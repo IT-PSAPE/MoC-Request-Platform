@@ -1,18 +1,15 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import ScrollArea from "@/components/ui/ScrollArea";
-import Divider from "@/components/ui/Divider";
 import Sheet from "@/components/ui/Sheet";
 import EmptyState from "@/components/ui/EmptyState";
-import { RequestItem, RequestStatus, RequestPriority, RequestKind } from "@/types/request";
-import { RequestStore } from "@/lib/store";
+import { RequestItem, RequestStatus } from "@/types/request";
 import RequestCard from "@/components/ui/RequestCard";
 import Switch from "@/components/ui/Switch";
+import { useRequestsListController } from "@/features/requests/useRequestsListController";
 
 const statusColor: Record<RequestStatus, "gray" | "blue" | "yellow" | "green" | "red"> = {
   not_started: "gray",
@@ -23,125 +20,31 @@ const statusColor: Record<RequestStatus, "gray" | "blue" | "yellow" | "green" | 
 };
 
 export default function RequestsPage() {
-  const [items, setItems] = useState<RequestItem[]>([]);
-  const [q, setQ] = useState("");
-  // Filters & sorting
-  const [priorityFilter, setPriorityFilter] = useState<"all" | RequestPriority>("all");
-  const [kindFilter, setKindFilter] = useState<"all" | RequestKind>("all");
-  const [dueStart, setDueStart] = useState(""); // ISO from input type=datetime-local
-  const [dueEnd, setDueEnd] = useState("");
-  // Compound sort rules
-  type SortKey = "createdAt" | "dueAt" | "priority";
-  type SortRule = { key: SortKey; dir: "asc" | "desc"; enabled: boolean };
-  const [sortRules, setSortRules] = useState<SortRule[]>([
-    { key: "createdAt", dir: "desc", enabled: true },
-    { key: "dueAt", dir: "asc", enabled: false },
-    { key: "priority", dir: "desc", enabled: false },
-  ]);
-  // Sheets
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
-  const [active, setActive] = useState<RequestItem | null>(null);
-
-  // Reset handlers
-  const resetFilters = () => {
-    setPriorityFilter("all");
-    setKindFilter("all");
-    setDueStart("");
-    setDueEnd("");
-  };
-  const defaultSortRules: SortRule[] = [
-    { key: "createdAt", dir: "desc", enabled: true },
-    { key: "dueAt", dir: "asc", enabled: false },
-    { key: "priority", dir: "desc", enabled: false },
-  ];
-  const resetSorts = () => setSortRules(defaultSortRules);
-
-  useEffect(() => setItems(RequestStore.list()), []);
-
-  const filtered = useMemo(() => {
-    const ql = q.trim().toLowerCase();
-    const startMs = dueStart ? new Date(dueStart).getTime() : null;
-    const endMs = dueEnd ? new Date(dueEnd).getTime() : null;
-    return items.filter((i) => {
-      // Build a search haystack including ID and user-entered fields
-      const equipmentNames = (i.selectedEquipment || []).map((e) => e.name).join(" ");
-      const songText = (i.selectedSongs || []).map((s) => `${s.title} ${s.artist ?? ""}`).join(" ");
-      const haystack = [
-        i.id,
-        i.who,
-        i.what,
-        i.where,
-        i.why,
-        i.how,
-        i.additionalInfo ?? "",
-        i.priority,
-        i.status,
-        i.kind ?? "",
-        i.createdAt,
-        i.updatedAt,
-        i.dueAt ?? "",
-        equipmentNames,
-        songText,
-      ]
-        .join(" ")
-        .toLowerCase();
-      const matchQ = ql ? haystack.includes(ql) : true;
-
-      // Priority filter
-      const matchPriority = priorityFilter === "all" ? true : i.priority === priorityFilter;
-      // Kind filter
-      const matchKind = kindFilter === "all" ? true : (i.kind ?? "") === kindFilter;
-      // Due date range filter (inclusive)
-      const dueMs = i.dueAt ? new Date(i.dueAt).getTime() : null;
-      const matchDueStart = startMs !== null ? (dueMs !== null && dueMs >= startMs) : true;
-      const matchDueEnd = endMs !== null ? (dueMs !== null && dueMs <= endMs) : true;
-
-      return matchQ && matchPriority && matchKind && matchDueStart && matchDueEnd;
-    });
-  }, [items, q, priorityFilter, kindFilter, dueStart, dueEnd]);
-
-  const orderedStatuses: { key: RequestStatus; title: string }[] = [
-    { key: "not_started", title: "Not Started" },
-    { key: "pending", title: "Pending" },
-    { key: "in_progress", title: "In Progress" },
-    { key: "completed", title: "Completed" },
-    { key: "dropped", title: "Dropped" },
-  ];
-
-  const grouped = useMemo(() => {
-    const g: Record<RequestStatus, RequestItem[]> = {
-      not_started: [],
-      pending: [],
-      in_progress: [],
-      completed: [],
-      dropped: [],
-    } as any;
-    filtered.forEach((i) => g[i.status].push(i));
-    return g;
-  }, [filtered]);
-
-  // Sorting comparator (used for cards within each status column)
-  const priorityOrder: Record<RequestPriority, number> = { low: 0, medium: 1, high: 2, urgent: 3 };
-  const compare = (a: RequestItem, b: RequestItem) => {
-    for (const rule of sortRules) {
-      if (!rule.enabled) continue;
-      let av = 0, bv = 0;
-      if (rule.key === "createdAt") {
-        av = new Date(a.createdAt).getTime();
-        bv = new Date(b.createdAt).getTime();
-      } else if (rule.key === "dueAt") {
-        av = a.dueAt ? new Date(a.dueAt).getTime() : 0;
-        bv = b.dueAt ? new Date(b.dueAt).getTime() : 0;
-      } else if (rule.key === "priority") {
-        av = priorityOrder[a.priority];
-        bv = priorityOrder[b.priority];
-      }
-      const diff = av - bv;
-      if (diff !== 0) return rule.dir === "asc" ? diff : -diff;
-    }
-    return 0;
-  };
+  const {
+    items,
+    active,
+    setActive,
+    q,
+    setQ,
+    priorityFilter,
+    setPriorityFilter,
+    kindFilter,
+    setKindFilter,
+    dueStart,
+    setDueStart,
+    dueEnd,
+    setDueEnd,
+    resetFilters,
+    sortRules,
+    setSortRules,
+    resetSorts,
+    compare,
+    filterOpen,
+    setFilterOpen,
+    sortOpen,
+    setSortOpen,
+    orderedStatuses,
+  } = useRequestsListController();
 
   // ──────────────────────────────────────────────────────────────────────────────────────────────────
   // RENDER FUNCTION
@@ -326,7 +229,7 @@ export default function RequestsPage() {
         <div className="space-y-4 text-sm">
           <div>
             <div className="text-xs text-foreground/60 mb-1">Priority</div>
-            <Select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value as any)}>
+            <Select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value as typeof priorityFilter)}>
               <option value="all">All</option>
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -336,7 +239,7 @@ export default function RequestsPage() {
           </div>
           <div>
             <div className="text-xs text-foreground/60 mb-1">Type</div>
-            <Select value={kindFilter} onChange={(e) => setKindFilter(e.target.value as any)}>
+            <Select value={kindFilter} onChange={(e) => setKindFilter(e.target.value as typeof kindFilter)}>
               <option value="all">All</option>
               <option value="event">Event</option>
               <option value="video_editing">Video Editing</option>
@@ -375,7 +278,7 @@ export default function RequestsPage() {
                   onCheckedChange={(v) => setSortRules((rs) => rs.map((r, i) => i === idx ? { ...r, enabled: v } : r))}
                   aria-label={`Toggle ${rule.key} sort`}
                 />
-                <Select value={rule.dir} onChange={(e) => setSortRules((rs) => rs.map((r, i) => i === idx ? { ...r, dir: e.target.value as any } : r))}>
+                <Select value={rule.dir} onChange={(e) => setSortRules((rs) => rs.map((r, i) => i === idx ? { ...r, dir: e.target.value as "asc" | "desc" } : r))}>
                   <option value="asc">Asc</option>
                   <option value="desc">Desc</option>
                 </Select>

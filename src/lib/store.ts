@@ -1,12 +1,12 @@
 import { RequestItem, RequestStatus } from "@/types/request";
-
-const STORAGE_KEY = "moc_requests_v1";
+import { CONFIG } from "@/config";
 
 function load(): RequestItem[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? (JSON.parse(raw) as any[]) : [];
+    const raw = localStorage.getItem(CONFIG.storage.requests);
+    const parsedUnknown: unknown = raw ? JSON.parse(raw) : [];
+    const parsed = Array.isArray(parsedUnknown) ? parsedUnknown : [];
     // Migration: map legacy 'paused' status to 'pending'
     const migrated: RequestItem[] = parsed.map((r) =>
       ({
@@ -22,7 +22,7 @@ function load(): RequestItem[] {
 
 function save(items: RequestItem[]) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  localStorage.setItem(CONFIG.storage.requests, JSON.stringify(items));
 }
 
 export const RequestStore = {

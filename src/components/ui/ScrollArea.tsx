@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
 export default function ScrollArea({
@@ -19,17 +19,7 @@ export default function ScrollArea({
   const [visible, setVisible] = useState(false);
   const hideTimer = useRef<number | null>(null);
 
-  const metrics = useMemo(
-    () => ({
-      clientWidth: 0,
-      scrollWidth: 0,
-      clientHeight: 0,
-      scrollHeight: 0,
-      scrollLeft: 0,
-      scrollTop: 0,
-    }),
-    []
-  );
+  // (metrics removed; was unused)
 
   const [thumbH, setThumbH] = useState({ width: 0, left: 0 });
   const [thumbV, setThumbV] = useState({ height: 0, top: 0 });
@@ -128,7 +118,7 @@ export default function ScrollArea({
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
-      window.removeEventListener("touchmove", onTouchMove as any);
+      window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
     };
   }, [endDrag, onGlobalMove]);
@@ -176,7 +166,6 @@ export default function ScrollArea({
           "relative"
         )}
         // Hide native WebKit scrollbars
-        style={{} as any}
       >
         {/* WebKit: hide scrollbar by styling pseudo-elements via a nested stylesheet */}
         <style jsx>{`

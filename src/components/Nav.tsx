@@ -2,14 +2,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const AUTH_KEY = "moc_admin_authed";
+import { Auth } from "@/features/auth/auth";
 
 export default function Nav() {
   const [authed, setAuthed] = useState(false);
 
   useEffect(() => {
-    setAuthed(typeof window !== "undefined" && localStorage.getItem(AUTH_KEY) === "1");
+    setAuthed(Auth.isAuthed());
   }, []);
 
   const pathname = usePathname();
