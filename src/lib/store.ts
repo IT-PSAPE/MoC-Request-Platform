@@ -1,5 +1,6 @@
 import { RequestItem, RequestStatus } from "@/types/request";
 import { CONFIG } from "@/config";
+import { getRandomUUID } from "./randomuuid";
 
 function load(): RequestItem[] {
   if (typeof window === "undefined") return [];
@@ -36,7 +37,7 @@ export const RequestStore = {
     const items = load();
     const now = new Date().toISOString();
     const item: RequestItem = {
-      id: crypto.randomUUID(),
+      id: getRandomUUID(),
       createdAt: now,
       updatedAt: now,
       ...input,

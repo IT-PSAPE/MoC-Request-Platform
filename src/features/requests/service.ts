@@ -1,3 +1,4 @@
+import { getRandomUUID } from "@/lib/randomuuid";
 import { RequestStore } from "@/lib/store";
 import { RequestItem, RequestStatus, InternalNote } from "@/types/request";
 
@@ -17,7 +18,7 @@ export const RequestService = {
   addNote(id: string, message: string) {
     const r = RequestStore.get(id);
     if (!r) return;
-    const note: InternalNote = { id: crypto.randomUUID(), message, createdAt: new Date().toISOString() };
+    const note: InternalNote = { id: getRandomUUID(), message, createdAt: new Date().toISOString() };
     RequestStore.update(id, { notes: [...r.notes, note] });
   },
   updateEquipmentChecklist(id: string, next: NonNullable<RequestItem["equipmentChecklist"]>) {
