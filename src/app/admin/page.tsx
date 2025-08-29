@@ -56,7 +56,7 @@ export default function AdminPage() {
       <ScrollArea className="max-w-full flex-1 min-h-0">
         <div className="flex gap-4 pb-2 pr-2 px-4 h-full">
           {statuses.map((col) => (
-            <div key={col.key} className="min-w-64 flex-1 h-full flex flex-col">
+            <div key={col.key} className="min-w-64 flex-1 h-full flex flex-col bg-foreground/2 rounded-md p-3">
               <div className="text-sm font-medium mb-2">{col.title}</div>
               <div
                 className="flex-1 space-y-2"
