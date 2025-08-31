@@ -3,6 +3,7 @@ import { useMemo, useState, FormEvent } from "react";
 import { Attachment, EventFlowStep, RequestItem, RequestKind, SongItem, EquipmentItem, RequestPriority } from "@/types/request";
 import { RequestService } from "@/features/requests/service";
 import { deadlineRequirementDays } from "@/features/requests/utils";
+import { getRandomUUID } from "@/lib/randomuuid";
 
 export function useRequestFormController() {
   // Step state
@@ -64,7 +65,7 @@ export function useRequestFormController() {
 
   function addFlowStep(type: "segment" | "song") {
     const stepObj: EventFlowStep = {
-      id: crypto.randomUUID(),
+      id: getRandomUUID(),
       order: eventFlow.length + 1,
       type,
       label: type === "segment" ? `Segment ${eventFlow.length + 1}` : `Song ${eventFlow.length + 1}`,

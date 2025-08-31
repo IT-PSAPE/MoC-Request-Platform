@@ -5,7 +5,8 @@ import { RequestService } from "@/features/requests/service";
 import type { RequestItem, RequestStatus } from "@/types/request";
 
 export function useAdminController() {
-  const [authed, setAuthed] = useState(false);
+  // start as `null` so consumers can tell "not yet checked" vs false
+  const [authed, setAuthed] = useState<boolean | null>(null);
   const [items, setItems] = useState<RequestItem[]>([]);
   const [active, setActive] = useState<RequestItem | null>(null);
 

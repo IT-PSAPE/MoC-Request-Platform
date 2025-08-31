@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import Card from "@/components/ui/Card";
+import { useState, useEffect } from "react";
+// Card not used here anymore
 import Select from "@/components/ui/Select";
 import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
@@ -10,6 +10,7 @@ import ScrollArea from "@/components/ui/ScrollArea";
 import EmptyState from "@/components/ui/EmptyState";
 import RequestCard from "@/components/ui/RequestCard";
 import { useAdminController } from "@/features/admin/useAdminController";
+import { useRouter } from "next/navigation";
 
 const columns: { key: RequestStatus; title: string }[] = [
   { key: "not_started", title: "Not Started" },
@@ -21,26 +22,29 @@ const columns: { key: RequestStatus; title: string }[] = [
 
 export default function AdminPage() {
   const {
-    authed,
-    items,
-    active,
-    setActive,
-    login,
-    updateStatus,
+  authed,
+  items,
+  active,
+  setActive,
+  updateStatus,
     addNote,
     setEquipmentChecked,
     setSongChecked,
     refreshActive,
   } = useAdminController();
 
-  if (!authed) {
-    return (
-      <div className="mx-auto max-w-sm py-16">
-        <Card title="Admin Login">
-          <LoginForm onLogin={login} />
-        </Card>
-      </div>
-    );
+  const router = useRouter();
+
+  useEffect(() => {
+    if (authed === false) {
+      // redirect to dedicated login page, preserving return location
+      router.push(`/login?next=${encodeURIComponent("/admin")}`);
+    }
+  }, [authed, router]);
+
+  if (authed === null) {
+    // auth check pending — avoid rendering and avoid redirecting
+    return <div className="py-8">Loading...</div>;
   }
 
   // ──────────────────────────────────────────────────────────────────────────────────────────────────
@@ -52,7 +56,7 @@ export default function AdminPage() {
       <ScrollArea className="max-w-full flex-1 min-h-0">
         <div className="flex gap-4 pb-2 pr-2 px-4 h-full">
           {statuses.map((col) => (
-            <div key={col.key} className="min-w-64 flex-1 h-full flex flex-col">
+            <div key={col.key} className="min-w-64 flex-1 h-full flex flex-col bg-foreground/2 rounded-md p-3">
               <div className="text-sm font-medium mb-2">{col.title}</div>
               <div
                 className="flex-1 space-y-2"
@@ -307,30 +311,9 @@ export default function AdminPage() {
       <DetailsSheet />
     </div>
   );
+
 }
 
-function LoginForm({ onLogin }: { onLogin: (password: string) => void }) {
-  const [password, setPassword] = useState("");
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onLogin(password);
-      }}
-      className="space-y-3"
-    >
-      <p className="text-sm text-foreground/70">Demo-only authentication. Use password: <code>admin</code>.</p>
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full rounded-md border border-foreground/20 bg-transparent px-3 py-2 text-sm focus:outline-none"
-      />
-      <Button type="submit">Login</Button>
-    </form>
-  );
-}
 
 function AddNote({ onAdd }: { onAdd: (message: string) => void }) {
   const [message, setMessage] = useState("");
