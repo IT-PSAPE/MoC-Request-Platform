@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 
 export default function Home() {
   return (
@@ -19,10 +20,8 @@ export default function Home() {
                   <span className="text-xl" aria-hidden>✍️</span>
                 </div>
                 <div className="text-xl font-medium">Submit a Request</div>
-                <div className="text-sm text-foreground/70">Create a new request using the 5W1H format.</div>
-                <div className="mt-auto w-full pt-2">
-                  <span className="inline-flex w-full items-center justify-center rounded-md border px-3 py-2 text-sm font-medium group-hover:underline">Go to form →</span>
-                </div>
+                <div className="text-sm text-foreground/70 mb-6">Create a new request using the 5W1H format.</div>
+                <Button type="button" variant="secondary" className="w-full">Go to form →</Button>
               </div>
             </Card>
           </Link>
@@ -33,10 +32,8 @@ export default function Home() {
                   <span className="text-xl" aria-hidden>🗂️</span>
                 </div>
                 <div className="text-xl font-medium">View Requests</div>
-                <div className="text-sm text-foreground/70">Browse and track progress in a Kanban view.</div>
-                <div className="mt-auto w-full pt-2">
-                  <span className="inline-flex w-full items-center justify-center rounded-md border px-3 py-2 text-sm font-medium group-hover:underline">Open board →</span>
-                </div>
+                <div className="text-sm text-foreground/70 mb-6">Browse and track progress in a Kanban view.</div>
+                <Button type="button" variant="secondary" className="w-full">Open board →</Button>
               </div>
             </Card>
           </Link>
