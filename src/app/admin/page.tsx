@@ -11,6 +11,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import RequestCard from "@/components/ui/RequestCard";
 import { useAdminController } from "@/features/admin/useAdminController";
 import { useRouter } from "next/navigation";
+import { EquipmentStore } from "@/lib/equipmentStore";
 
 const columns: { key: RequestStatus; title: string }[] = [
   { key: "not_started", title: "Not Started" },
@@ -34,6 +35,9 @@ export default function AdminPage() {
   } = useAdminController();
 
   const router = useRouter();
+
+  // Sidebar tab state
+  const [tab, setTab] = useState<"requests" | "equipment">("requests");
 
   useEffect(() => {
     if (authed === false) {
@@ -77,6 +81,62 @@ export default function AdminPage() {
         </div>
       </ScrollArea>
     )
+  }
+
+  function EquipmentCatalogPanel() {
+    // Compute equipment with active requests and quantities
+    const equipment = EquipmentStore.list();
+    const activeReqs = items.filter((r) => r.status === "pending" || r.status === "in_progress");
+    const byEquipment: Record<string, { request: RequestItem; quantity: number }[]> = {};
+    activeReqs.forEach((r) => {
+      (r.selectedEquipment || []).forEach((e) => {
+        const qty = typeof e.quantity === "number" ? Math.max(1, Math.floor(e.quantity)) : 1;
+        if (!byEquipment[e.id]) byEquipment[e.id] = [];
+        byEquipment[e.id].push({ request: r, quantity: qty });
+      });
+    });
+
+    return (
+      <ScrollArea className="max-w-full flex-1 min-h-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 p-3">
+          {equipment.map((eq) => {
+            const usedBy = byEquipment[eq.id] || [];
+            return (
+              <div key={eq.id} className="rounded-md border border-foreground/15 p-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <div className="font-medium">{eq.name}</div>
+                  <div className="text-xs text-foreground/60">Left: {eq.quantity}</div>
+                </div>
+                <div className="text-xs text-foreground/60 mt-0.5">ID: {eq.id}</div>
+                {usedBy.length === 0 ? (
+                  <div className="mt-3">
+                    <EmptyState title="No active usage" message="No pending/in-progress requests are using this." />
+                  </div>
+                ) : (
+                  <div className="mt-3">
+                    <div className="text-xs text-foreground/60 mb-1">In Requests ({usedBy.length})</div>
+                    <ul className="space-y-1">
+                      {usedBy.map(({ request, quantity }) => (
+                        <li key={request.id} className="flex items-center justify-between gap-2">
+                          <button
+                            className="underline text-left truncate"
+                            title={`Open details for ${request.who}`}
+                            onClick={() => setActive(request)}
+                          >
+                            {request.who}
+                          </button>
+                          <span className="text-xs text-foreground/60">x{quantity}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </ScrollArea>
+    );
   }
 
   function DetailsSheet() {
@@ -301,14 +361,43 @@ export default function AdminPage() {
   // ──────────────────────────────────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="py-8 flex flex-col flex-1 min-h-0">
-      <h1 className="w-full max-w-7xl mx-auto px-4 text-2xl font-semibold mb-4">Admin Dashboard</h1>
+    <div className="py-8 flex flex-1 min-h-0">
+      {/* Sidebar */}
+      <aside className="w-48 shrink-0 pl-4">
+        <div className="text-2xl font-semibold mb-4">Admin</div>
+        <div className="space-y-2 text-sm">
+          <button
+            className={`w-full text-left rounded-md px-2 py-1 ${tab === "requests" ? "bg-foreground/10" : "hover:bg-foreground/5"}`}
+            onClick={() => setTab("requests")}
+          >
+            Requests
+          </button>
+          <button
+            className={`w-full text-left rounded-md px-2 py-1 ${tab === "equipment" ? "bg-foreground/10" : "hover:bg-foreground/5"}`}
+            onClick={() => setTab("equipment")}
+          >
+            Equipment
+          </button>
+        </div>
+      </aside>
 
-      {/* Kanban area fills remaining space */}
-      <KanbanBoard items={items} statuses={columns} />
+      {/* Main content */}
+      <section className="flex-1 flex flex-col min-w-0">
+        {tab === "requests" ? (
+          <>
+            <div className="w-full px-4 text-2xl font-semibold mb-4">Requests</div>
+            <KanbanBoard items={items} statuses={columns} />
+          </>
+        ) : (
+          <>
+            <div className="w-full px-4 text-2xl font-semibold mb-4">Equipment Catalog</div>
+            <EquipmentCatalogPanel />
+          </>
+        )}
 
-      {/* Details sheet */}
-      <DetailsSheet />
+        {/* Details sheet stays available for both tabs */}
+        <DetailsSheet />
+      </section>
     </div>
   );
 
