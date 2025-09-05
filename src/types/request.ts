@@ -27,6 +27,7 @@ export type RequestKind =
 export type EquipmentItem = {
   id: string;
   name: string;
+  quantity?: number; // requested units (default 1 for legacy)
 };
 
 export type SongItem = {

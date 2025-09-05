@@ -7,6 +7,7 @@ export const CONFIG = {
   storage: {
     requests: "moc_requests_v1",
     authFlag: "moc_admin_authed",
+    equipment: "moc_equipment_v1",
   },
   // Demo-only admin password. Override via NEXT_PUBLIC_ADMIN_PASSWORD
   demo: {

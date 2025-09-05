@@ -1,10 +1,12 @@
-// Mock catalogs for demo. Replace with API calls later.
-export const equipmentCatalog = [
-  { id: "eq1", name: "Camera A", available: true },
-  { id: "eq2", name: "Tripod", available: false },
-  { id: "eq3", name: "Mic Wireless", available: true },
-  { id: "eq4", name: "Lighting Kit", available: true },
-] as const;
+// Equipment now comes from localStorage-backed store.
+// Call this at render time in client components to get current availability.
+import { EquipmentStore } from "@/lib/equipmentStore";
+
+export function getEquipmentCatalog() {
+  // Reading should not mutate storage; EquipmentStore.list() is read-only.
+  // Map to UI shape with computed availability and quantity left.
+  return EquipmentStore.list().map((e) => ({ id: e.id, name: e.name, available: e.quantity > 0, quantity: e.quantity }));
+}
 
 export const songsCatalog = [
   { id: "s1", title: "Song Alpha", artist: "Band X", available: true },

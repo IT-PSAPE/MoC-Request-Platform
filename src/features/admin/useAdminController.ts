@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Auth } from "@/features/auth/auth";
 import { RequestService } from "@/features/requests/service";
 import type { RequestItem, RequestStatus } from "@/types/request";
+import { EquipmentStore } from "@/lib/equipmentStore";
 
 export function useAdminController() {
   // start as `null` so consumers can tell "not yet checked" vs false
@@ -49,9 +50,21 @@ export function useAdminController() {
 
   const setEquipmentChecked = useCallback((requestId: string, equipmentId: string, checked: boolean) => {
     const current = RequestService.get(requestId);
+    const prev = !!current?.equipmentChecklist?.[equipmentId];
     const next = { ...(current?.equipmentChecklist || {}) };
     next[equipmentId] = checked;
     RequestService.updateEquipmentChecklist(requestId, next);
+    // Determine requested quantity for this equipment in the request
+    const reqQty = (() => {
+      const item = current?.selectedEquipment?.find((e) => e.id === equipmentId);
+      const q = item && typeof item.quantity === "number" ? Math.max(1, Math.floor(item.quantity)) : 1;
+      return q;
+    })();
+    // Apply inventory adjustment only on change
+    if (checked !== prev) {
+      if (checked) EquipmentStore.adjustQuantity(equipmentId, -reqQty);
+      else EquipmentStore.adjustQuantity(equipmentId, +reqQty);
+    }
     setActive({ ...RequestService.get(requestId)! });
   }, []);
 

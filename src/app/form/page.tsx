@@ -8,7 +8,7 @@ import Card from "@/components/ui/Card";
 import Dropzone from "@/components/ui/Dropzone";
 import Divider from "@/components/ui/Divider";
 import { RequestKind } from "@/types/request";
-import { equipmentCatalog, songsCatalog } from "@/features/requests/catalog";
+import { getEquipmentCatalog, songsCatalog } from "@/features/requests/catalog";
 import { useRequestFormController } from "@/features/requests/formController";
 
 const priorities = [
@@ -20,6 +20,8 @@ const priorities = [
 
 export default function SubmitPage() {
   const router = useRouter();
+  // Read current equipment availability from local storage (client-side)
+  const equipmentCatalog = getEquipmentCatalog();
   const {
     // step control
     step,
@@ -57,6 +59,7 @@ export default function SubmitPage() {
     selectedEquipment,
     selectedSongs,
     toggleEquipment,
+    setEquipmentQuantity,
     toggleSong,
 
     // flow
@@ -313,20 +316,45 @@ export default function SubmitPage() {
               <Divider title="Select Equipment (if applicable)" />
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {equipmentCatalog.map((eq) => {
-                  const isSelected = selectedEquipment.some((x) => x.id === eq.id);
+                  const selected = selectedEquipment.find((x) => x.id === eq.id);
+                  const isSelected = !!selected;
+                  const left = typeof eq.quantity === "number" ? eq.quantity : 0;
                   return (
-                    <button
-                      key={eq.id}
-                      type="button"
-                      onClick={() => toggleEquipment(eq)}
-                      disabled={!eq.available}
-                      className={`flex items-center justify-between rounded-md border px-3 py-2 text-sm ${
-                        isSelected ? "border-foreground" : "border-foreground/20"
-                      } ${eq.available ? "" : "opacity-50 cursor-not-allowed"}`}
-                    >
-                      <span>{eq.name}</span>
-                      <span className="text-xs text-foreground/60">{eq.available ? (isSelected ? "Selected" : "Available") : "Unavailable"}</span>
-                    </button>
+                    <div key={eq.id} className={`rounded-md border p-2 ${isSelected ? "border-foreground" : "border-foreground/20"}`}>
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="text-sm font-medium">{eq.name}</div>
+                        <div className="text-xs text-foreground/60">Left: {left}</div>
+                      </div>
+                      <div className="mt-2 flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleEquipment(eq)}
+                          disabled={!eq.available}
+                          className={`rounded-md px-2 py-1 text-xs ${
+                            eq.available ? "bg-foreground/10 hover:bg-foreground/15" : "opacity-50 cursor-not-allowed bg-foreground/5"
+                          }`}
+                        >
+                          {isSelected ? "Remove" : "Add"}
+                        </button>
+                        {isSelected && (
+                          <>
+                            <label className="text-xs text-foreground/60">Qty</label>
+                            <input
+                              type="number"
+                              min={1}
+                              max={Math.max(1, left)}
+                              className="w-20 rounded-md border border-foreground/20 px-2 py-1 text-sm"
+                              value={selected.quantity || 1}
+                              onChange={(e) => {
+                                const v = parseInt(e.target.value || "1", 10);
+                                const clamped = Math.max(1, Math.min(isFinite(left) ? left : 9999, v));
+                                setEquipmentQuantity(eq.id, clamped);
+                              }}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </div>
                   );
                 })}
               </div>

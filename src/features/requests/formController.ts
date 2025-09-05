@@ -47,12 +47,19 @@ export function useRequestFormController() {
     return null;
   }, [kind, dueAt]);
 
-  function toggleEquipment(ei: { id: string; name: string; available: boolean }) {
+  function toggleEquipment(ei: { id: string; name: string; available: boolean; quantity?: number }) {
     if (!ei.available) return;
     setSelectedEquipment((prev) => {
       const exists = prev.some((x) => x.id === ei.id);
-      return exists ? prev.filter((x) => x.id !== ei.id) : [...prev, { id: ei.id, name: ei.name }];
+      // Default requested quantity is 1 when adding
+      return exists ? prev.filter((x) => x.id !== ei.id) : [...prev, { id: ei.id, name: ei.name, quantity: 1 }];
     });
+  }
+
+  function setEquipmentQuantity(equipmentId: string, quantity: number) {
+    setSelectedEquipment((prev) =>
+      prev.map((x) => (x.id === equipmentId ? { ...x, quantity: Math.max(1, Math.floor(quantity || 1)) } : x))
+    );
   }
 
   function toggleSong(si: { id: string; title: string; artist?: string; available: boolean }) {
@@ -110,7 +117,9 @@ export function useRequestFormController() {
       notes: [],
       kind: kind || undefined,
       dueAt: dueAt || undefined,
-      selectedEquipment: selectedEquipment.length ? selectedEquipment : undefined,
+      selectedEquipment: selectedEquipment.length
+        ? selectedEquipment.map((e) => ({ ...e, quantity: e.quantity && e.quantity > 0 ? Math.floor(e.quantity) : 1 }))
+        : undefined,
       selectedSongs: selectedSongs.length ? selectedSongs : undefined,
       eventFlow: eventFlow.length ? eventFlow : undefined,
     };
@@ -175,6 +184,7 @@ export function useRequestFormController() {
     selectedEquipment,
     setSelectedEquipment,
     toggleEquipment,
+    setEquipmentQuantity,
     selectedSongs,
     setSelectedSongs,
     toggleSong,

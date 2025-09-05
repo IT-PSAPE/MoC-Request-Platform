@@ -3,11 +3,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Auth } from "@/features/auth/auth";
+import { EquipmentStore } from "@/lib/equipmentStore";
 
 export default function Nav() {
   const [authed, setAuthed] = useState(false);
 
   useEffect(() => {
+    // Initialize equipment store on app load (client-side)
+    EquipmentStore.init();
     setAuthed(Auth.isAuthed());
   }, []);
 
