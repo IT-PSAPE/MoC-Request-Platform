@@ -13,7 +13,7 @@ export default function Home() {
           </p>
         </div>
         <div className="mx-auto w-full grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-          <Link href="/submit" className="block group h-full">
+          <Link href="/form" className="block group h-full">
             <Card className="h-full rounded-xl border hover:shadow-lg transition-shadow">
               <div className="flex h-full flex-col items-start text-left gap-4">
                 <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-foreground/10">
