@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Geist, Geist_Mono } from "next/font/google";
+import { Figtree} from "next/font/google";
 import "./globals.css";
 import NavigationBar from "@/components/NavigationBar";
 
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${figTree.variable} ${figTree.variable} antialiased flex flex-col h-screen`}>
+      <body className={`${figTree.variable} ${figTree.variable} antialiased flex flex-col h-screen bg-primary`}>
         <NavigationBar />
         <main className="mx-auto w-full flex flex-col h-full min-h-0 overflow-x-auto"> {children} </main>
       </body>
