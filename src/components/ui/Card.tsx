@@ -10,13 +10,13 @@ type Props = {
 
 export default function Card({ title, children, className, footer }: Props) {
   return (
-    <div className={cn("rounded-lg border border-foreground/15 bg-background/60 shadow-sm", className)}>
+    <div className={cn("rounded-lg border border-gray-200 bg-white shadow-sm", className)}>
       {title && (
-        <div className="border-b border-foreground/10 px-4 py-2 text-sm font-medium">
+        <div className="border-b border-foreground/10 px-2 py-2 text-sm font-medium">
           {title}
         </div>
       )}
-      <div className="p-4">{children}</div>
+      <div className="p-2">{children}</div>
       {footer && <div className="border-t border-foreground/10 px-4 py-2">{footer}</div>}
     </div>
   );
