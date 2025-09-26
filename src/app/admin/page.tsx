@@ -13,6 +13,7 @@ import { useAdminController } from "@/features/admin/useAdminController";
 import { useRouter } from "next/navigation";
 import { EquipmentStore } from "@/lib/equipmentStore";
 import AddNote from "./components/add-notes";
+import KanbanBoard from "./components/kanban-board";
 
 const columns: { key: RequestStatus; title: string }[] = [
   { key: "not_started", title: "Not Started" },
@@ -24,11 +25,11 @@ const columns: { key: RequestStatus; title: string }[] = [
 
 export default function AdminPage() {
   const {
-  authed,
-  items,
-  active,
-  setActive,
-  updateStatus,
+    authed,
+    items,
+    active,
+    setActive,
+    updateStatus,
     addNote,
     setEquipmentChecked,
     setSongChecked,
@@ -55,42 +56,6 @@ export default function AdminPage() {
   // ──────────────────────────────────────────────────────────────────────────────────────────────────
   // RENDER FUNCTION
   // ──────────────────────────────────────────────────────────────────────────────────────────────────
-
-  function KanbanBoard({ items, statuses }: { items: RequestItem[]; statuses: { key: RequestStatus; title: string }[] }) {
-    return (
-      <ScrollArea className="max-w-full flex-1 min-h-0">
-        <div className="flex gap-4 pb-2 pr-2 px-4 h-full">
-          {statuses.map((col) => (
-            <div key={col.key} className="min-w-64 flex-1 h-full flex flex-col bg-foreground/2 rounded-md p-3">
-              {(() => {
-                const list = items.filter((r) => r.status === col.key);
-                return (
-                  <div className="mb-2">
-                    <div className="text-sm font-medium">{col.title}</div>
-                    <div className="text-xs text-foreground/60">{list.length} Requests</div>
-                  </div>
-                );
-              })()}
-              <div
-                className="flex-1 space-y-2"
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  const id = e.dataTransfer.getData("text/plain");
-                  updateStatus(id, col.key);
-                }}
-              >
-                {items.filter((r) => r.status === col.key).map((r) => (
-                  <div key={r.id} className="cursor-move" draggable onDragStart={(e) => e.dataTransfer.setData("text/plain", r.id)}>
-                    <RequestCard request={r} setActive={setActive} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
-    )
-  }
 
   function EquipmentCatalogPanel() {
     // Compute equipment with active requests and quantities
@@ -395,7 +360,12 @@ export default function AdminPage() {
         {tab === "requests" ? (
           <>
             <div className="w-full px-4 text-2xl font-semibold mb-4">Requests</div>
-            <KanbanBoard items={items} statuses={columns} />
+            <KanbanBoard
+              items={items}
+              statuses={columns}
+              updateStatus={updateStatus}
+              setActive={setActive}
+            />
           </>
         ) : (
           <>
