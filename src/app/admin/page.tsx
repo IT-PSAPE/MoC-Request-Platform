@@ -61,7 +61,15 @@ export default function AdminPage() {
         <div className="flex gap-4 pb-2 pr-2 px-4 h-full">
           {statuses.map((col) => (
             <div key={col.key} className="min-w-64 flex-1 h-full flex flex-col bg-foreground/2 rounded-md p-3">
-              <div className="text-sm font-medium mb-2">{col.title}</div>
+              {(() => {
+                const list = items.filter((r) => r.status === col.key);
+                return (
+                  <div className="mb-2">
+                    <div className="text-sm font-medium">{col.title}</div>
+                    <div className="text-xs text-foreground/60">{list.length} Requests</div>
+                  </div>
+                );
+              })()}
               <div
                 className="flex-1 space-y-2"
                 onDragOver={(e) => e.preventDefault()}

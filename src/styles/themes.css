@@ -1,0 +1,12 @@
+html[data-theme="admin"] {
+    /* Primary */
+    --color-primary-alpha-10: color-mix(in srgb,
+            transparent,
+            var(--color-olive-500) 10%);
+    --color-primary-alpha-16: color-mix(in srgb,
+            transparent,
+            var(--color-olive-700) 40%);
+    --color-primary-base: var(--color-olive-500);
+    --color-primary-dark: var(--color-olive-700);
+    --color-primary-darker: var(--color-olive-900);
+}
