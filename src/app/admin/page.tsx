@@ -12,6 +12,7 @@ import RequestCard from "@/components/ui/RequestCard";
 import { useAdminController } from "@/features/admin/useAdminController";
 import { useRouter } from "next/navigation";
 import { EquipmentStore } from "@/lib/equipmentStore";
+import AddNote from "./components/add-notes";
 
 const columns: { key: RequestStatus; title: string }[] = [
   { key: "not_started", title: "Not Started" },
@@ -409,29 +410,4 @@ export default function AdminPage() {
     </div>
   );
 
-}
-
-
-function AddNote({ onAdd }: { onAdd: (message: string) => void }) {
-  const [message, setMessage] = useState("");
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!message.trim()) return;
-        onAdd(message.trim());
-        setMessage("");
-      }}
-      className="space-y-2"
-    >
-      <Textarea
-        placeholder="Add a note for the team..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <Button type="submit" variant="secondary" className="w-full">
-        Add Note
-      </Button>
-    </form>
-  );
 }
