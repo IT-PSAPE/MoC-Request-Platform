@@ -10,6 +10,7 @@ import { RequestItem, RequestStatus } from "@/types/request";
 import RequestCard from "@/components/ui/RequestCard";
 import Switch from "@/components/ui/Switch";
 import { useRequestsListController } from "@/features/requests/useRequestsListController";
+import FilterForm from "./components/filter-form";
 
 const statusColor: Record<RequestStatus, "gray" | "blue" | "yellow" | "green" | "red"> = {
   not_started: "gray",
@@ -49,23 +50,6 @@ export default function RequestsPage() {
   // ──────────────────────────────────────────────────────────────────────────────────────────────────
   // RENDER FUNCTION
   // ──────────────────────────────────────────────────────────────────────────────────────────────────
-
-  function FilterForm() {
-    return (
-      <form className="w-full max-w-7xl px-4 mx-auto flex items-center gap-3 mb-6">
-        <Input
-          placeholder="Search by ID, name, details..."
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          className="mr-auto w-full max-w-sm"
-        />
-        <div className="flex gap-2">
-          <Button type="button" size="sm" variant="secondary" onClick={() => setFilterOpen(true)}>Filter</Button>
-          <Button type="button" size="sm" variant="secondary" onClick={() => setSortOpen(true)}>Sort</Button>
-        </div>
-      </form>
-    )
-  }
 
   function DetailsSheet() {
     return (
@@ -321,7 +305,7 @@ export default function RequestsPage() {
     <div className="py-8 flex flex-col flex-1 min-h-0">
       <h1 className="w-full max-w-7xl mx-auto px-4 text-2xl font-semibold mb-4">All Requests</h1>
       {/* Filter Form */}
-      <FilterForm />
+      <FilterForm query={q} setQuery={setQ} setFilterOpen={setFilterOpen} setSortOpen={setSortOpen} />
 
       {/* Kanban Board */}
       <KanbanBoard items={items} statuses={orderedStatuses} />
