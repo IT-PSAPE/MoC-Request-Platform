@@ -127,3 +127,7 @@ type FetchRequest = {
     venues?: Venue[];
     request_venue?: RequestVenue[];
 };
+
+// 
+
+type  FormSteps = 1 | 2 | 3;

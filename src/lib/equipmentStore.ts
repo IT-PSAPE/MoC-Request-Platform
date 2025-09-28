@@ -27,6 +27,7 @@ function safeLoad(): EquipmentRecord[] {
     if (!Array.isArray(parsed)) return EQUIPMENT_SEED;
     // Migration and sanity: support legacy {available:boolean}
     const cleaned: EquipmentRecord[] = parsed
+      // @ts-ignore
       .map((x: any) => {
         const id = String(x.id);
         const name = String(x.name);

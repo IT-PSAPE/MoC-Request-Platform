@@ -1,5 +1,3 @@
-type  FormSteps = 1 | 2 | 3;
-
 type Props = {
     step: FormSteps;
     maxStepReached: FormSteps;
