@@ -10,6 +10,7 @@ import Divider from "@/components/ui/Divider";
 import { RequestKind } from "@/types/request";
 import { getEquipmentCatalog, songsCatalog } from "@/features/requests/catalog";
 import { useRequestFormController } from "@/features/requests/formController";
+import StepIndicator from "./components/step-indicator";
 
 const priorities = [
   { value: "low", label: "Low" },
@@ -78,25 +79,6 @@ export default function SubmitPage() {
     // submission
     submitted,
   } = useRequestFormController();
-
-  function StepIndicator() {
-    return [1, 2, 3].map((s) => {
-      const reached = (maxStepReached as number) >= (s as number);
-      const active = (step as number) >= (s as number);
-      return (
-        <button
-          type="button"
-          key={s}
-          onClick={() => reached && setStep(s as 1 | 2 | 3)}
-          className={`h-2 rounded-full ${active ? "bg-foreground/80" : "bg-foreground/20"} ${reached ? "cursor-pointer" : "cursor-not-allowed opacity-60"
-            }`}
-          style={{ width: 100 }}
-          aria-label={`Go to step ${s}`}
-          disabled={!reached}
-        />
-      );
-    });
-  }
 
   function FormStepOne() {
     return (
@@ -463,7 +445,7 @@ export default function SubmitPage() {
 
       {/* Step indicator (clickable for visited steps) */}
       <div className="flex items-center gap-2 mb-6">
-        <StepIndicator />
+        <StepIndicator step={step} maxStepReached={maxStepReached} setStep={setStep} />
         <div className="ml-2 text-xs text-foreground/60">Step {step} of 3</div>
       </div>
 
