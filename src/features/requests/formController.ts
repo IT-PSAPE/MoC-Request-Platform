@@ -7,8 +7,8 @@ import { getRandomUUID } from "@/lib/randomuuid";
 
 export function useRequestFormController() {
   // Step state
-  const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [maxStepReached, setMaxStepReached] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<FormSteps>(1);
+  const [maxStepReached, setMaxStepReached] = useState<FormSteps>(1);
 
   // Core fields (Step 1)
   const [who, setWho] = useState("");
