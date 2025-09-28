@@ -5,19 +5,19 @@ import Sheet from "@/components/ui/Sheet";
 import AddNote from "./add-notes";
 import Select from "@/components/ui/Select";
 import { RequestItem, RequestStatus } from "@/types/request";
+import { columns } from "@/features/requests/defualts";
 
 type Props = {
     active: RequestItem | null;
     setActive: Dispatch<SetStateAction<RequestItem | null>>;
     updateStatus: (id: string, status: RequestStatus) => void;
     refreshActive: () => void;
-    columns: { key: RequestStatus; title: string }[];
     setEquipmentChecked: (requestId: string, equipmentId: string, checked: boolean) => void;
     setSongChecked: (requestId: string, songId: string, checked: boolean) => void;
     addNote: (id: string, message: string) => void;
 }
 
-function DetailsSheet({active, setActive, updateStatus, refreshActive, columns, setSongChecked, setEquipmentChecked, addNote}: Props) {
+function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongChecked, setEquipmentChecked, addNote }: Props) {
     return (
         <Sheet
             open={!!active}

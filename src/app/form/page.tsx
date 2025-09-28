@@ -1,25 +1,12 @@
 "use client";
-import Input from "@/components/ui/Input";
-import Select from "@/components/ui/Select";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
-import Divider from "@/components/ui/Divider";
-import { RequestKind } from "@/types/request";
-import { getEquipmentCatalog, songsCatalog } from "@/features/requests/catalog";
+
 import { useRequestFormController } from "@/features/requests/formController";
+
 import StepIndicator from "./components/step-indicator";
 import SuccessScreen from "./components/success-screen";
 import QuestionForm from "./components/question-form";
-import { RequestPriority } from "@/types/request";
 import DetailsForm from "./components/details-form";
 import FlowForm from "./components/flow-form";
-
-const priorities: { value: RequestPriority; label: string }[] = [
-  { value: "low", label: "Low" },
-  { value: "medium", label: "Medium" },
-  { value: "high", label: "High" },
-  { value: "urgent", label: "Urgent" },
-] as const;
 
 export default function SubmitPage() {
   const controller = useRequestFormController();
@@ -36,11 +23,60 @@ export default function SubmitPage() {
       </div>
 
       <form onSubmit={controller.onSubmit} className="space-y-6">
-        {controller.step === 1 && <QuestionForm who={controller.who} setWho={controller.setWho} what={controller.what} setWhat={controller.setWhat} whenTxt={controller.whenTxt} setWhenTxt={controller.setWhenTxt} whereTxt={controller.whereTxt} setWhereTxt={controller.setWhereTxt} why={controller.why} setWhy={controller.setWhy} how={controller.how} setHow={controller.setHow} additionalInfo={controller.additionalInfo} setAdditionalInfo={controller.setAdditionalInfo} priority={controller.priority} setPriority={controller.setPriority} attachments={controller.attachments} setAttachments={controller.setAttachments} validateStep1={controller.validateStep1} resetForm={controller.resetForm} setStep={controller.setStep} setMaxStepReached={controller.setMaxStepReached} priorities={priorities} />}
+        {controller.step === 1 &&
+          <QuestionForm
+            who={controller.who}
+            setWho={controller.setWho}
+            what={controller.what}
+            setWhat={controller.setWhat}
+            whenTxt={controller.whenTxt}
+            setWhenTxt={controller.setWhenTxt}
+            whereTxt={controller.whereTxt}
+            setWhereTxt={controller.setWhereTxt}
+            why={controller.why}
+            setWhy={controller.setWhy}
+            how={controller.how}
+            setHow={controller.setHow}
+            additionalInfo={controller.additionalInfo}
+            setAdditionalInfo={controller.setAdditionalInfo}
+            priority={controller.priority}
+            setPriority={controller.setPriority}
+            attachments={controller.attachments}
+            setAttachments={controller.setAttachments}
+            validateStep1={controller.validateStep1}
+            resetForm={controller.resetForm}
+            setStep={controller.setStep}
+            setMaxStepReached={controller.setMaxStepReached}
+          />
+        }
 
-        {controller.step === 2 && <DetailsForm kind={controller.kind} setKind={controller.setKind} dueAt={controller.dueAt} setDueAt={controller.setDueAt} deadlineWarning={controller.deadlineWarning} setStep={controller.setStep} setMaxStepReached={controller.setMaxStepReached} selectedEquipment={controller.selectedEquipment} selectedSongs={controller.selectedSongs} toggleEquipment={controller.toggleEquipment} setEquipmentQuantity={controller.setEquipmentQuantity} toggleSong={controller.toggleSong} />}
+        {controller.step === 2 &&
+          <DetailsForm
+            kind={controller.kind}
+            setKind={controller.setKind}
+            dueAt={controller.dueAt}
+            setDueAt={controller.setDueAt}
+            deadlineWarning={controller.deadlineWarning}
+            setStep={controller.setStep}
+            setMaxStepReached={controller.setMaxStepReached}
+            selectedEquipment={controller.selectedEquipment}
+            selectedSongs={controller.selectedSongs}
+            toggleEquipment={controller.toggleEquipment}
+            setEquipmentQuantity={controller.setEquipmentQuantity}
+            toggleSong={controller.toggleSong}
+          />
+        }
 
-        {controller.step === 3 && <FlowForm eventFlow={controller.eventFlow} addFlowStep={controller.addFlowStep} removeFlowStep={controller.removeFlowStep} updateFlowLabel={controller.updateFlowLabel} updateFlowSong={controller.updateFlowSong} setStep={controller.setStep} />}
+        {controller.step === 3 &&
+          <FlowForm
+            eventFlow={controller.eventFlow}
+            addFlowStep={controller.addFlowStep}
+            removeFlowStep={controller.removeFlowStep}
+            updateFlowLabel={controller.updateFlowLabel}
+            updateFlowSong={controller.updateFlowSong}
+            setStep={controller.setStep}
+          />
+        }
       </form>
 
       {/* Success screen */}

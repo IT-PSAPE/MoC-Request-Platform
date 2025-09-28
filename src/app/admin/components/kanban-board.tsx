@@ -1,20 +1,20 @@
 import RequestCard from "@/components/ui/RequestCard";
 import ScrollArea from "@/components/ui/ScrollArea";
+import { columns } from "@/features/requests/defualts";
 import { RequestItem, RequestStatus } from "@/types/request";
 import { Dispatch, SetStateAction } from "react";
 
 type Props = {
-    statuses: { key: RequestStatus; title: string }[];
     items: RequestItem[];
     updateStatus: (id: string, status: RequestStatus) => void;
     setActive: Dispatch<SetStateAction<RequestItem | null>>;
 }
 
-function KanbanBoard({ statuses, items, updateStatus, setActive }: Props) {
+function KanbanBoard({ items, updateStatus, setActive }: Props) {
     return (
         <ScrollArea className="max-w-full flex-1 min-h-0">
             <div className="flex gap-4 pb-2 pr-2 px-4 h-full">
-                {statuses.map((col) => (
+                {columns.map((col) => (
                     <div key={col.key} className="min-w-64 flex-1 h-full flex flex-col bg-foreground/2 rounded-md p-3">
                         {(() => {
                             const list = items.filter((r) => r.status === col.key);

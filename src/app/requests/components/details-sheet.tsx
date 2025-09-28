@@ -4,14 +4,14 @@ import EmptyState from "@/components/ui/EmptyState";
 import Sheet from "@/components/ui/Sheet";
 import { RequestItem } from "@/types/request";
 import Badge from "@/components/ui/Badge";
+import { statusColor } from "@/features/requests/defualts";
 
 type Props = {
     active: RequestItem | null;
     setActive: Dispatch<SetStateAction<RequestItem | null>>;
-    statusColor: Record<RequestItem["status"], "gray" | "blue" | "yellow" | "green" | "red">;
 }
 
-function DetailsSheet({active, setActive, statusColor}: Props) {
+function DetailsSheet({ active, setActive }: Props) {
     return (
         <Sheet
             open={!!active}

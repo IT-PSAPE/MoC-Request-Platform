@@ -1,12 +1,12 @@
 "use client";
 
 import { useRequestsListController } from "@/features/requests/useRequestsListController";
+
 import FilterForm from "./components/filter-form";
 import KanbanBoard from "./components/kanban-board";
 import DetailsSheet from "./components/details-sheet";
 import FilterSheet from "./components/filter-sheet";
 import SortSheet from "./components/sort-sheet";
-import { statusColor } from "./types";
 
 export default function RequestsPage() {
   const controller = useRequestsListController();
@@ -55,8 +55,7 @@ export default function RequestsPage() {
       {/* Details Sheet */}
       <DetailsSheet
         active={controller.active}
-        setActive={controller.setActive}
-        statusColor={statusColor} />
+        setActive={controller.setActive} />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import Select from "@/components/ui/Select";
 import { Attachment, RequestPriority } from "@/types/request";
+import { priorities } from "@/features/requests/defualts";
 
 type Props = {
     who: string;
@@ -32,11 +33,9 @@ type Props = {
     resetForm: () => void;
     setStep: Dispatch<SetStateAction<FormSteps>>;
     setMaxStepReached: Dispatch<SetStateAction<FormSteps>>;
-
-    priorities: { value: RequestPriority; label: string }[];
 }
 
-function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTxt, setWhereTxt, why, setWhy, how, setHow, additionalInfo, setAdditionalInfo, priority, setPriority, attachments, setAttachments, validateStep1, resetForm, setStep, setMaxStepReached, priorities }: Props) {
+function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTxt, setWhereTxt, why, setWhy, how, setHow, additionalInfo, setAdditionalInfo, priority, setPriority, attachments, setAttachments, validateStep1, resetForm, setStep, setMaxStepReached }: Props) {
     return (
         <>
             <Card>
