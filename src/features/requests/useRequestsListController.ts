@@ -20,6 +20,7 @@ export function useRequestsListController() {
 
   // Filters
   const [priorityFilter, setPriorityFilter] = useState<Priority | null>(null);
+  const [filteredRequests, setFilteredRequests] = useState<FetchRequest[]>([]);
   const [typeFilter, setTypeFilter] = useState<RequestType | null>(null);
   const [dueStart, setDueStart] = useState("");
   const [dueEnd, setDueEnd] = useState("");
@@ -125,18 +126,15 @@ export function useRequestsListController() {
 
       const matchQ = ql ? haystack.includes(ql) : true;
 
-      const matchPriority = priorityFilter === null ? true : request.priority === priorityFilter;
-      const matchKind = typeFilter === null ? true : (request.type ?? "") === typeFilter;
+      const matchPriority = priorityFilter
+        ? request.priority?.id === priorityFilter.id
+        : true;
+      const matchKind = typeFilter
+        ? request.type?.id === typeFilter.id
+        : true;
       const dueMs = request.due ? new Date(request.due).getTime() : null;
       const matchDueStart = startMs !== null ? (dueMs !== null && dueMs >= startMs) : true;
       const matchDueEnd = endMs !== null ? (dueMs !== null && dueMs <= endMs) : true;
-
-      console.log("Request:", request);
-      console.log("Match Q:", matchQ);
-      console.log("Match Priority:", matchPriority);
-      console.log("Match Kind:", matchKind);
-      console.log("Match Due Start:", matchDueStart);
-      console.log("Match Due End:", matchDueEnd);
 
       return matchQ && matchPriority && matchKind && matchDueStart && matchDueEnd;
     });
@@ -186,8 +184,6 @@ export function useRequestsListController() {
 
   return {
     // data
-    requests,
-    filtered,
     grouped,
 
     // selection

@@ -24,13 +24,27 @@ function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFil
     const defualt = useDefualtContext();
 
     function updatePriorityFilter(e: React.ChangeEvent<HTMLSelectElement>) {
-        const priority = defualt.priorities.find(p => p.id === e.target.value);
+        const { value } = e.target;
+
+        if (!value) {
+            setPriorityFilter(null);
+            return;
+        }
+
+        const priority = defualt.priorities.find(p => p.id === value);
 
         setPriorityFilter(priority || null);
     }
 
     function updateTypeFilter(e: React.ChangeEvent<HTMLSelectElement>) {
-        const type = defualt.types.find(t => t.id === e.target.value);
+        const { value } = e.target;
+
+        if (!value) {
+            setTypeFilter(null);
+            return;
+        }
+
+        const type = defualt.types.find(t => t.id === value);
 
         setTypeFilter(type || null);
     }
@@ -40,24 +54,24 @@ function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFil
             <div className="space-y-4 text-sm">
                 <div>
                     <div className="text-xs text-foreground/60 mb-1">Priority</div>
-                    <Select value={priorityFilter?.id} onChange={updatePriorityFilter}>
-                        <option value="all">All</option>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        <option value="urgent">Urgent</option>
+                    <Select value={priorityFilter?.id ?? ""} onChange={updatePriorityFilter}>
+                        <option value="">All</option>
+                        {defualt.priorities.map((priority) => (
+                            <option key={priority.id} value={priority.id}>
+                                {priority.name}
+                            </option>
+                        ))}
                     </Select>
                 </div>
                 <div>
                     <div className="text-xs text-foreground/60 mb-1">Type</div>
-                    <Select value={kindFilter?.id} onChange={updateTypeFilter}>
-                        <option value="all">All</option>
-                        <option value="event">Event</option>
-                        <option value="video_editing">Video Editing</option>
-                        <option value="video_filming_editing">Video Filming + Editing</option>
-                        <option value="equipment">Equipment</option>
-                        <option value="design_flyer">Design: Flyer</option>
-                        <option value="design_special">Design: Special</option>
+                    <Select value={kindFilter?.id ?? ""} onChange={updateTypeFilter}>
+                        <option value="">All</option>
+                        {defualt.types.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
                     </Select>
                 </div>
                 <div>

@@ -6,12 +6,12 @@ import ScrollArea from "@/components/ui/ScrollArea";
 import { useDefualtContext } from "@/components/providers/defualt-provider";
 
 type Props = {
-    requests: FetchRequest[];
     compare: (a: FetchRequest, b: FetchRequest) => number;
     setActive: Dispatch<SetStateAction<FetchRequest | null>>;
+    grouped: Record<number, FetchRequest[]>;
 }
 
-function KanbanBoard({ requests: items, compare, setActive }: Props) {
+function KanbanBoard({ compare, setActive, grouped }: Props) {
     const defualts = useDefualtContext();
 
     return (
@@ -22,10 +22,10 @@ function KanbanBoard({ requests: items, compare, setActive }: Props) {
                         <div className="text-sm font-medium mb-2">{col.name}</div>
                         <div className="space-y-2">
                             {
-                                items.length === 0 ? (
+                                grouped[col.value].length === 0 ? (
                                     <EmptyState />
                                 ) : (
-                                    items.filter((r) => r.status.id === col.id).sort(compare).map((r) => (
+                                    grouped[col.value].sort(compare).map((r) => (
                                         <RequestCard key={r.id} request={r} setActive={setActive} />
                                     ))
                                 )

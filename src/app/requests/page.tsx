@@ -24,9 +24,9 @@ export default function RequestsPage() {
 
       {/* Kanban Board */}
       <KanbanBoard
-        requests={controller.requests}
         compare={controller.compare}
         setActive={controller.setActive}
+        grouped={controller.grouped}
       />
 
       {/* Filter Sheet */}
