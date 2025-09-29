@@ -6,6 +6,7 @@ import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 type AuthContextType = {
     authed: boolean;
     user: User | null;
+    initialized: boolean;
     login: (email: string, password: string) => Promise<boolean>;
     logout: () => Promise<void>;
 };
@@ -15,6 +16,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {
     const [authed, setAuthed] = useState(false);
     const [user, setUser] = useState<User | null>(null);
+    const [initialized, setInitialized] = useState(false);
 
     const supabase = useMemo<SupabaseClient | null>(() => {
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
@@ -37,6 +39,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
         if (!supabase) {
             setUser(null);
             setAuthed(false);
+            setInitialized(true);
             return;
         }
 
@@ -52,17 +55,20 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
                     console.error("Failed to fetch Supabase session", error);
                     setUser(null);
                     setAuthed(false);
+                    setInitialized(true);
                     return;
                 }
 
                 const sessionUser = data?.session?.user ?? null;
                 setUser(sessionUser);
                 setAuthed(Boolean(sessionUser));
+                setInitialized(true);
             } catch (error) {
                 if (!isMounted) return;
                 console.error("Unexpected error fetching Supabase session", error);
                 setUser(null);
                 setAuthed(false);
+                setInitialized(true);
             }
         };
 
@@ -87,6 +93,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
 
         setUser(data.user);
         setAuthed(true);
+        setInitialized(true);
 
         return true;
     }
@@ -102,9 +109,10 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
 
         setUser(null);
         setAuthed(false);
+        setInitialized(true);
     }
 
-    const context = { authed, user, login, logout };
+    const context: AuthContextType = { authed, user, initialized, login, logout };
 
     return (
         <AuthContext.Provider value={context}>

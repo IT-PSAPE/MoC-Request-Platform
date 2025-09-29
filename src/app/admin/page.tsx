@@ -11,7 +11,7 @@ import Sidebar from "./components/siebar";
 import { useAuthContext } from "@/components/providers/auth-provider";
 
 export default function AdminPage() {
-  const { authed, user } = useAuthContext();
+  const { authed, user, initialized } = useAuthContext();
   const controloler = useAdminController();
 
   const router = useRouter();
@@ -20,14 +20,18 @@ export default function AdminPage() {
   const [tab, setTab] = useState<"requests" | "equipment">("requests");
 
   useEffect(() => {
-    if (!authed) {
+    if (initialized && !authed) {
       // redirect to dedicated login page, preserving return location
       router.push(`/login?next=${encodeURIComponent("/admin")}`);
     }
-  }, [authed, router]);
+  }, [authed, initialized, router]);
 
-  if (!user) {
+  if (!initialized) {
     return <div className="py-8">Loading...</div>;
+  }
+
+  if (!authed || !user) {
+    return <div className="py-8">Redirecting...</div>;
   }
 
   // ──────────────────────────────────────────────────────────────────────────────────────────────────
