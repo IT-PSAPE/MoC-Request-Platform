@@ -13,7 +13,7 @@ type Props = {
     refreshActive: () => void;
     setEquipmentChecked: (requestId: string, equipmentId: string, checked: boolean) => void;
     setSongChecked: (requestId: string, songId: string, checked: boolean) => void;
-    addNote: (id: string, message: string) => void;
+    addNote: (id: string, note: string) => void;
 }
 
 function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongChecked, setEquipmentChecked, addNote }: Props) {

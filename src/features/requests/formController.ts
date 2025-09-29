@@ -1,8 +1,8 @@
 "use client";
 import { useMemo, useState, FormEvent } from "react";
 import { Attachment, EventFlowStep, RequestItem, RequestKind, SongItem, EquipmentItem, RequestPriority } from "@/types/request";
-import { RequestService } from "@/features/requests/service";
-import { deadlineRequirementDays } from "@/features/requests/utils";
+import { RequestService } from "@/features/service";
+import { deadlineRequirementDays } from "@/features/utils";
 import { getRandomUUID } from "@/lib/randomuuid";
 
 export function useRequestFormController() {

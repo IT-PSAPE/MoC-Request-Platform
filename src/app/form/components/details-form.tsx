@@ -7,7 +7,7 @@ import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 
 import { EquipmentItem, RequestKind, SongItem } from "@/types/request";
-import { getEquipmentCatalog, songsCatalog } from "@/features/requests/catalog";
+import { getEquipmentCatalog, songsCatalog } from "@/features/catalog";
 
 type Props = {
     kind: "" | RequestKind;

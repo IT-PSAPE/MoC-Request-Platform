@@ -1,9 +1,11 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDefualtContext } from "@/components/providers/defualt-provider";
+import RequestService from "../requests/request-service";
 
 export function useAdminController() {
   const defualtContext = useDefualtContext();
+  const service = RequestService;
 
   // start as `null` so consumers can tell "not yet checked" vs false
   const [items, setItems] = useState<FetchRequest[]>([]);
@@ -11,111 +13,31 @@ export function useAdminController() {
 
   // Load
   useEffect(() => {
-    const data = defualtContext.supabase.from("request").select(
-      ` id,
-        who,
-        what,
-        when,
-        where,
-        why,
-        how,
-        info,
-        due,
-        flow,
-        created_at,
-        priority(*),
-        status(*),
-        type(*),
-        attachment(*),
-        note(*),
-        equipment:request_equipment(*, equipment(*)),
-        song:request_song(*, song(*)),
-        venue:request_venue(*, venue(*))
-      `);
-
-    data.then((res) => {
-      if (res.error) {
-        console.error("Failed to load requests", res.error);
-      } else {
-
-        const requests = res.data.map((request) => ({
-          id: request.id as string,
-          who: request.who as string,
-          what: request.what as string,
-          when: request.when as string,
-          where: request.where as string,
-          why: request.why as string,
-          how: request.how as string,
-          info: request.info as string,
-          due: request.due as string,
-          flow: request.flow as string[],
-          created_at: request.created_at as string,
-          // @ts-ignore
-          priority: request.priority as Priority,
-          // @ts-ignore
-          status: request.status as Status,
-          // @ts-ignore
-          type: request.type as RequestType,
-          attachment: request.attachment as Attachment[],
-          note: request.note as Note[],
-          equipment: request.equipment,
-          song: request.song,
-          venue: request.venue,
-        }));
-
-        console.log(requests);
-
-        setItems(requests);
-      }
-    });
-
+    service.list(defualtContext.supabase).then((res) => setItems(res));
   }, []);
 
   const refreshItems = useCallback(() => {
-    // setItems(RequestService.list());
+    service.list(defualtContext.supabase).then((res) => setItems(res));
   }, []);
 
-  const refreshActive = useCallback(() => {
-    // setActive((prev) => (prev ? { ...RequestService.get(prev.id)! } : prev));
-  }, []);
+  const refreshActive = useCallback(async () => {
+    if (active) setActive(await service.get(defualtContext.supabase, active.id));
+  }, [active]);
 
   const updateStatus = useCallback((id: string, status: Status) => {
-    // RequestService.updateStatus(id, status);
-    refreshItems();
+    service.updateStatus(defualtContext.supabase, id, status).then(() => refreshItems());
   }, [refreshItems]);
 
-  const addNote = useCallback((id: string, message: string) => {
-    // RequestService.addNote(id, message);
-    refreshItems();
-    // setActive((prev) => (prev && prev.id === id ? { ...RequestService.get(id)! } : prev));
-  }, [refreshItems]);
+  const addNote = useCallback(async (id: string, note: string) => {
+    service.addNote(defualtContext.supabase, id, note).then(() => { refreshItems(); refreshActive(); });
+  }, [refreshItems, refreshActive]);
 
   const setEquipmentChecked = useCallback((requestId: string, equipmentId: string, checked: boolean) => {
-    // const current = RequestService.get(requestId);
-    // const prev = !!current?.equipmentChecklist?.[equipmentId];
-    // const next = { ...(current?.equipmentChecklist || {}) };
-    // next[equipmentId] = checked;
-    // RequestService.updateEquipmentChecklist(requestId, next);
-    // Determine requested quantity for this equipment in the request
-    // const reqQty = (() => {
-    //   const item = current?.selectedEquipment?.find((e) => e.id === equipmentId);
-    //   const q = item && typeof item.quantity === "number" ? Math.max(1, Math.floor(item.quantity)) : 1;
-    //   return q;
-    // })();
-    // // Apply inventory adjustment only on change
-    // if (checked !== prev) {
-    //   if (checked) EquipmentStore.adjustQuantity(equipmentId, -reqQty);
-    //   else EquipmentStore.adjustQuantity(equipmentId, +reqQty);
-    // }
-    // setActive({ ...RequestService.get(requestId)! });
+
   }, []);
 
   const setSongChecked = useCallback((requestId: string, songId: string, checked: boolean) => {
-    // const current = RequestService.get(requestId);
-    // const next = { ...(current?.songChecklist || {}) };
-    // next[songId] = checked;
-    // RequestService.updateSongChecklist(requestId, next);
-    // setActive({ ...RequestService.get(requestId)! });
+
   }, []);
 
   const grouped = useMemo(() => {

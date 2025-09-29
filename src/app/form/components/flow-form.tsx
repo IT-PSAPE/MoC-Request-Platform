@@ -5,7 +5,7 @@ import Divider from "@/components/ui/Divider";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
-import { songsCatalog } from "@/features/requests/catalog";
+import { songsCatalog } from "@/features/catalog";
 import { EventFlowStep } from "@/types/request";
 
 type Props = {

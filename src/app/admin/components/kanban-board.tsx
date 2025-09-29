@@ -19,11 +19,11 @@ function KanbanBoard({ grouped, updateStatus, setActive }: Props) {
                 {defualts.statuses.map((status) => (
                     <div key={status.id} className="min-w-64 flex-1 h-full flex flex-col bg-foreground/2 rounded-md p-3">
                         {(() => {
-                            const list = grouped[status.value];
+                            const list = grouped[status.value] ?? [];
                             return (
                                 <div className="mb-2">
                                     <div className="text-sm font-medium">{status.name}</div>
-                                    <div className="text-xs text-foreground/60">{list.length}Requests</div>
+                                    <div className="text-xs text-foreground/60">{list.length} Requests</div>
                                 </div>
                             );
                         })()}
@@ -32,15 +32,21 @@ function KanbanBoard({ grouped, updateStatus, setActive }: Props) {
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={(e) => {
                                 const id = e.dataTransfer.getData("text/plain");
+                                if (!id) return;
                                 updateStatus(id, status);
                             }}
                         >
                             {
-                                grouped[status.value].length === 0 ? (
-                                    <EmptyState />
+                                (grouped[status.value] ?? []).length === 0 ? (
+                                    <EmptyState title="Nothing here" message="Drop a request to move it into this status." />
                                 ) : (
-                                    grouped[status.value].map((r) => (
-                                        <RequestCard key={r.id} request={r} setActive={setActive} />
+                                    (grouped[status.value] ?? []).map((r) => (
+                                        <RequestCard
+                                            key={r.id}
+                                            request={r}
+                                            setActive={setActive}
+                                            draggable
+                                        />
                                     ))
                                 )
                             }

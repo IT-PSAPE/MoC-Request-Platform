@@ -1,6 +1,7 @@
 "use client";
 import { useDefualtContext } from "@/components/providers/defualt-provider";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import RequestService from "./request-service";
 
 export type SortKey = "createdAt" | "dueAt" | "priority";
 export type SortRule = { key: SortKey; dir: "asc" | "desc"; enabled: boolean };
@@ -12,6 +13,9 @@ const DEFAULT_SORT_RULES: ReadonlyArray<SortRule> = [
 ] as const;
 
 export function useRequestsListController() {
+  const defualtContext = useDefualtContext();
+  const service = RequestService;
+
   // Data
   const [requests, setRequests] = useState<FetchRequest[]>([]);
 
@@ -20,7 +24,6 @@ export function useRequestsListController() {
 
   // Filters
   const [priorityFilter, setPriorityFilter] = useState<Priority | null>(null);
-  const [filteredRequests, setFilteredRequests] = useState<FetchRequest[]>([]);
   const [typeFilter, setTypeFilter] = useState<RequestType | null>(null);
   const [dueStart, setDueStart] = useState("");
   const [dueEnd, setDueEnd] = useState("");
@@ -33,66 +36,9 @@ export function useRequestsListController() {
   const [sortOpen, setSortOpen] = useState(false);
   const [active, setActive] = useState<FetchRequest | null>(null);
 
-  const defualtContext = useDefualtContext();
-
   // Load
   useEffect(() => {
-    const data = defualtContext.supabase.from("request").select(
-      ` id,
-        who,
-        what,
-        when,
-        where,
-        why,
-        how,
-        info,
-        due,
-        flow,
-        created_at,
-        priority(*),
-        status(*),
-        type(*),
-        attachment(*),
-        note(*),
-        equipment:request_equipment(*, equipment(*)),
-        song:request_song(*, song(*)),
-        venue:request_venue(*, venue(*))
-      `);
-
-    data.then((res) => {
-      if (res.error) {
-        console.error("Failed to load requests", res.error);
-      } else {
-
-        const requests = res.data.map((request) => ({
-          id: request.id as string,
-          who: request.who as string,
-          what: request.what as string,
-          when: request.when as string,
-          where: request.where as string,
-          why: request.why as string,
-          how: request.how as string,
-          info: request.info as string,
-          due: request.due as string,
-          flow: request.flow as string[],
-          created_at: request.created_at as string,
-          // @ts-ignore
-          priority: request.priority as Priority,
-          // @ts-ignore
-          status: request.status as Status,
-          // @ts-ignore
-          type: request.type as RequestType,
-          attachment: request.attachment as Attachment[],
-          note: request.note as Note[],
-          equipment: request.equipment,
-          song: request.song,
-          venue: request.venue,
-        }));
-
-        setRequests(requests);
-      }
-    });
-
+    service.list(defualtContext.supabase).then((res) => setRequests(res));
   }, []);
 
   // Derived: filtered

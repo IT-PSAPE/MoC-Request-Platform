@@ -8,7 +8,7 @@ import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import Select from "@/components/ui/Select";
 import { Attachment, RequestPriority } from "@/types/request";
-import { priorities } from "@/features/requests/defualts";
+import { priorities } from "@/features/defualts";
 
 type Props = {
     who: string;

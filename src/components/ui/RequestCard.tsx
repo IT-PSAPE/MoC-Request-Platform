@@ -13,14 +13,24 @@ interface RequestCardProps extends React.HTMLAttributes<HTMLDivElement> {
   setActive: (r: FetchRequest) => void;
 }
 
-function RequestCard({ ...props }: RequestCardProps) {
-  const r = props.request;
+function RequestCard({ request: r, setActive, className, onClick, onDragStart, ...divProps }: RequestCardProps) {
   const title = r.what || "Request";
   const description = r.info || r.why || "";
   const totalQty = (r.equipment || []).reduce((sum, e) => sum + (typeof e.quantity === "number" ? Math.max(1, Math.floor(e.quantity)) : 1), 0);
   const headerType = r.type ? r.type.name.replace(/_/g, " ") : "Request";
   const headerDate = formatDateMDY(r.due || r.created_at);
   const footerDate = formatDateDayMon(r.created_at);
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    onClick?.(event);
+    if (event.defaultPrevented) return;
+    setActive(r);
+  };
+
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    event.dataTransfer.setData("text/plain", r.id);
+    onDragStart?.(event);
+  };
 
 
   function StatusBadge() {
@@ -33,7 +43,12 @@ function RequestCard({ ...props }: RequestCardProps) {
   }
 
   return (
-    <div className="space-y-3 p-3 rounded-lg border border-gray-200 bg-white shadow-sm" onClick={() => props.setActive(r)}>
+    <div
+      {...divProps}
+      className={cn("space-y-3 p-3 rounded-lg border border-gray-200 bg-white shadow-sm", className)}
+      onClick={handleClick}
+      onDragStart={handleDragStart}
+    >
       {/* Header pill */}
       <div className="inline-flex rounded-md bg-gray-50 px-3 py-1 text-xs items-center text-gray-700">
         <span className="capitalize">{headerType} • {headerDate}</span>
