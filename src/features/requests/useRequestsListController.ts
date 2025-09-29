@@ -89,7 +89,6 @@ export function useRequestsListController() {
           venue: request.venue,
         }));
 
-        // @ts-ignore
         setRequests(requests);
       }
     });

@@ -123,10 +123,10 @@ type FetchRequest = {
     status: Status;
     type: RequestType;
     attachment: Attachment[];
-    notes: Note[];
+    note: Note[];
     equipment: RequestEquipment[];
     song: RequestSong[];
-    venues: RequestVenue[];
+    venue: RequestVenue[];
 };
 
 // 

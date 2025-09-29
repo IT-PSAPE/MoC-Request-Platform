@@ -4,13 +4,12 @@ import EmptyState from "@/components/ui/EmptyState";
 import Sheet from "@/components/ui/Sheet";
 import AddNote from "./add-notes";
 import Select from "@/components/ui/Select";
-import { RequestItem, RequestStatus } from "@/types/request";
-import { columns } from "@/features/requests/defualts";
+import { useDefualtContext } from "@/components/providers/defualt-provider";
 
 type Props = {
-    active: RequestItem | null;
-    setActive: Dispatch<SetStateAction<RequestItem | null>>;
-    updateStatus: (id: string, status: RequestStatus) => void;
+    active: FetchRequest | null;
+    setActive: Dispatch<SetStateAction<FetchRequest | null>>;
+    updateStatus: (id: string, status: Status) => void;
     refreshActive: () => void;
     setEquipmentChecked: (requestId: string, equipmentId: string, checked: boolean) => void;
     setSongChecked: (requestId: string, songId: string, checked: boolean) => void;
@@ -18,6 +17,8 @@ type Props = {
 }
 
 function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongChecked, setEquipmentChecked, addNote }: Props) {
+  const defualtContext = useDefualtContext();
+  
     return (
         <Sheet
             open={!!active}
@@ -32,34 +33,35 @@ function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongC
                         <h3 className="text-base font-semibold mb-3">Overview</h3>
                         <div className="text-xs text-foreground/60">Status</div>
                         <Select
-                            value={active.status}
+                            value={active.status.id}
                             onChange={(e) => {
-                                const s = e.target.value as RequestStatus;
+                                const s = defualtContext.statuses.find((s) => s.id === e.target.value);
+                                if (!s) return;
                                 updateStatus(active.id, s);
                                 refreshActive();
                             }}
                         >
-                            {columns.map((c) => (
-                                <option key={c.key} value={c.key}>
-                                    {c.title}
+                            {defualtContext.statuses.map((s) => (
+                                <option key={s.id} value={s.id}>
+                                    {s.name}
                                 </option>
                             ))}
                         </Select>
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             <div>
                                 <div className="text-xs text-foreground/60">Priority</div>
-                                <div className="font-medium capitalize">{active.priority}</div>
+                                <div className="font-medium capitalize">{active.priority.name}</div>
                             </div>
-                            {active.kind && (
+                            {active.type && (
                                 <div>
                                     <div className="text-xs text-foreground/60">Type</div>
-                                    <div className="font-medium capitalize">{active.kind.replace(/_/g, " ")}</div>
+                                    <div className="font-medium capitalize">{active.type.name}</div>
                                 </div>
                             )}
-                            {active.dueAt && (
+                            {active.due && (
                                 <div>
                                     <div className="text-xs text-foreground/60">Due</div>
-                                    <div className="font-medium">{new Date(active.dueAt).toLocaleString()}</div>
+                                    <div className="font-medium">{new Date(active.due).toLocaleString()}</div>
                                 </div>
                             )}
                         </div>
@@ -69,7 +71,7 @@ function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongC
                     {/* 5W + 1H */}
                     <div>
                         <h3 className="text-base font-semibold mb-3">5W + 1H</h3>
-                        {!(active.who || active.what || active.when || active.where || active.why || active.how || active.additionalInfo) ? (
+                        {!(active.who || active.what || active.when || active.where || active.why || active.how || active.info) ? (
                             <EmptyState title="No basic details" message="Who, What, When, Where, Why, or How not provided." />
                         ) : (
                             <>
@@ -97,10 +99,10 @@ function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongC
                                     <div className="text-xs text-foreground/60">How</div>
                                     <div>{active.how}</div>
                                 </div>
-                                {active.additionalInfo && (
+                                {active.info && (
                                     <div>
                                         <div className="text-xs text-foreground/60">Additional</div>
-                                        <div>{active.additionalInfo}</div>
+                                        <div>{active.info}</div>
                                     </div>
                                 )}
                             </>
@@ -111,48 +113,47 @@ function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongC
                     {/* Request Items (checklists) */}
                     <div>
                         <h3 className="text-base font-semibold mb-3">Request Items</h3>
-                        {!(active.selectedEquipment && active.selectedEquipment.length) && !(active.selectedSongs && active.selectedSongs.length) ? (
+                        {!(active.equipment && active.equipment.length) && !(active.song && active.song.length) ? (
                             <EmptyState title="No request items" message="No equipment or songs were specified." />
                         ) : (
                             <>
-                                {active.selectedEquipment && active.selectedEquipment.length > 0 && (
+                                {active.equipment && active.equipment.length > 0 && (
                                     <div>
                                         <div className="text-xs text-foreground/60 mb-1">Equipment</div>
                                         <ul className="space-y-1">
-                                            {active.selectedEquipment.map((e) => {
-                                                const checked = !!active.equipmentChecklist?.[e.id];
+                                            {active.equipment.map((e) => {
                                                 return (
-                                                    <li key={e.id} className="flex items-center gap-2">
+                                                    <li key={`${e.request_id}-${e.equipment_id}`} className="flex items-center gap-2">
                                                         <input
                                                             type="checkbox"
-                                                            checked={checked}
+                                                            checked={e.approved}
                                                             onChange={(ev) => {
-                                                                setEquipmentChecked(active.id, e.id, ev.target.checked);
+                                                                setEquipmentChecked(active.id, e.equipment_id, ev.target.checked);
                                                             }}
                                                         />
-                                                        <span>{e.name}</span>
+                                                        <span>{e.equipment.name}</span>
                                                     </li>
                                                 );
                                             })}
                                         </ul>
                                     </div>
                                 )}
-                                {active.selectedSongs && active.selectedSongs.length > 0 && (
+                                {active.song && active.song.length > 0 && (
                                     <div className="mt-3">
                                         <div className="text-xs text-foreground/60 mb-1">Songs</div>
                                         <ul className="space-y-1">
-                                            {active.selectedSongs.map((s) => {
-                                                const checked = !!active.songChecklist?.[s.id];
+                                            {active.song.map((s) => {
+                                                // const checked = !!active.songChecklist?.[s.id];
                                                 return (
-                                                    <li key={s.id} className="flex items-center gap-2">
+                                                    <li key={`${s.request_id}-${s.song_id}`} className="flex items-center gap-2">
                                                         <input
                                                             type="checkbox"
-                                                            checked={checked}
+                                                            checked={s.song.instrumental || s.song.lyrics}
                                                             onChange={(ev) => {
-                                                                setSongChecked(active.id, s.id, ev.target.checked);
+                                                                setSongChecked(active.id, s.song_id, ev.target.checked);
                                                             }}
                                                         />
-                                                        <span>{s.title}{s.artist ? ` — ${s.artist}` : ""}</span>
+                                                        <span>{s.song.name}</span>
                                                     </li>
                                                 );
                                             })}
@@ -167,35 +168,35 @@ function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongC
                     {/* Proceedings: Event Flow + Files */}
                     <div>
                         <h3 className="text-base font-semibold mb-3">Proceedings</h3>
-                        {!(active.eventFlow && active.eventFlow.length) && !(active.attachments && active.attachments.length) ? (
-                            <EmptyState title="No proceedings" message="No event flow steps or files attached." />
+                        {!(active.venue && active.venue.length) ? (
+                            <EmptyState title="No proceedings" message="No venues specified." />
                         ) : (
                             <>
-                                {active.eventFlow && active.eventFlow.length > 0 && (
+                                {active.venue && active.venue.length > 0 && (
                                     <div>
                                         <ol className="list-decimal pl-5">
-                                            {active.eventFlow.map((st, idx) => (
+                                            {active.flow.map((st, idx) => (
                                                 <li key={idx}>
-                                                    <span className="font-medium capitalize">{st.type}</span>
-                                                    {st.label ? `: ${st.label}` : ""}
+                                                    <span className="font-medium capitalize">{st}</span>
+                                                    {/* {st.label ? `: ${st.label}` : ""}
                                                     {st.type === "song" && st.songId
                                                         ? (() => {
                                                             const song = (active.selectedSongs || []).find((s) => s.id === st.songId);
                                                             return song ? ` — ${song.title}` : "";
                                                         })()
-                                                        : ""}
+                                                        : ""} */}
                                                 </li>
                                             ))}
                                         </ol>
                                     </div>
                                 )}
-                                {active.attachments.length > 0 && (
+                                {active.attachment.length > 0 && (
                                     <details className="mt-3">
-                                        <summary className="cursor-pointer">Attachments ({active.attachments.length})</summary>
+                                        <summary className="cursor-pointer">Attachments ({active.attachment.length})</summary>
                                         <ul className="list-disc pl-5 mt-1">
-                                            {active.attachments.map((a) => (
+                                            {active.attachment.map((a) => (
                                                 <li key={a.id}>
-                                                    <a href={a.dataUrl} download={a.name} className="underline">
+                                                    <a href={a.storage} download={a.name} className="underline">
                                                         {a.name}
                                                     </a>
                                                 </li>
@@ -211,14 +212,14 @@ function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongC
                     {/* Internal Notes */}
                     <div>
                         <h3 className="text-base font-semibold mb-3">Internal Notes</h3>
-                        {active.notes.length === 0 ? (
+                        {active.note.length === 0 ? (
                             <EmptyState title="No notes yet" message="Add a note for internal collaboration." />
                         ) : (
                             <ul className="space-y-3">
-                                {active.notes.map((n) => (
+                                {active.note.map((n) => (
                                     <li key={n.id} className="text-sm">
-                                        <div className="text-foreground/60">{new Date(n.createdAt).toLocaleString()}</div>
-                                        <div className="mt-0.5">{n.message}</div>
+                                        <div className="text-foreground/60">{new Date(n.created).toLocaleString()}</div>
+                                        <div className="mt-0.5">{n.note}</div>
                                     </li>
                                 ))}
                             </ul>

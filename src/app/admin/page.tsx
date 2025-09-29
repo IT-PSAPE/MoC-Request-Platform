@@ -49,7 +49,7 @@ export default function AdminPage() {
           <>
             <div className="w-full px-4 text-2xl font-semibold mb-4">Requests</div>
             <KanbanBoard
-              items={controloler.items}
+              grouped={controloler.grouped}
               updateStatus={controloler.updateStatus}
               setActive={controloler.setActive}
             />

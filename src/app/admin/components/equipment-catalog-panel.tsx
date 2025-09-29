@@ -3,23 +3,23 @@ import { Dispatch, SetStateAction } from "react";
 import EmptyState from "@/components/ui/EmptyState";
 import ScrollArea from "@/components/ui/ScrollArea";
 import { EquipmentStore } from "@/lib/equipmentStore";
-import { RequestItem } from "@/types/request";
 
 type Props = {
-    items: RequestItem[];
-    setActive: Dispatch<SetStateAction<RequestItem | null>>
+    items: FetchRequest[];
+    setActive: Dispatch<SetStateAction<FetchRequest | null>>
 }
 
 function EquipmentCatalogPanel({items, setActive}: Props) {
     // Compute equipment with active requests and quantities
     const equipment = EquipmentStore.list();
-    const activeReqs = items.filter((r) => r.status === "pending" || r.status === "in_progress");
-    const byEquipment: Record<string, { request: RequestItem; quantity: number }[]> = {};
+    const activeReqs = items.filter((r) => r.status.value === 1 || r.status.value === 2);
+    const byEquipment: Record<string, { request: FetchRequest; quantity: number }[]> = {};
+
     activeReqs.forEach((r) => {
-        (r.selectedEquipment || []).forEach((e) => {
+        (r.equipment || []).forEach((e) => {
             const qty = typeof e.quantity === "number" ? Math.max(1, Math.floor(e.quantity)) : 1;
-            if (!byEquipment[e.id]) byEquipment[e.id] = [];
-            byEquipment[e.id].push({ request: r, quantity: qty });
+            if (!byEquipment[e.equipment.id]) byEquipment[e.equipment.id] = [];
+            byEquipment[e.equipment.id].push({ request: r, quantity: qty });
         });
     });
 
