@@ -1,7 +1,6 @@
 "use client";
+import { useDefualtContext } from "@/components/providers/defualt-provider";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { RequestItem, RequestKind, RequestPriority, RequestStatus } from "@/types/request";
-import { RequestService } from "@/features/requests/service";
 
 export type SortKey = "createdAt" | "dueAt" | "priority";
 export type SortRule = { key: SortKey; dir: "asc" | "desc"; enabled: boolean };
@@ -12,18 +11,16 @@ const DEFAULT_SORT_RULES: ReadonlyArray<SortRule> = [
   { key: "priority", dir: "desc", enabled: false },
 ] as const;
 
-const PRIORITY_ORDER: Readonly<Record<RequestPriority, number>> = { low: 0, medium: 1, high: 2, urgent: 3 } as const;
-
 export function useRequestsListController() {
   // Data
-  const [items, setItems] = useState<RequestItem[]>([]);
+  const [requests, setRequests] = useState<FetchRequest[]>([]);
 
   // Search
-  const [q, setQ] = useState("");
+  const [query, setQuery] = useState("");
 
   // Filters
-  const [priorityFilter, setPriorityFilter] = useState<"all" | RequestPriority>("all");
-  const [kindFilter, setKindFilter] = useState<"all" | RequestKind>("all");
+  const [priorityFilter, setPriorityFilter] = useState<Priority | null>(null);
+  const [kindFilter, setKindFilter] = useState<RequestType | null>(null);
   const [dueStart, setDueStart] = useState("");
   const [dueEnd, setDueEnd] = useState("");
 
@@ -33,77 +30,107 @@ export function useRequestsListController() {
   // UI sheets
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
-  const [active, setActive] = useState<RequestItem | null>(null);
+  const [active, setActive] = useState<FetchRequest | null>(null);
+
+  const defualtContext = useDefualtContext();
 
   // Load
-  useEffect(() => setItems(RequestService.list()), []);
+  useEffect(() => {
+    const data = defualtContext.supabase.from("request").select(
+      ` id,
+        who,
+        what,
+        when,
+        where,
+        why,
+        how,
+        info,
+        due,
+        flow,
+        created_at,
+        priority(*),
+        status(*),
+        type(*),
+        attachment(*),
+        note(*),
+        equipment:request_equipment(equipment(*)),
+        song:request_song(song(*)),
+        venue:request_venue(venue(*))
+      `);
+
+    data.then((res) => {
+      if (res.error) {
+        console.error("Failed to load requests", res.error);
+      } else {
+        setRequests(res.data);
+      }
+    });
+
+  }, []);
 
   // Derived: filtered
   const filtered = useMemo(() => {
-    const ql = q.trim().toLowerCase();
+    const ql = query.trim().toLowerCase();
     const startMs = dueStart ? new Date(dueStart).getTime() : null;
     const endMs = dueEnd ? new Date(dueEnd).getTime() : null;
-    return items.filter((i) => {
-      const equipmentNames = (i.selectedEquipment || []).map((e) => e.name).join(" ");
-      const songText = (i.selectedSongs || []).map((s) => `${s.title} ${s.artist ?? ""}`).join(" ");
+
+    return requests.filter((request) => {
+      const equipmentNames = (request.equipment || []).map((e) => e.name).join(" ");
+
+      const songText = (request.song || []).map((s) => `${s.name}`).join(" ");
+
       const haystack = [
-        i.id,
-        i.who,
-        i.what,
-        i.where,
-        i.why,
-        i.how,
-        i.additionalInfo ?? "",
-        i.priority,
-        i.status,
-        i.kind ?? "",
-        i.createdAt,
-        i.updatedAt,
-        i.dueAt ?? "",
+        request.id,
+        request.who,
+        request.what,
+        request.where,
+        request.why,
+        request.how,
+        request.info ?? "",
+        request.priority,
+        request.status,
+        request.type ?? "",
+        request.created_at,
+        request.due ?? "",
         equipmentNames,
         songText,
-      ]
-        .join(" ")
-        .toLowerCase();
+      ].join(" ").toLowerCase();
+
       const matchQ = ql ? haystack.includes(ql) : true;
 
-      const matchPriority = priorityFilter === "all" ? true : i.priority === priorityFilter;
-      const matchKind = kindFilter === "all" ? true : (i.kind ?? "") === kindFilter;
-      const dueMs = i.dueAt ? new Date(i.dueAt).getTime() : null;
+      const matchPriority = priorityFilter === null ? true : request.priority === priorityFilter;
+      const matchKind = kindFilter === null ? true : (request.type ?? "") === kindFilter;
+      const dueMs = request.due ? new Date(request.due).getTime() : null;
       const matchDueStart = startMs !== null ? (dueMs !== null && dueMs >= startMs) : true;
       const matchDueEnd = endMs !== null ? (dueMs !== null && dueMs <= endMs) : true;
 
       return matchQ && matchPriority && matchKind && matchDueStart && matchDueEnd;
     });
-  }, [items, q, priorityFilter, kindFilter, dueStart, dueEnd]);
+  }, [requests, query, priorityFilter, kindFilter, dueStart, dueEnd]);
 
   // Derived: grouped
   const grouped = useMemo(() => {
-    const g: Record<RequestStatus, RequestItem[]> = {
-      not_started: [],
-      pending: [],
-      in_progress: [],
-      completed: [],
-      dropped: [],
-    };
-    filtered.forEach((i) => g[i.status].push(i));
+    const g: Record<number, FetchRequest[]> = { 0: [], 1: [], 2: [], 3: [], 4: [] };
+
+    filtered.forEach((request) => g[request.status.value].push(request));
+
     return g;
   }, [filtered]);
 
   // Derived: comparator
-  const compare = useCallback((a: RequestItem, b: RequestItem) => {
+  const compare = useCallback((a: FetchRequest, b: FetchRequest) => {
     for (const rule of sortRules) {
       if (!rule.enabled) continue;
       let av = 0, bv = 0;
       if (rule.key === "createdAt") {
-        av = new Date(a.createdAt).getTime();
-        bv = new Date(b.createdAt).getTime();
+        av = new Date(a.created_at).getTime();
+        bv = new Date(b.created_at).getTime();
       } else if (rule.key === "dueAt") {
-        av = a.dueAt ? new Date(a.dueAt).getTime() : 0;
-        bv = b.dueAt ? new Date(b.dueAt).getTime() : 0;
+        av = a.due ? new Date(a.due).getTime() : 0;
+        bv = b.due ? new Date(b.due).getTime() : 0;
       } else if (rule.key === "priority") {
-        av = PRIORITY_ORDER[a.priority];
-        bv = PRIORITY_ORDER[b.priority];
+        av = a.priority.value;
+        bv = b.priority.value;
       }
       const diff = av - bv;
       if (diff !== 0) return rule.dir === "asc" ? diff : -diff;
@@ -113,25 +140,25 @@ export function useRequestsListController() {
 
   // Reset helpers
   const resetFilters = useCallback(() => {
-    setPriorityFilter("all");
-    setKindFilter("all");
+    setPriorityFilter(null);
+    setKindFilter(null);
     setDueStart("");
     setDueEnd("");
   }, []);
   const resetSorts = useCallback(() => setSortRules([...(DEFAULT_SORT_RULES as SortRule[])]), []);
 
   // Status order for UI
-  const orderedStatuses: { key: RequestStatus; title: string }[] = [
-    { key: "not_started", title: "Not Started" },
-    { key: "pending", title: "Pending" },
-    { key: "in_progress", title: "In Progress" },
-    { key: "completed", title: "Completed" },
-    { key: "dropped", title: "Dropped" },
+  const orderedStatuses: Status[] = [
+    { id: "not_started", name: "Not Started", value: 0 },
+    { id: "pending", name: "Pending", value: 1 },
+    { id: "in_progress", name: "In Progress", value: 2 },
+    { id: "completed", name: "Completed", value: 3 },
+    { id: "dropped", name: "Dropped", value: 4 },
   ];
 
   return {
     // data
-    items,
+    requests,
     filtered,
     grouped,
 
@@ -140,14 +167,14 @@ export function useRequestsListController() {
     setActive,
 
     // query
-    q,
-    setQ,
+    query,
+    setQuery,
 
     // filters
     priorityFilter,
     setPriorityFilter,
-    kindFilter,
-    setKindFilter,
+    typeFilter: kindFilter,
+    setTypeFilter: setKindFilter,
     dueStart,
     setDueStart,
     dueEnd,

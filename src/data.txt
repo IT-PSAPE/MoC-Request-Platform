@@ -1,0 +1,19 @@
+id
+who
+what
+when
+where
+why
+how
+due
+info
+flow
+created_at
+*priority
+*status
+*type
+- attachment
+- notes
+- equipment
+- song
+- venues

@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
+import { createContext, useContext, useEffect, useState } from "react";
+import { SupabaseClient, User } from '@supabase/supabase-js';
 
 type AuthContextType = {
     authed: boolean;
@@ -13,36 +13,12 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthContextProvider({ children }: { children: React.ReactNode }) {
+export function AuthContextProvider({ children, supabase }: { children: React.ReactNode, supabase: SupabaseClient }) {
     const [authed, setAuthed] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [initialized, setInitialized] = useState(false);
 
-    const supabase = useMemo<SupabaseClient | null>(() => {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
-        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY;
-
-        if (!supabaseUrl || !supabaseAnonKey) {
-            console.error("Supabase environment variables are missing.");
-            return null;
-        }
-
-        try {
-            return createClient(supabaseUrl, supabaseAnonKey);
-        } catch (error) {
-            console.error("Failed to create Supabase client", error);
-            return null;
-        }
-    }, []);
-
     useEffect(() => {
-        if (!supabase) {
-            setUser(null);
-            setAuthed(false);
-            setInitialized(true);
-            return;
-        }
-
         let isMounted = true;
 
         const syncSession = async () => {
@@ -80,10 +56,6 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
     }, [supabase]);
 
     async function login(email: string, password: string) {
-        if (!supabase) {
-            throw new Error("Supabase client is not configured");
-        }
-
         const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
@@ -99,10 +71,6 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
     }
 
     async function logout() {
-        if (!supabase) {
-            throw new Error("Supabase client is not configured");
-        }
-
         const { error } = await supabase.auth.signOut()
 
         if (error) throw error;

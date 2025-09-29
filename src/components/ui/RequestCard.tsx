@@ -1,34 +1,33 @@
-import { RequestItem, RequestStatus } from "@/types/request";
 import { cn } from "@/lib/cn";
 
-const statusColor: Record<RequestStatus, string> = {
-  not_started: "bg-gray-500",
-  pending: "bg-blue-500",
-  in_progress: "bg-yellow-500",
-  completed: "bg-green-600",
-  dropped: "bg-red-500",
+const statusColor: Record<number, string> = {
+  1: "bg-gray-500",
+  2: "bg-blue-500",
+  3: "bg-yellow-500",
+  4: "bg-green-600",
+  5: "bg-red-500",
 };
 
 interface RequestCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  request: RequestItem;
-  setActive: (r: RequestItem) => void;
+  request: FetchRequest;
+  setActive: (r: FetchRequest) => void;
 }
 
 function RequestCard({ ...props }: RequestCardProps) {
   const r = props.request;
   const title = r.what || "Request";
-  const description = r.additionalInfo || r.why || "";
-  const totalQty = (r.selectedEquipment || []).reduce((sum, e) => sum + (typeof e.quantity === "number" ? Math.max(1, Math.floor(e.quantity)) : 1), 0);
-  const headerType = r.kind ? r.kind.replace(/_/g, " ") : "Request";
-  const headerDate = formatDateMDY(r.dueAt || r.createdAt);
-  const footerDate = formatDateDayMon(r.createdAt);
+  const description = r.info || r.why || "";
+  const totalQty = (r.equipment || []).reduce((sum, e) => sum + (typeof e.quantity === "number" ? Math.max(1, Math.floor(e.quantity)) : 1), 0);
+  const headerType = r.type ? r.type.name.replace(/_/g, " ") : "Request";
+  const headerDate = formatDateMDY(r.due || r.created_at);
+  const footerDate = formatDateDayMon(r.created_at);
 
 
   function StatusBadge() {
     return (
       <span className="inline-flex items-center gap-2 rounded-md border border-foreground/15 bg-foreground/5 px-3 py-1 text-xs text-foreground/80">
-        <span className={cn("h-2 w-2 rounded-full", statusColor[r.status])} />
-        <span className="capitalize">{r.status.replace(/_/g, " ")}</span>
+        <span className={cn("h-2 w-2 rounded-full", statusColor[r.status.value])} />
+        <span className="capitalize">{r.status.name.replace(/_/g, " ")}</span>
       </span>
     )
   }

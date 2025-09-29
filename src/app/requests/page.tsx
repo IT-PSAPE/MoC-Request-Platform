@@ -16,17 +16,18 @@ export default function RequestsPage() {
       <h1 className="w-full max-w-7xl mx-auto px-4 text-2xl font-semibold mb-4">All Requests</h1>
       {/* Filter Form */}
       <FilterForm
-        query={controller.q}
-        setQuery={controller.setQ}
+        query={controller.query}
+        setQuery={controller.setQuery}
         setFilterOpen={controller.setFilterOpen}
-        setSortOpen={controller.setSortOpen} />
+        setSortOpen={controller.setSortOpen}
+      />
 
       {/* Kanban Board */}
       <KanbanBoard
-        items={controller.items}
-        statuses={controller.orderedStatuses}
+        requests={controller.requests}
         compare={controller.compare}
-        setActive={controller.setActive} />
+        setActive={controller.setActive}
+      />
 
       {/* Filter Sheet */}
       <FilterSheet
@@ -34,8 +35,8 @@ export default function RequestsPage() {
         setFilterOpen={controller.setFilterOpen}
         priorityFilter={controller.priorityFilter}
         setPriorityFilter={controller.setPriorityFilter}
-        kindFilter={controller.kindFilter}
-        setKindFilter={controller.setKindFilter}
+        typeFilter={controller.typeFilter}
+        setTypeFilter={controller.setTypeFilter}
         dueStart={controller.dueStart}
         setDueStart={controller.setDueStart}
         dueEnd={controller.dueEnd}
@@ -55,7 +56,8 @@ export default function RequestsPage() {
       {/* Details Sheet */}
       <DetailsSheet
         active={controller.active}
-        setActive={controller.setActive} />
+        setActive={controller.setActive}
+      />
     </div>
   );
 }

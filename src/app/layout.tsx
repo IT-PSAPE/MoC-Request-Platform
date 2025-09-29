@@ -22,12 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <RootProvider>
-        <body className={`${figTree.variable} ${figTree.variable} antialiased flex flex-col h-screen bg-primary`}>
+      <body className={`${figTree.variable} ${figTree.variable} antialiased flex flex-col h-screen bg-primary`}>
+        <RootProvider>
           <NavigationBar />
           <main className="mx-auto w-full flex flex-col h-full min-h-0 overflow-x-auto"> {children} </main>
-        </body>
-      </RootProvider>
+        </RootProvider>
+      </body>
     </html>
   );
 }

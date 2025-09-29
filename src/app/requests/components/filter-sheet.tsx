@@ -4,15 +4,15 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Sheet from "@/components/ui/Sheet";
-import { RequestKind, RequestPriority } from "@/types/request";
+import { useDefualtContext } from "@/components/providers/defualt-provider";
 
 type Props = {
     filterOpen: boolean;
     setFilterOpen: Dispatch<SetStateAction<boolean>>;
-    priorityFilter:  "all" | RequestPriority;
-    setPriorityFilter: Dispatch<SetStateAction<"all" | RequestPriority>>;
-    kindFilter: "all" | RequestKind;
-    setKindFilter: (value: SetStateAction<"all" | RequestKind>) => void;
+    priorityFilter: Priority | null;
+    setPriorityFilter: Dispatch<SetStateAction<Priority | null>>;
+    typeFilter: RequestType | null;
+    setTypeFilter: (value: SetStateAction<RequestType | null>) => void;
     dueStart: string;
     setDueStart: (value: SetStateAction<string>) => void;
     dueEnd: string;
@@ -20,13 +20,27 @@ type Props = {
     resetFilters: () => void;
 }
 
-function FilterSheet({filterOpen, setFilterOpen, priorityFilter, setPriorityFilter, kindFilter, setKindFilter, dueStart, setDueStart, dueEnd, setDueEnd, resetFilters}: Props) {
+function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFilter, typeFilter: kindFilter, setTypeFilter, dueStart, setDueStart, dueEnd, setDueEnd, resetFilters }: Props) {
+    const defualt = useDefualtContext();
+
+    function updatePriorityFilter(e: React.ChangeEvent<HTMLSelectElement>) {
+        const priority = defualt.priorities.find(p => p.id === e.target.value);
+
+        setPriorityFilter(priority || null);
+    }
+
+    function updateTypeFilter(e: React.ChangeEvent<HTMLSelectElement>) {
+        const type = defualt.types.find(t => t.id === e.target.value);
+
+        setTypeFilter(type || null);
+    }
+
     return (
         <Sheet open={filterOpen} onOpenChange={setFilterOpen} title="Filters" width={420}>
             <div className="space-y-4 text-sm">
                 <div>
                     <div className="text-xs text-foreground/60 mb-1">Priority</div>
-                    <Select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value as typeof priorityFilter)}>
+                    <Select value={priorityFilter?.id} onChange={updatePriorityFilter}>
                         <option value="all">All</option>
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
@@ -36,7 +50,7 @@ function FilterSheet({filterOpen, setFilterOpen, priorityFilter, setPriorityFilt
                 </div>
                 <div>
                     <div className="text-xs text-foreground/60 mb-1">Type</div>
-                    <Select value={kindFilter} onChange={(e) => setKindFilter(e.target.value as typeof kindFilter)}>
+                    <Select value={kindFilter?.id} onChange={updateTypeFilter}>
                         <option value="all">All</option>
                         <option value="event">Event</option>
                         <option value="video_editing">Video Editing</option>

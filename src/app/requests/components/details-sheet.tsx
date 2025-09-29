@@ -2,13 +2,12 @@ import { Dispatch, SetStateAction } from "react";
 
 import EmptyState from "@/components/ui/EmptyState";
 import Sheet from "@/components/ui/Sheet";
-import { RequestItem } from "@/types/request";
 import Badge from "@/components/ui/Badge";
 import { statusColor } from "@/features/requests/defualts";
 
 type Props = {
-    active: RequestItem | null;
-    setActive: Dispatch<SetStateAction<RequestItem | null>>;
+    active: FetchRequest | null;
+    setActive: Dispatch<SetStateAction<FetchRequest | null>>;
 }
 
 function DetailsSheet({ active, setActive }: Props) {
@@ -25,22 +24,22 @@ function DetailsSheet({ active, setActive }: Props) {
                     <div>
                         <h3 className="text-base font-semibold mb-3">Overview</h3>
                         <div className="text-xs text-foreground/60">Status</div>
-                        <Badge color={statusColor[active.status]}>{active.status.replace(/_/g, " ")}</Badge>
+                        <Badge color={statusColor[active.status.value]}>{active.status.name}</Badge>
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             <div>
                                 <div className="text-xs text-foreground/60">Priority</div>
-                                <div className="font-medium capitalize">{active.priority}</div>
+                                <div className="font-medium capitalize">{active.priority.name}</div>
                             </div>
-                            {active.kind && (
+                            {active.type && (
                                 <div>
                                     <div className="text-xs text-foreground/60">Type</div>
-                                    <div className="font-medium capitalize">{active.kind.replace(/_/g, " ")}</div>
+                                    <div className="font-medium capitalize">{active.type.name}</div>
                                 </div>
                             )}
-                            {active.dueAt && (
+                            {active.due && (
                                 <div>
                                     <div className="text-xs text-foreground/60">Due</div>
-                                    <div className="font-medium">{new Date(active.dueAt).toLocaleString()}</div>
+                                    <div className="font-medium">{new Date(active.due).toLocaleString()}</div>
                                 </div>
                             )}
                         </div>
@@ -49,7 +48,7 @@ function DetailsSheet({ active, setActive }: Props) {
                     {/* 5W + 1H */}
                     <div>
                         <h3 className="text-base font-semibold mb-3">5W + 1H</h3>
-                        {!(active.who || active.what || active.when || active.where || active.why || active.how || active.additionalInfo) ? (
+                        {!(active.who || active.what || active.when || active.where || active.why || active.how || active.info) ? (
                             <EmptyState title="No basic details" message="Who, What, When, Where, Why, or How not provided." />
                         ) : (
                             <>
@@ -77,10 +76,10 @@ function DetailsSheet({ active, setActive }: Props) {
                                     <div className="text-xs text-foreground/60">How</div>
                                     <div>{active.how}</div>
                                 </div>
-                                {active.additionalInfo && (
+                                {active.info && (
                                     <div>
                                         <div className="text-xs text-foreground/60">Additional</div>
-                                        <div>{active.additionalInfo}</div>
+                                        <div>{active.info}</div>
                                     </div>
                                 )}
                             </>
@@ -90,26 +89,26 @@ function DetailsSheet({ active, setActive }: Props) {
                     {/* Request Items */}
                     <div>
                         <h3 className="text-base font-semibold mb-3">Request Items</h3>
-                        {!(active.selectedEquipment && active.selectedEquipment.length) && !(active.selectedSongs && active.selectedSongs.length) ? (
+                        {!(active.equipment && active.equipment.length) && !(active.song && active.song.length) ? (
                             <EmptyState title="No request items" message="No equipment or songs were specified." />
                         ) : (
                             <>
-                                {active.selectedEquipment && active.selectedEquipment.length > 0 && (
+                                {active.equipment && active.equipment.length > 0 && (
                                     <div>
                                         <div className="text-xs text-foreground/60">Equipment</div>
                                         <ul className="list-disc pl-5">
-                                            {active.selectedEquipment.map((e) => (
+                                            {active.equipment.map((e) => (
                                                 <li key={e.id}>{e.name}</li>
                                             ))}
                                         </ul>
                                     </div>
                                 )}
-                                {active.selectedSongs && active.selectedSongs.length > 0 && (
+                                {active.song && active.song.length > 0 && (
                                     <div className="mt-2">
                                         <div className="text-xs text-foreground/60">Songs</div>
                                         <ul className="list-disc pl-5">
-                                            {active.selectedSongs.map((s) => (
-                                                <li key={s.id}>{s.title}{s.artist ? ` — ${s.artist}` : ""}</li>
+                                            {active.song.map((s) => (
+                                                <li key={s.id}>{s.name}</li>
                                             ))}
                                         </ul>
                                     </div>
@@ -121,35 +120,35 @@ function DetailsSheet({ active, setActive }: Props) {
                     {/* Proceedings: Event Flow + Files */}
                     <div>
                         <h3 className="text-base font-semibold mb-3">Proceedings</h3>
-                        {!(active.eventFlow && active.eventFlow.length) && !(active.attachments && active.attachments.length) ? (
+                        {!(active.flow && active.flow.length) && !(active.attachment && active.attachment.length) ? (
                             <EmptyState title="No proceedings" message="No event flow steps or files attached." />
                         ) : (
                             <>
-                                {active.eventFlow && active.eventFlow.length > 0 && (
+                                {active.flow && active.flow.length > 0 && (
                                     <div>
                                         <ol className="list-decimal pl-5">
-                                            {active.eventFlow.map((st, idx) => (
+                                            {active.flow.map((st, idx) => (
                                                 <li key={idx}>
-                                                    <span className="font-medium capitalize">{st.type}</span>
-                                                    {st.label ? `: ${st.label}` : ""}
+                                                    <span className="font-medium capitalize">{st}</span>
+                                                    {/* {st.label ? `: ${st.label}` : ""}
                                                     {st.type === "song" && st.songId
                                                         ? (() => {
-                                                            const song = (active.selectedSongs || []).find((s) => s.id === st.songId);
-                                                            return song ? ` — ${song.title}` : "";
+                                                            const song = (active.song || []).find((s) => s.id === st.songId);
+                                                            return song ? ` — ${song.name}` : "";
                                                         })()
-                                                        : ""}
+                                                        : ""} */}
                                                 </li>
                                             ))}
                                         </ol>
                                     </div>
                                 )}
-                                {active.attachments.length > 0 && (
+                                {active.attachment.length > 0 && (
                                     <details className="mt-3">
-                                        <summary className="cursor-pointer">Attachments ({active.attachments.length})</summary>
+                                        <summary className="cursor-pointer">Attachments ({active.attachment.length})</summary>
                                         <ul className="list-disc pl-5 mt-1">
-                                            {active.attachments.map((a) => (
+                                            {active.attachment.map((a) => (
                                                 <li key={a.id}>
-                                                    <a href={a.dataUrl} download={a.name} className="underline">
+                                                    <a href={a.storage} download={a.name} className="underline">
                                                         {a.name}
                                                     </a>
                                                 </li>

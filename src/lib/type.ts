@@ -112,20 +112,16 @@ type FetchRequest = {
     how: string;
     info: string | null;
     due: string | null;
-    flow: string[];
+    flow: string[] | null;
+    created_at: string;
     priority: Priority;
     status: Status;
-    type: RequestType | null;
-    created_at: string;
-    attachments: Attachment[];
+    type: RequestType;
     attachment: Attachment[];
     notes: Note[];
     equipment: Equipment[];
-    request_equipment: RequestEquipment[];
     song: Song[];
-    request_song: RequestSong[];
-    venues?: Venue[];
-    request_venue?: RequestVenue[];
+    venues: Venue[];
 };
 
 // 
