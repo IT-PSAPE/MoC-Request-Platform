@@ -26,8 +26,8 @@ export function DefualtContextProvider({ children, supabase }: { children: React
         const loadDefaults = async () => {
             try {
                 const [statusResult, priorityResult, typeResult] = await Promise.all([
-                    supabase.from("status").select("*"),
-                    supabase.from("priority").select("*"),
+                    supabase.from("status").select("*").order("value", { ascending: true }),
+                    supabase.from("priority").select("*").order("value", { ascending: true }),
                     supabase.from("request_type").select("*"),
                 ]);
 

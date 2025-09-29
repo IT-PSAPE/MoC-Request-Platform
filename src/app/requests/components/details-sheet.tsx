@@ -98,7 +98,7 @@ function DetailsSheet({ active, setActive }: Props) {
                                         <div className="text-xs text-foreground/60">Equipment</div>
                                         <ul className="list-disc pl-5">
                                             {active.equipment.map((e) => (
-                                                <li key={e.id}>{e.name}</li>
+                                                <li key={e.equipment.id}>{e.equipment.name}</li>
                                             ))}
                                         </ul>
                                     </div>
@@ -108,7 +108,7 @@ function DetailsSheet({ active, setActive }: Props) {
                                         <div className="text-xs text-foreground/60">Songs</div>
                                         <ul className="list-disc pl-5">
                                             {active.song.map((s) => (
-                                                <li key={s.id}>{s.name}</li>
+                                                <li key={s.song.id}>{s.song.name}</li>
                                             ))}
                                         </ul>
                                     </div>

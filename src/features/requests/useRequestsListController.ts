@@ -20,7 +20,7 @@ export function useRequestsListController() {
 
   // Filters
   const [priorityFilter, setPriorityFilter] = useState<Priority | null>(null);
-  const [kindFilter, setKindFilter] = useState<RequestType | null>(null);
+  const [typeFilter, setTypeFilter] = useState<RequestType | null>(null);
   const [dueStart, setDueStart] = useState("");
   const [dueEnd, setDueEnd] = useState("");
 
@@ -53,16 +53,43 @@ export function useRequestsListController() {
         type(*),
         attachment(*),
         note(*),
-        equipment:request_equipment(equipment(*)),
-        song:request_song(song(*)),
-        venue:request_venue(venue(*))
+        equipment:request_equipment(*, equipment(*)),
+        song:request_song(*, song(*)),
+        venue:request_venue(*, venue(*))
       `);
 
     data.then((res) => {
       if (res.error) {
         console.error("Failed to load requests", res.error);
       } else {
-        setRequests(res.data);
+
+        const requests = res.data.map((request) => ({
+          id: request.id as string,
+          who: request.who as string,
+          what: request.what as string,
+          when: request.when as string,
+          where: request.where as string,
+          why: request.why as string,
+          how: request.how as string,
+          info: request.info as string,
+          due: request.due as string,
+          flow: request.flow as string[],
+          created_at: request.created_at as string,
+          // @ts-ignore
+          priority: request.priority as Priority,
+          // @ts-ignore
+          status: request.status as Status,
+          // @ts-ignore
+          type: request.type as RequestType,
+          attachment: request.attachment as Attachment[],
+          note: request.note as Note[],
+          equipment: request.equipment,
+          song: request.song,
+          venue: request.venue,
+        }));
+
+        // @ts-ignore
+        setRequests(requests);
       }
     });
 
@@ -75,9 +102,9 @@ export function useRequestsListController() {
     const endMs = dueEnd ? new Date(dueEnd).getTime() : null;
 
     return requests.filter((request) => {
-      const equipmentNames = (request.equipment || []).map((e) => e.name).join(" ");
+      const equipmentNames = (request.equipment || []).map((e) => e.equipment.name).join(" ");
 
-      const songText = (request.song || []).map((s) => `${s.name}`).join(" ");
+      const songText = (request.song || []).map((s) => `${s.song.name}`).join(" ");
 
       const haystack = [
         request.id,
@@ -99,14 +126,21 @@ export function useRequestsListController() {
       const matchQ = ql ? haystack.includes(ql) : true;
 
       const matchPriority = priorityFilter === null ? true : request.priority === priorityFilter;
-      const matchKind = kindFilter === null ? true : (request.type ?? "") === kindFilter;
+      const matchKind = typeFilter === null ? true : (request.type ?? "") === typeFilter;
       const dueMs = request.due ? new Date(request.due).getTime() : null;
       const matchDueStart = startMs !== null ? (dueMs !== null && dueMs >= startMs) : true;
       const matchDueEnd = endMs !== null ? (dueMs !== null && dueMs <= endMs) : true;
 
+      console.log("Request:", request);
+      console.log("Match Q:", matchQ);
+      console.log("Match Priority:", matchPriority);
+      console.log("Match Kind:", matchKind);
+      console.log("Match Due Start:", matchDueStart);
+      console.log("Match Due End:", matchDueEnd);
+
       return matchQ && matchPriority && matchKind && matchDueStart && matchDueEnd;
     });
-  }, [requests, query, priorityFilter, kindFilter, dueStart, dueEnd]);
+  }, [requests, query, priorityFilter, typeFilter, dueStart, dueEnd]);
 
   // Derived: grouped
   const grouped = useMemo(() => {
@@ -141,20 +175,14 @@ export function useRequestsListController() {
   // Reset helpers
   const resetFilters = useCallback(() => {
     setPriorityFilter(null);
-    setKindFilter(null);
+    setTypeFilter(null);
     setDueStart("");
     setDueEnd("");
   }, []);
+
   const resetSorts = useCallback(() => setSortRules([...(DEFAULT_SORT_RULES as SortRule[])]), []);
 
   // Status order for UI
-  const orderedStatuses: Status[] = [
-    { id: "not_started", name: "Not Started", value: 0 },
-    { id: "pending", name: "Pending", value: 1 },
-    { id: "in_progress", name: "In Progress", value: 2 },
-    { id: "completed", name: "Completed", value: 3 },
-    { id: "dropped", name: "Dropped", value: 4 },
-  ];
 
   return {
     // data
@@ -173,8 +201,8 @@ export function useRequestsListController() {
     // filters
     priorityFilter,
     setPriorityFilter,
-    typeFilter: kindFilter,
-    setTypeFilter: setKindFilter,
+    typeFilter,
+    setTypeFilter,
     dueStart,
     setDueStart,
     dueEnd,
@@ -192,8 +220,5 @@ export function useRequestsListController() {
     setFilterOpen,
     sortOpen,
     setSortOpen,
-
-    // UI helpers
-    orderedStatuses,
   } as const;
 }

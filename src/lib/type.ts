@@ -57,21 +57,26 @@ type Note = {
     created: string;
 };
 
+// JOIN TABLES
+
 type RequestEquipment = {
     request_id: string;
     equipment_id: string;
     quantity: number;
     approved: boolean;
+    equipment: Equipment;
 };
 
 type RequestSong = {
     request_id: string;
     song_id: string;
+    song: Song;
 };
 
 type RequestVenue = {
     request_id: string;
     venue_id: string;
+    venue: Venue;
 };
 
 // FLOW
@@ -112,16 +117,16 @@ type FetchRequest = {
     how: string;
     info: string | null;
     due: string | null;
-    flow: string[] | null;
+    flow: string[];
     created_at: string;
     priority: Priority;
     status: Status;
     type: RequestType;
     attachment: Attachment[];
     notes: Note[];
-    equipment: Equipment[];
-    song: Song[];
-    venues: Venue[];
+    equipment: RequestEquipment[];
+    song: RequestSong[];
+    venues: RequestVenue[];
 };
 
 // 

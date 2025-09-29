@@ -1,11 +1,11 @@
 import { cn } from "@/lib/cn";
 
 const statusColor: Record<number, string> = {
-  1: "bg-gray-500",
-  2: "bg-blue-500",
-  3: "bg-yellow-500",
-  4: "bg-green-600",
-  5: "bg-red-500",
+  0: "bg-gray-500",
+  1: "bg-blue-500",
+  2: "bg-yellow-500",
+  3: "bg-green-600",
+  4: "bg-red-500",
 };
 
 interface RequestCardProps extends React.HTMLAttributes<HTMLDivElement> {
