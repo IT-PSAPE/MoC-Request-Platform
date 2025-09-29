@@ -1,20 +1,16 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Auth } from "@/features/auth/auth";
 import { RequestService } from "@/features/requests/service";
 import type { RequestItem, RequestStatus } from "@/types/request";
 import { EquipmentStore } from "@/lib/equipmentStore";
+import { useAuthContext } from "@/components/providers/auth-provider";
 
 export function useAdminController() {
   // start as `null` so consumers can tell "not yet checked" vs false
-  const [authed, setAuthed] = useState<boolean | null>(null);
   const [items, setItems] = useState<RequestItem[]>([]);
   const [active, setActive] = useState<RequestItem | null>(null);
 
-  // Initialize auth state
-  useEffect(() => {
-    setAuthed(Auth.isAuthed());
-  }, []);
+  const { authed } = useAuthContext();
 
   // Load requests when authed changes
   useEffect(() => {
@@ -29,12 +25,6 @@ export function useAdminController() {
 
   const refreshActive = useCallback(() => {
     setActive((prev) => (prev ? { ...RequestService.get(prev.id)! } : prev));
-  }, []);
-
-  const login = useCallback((password: string) => {
-    const ok = Auth.login(password);
-    if (ok) setAuthed(true);
-    else alert("Invalid password (hint: 'admin' for demo)");
   }, []);
 
   const updateStatus = useCallback((id: string, status: RequestStatus) => {
@@ -98,7 +88,6 @@ export function useAdminController() {
     setActive,
 
     // actions
-    login,
     updateStatus,
     addNote,
     setEquipmentChecked,

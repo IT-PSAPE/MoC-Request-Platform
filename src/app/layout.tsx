@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Figtree} from "next/font/google";
+import { Figtree } from "next/font/google";
 import "./globals.css";
-import NavigationBar from "@/components/NavigationBar";
+import NavigationBar from "@/components/navigation-bar";
+import RootProvider from "@/components/root-provider";
 
 const figTree = Figtree({
   variable: "--font-figtree",
@@ -21,10 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${figTree.variable} ${figTree.variable} antialiased flex flex-col h-screen bg-primary`}>
-        <NavigationBar />
-        <main className="mx-auto w-full flex flex-col h-full min-h-0 overflow-x-auto"> {children} </main>
-      </body>
+      <RootProvider>
+        <body className={`${figTree.variable} ${figTree.variable} antialiased flex flex-col h-screen bg-primary`}>
+          <NavigationBar />
+          <main className="mx-auto w-full flex flex-col h-full min-h-0 overflow-x-auto"> {children} </main>
+        </body>
+      </RootProvider>
     </html>
   );
 }

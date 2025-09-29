@@ -8,8 +8,10 @@ import KanbanBoard from "./components/kanban-board";
 import EquipmentCatalogPanel from "./components/equipment-catalog-panel";
 import DetailsSheet from "./components/details-sheet";
 import Sidebar from "./components/siebar";
+import { useAuthContext } from "@/components/providers/auth-provider";
 
 export default function AdminPage() {
+  const { authed, user } = useAuthContext();
   const controloler = useAdminController();
 
   const router = useRouter();
@@ -18,14 +20,13 @@ export default function AdminPage() {
   const [tab, setTab] = useState<"requests" | "equipment">("requests");
 
   useEffect(() => {
-    if (controloler.authed === false) {
+    if (!authed) {
       // redirect to dedicated login page, preserving return location
       router.push(`/login?next=${encodeURIComponent("/admin")}`);
     }
-  }, [controloler.authed, router]);
+  }, [authed, router]);
 
-  if (controloler.authed === null) {
-    // auth check pending — avoid rendering and avoid redirecting
+  if (!user) {
     return <div className="py-8">Loading...</div>;
   }
 

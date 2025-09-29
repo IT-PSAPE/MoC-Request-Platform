@@ -1,18 +1,17 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Auth } from "@/features/auth/auth";
+import { useEffect } from "react";
 import { EquipmentStore } from "@/lib/equipmentStore";
 import Button from "./ui/Button";
+import { useAuthContext } from "./providers/auth-provider";
 
 export default function NavigationBar() {
-  const [authed, setAuthed] = useState(false);
+  const { authed } = useAuthContext();
 
   useEffect(() => {
     // Initialize equipment store on app load (client-side)
     EquipmentStore.init();
-    setAuthed(Auth.isAuthed());
   }, []);
 
   const pathname = usePathname();
