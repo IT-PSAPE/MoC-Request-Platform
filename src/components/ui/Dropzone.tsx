@@ -26,11 +26,11 @@ export default function Dropzone({
           reader.onload = () =>
             resolve({
               id: 'xxx-x-x--x-x-x-xxx-x-x-x',
-              request: 'xx-x-xxx-x-x-x--x',
+              request_id: 'xx-x-xxx-x-x-x--x',
               name: file.name,
               type: file.type,
               size: file.size,
-              storage: String(reader.result),
+              url: String(reader.result),
               created: new Date().toISOString(),
             });
           reader.readAsDataURL(file);

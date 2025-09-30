@@ -6,6 +6,7 @@ import Divider from "@/components/ui/Divider";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { useDefualtContext } from "@/components/providers/defualt-provider";
+import Dropzone from "@/components/ui/Dropzone";
 
 type Props = {
     type: RequestType | null;
@@ -21,10 +22,18 @@ type Props = {
     toggleEquipment: (equipment: Equipment) => void;
     setEquipmentQuantity: (equipmentId: string, quantity: number) => void;
     toggleSong: (song: Song) => void;
+    priority: Priority | null;
+    setPriority: Dispatch<SetStateAction<Priority | null>>;
+    attachments: Attachment[];
+    setAttachments: Dispatch<SetStateAction<Attachment[]>>;
 }
 
-function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, setMaxStepReached, selectedEquipment, selectedSongs, toggleEquipment, setEquipmentQuantity, toggleSong }: Props) {
-    const { supabase, types } = useDefualtContext();
+function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, setMaxStepReached, selectedEquipment, selectedSongs, toggleEquipment, setEquipmentQuantity, toggleSong, priority, setPriority, attachments, setAttachments}: Props) {
+    const { supabase, types, priorities } = useDefualtContext();
+
+    function handlePriorityChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        setPriority(priorities.find((p) => p.id === e.target.value) || null);
+    }
 
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [songs, setSongs] = useState<Song[]>([]);
@@ -59,6 +68,24 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
             <Card>
                 <Divider title="Request Type & Due Date" />
                 <div className="mt-4 space-y-5">
+                    {/* Priority */}
+                    <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-start">
+                        <div className="sm:col-span-2">
+                            <div className="text-sm font-medium">Priority</div>
+                            <div className="text-xs text-foreground/60">Higher priority may be processed sooner.</div>
+                        </div>
+                        <div className="sm:col-span-3">
+                            <label className="text-xs text-foreground/60">Priority</label>
+                            <Select name="priority" value={priority?.id || ""} onChange={handlePriorityChange}>
+                                {priorities.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.name}
+                                    </option>
+                                ))}
+                            </Select>
+                        </div>
+                    </div>
+                    <div className="border-b border-foreground/10" />
                     <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-start">
                         <div className="sm:col-span-2">
                             <div className="text-sm font-medium">Type of Request</div>
@@ -161,6 +188,39 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
                             </button>
                         );
                     })}
+                </div>
+            </Card>
+
+            <Card>
+                <Divider title="Supporting Files" />
+                <div className="mt-4 space-y-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-start">
+                        <div className="sm:col-span-2">
+                            <div className="text-sm font-medium">Attachments</div>
+                            <div className="text-xs text-foreground/60">Upload reference files if applicable.</div>
+                        </div>
+                        <div className="sm:col-span-3">
+                            <Dropzone onFiles={(f) => setAttachments((prev) => [...prev, ...f])} />
+                            {attachments.length > 0 && (
+                                <ul className="mt-2 text-sm list-disc pl-5 space-y-1">
+                                    {attachments.map((a) => (
+                                        <li key={a.id} className="flex items-center justify-between">
+                                            <span>
+                                                {a.name} <span className="text-foreground/60 text-xs">({Math.round(a.size / 1024)} KB)</span>
+                                            </span>
+                                            <button
+                                                type="button"
+                                                className="text-xs text-red-500"
+                                                onClick={() => setAttachments((prev) => prev.filter((x) => x.id !== a.id))}
+                                            >
+                                                Remove
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </Card>
 

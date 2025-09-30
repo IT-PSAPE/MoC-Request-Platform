@@ -3,11 +3,8 @@ import { Dispatch, SetStateAction } from "react";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Divider from "@/components/ui/Divider";
-import Dropzone from "@/components/ui/Dropzone";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
-import Select from "@/components/ui/Select";
-import { useDefualtContext } from "@/components/providers/defualt-provider";
 
 type Props = {
     who: string;
@@ -24,23 +21,13 @@ type Props = {
     setHow: Dispatch<SetStateAction<string>>;
     additionalInfo: string;
     setAdditionalInfo: Dispatch<SetStateAction<string>>;
-    priority: Priority | null;
-    setPriority: Dispatch<SetStateAction<Priority | null>>;
-    attachments: Attachment[];
-    setAttachments: Dispatch<SetStateAction<Attachment[]>>;
     validateStep1: () => boolean;
     resetForm: () => void;
     setStep: Dispatch<SetStateAction<FormSteps>>;
     setMaxStepReached: Dispatch<SetStateAction<FormSteps>>;
 }
 
-function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTxt, setWhereTxt, why, setWhy, how, setHow, additionalInfo, setAdditionalInfo, priority, setPriority, attachments, setAttachments, validateStep1, resetForm, setStep, setMaxStepReached }: Props) {
-    const { priorities } = useDefualtContext();
-
-    function handlePriorityChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        setPriority(priorities.find((p) => p.id === e.target.value) || null);
-    }
-
+function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTxt, setWhereTxt, why, setWhy, how, setHow, additionalInfo, setAdditionalInfo, validateStep1, resetForm, setStep, setMaxStepReached }: Props) {
     return (
         <>
             <Card>
@@ -117,29 +104,6 @@ function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTx
                             <Textarea name="how" value={how} onChange={(e) => setHow(e.target.value)} placeholder="How should it be done?" required />
                         </div>
                     </div>
-                </div>
-            </Card>
-
-            <Card>
-                <Divider title="Additional Details" />
-                <div className="mt-4 space-y-5">
-                    {/* Priority */}
-                    <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-start">
-                        <div className="sm:col-span-2">
-                            <div className="text-sm font-medium">Priority</div>
-                            <div className="text-xs text-foreground/60">Higher priority may be processed sooner.</div>
-                        </div>
-                        <div className="sm:col-span-3">
-                            <label className="text-xs text-foreground/60">Priority</label>
-                            <Select name="priority" value={priority?.id || ""} onChange={handlePriorityChange}>
-                                {priorities.map((p) => (
-                                    <option key={p.id} value={p.id}>
-                                        {p.name}
-                                    </option>
-                                ))}
-                            </Select>
-                        </div>
-                    </div>
                     <div className="border-b border-foreground/10" />
                     {/* Additional Info */}
                     <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-start">
@@ -150,35 +114,6 @@ function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTx
                         <div className="sm:col-span-3">
                             <label className="text-xs text-foreground/60">Additional Info</label>
                             <Textarea name="additionalInfo" value={additionalInfo} onChange={(e) => setAdditionalInfo(e.target.value)} placeholder="Anything else we should know?" />
-                        </div>
-                    </div>
-                    <div className="border-b border-foreground/10" />
-                    {/* Attachments */}
-                    <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-start">
-                        <div className="sm:col-span-2">
-                            <div className="text-sm font-medium">Attachments</div>
-                            <div className="text-xs text-foreground/60">Upload reference files if applicable.</div>
-                        </div>
-                        <div className="sm:col-span-3">
-                            <Dropzone onFiles={(f) => setAttachments((prev) => [...prev, ...f])} />
-                            {attachments.length > 0 && (
-                                <ul className="mt-2 text-sm list-disc pl-5 space-y-1">
-                                    {attachments.map((a) => (
-                                        <li key={a.id} className="flex items-center justify-between">
-                                            <span>
-                                                {a.name} <span className="text-foreground/60 text-xs">({Math.round(a.size / 1024)} KB)</span>
-                                            </span>
-                                            <button
-                                                type="button"
-                                                className="text-xs text-red-500"
-                                                onClick={() => setAttachments((prev) => prev.filter((x) => x.id !== a.id))}
-                                            >
-                                                Remove
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
                         </div>
                     </div>
                 </div>

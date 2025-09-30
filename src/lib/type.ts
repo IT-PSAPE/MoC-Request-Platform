@@ -41,11 +41,11 @@ type Venue = {
 
 type Attachment = {
     id: string;
-    request: string;
+    request_id: string;
     name: string;
     type: string;
     size: number;
-    storage: string;
+    url: string;
     created: string;
 };
 

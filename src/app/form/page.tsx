@@ -39,10 +39,6 @@ export default function SubmitPage() {
             setHow={controller.setHow}
             additionalInfo={controller.additionalInfo}
             setAdditionalInfo={controller.setAdditionalInfo}
-            priority={controller.priority}
-            setPriority={controller.setPriority}
-            attachments={controller.attachments}
-            setAttachments={controller.setAttachments}
             validateStep1={controller.validateStep1}
             resetForm={controller.resetForm}
             setStep={controller.setStep}
@@ -64,6 +60,10 @@ export default function SubmitPage() {
             toggleEquipment={controller.toggleEquipment}
             setEquipmentQuantity={controller.setEquipmentQuantity}
             toggleSong={controller.toggleSong}
+            priority={controller.priority}
+            setPriority={controller.setPriority}
+            attachments={controller.attachments}
+            setAttachments={controller.setAttachments}
           />
         }
 

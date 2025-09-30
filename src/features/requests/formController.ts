@@ -114,6 +114,21 @@ export function useRequestFormController() {
       flow: [],
     };
 
+    // @ts-ignore
+    const requestEquipment: RequestEquipment[] = selectedEquipment.map((eq) => ({
+      request_id: "",
+      equipment_id: eq.id,
+      quantity: eq.quantity || 1,
+    }));
+    
+    // @ts-ignore
+    const requestSongs: RequestSong[] = selectedSongs.map((s) => ({
+      request_id: '',
+      song_id: s.id,
+    }));
+
+    const requestVenues: RequestVenue[] = []; // Not implemented yet
+
     const created = await service.create(supabase, request);
 
     setSubmitted(created.id);

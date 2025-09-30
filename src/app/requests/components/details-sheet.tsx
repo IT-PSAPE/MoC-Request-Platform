@@ -148,7 +148,7 @@ function DetailsSheet({ active, setActive }: Props) {
                                         <ul className="list-disc pl-5 mt-1">
                                             {active.attachment.map((a) => (
                                                 <li key={a.id}>
-                                                    <a href={a.storage} download={a.name} className="underline">
+                                                    <a href={a.url} download={a.name} className="underline">
                                                         {a.name}
                                                     </a>
                                                 </li>
