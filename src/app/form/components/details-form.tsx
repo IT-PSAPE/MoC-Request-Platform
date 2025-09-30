@@ -6,7 +6,7 @@ import Divider from "@/components/ui/Divider";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { useDefualtContext } from "@/components/providers/defualt-provider";
-import Dropzone from "@/components/ui/Dropzone";
+// import Dropzone from "@/components/ui/Dropzone";
 import EmptyState from "@/components/ui/EmptyState";
 
 type Props = {
@@ -65,7 +65,6 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
             setVenues(res.data);
         });
     }, [supabase]);
-
 
 
     function handleTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -253,7 +252,7 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
                 </div>
             </Card>
 
-            <Card>
+            {/* <Card>
                 <Divider title="Supporting Files" />
                 <div className="mt-4 space-y-5">
                     <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-start">
@@ -284,7 +283,7 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
                         </div>
                     </div>
                 </div>
-            </Card>
+            </Card> */}
 
             <div className="flex gap-3">
                 <Button type="button" variant="secondary" onClick={() => setStep(1)}>

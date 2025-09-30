@@ -128,14 +128,61 @@ async function addNote(supabase: SupabaseClient, id: string, note: string): Prom
     const { error } = await supabase.from('note').insert({ request: id, author: user.data.user?.id, note: note });
 }
 
-async function create(supabase: SupabaseClient, request: BaseRequest): Promise<FetchRequest> {
-    const { data, error } = await supabase.from('request').insert(request);
-    if (error || !data) {
-        console.error("Failed to create request", error);
-        throw error;
+type CreateRequestParams = {
+    supabase: SupabaseClient;
+    request: BaseRequest;
+    attachments: Attachment[];
+    songs: RequestSong[];
+    venues: RequestVenue[];
+    equipment: RequestEquipment[];
+};
+
+async function create({ supabase, request, attachments, songs, venues, equipment }: CreateRequestParams): Promise<FetchRequest> {
+    const { data, error } = await supabase.from('request').insert(request).select('id');
+
+    if (error) {
+        throw new Error('Failed to create request: ' + error.message);
     }
 
-    return data[0] as FetchRequest;
+    const insertedRequests = data as { id: string }[] | null;
+
+    if (!insertedRequests || insertedRequests.length === 0) {
+        throw new Error('Failed to create request: missing inserted record');
+    }
+
+    const requestId = insertedRequests[0].id;
+
+    if (attachments.length > 0) {
+        const attachmentsToInsert = attachments.map(att => ({ ...att, request: requestId }));
+        const { error: attError } = await supabase.from('attachment').insert(attachmentsToInsert);
+        if (attError) {
+            console.error('Failed to insert attachments:', attError);
+        }
+    }
+
+    if (songs.length > 0) {
+        const songsToInsert = songs.map(s => ({ ...s, request_id: requestId }));
+        const { error: songError } = await supabase.from('request_song').insert(songsToInsert);
+        if (songError) {
+            console.error('Failed to insert songs:', songError);
+        }
+    }
+
+    if (venues.length > 0) {
+        const venuesToInsert = venues.map(v => ({ ...v, request_id: requestId }));
+        const { error: venueError } = await supabase.from('request_venue').insert(venuesToInsert);
+        if (venueError) {
+            console.error('Failed to insert venues:', venueError);
+        }
+    }
+
+    const createdRequest = await get(supabase, requestId);
+
+    if (!createdRequest) {
+        throw new Error('Failed to load created request');
+    }
+
+    return createdRequest;
 }
 
 

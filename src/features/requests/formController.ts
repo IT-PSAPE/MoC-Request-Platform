@@ -125,22 +125,31 @@ export function useRequestFormController() {
       flow: [],
     };
 
-    // @ts-ignore
     const requestEquipment: RequestEquipment[] = selectedEquipment.map((eq) => ({
       request_id: "",
       equipment_id: eq.id,
       quantity: eq.quantity || 1,
+      approved: false,
     }));
     
-    // @ts-ignore
     const requestSongs: RequestSong[] = selectedSongs.map((s) => ({
       request_id: '',
       song_id: s.id,
     }));
+    
+    const requestVenues: RequestVenue[] = selectedVenues.map((v) => ({
+      request_id: '',
+      venue_id: v.id,
+    })); // Not implemented yet
 
-    const requestVenues: RequestVenue[] = []; // Not implemented yet
-
-    const created = await service.create(supabase, request);
+    const created = await service.create({
+      supabase,
+      request,
+      attachments,
+      equipment: requestEquipment,
+      songs: requestSongs,
+      venues: requestVenues,
+    });
 
     setSubmitted(created.id);
   }
