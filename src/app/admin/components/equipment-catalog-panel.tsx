@@ -1,8 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import EmptyState from "@/components/ui/EmptyState";
 import ScrollArea from "@/components/ui/ScrollArea";
-import { EquipmentStore } from "@/lib/equipmentStore";
+import { useDefualtContext } from "@/components/providers/defualt-provider";
 
 type Props = {
     items: FetchRequest[];
@@ -10,8 +10,10 @@ type Props = {
 }
 
 function EquipmentCatalogPanel({items, setActive}: Props) {
+    const { supabase } = useDefualtContext();
+
+    const [equipment, setEquipment] = useState<Equipment[]>([]);
     // Compute equipment with active requests and quantities
-    const equipment = EquipmentStore.list();
     const activeReqs = items.filter((r) => r.status.value === 1 || r.status.value === 2);
     const byEquipment: Record<string, { request: FetchRequest; quantity: number }[]> = {};
 
@@ -22,6 +24,14 @@ function EquipmentCatalogPanel({items, setActive}: Props) {
             byEquipment[e.equipment.id].push({ request: r, quantity: qty });
         });
     });
+
+    useEffect(() => {
+        const eq = supabase.from("equipment").select("*").order("name");
+        eq.then((res) => {
+            if (res.error) return;
+            setEquipment(res.data);
+        });
+    }, []);
 
     return (
         <ScrollArea className="max-w-full flex-1 min-h-0">

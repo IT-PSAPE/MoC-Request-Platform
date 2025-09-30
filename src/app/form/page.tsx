@@ -52,10 +52,10 @@ export default function SubmitPage() {
 
         {controller.step === 2 &&
           <DetailsForm
-            kind={controller.kind}
-            setKind={controller.setKind}
-            dueAt={controller.dueAt}
-            setDueAt={controller.setDueAt}
+            type={controller.type}
+            setType={controller.setType}
+            due={controller.due}
+            setDue={controller.setDue}
             deadlineWarning={controller.deadlineWarning}
             setStep={controller.setStep}
             setMaxStepReached={controller.setMaxStepReached}

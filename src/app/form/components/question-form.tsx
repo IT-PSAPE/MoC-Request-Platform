@@ -7,7 +7,6 @@ import Dropzone from "@/components/ui/Dropzone";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import Select from "@/components/ui/Select";
-import { Attachment, RequestPriority } from "@/types/request";
 import { priorities } from "@/features/defualts";
 
 type Props = {
@@ -25,8 +24,8 @@ type Props = {
     setHow: Dispatch<SetStateAction<string>>;
     additionalInfo: string;
     setAdditionalInfo: Dispatch<SetStateAction<string>>;
-    priority: RequestPriority;
-    setPriority: Dispatch<SetStateAction<RequestPriority>>;
+    priority: Priority;
+    setPriority: Dispatch<SetStateAction<Priority>>;
     attachments: Attachment[];
     setAttachments: Dispatch<SetStateAction<Attachment[]>>;
     validateStep1: () => boolean;
@@ -126,7 +125,7 @@ function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTx
                         </div>
                         <div className="sm:col-span-3">
                             <label className="text-xs text-foreground/60">Priority</label>
-                            <Select name="priority" value={priority} onChange={(e) => setPriority(e.target.value as typeof priority)}>
+                            <Select name="priority" value={priority.id} onChange={(e) => setPriority(priorities.find((p) => p.value === e.target.value))}>
                                 {priorities.map((p) => (
                                     <option key={p.value} value={p.value}>
                                         {p.label}

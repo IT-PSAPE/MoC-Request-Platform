@@ -1,9 +1,6 @@
 "use client";
 import { useMemo, useState, FormEvent } from "react";
-import { Attachment, EventFlowStep, RequestItem, RequestKind, SongItem, EquipmentItem, RequestPriority } from "@/types/request";
-import { RequestService } from "@/features/service";
 import { deadlineRequirementDays } from "@/features/utils";
-import { getRandomUUID } from "@/lib/randomuuid";
 
 export function useRequestFormController() {
   // Step state
@@ -13,39 +10,41 @@ export function useRequestFormController() {
   // Core fields (Step 1)
   const [who, setWho] = useState("");
   const [what, setWhat] = useState("");
-  const [whenTxt, setWhenTxt] = useState("");
-  const [whereTxt, setWhereTxt] = useState("");
+  const [when, setWhen] = useState("");
+  const [where, setWhere] = useState("");
   const [why, setWhy] = useState("");
   const [how, setHow] = useState("");
-  const [additionalInfo, setAdditionalInfo] = useState("");
-  const [priority, setPriority] = useState<RequestPriority>("medium");
+  const [info, setInfo] = useState("");
+  
+  // Step 2: kind, dueAt, selections
+  const [type, setType] = useState<RequestType | null>(null);
+  const [priority, setPriority] = useState<Priority | null>(null);
+  const [due, setDue] = useState<string>(""); // ISO via datetime-local
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment[]>([]);
+  const [selectedSongs, setSelectedSongs] = useState<Song[]>([]);
   const [attachments, setAttachments] = useState<Attachment[]>([]);
 
-  // Step 2: kind, dueAt, selections
-  const [kind, setKind] = useState<RequestKind | "">("");
-  const [dueAt, setDueAt] = useState<string>(""); // ISO via datetime-local
-  const [selectedEquipment, setSelectedEquipment] = useState<EquipmentItem[]>([]);
-  const [selectedSongs, setSelectedSongs] = useState<SongItem[]>([]);
-
   // Step 3: event flow
-  const [eventFlow, setEventFlow] = useState<EventFlowStep[]>([]);
+  const [eventFlow, setEventFlow] = useState<string[]>([]);
 
   const [submitted, setSubmitted] = useState<string | null>(null);
 
   const deadlineWarning = useMemo(() => {
-    if (!kind || !dueAt) return null as string | null;
-    const days = deadlineRequirementDays(kind);
+    if (!type || !due) return null as string | null;
+    const days = deadlineRequirementDays(type);
     if (days === 0) return null;
     const now = new Date();
-    const due = new Date(dueAt);
-    const diffMs = due.getTime() - now.getTime();
+    const dueDate = new Date(due);
+    const diffMs = dueDate.getTime() - now.getTime();
     const diffDays = diffMs / (1000 * 60 * 60 * 24);
     if (diffDays < 0) return "Due date is in the past.";
     if (diffDays < days) {
-      return `Heads up: ${String(kind).replace(/_/g, " ")} should be requested at least ${days} day(s) in advance.`;
+      return `Heads up: ${String(type).replace(/_/g, " ")} should be requested at least ${days} day(s) in advance.`;
     }
     return null;
-  }, [kind, dueAt]);
+  }, [type, due]);
+
+  // 
 
   function toggleEquipment(ei: { id: string; name: string; available: boolean; quantity?: number }) {
     if (!ei.available) return;
@@ -63,37 +62,15 @@ export function useRequestFormController() {
   }
 
   function toggleSong(si: { id: string; title: string; artist?: string; available: boolean }) {
-    if (!si.available) return;
-    setSelectedSongs((prev) => {
-      const exists = prev.some((x) => x.id === si.id);
-      return exists ? prev.filter((x) => x.id !== si.id) : [...prev, { id: si.id, title: si.title, artist: si.artist }];
-    });
+    // 
   }
 
   function addFlowStep(type: "segment" | "song") {
-    const stepObj: EventFlowStep = {
-      id: getRandomUUID(),
-      order: eventFlow.length + 1,
-      type,
-      label: type === "segment" ? `Segment ${eventFlow.length + 1}` : `Song ${eventFlow.length + 1}`,
-    };
-    setEventFlow((prev) => [...prev, stepObj]);
-  }
-
-  function updateFlowLabel(id: string, label: string) {
-    setEventFlow((prev) => prev.map((s) => (s.id === id ? { ...s, label } : s)));
-  }
-
-  function updateFlowSong(id: string, songId: string) {
-    setEventFlow((prev) => prev.map((s) => (s.id === id ? { ...s, songId } : s)));
-  }
-
-  function removeFlowStep(id: string) {
-    setEventFlow((prev) => prev.filter((s) => s.id !== id).map((s, i) => ({ ...s, order: i + 1 })));
+    // 
   }
 
   function validateStep1(): boolean {
-    return !!(who && what && whenTxt && whereTxt && why && how);
+    return !!(who && what && when && where && why && how);
   }
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -103,26 +80,28 @@ export function useRequestFormController() {
       setStep(1);
       return;
     }
-    const input: Omit<RequestItem, "id" | "createdAt" | "updatedAt"> = {
+
+    const input: FormRequest = {
       who,
       what,
-      when: whenTxt,
-      where: whereTxt,
+      when,
+      where,
       why,
       how,
-      additionalInfo,
+      info,
       priority,
       attachments,
       status: "not_started",
       notes: [],
-      kind: kind || undefined,
-      dueAt: dueAt || undefined,
+      kind: type || undefined,
+      dueAt: due || undefined,
       selectedEquipment: selectedEquipment.length
         ? selectedEquipment.map((e) => ({ ...e, quantity: e.quantity && e.quantity > 0 ? Math.floor(e.quantity) : 1 }))
         : undefined,
       selectedSongs: selectedSongs.length ? selectedSongs : undefined,
       eventFlow: eventFlow.length ? eventFlow : undefined,
     };
+
     const created = RequestService.create(input);
     setSubmitted(created.id);
   }
@@ -133,15 +112,15 @@ export function useRequestFormController() {
     setMaxStepReached(1);
     setWho("");
     setWhat("");
-    setWhenTxt("");
-    setWhereTxt("");
+    setWhen("");
+    setWhere("");
     setWhy("");
     setHow("");
-    setAdditionalInfo("");
-    setPriority("medium");
+    setInfo("");
+    setPriority(null);
     setAttachments([]);
-    setKind("");
-    setDueAt("");
+    setType(null);
+    setDue("");
     setSelectedEquipment([]);
     setSelectedSongs([]);
     setEventFlow([]);
@@ -159,26 +138,26 @@ export function useRequestFormController() {
     setWho,
     what,
     setWhat,
-    whenTxt,
-    setWhenTxt,
-    whereTxt,
-    setWhereTxt,
+    whenTxt: when,
+    setWhenTxt: setWhen,
+    whereTxt: where,
+    setWhereTxt: setWhere,
     why,
     setWhy,
     how,
     setHow,
-    additionalInfo,
-    setAdditionalInfo,
+    additionalInfo: info,
+    setAdditionalInfo: setInfo,
     priority,
     setPriority,
     attachments,
     setAttachments,
 
     // type and scheduling
-    kind,
-    setKind,
-    dueAt,
-    setDueAt,
+    type,
+    setType,
+    due,
+    setDue,
 
     // selections
     selectedEquipment,
@@ -192,9 +171,6 @@ export function useRequestFormController() {
     // flow
     eventFlow,
     addFlowStep,
-    updateFlowLabel,
-    updateFlowSong,
-    removeFlowStep,
 
     // helpers
     deadlineWarning,

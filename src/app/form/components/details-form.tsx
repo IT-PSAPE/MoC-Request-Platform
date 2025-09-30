@@ -6,20 +6,19 @@ import Divider from "@/components/ui/Divider";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 
-import { EquipmentItem, RequestKind, SongItem } from "@/types/request";
 import { getEquipmentCatalog, songsCatalog } from "@/features/catalog";
 
 type Props = {
-    kind: "" | RequestKind;
-    setKind: Dispatch<SetStateAction<"" | RequestKind>>;
-    dueAt: string;
-    setDueAt: Dispatch<SetStateAction<string>>;
+    type: RequestType | null;
+    due: string;
     deadlineWarning: string | null;
+    setType: Dispatch<SetStateAction<RequestType>>;
+    setDue: Dispatch<SetStateAction<string>>;
     setStep: (value: SetStateAction<FormSteps>) => void;
     setMaxStepReached: Dispatch<SetStateAction<FormSteps>>;
 
-    selectedEquipment: EquipmentItem[];
-    selectedSongs: SongItem[];
+    selectedEquipment: Equipment[];
+    selectedSongs: Song[];
     toggleEquipment: (ei: {
         id: string;
         name: string;
@@ -35,7 +34,7 @@ type Props = {
     }) => void;
 }
 
-function DetailsForm({ kind, setKind, dueAt, setDueAt, deadlineWarning, setStep, setMaxStepReached, selectedEquipment, selectedSongs, toggleEquipment, setEquipmentQuantity, toggleSong }: Props) {
+function DetailsForm({ type: kind, setKind, due, setDue, deadlineWarning, setStep, setMaxStepReached, selectedEquipment, selectedSongs, toggleEquipment, setEquipmentQuantity, toggleSong }: Props) {
     const equipmentCatalog = getEquipmentCatalog();
     
     return (
@@ -69,8 +68,8 @@ function DetailsForm({ kind, setKind, dueAt, setDueAt, deadlineWarning, setStep,
                         <div className="sm:col-span-3 space-y-2">
                             <Input
                                 type="datetime-local"
-                                value={dueAt}
-                                onChange={(e) => setDueAt(e.target.value)}
+                                value={due}
+                                onChange={(e) => setDue(e.target.value)}
                             />
                             {deadlineWarning && (
                                 <div className="text-xs text-yellow-600">{deadlineWarning}</div>
