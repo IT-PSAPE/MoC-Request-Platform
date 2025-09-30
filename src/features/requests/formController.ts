@@ -27,6 +27,7 @@ export function useRequestFormController() {
   const [due, setDue] = useState<string>(""); // ISO via datetime-local
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment[]>([]);
   const [selectedSongs, setSelectedSongs] = useState<Song[]>([]);
+  const [selectedVenues, setSelectedVenues] = useState<Venue[]>([]);
   const [attachments, setAttachments] = useState<Attachment[]>([]);
 
   // Step 3: event flow
@@ -71,6 +72,16 @@ export function useRequestFormController() {
         return prev.filter((x) => x.id !== song.id);
       } else {
         return [...prev, song];
+      }
+    })
+  }
+
+  function toggleVenue(venue: Venue) {
+    setSelectedVenues((prev) => {
+      if (prev.find((x) => x.id === venue.id)) {
+        return prev.filter((x) => x.id !== venue.id);
+      } else {
+        return [...prev, venue];
       }
     })
   }
@@ -152,6 +163,7 @@ export function useRequestFormController() {
     setSelectedEquipment([]);
     setSelectedSongs([]);
     setEventFlow([]);
+    setSelectedVenues([]);
   }
 
   return {
@@ -195,20 +207,21 @@ export function useRequestFormController() {
     selectedSongs,
     setSelectedSongs,
     toggleSong,
+    selectedVenues,
+    setSelectedVenues,
+    toggleVenue,
 
     // flow
     eventFlow,
     addFlowStep,
+    removeFlowStep,
+    updateFlowLabel,
 
     // helpers
     deadlineWarning,
     validateStep1,
     onSubmit,
     resetForm,
-
-    // flow
-    removeFlowStep,
-    updateFlowLabel,
 
     // submission
     submitted,

@@ -64,6 +64,8 @@ export default function SubmitPage() {
             setPriority={controller.setPriority}
             attachments={controller.attachments}
             setAttachments={controller.setAttachments}
+            selectedVenues={controller.selectedVenues}
+            toggleVenue={controller.toggleVenue}
           />
         }
 
