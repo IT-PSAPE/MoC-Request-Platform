@@ -6,7 +6,7 @@ import { useDefualtContext } from "@/components/providers/defualt-provider";
 
 export function useRequestFormController() {
   const service = RequestService;
-  const {supabase} = useDefualtContext();
+  const { supabase, statuses} = useDefualtContext();
 
   // Step state
   const [step, setStep] = useState<FormSteps>(1);
@@ -20,7 +20,7 @@ export function useRequestFormController() {
   const [why, setWhy] = useState("");
   const [how, setHow] = useState("");
   const [info, setInfo] = useState("");
-  
+
   // Step 2: kind, dueAt, selections
   const [type, setType] = useState<RequestType | null>(null);
   const [priority, setPriority] = useState<Priority | null>(null);
@@ -98,7 +98,7 @@ export function useRequestFormController() {
       how: how,
       info: info,
       priority: '',
-      status: '',
+      status: statuses.find(s => s.value === 0)?.id || '',
       type: '',
       attachments,
       due: due,
