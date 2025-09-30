@@ -128,7 +128,7 @@ async function addNote(supabase: SupabaseClient, id: string, note: string): Prom
     const { error } = await supabase.from('note').insert({ request: id, author: user.data.user?.id, note: note });
 }
 
-async function create(supabase: SupabaseClient, request: FormRequest): Promise<FetchRequest> {
+async function create(supabase: SupabaseClient, request: BaseRequest): Promise<FetchRequest> {
     const { data, error } = await supabase.from('request').insert(request);
     if (error || !data) {
         console.error("Failed to create request", error);

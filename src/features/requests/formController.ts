@@ -49,8 +49,6 @@ export function useRequestFormController() {
     return null;
   }, [type, due]);
 
-  // 
-
   function toggleEquipment(eq: Equipment) {
 
   }
@@ -89,7 +87,7 @@ export function useRequestFormController() {
       return;
     }
 
-    const input: FormRequest = {
+    const request: BaseRequest = {
       who: who,
       what: what,
       when: when,
@@ -97,17 +95,14 @@ export function useRequestFormController() {
       why: why,
       how: how,
       info: info,
-      priority: '',
-      status: statuses.find(s => s.value === 0)?.id || '',
-      type: '',
-      attachments,
       due: due,
+      priority: priority?.id || '',
+      status: statuses.find(s => s.value === 0)?.id || '',
+      type: type?.id || '',
       flow: [],
-      equipment: [],
-      songs: [],
     };
 
-    const created = await service.create(supabase, input);
+    const created = await service.create(supabase, request);
 
     setSubmitted(created.id);
   }

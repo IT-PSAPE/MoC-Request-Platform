@@ -94,7 +94,6 @@ type BaseRequest = {
     priority: string;
     status: string;
     type: string;
-
 }
 
 type FormRequest = {
