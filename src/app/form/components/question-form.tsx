@@ -7,7 +7,7 @@ import Dropzone from "@/components/ui/Dropzone";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import Select from "@/components/ui/Select";
-import { priorities } from "@/features/defualts";
+import { useDefualtContext } from "@/components/providers/defualt-provider";
 
 type Props = {
     who: string;
@@ -24,8 +24,8 @@ type Props = {
     setHow: Dispatch<SetStateAction<string>>;
     additionalInfo: string;
     setAdditionalInfo: Dispatch<SetStateAction<string>>;
-    priority: Priority;
-    setPriority: Dispatch<SetStateAction<Priority>>;
+    priority: Priority | null;
+    setPriority: Dispatch<SetStateAction<Priority | null>>;
     attachments: Attachment[];
     setAttachments: Dispatch<SetStateAction<Attachment[]>>;
     validateStep1: () => boolean;
@@ -35,6 +35,12 @@ type Props = {
 }
 
 function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTxt, setWhereTxt, why, setWhy, how, setHow, additionalInfo, setAdditionalInfo, priority, setPriority, attachments, setAttachments, validateStep1, resetForm, setStep, setMaxStepReached }: Props) {
+    const { priorities } = useDefualtContext();
+
+    function handlePriorityChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        setPriority(priorities.find((p) => p.id === e.target.value) || null);
+    }
+
     return (
         <>
             <Card>
@@ -125,10 +131,10 @@ function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTx
                         </div>
                         <div className="sm:col-span-3">
                             <label className="text-xs text-foreground/60">Priority</label>
-                            <Select name="priority" value={priority.id} onChange={(e) => setPriority(priorities.find((p) => p.value === e.target.value))}>
+                            <Select name="priority" value={priority?.id || ""} onChange={handlePriorityChange}>
                                 {priorities.map((p) => (
-                                    <option key={p.value} value={p.value}>
-                                        {p.label}
+                                    <option key={p.id} value={p.id}>
+                                        {p.name}
                                     </option>
                                 ))}
                             </Select>

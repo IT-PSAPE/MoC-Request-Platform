@@ -79,7 +79,23 @@ type RequestVenue = {
     venue: Venue;
 };
 
-// FLOW
+// Request
+
+type BaseRequest = {
+    who: string;
+    what: string;
+    when: string;
+    where: string;
+    why: string;
+    how: string;
+    info: string | null;
+    due: string | null;
+    flow: string[];
+    priority: string;
+    status: string;
+    type: string;
+
+}
 
 type FormRequest = {
     who: string;
@@ -91,9 +107,9 @@ type FormRequest = {
     info: string | null;
     due: string | null;
     flow: string[];
-    priorityId: string;
-    statusId: string;
-    typeId: string;
+    priority: string;
+    status: string;
+    type: string;
     equipment: { id: string; quantity: number }[];
     attachments: {
         id: string;

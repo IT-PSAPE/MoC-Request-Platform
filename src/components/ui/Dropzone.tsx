@@ -1,8 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
 import Button from "./Button";
-import { Attachment } from "@/types/request";
-import { getRandomUUID } from "@/lib/randomuuid";
 
 const MAX_BYTES = 5 * 1024 * 1024; // 5MB cap for demo
 
@@ -27,11 +25,13 @@ export default function Dropzone({
           const reader = new FileReader();
           reader.onload = () =>
             resolve({
-              id: getRandomUUID(),
+              id: 'xxx-x-x--x-x-x-xxx-x-x-x',
+              request: 'xx-x-xxx-x-x-x--x',
               name: file.name,
               type: file.type,
               size: file.size,
-              dataUrl: String(reader.result),
+              storage: String(reader.result),
+              created: new Date().toISOString(),
             });
           reader.readAsDataURL(file);
         })

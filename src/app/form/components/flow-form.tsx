@@ -5,19 +5,16 @@ import Divider from "@/components/ui/Divider";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
-import { EventFlowStep } from "@/types/request";
 
 type Props = {
-    eventFlow: EventFlowStep[];
+    eventFlow: string[];
     addFlowStep: (type: "segment" | "song") => void;
-    removeFlowStep: (id: string) => void;
-    updateFlowLabel: (id: string, label: string) => void;
-    updateFlowSong: (id: string, songId: string) => void;
-
+    removeFlowStep: (index: number) => void
+    updateFlowLabel: (index: number, label: string) => void
     setStep: Dispatch<SetStateAction<FormSteps>>
 }
 
-function FlowForm({ eventFlow, addFlowStep, removeFlowStep, updateFlowLabel, updateFlowSong, setStep }: Props) {
+function FlowForm({ eventFlow, addFlowStep, removeFlowStep, updateFlowLabel, setStep }: Props) {
     return (
         <>
             <Card>
@@ -28,14 +25,14 @@ function FlowForm({ eventFlow, addFlowStep, removeFlowStep, updateFlowLabel, upd
                         <Button type="button" variant="secondary" onClick={() => addFlowStep("song")}>Add Song</Button>
                     </div>
                     <div className="space-y-2">
-                        {eventFlow.map((s) => (
-                            <div key={s.id} className="rounded-md border border-foreground/20 p-2">
+                        {eventFlow.map((s, i) => (
+                            <div key={i} className="rounded-md border border-foreground/20 p-2">
                                 <div className="flex items-center justify-between gap-2">
-                                    <div className="text-xs text-foreground/60">Step {s.order} • {s.type}</div>
+                                    <div className="text-xs text-foreground/60">Step {i + 1}</div>
                                     <button
                                         type="button"
                                         className="text-xs text-red-500"
-                                        onClick={() => removeFlowStep(s.id)}
+                                        onClick={() => removeFlowStep(i)}
                                     >
                                         Remove
                                     </button>
@@ -43,10 +40,10 @@ function FlowForm({ eventFlow, addFlowStep, removeFlowStep, updateFlowLabel, upd
                                 <div className="mt-2 grid grid-cols-1 sm:grid-cols-5 gap-2 items-center">
                                     <div className="sm:col-span-2 text-xs text-foreground/60">Label</div>
                                     <div className="sm:col-span-3">
-                                        <Input value={s.label} onChange={(e) => updateFlowLabel(s.id, e.target.value)} />
+                                        <Input value={s} onChange={(e) => updateFlowLabel(i, e.target.value)} />
                                     </div>
                                 </div>
-                                {s.type === "song" && (
+                                {/* {s === "song" && (
                                     <div className="mt-2 grid grid-cols-1 sm:grid-cols-5 gap-2 items-center">
                                         <div className="sm:col-span-2 text-xs text-foreground/60">Song</div>
                                         <div className="sm:col-span-3">
@@ -60,7 +57,7 @@ function FlowForm({ eventFlow, addFlowStep, removeFlowStep, updateFlowLabel, upd
                                             </Select>
                                         </div>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         ))}
                     </div>

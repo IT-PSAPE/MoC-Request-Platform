@@ -1,8 +1,13 @@
 "use client";
 import { useMemo, useState, FormEvent } from "react";
 import { deadlineRequirementDays } from "@/features/utils";
+import RequestService from "@/features/requests/request-service";
+import { useDefualtContext } from "@/components/providers/defualt-provider";
 
 export function useRequestFormController() {
+  const service = RequestService;
+  const {supabase} = useDefualtContext();
+
   // Step state
   const [step, setStep] = useState<FormSteps>(1);
   const [maxStepReached, setMaxStepReached] = useState<FormSteps>(1);
@@ -46,13 +51,8 @@ export function useRequestFormController() {
 
   // 
 
-  function toggleEquipment(ei: { id: string; name: string; available: boolean; quantity?: number }) {
-    if (!ei.available) return;
-    setSelectedEquipment((prev) => {
-      const exists = prev.some((x) => x.id === ei.id);
-      // Default requested quantity is 1 when adding
-      return exists ? prev.filter((x) => x.id !== ei.id) : [...prev, { id: ei.id, name: ei.name, quantity: 1 }];
-    });
+  function toggleEquipment(eq: Equipment) {
+
   }
 
   function setEquipmentQuantity(equipmentId: string, quantity: number) {
@@ -61,7 +61,7 @@ export function useRequestFormController() {
     );
   }
 
-  function toggleSong(si: { id: string; title: string; artist?: string; available: boolean }) {
+  function toggleSong(song: Song) {
     // 
   }
 
@@ -69,11 +69,19 @@ export function useRequestFormController() {
     // 
   }
 
+  function removeFlowStep(index: number) {
+    setEventFlow((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function updateFlowLabel(index: number, label: string) {
+    setEventFlow((prev) => prev.map((x, i) => (i === index ? label : x)));
+  }
+
   function validateStep1(): boolean {
     return !!(who && what && when && where && why && how);
   }
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!validateStep1()) {
       alert("Please complete all 5W1H fields.");
@@ -82,27 +90,25 @@ export function useRequestFormController() {
     }
 
     const input: FormRequest = {
-      who,
-      what,
-      when,
-      where,
-      why,
-      how,
-      info,
-      priority,
+      who: who,
+      what: what,
+      when: when,
+      where: where,
+      why: why,
+      how: how,
+      info: info,
+      priority: '',
+      status: '',
+      type: '',
       attachments,
-      status: "not_started",
-      notes: [],
-      kind: type || undefined,
-      dueAt: due || undefined,
-      selectedEquipment: selectedEquipment.length
-        ? selectedEquipment.map((e) => ({ ...e, quantity: e.quantity && e.quantity > 0 ? Math.floor(e.quantity) : 1 }))
-        : undefined,
-      selectedSongs: selectedSongs.length ? selectedSongs : undefined,
-      eventFlow: eventFlow.length ? eventFlow : undefined,
+      due: due,
+      flow: [],
+      equipment: [],
+      songs: [],
     };
 
-    const created = RequestService.create(input);
+    const created = await service.create(supabase, input);
+
     setSubmitted(created.id);
   }
 
@@ -177,6 +183,10 @@ export function useRequestFormController() {
     validateStep1,
     onSubmit,
     resetForm,
+
+    // flow
+    removeFlowStep,
+    updateFlowLabel,
 
     // submission
     submitted,

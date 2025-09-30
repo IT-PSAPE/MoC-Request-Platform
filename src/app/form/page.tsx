@@ -73,7 +73,6 @@ export default function SubmitPage() {
             addFlowStep={controller.addFlowStep}
             removeFlowStep={controller.removeFlowStep}
             updateFlowLabel={controller.updateFlowLabel}
-            updateFlowSong={controller.updateFlowSong}
             setStep={controller.setStep}
           />
         }
