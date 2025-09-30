@@ -50,7 +50,13 @@ export function useRequestFormController() {
   }, [type, due]);
 
   function toggleEquipment(eq: Equipment) {
-
+    setSelectedEquipment((prev) => {
+      if (prev.find((x) => x.id === eq.id)) {
+        return prev.filter((x) => x.id !== eq.id);
+      } else {
+        return [...prev, { ...eq, quantity: 1 }];
+      }
+    })
   }
 
   function setEquipmentQuantity(equipmentId: string, quantity: number) {
@@ -60,11 +66,17 @@ export function useRequestFormController() {
   }
 
   function toggleSong(song: Song) {
-    // 
+    setSelectedSongs((prev) => {
+      if (prev.find((x) => x.id === song.id)) {
+        return prev.filter((x) => x.id !== song.id);
+      } else {
+        return [...prev, song];
+      }
+    })
   }
 
   function addFlowStep(type: "segment" | "song") {
-    // 
+    setEventFlow((prev) => [...prev, type === "segment" ? "New Segment" : "New Song"]);
   }
 
   function removeFlowStep(index: number) {

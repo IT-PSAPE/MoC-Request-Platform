@@ -38,7 +38,7 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
     }, []);
 
     useEffect(() => {
-        const eq = supabase.from("songs").select("*").order("name");
+        const eq = supabase.from("song").select("*").order("name");
         eq.then((res) => {
             if (res.error) return;
             setSongs(res.data);

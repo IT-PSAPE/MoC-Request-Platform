@@ -22,7 +22,7 @@ function FlowForm({ eventFlow, addFlowStep, removeFlowStep, updateFlowLabel, set
                 <div className="mt-4 space-y-3">
                     <div className="flex gap-2">
                         <Button type="button" variant="secondary" onClick={() => addFlowStep("segment")}>Add Segment</Button>
-                        <Button type="button" variant="secondary" onClick={() => addFlowStep("song")}>Add Song</Button>
+                        {/* <Button type="button" variant="secondary" onClick={() => addFlowStep("song")}>Add Song</Button> */}
                     </div>
                     <div className="space-y-2">
                         {eventFlow.map((s, i) => (
