@@ -55,6 +55,7 @@ export default function SubmitPage() {
             deadlineWarning={controller.deadlineWarning}
             setStep={controller.setStep}
             setMaxStepReached={controller.setMaxStepReached}
+            validateStep2={controller.validateStep2}
             selectedEquipment={controller.selectedEquipment}
             selectedSongs={controller.selectedSongs}
             toggleEquipment={controller.toggleEquipment}

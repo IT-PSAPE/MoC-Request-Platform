@@ -102,11 +102,21 @@ export function useRequestFormController() {
     return !!(who && what && when && where && why && how);
   }
 
+  function validateStep2(): boolean {
+    return !!(priority && type && due);
+  }
+
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!validateStep1()) {
       alert("Please complete all 5W1H fields.");
       setStep(1);
+      return;
+    }
+
+    if (!validateStep2()) {
+      alert("Please choose a priority, request type, and due date.");
+      setStep(2);
       return;
     }
 
@@ -229,6 +239,7 @@ export function useRequestFormController() {
     // helpers
     deadlineWarning,
     validateStep1,
+    validateStep2,
     onSubmit,
     resetForm,
 

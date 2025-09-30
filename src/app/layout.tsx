@@ -21,8 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${figTree.variable} ${figTree.variable} antialiased flex flex-col h-screen bg-primary`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className={`${figTree.variable} antialiased flex flex-col h-screen bg-primary`}
+      >
         <RootProvider>
           <NavigationBar />
           <main className="mx-auto w-full flex flex-col h-full min-h-0 overflow-x-auto"> {children} </main>

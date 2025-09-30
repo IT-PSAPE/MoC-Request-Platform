@@ -17,6 +17,7 @@ type Props = {
     setDue: Dispatch<SetStateAction<string>>;
     setStep: (value: SetStateAction<FormSteps>) => void;
     setMaxStepReached: Dispatch<SetStateAction<FormSteps>>;
+    validateStep2: () => boolean;
 
     selectedEquipment: Equipment[];
     selectedSongs: Song[];
@@ -31,7 +32,7 @@ type Props = {
     toggleVenue: (venue: Venue) => void;
 }
 
-function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, setMaxStepReached, selectedEquipment, selectedSongs, toggleEquipment, setEquipmentQuantity, toggleSong, priority, setPriority, attachments, setAttachments, selectedVenues, toggleVenue}: Props) {
+function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, setMaxStepReached, validateStep2, selectedEquipment, selectedSongs, toggleEquipment, setEquipmentQuantity, toggleSong, priority, setPriority, attachments, setAttachments, selectedVenues, toggleVenue}: Props) {
     const { supabase, types, priorities } = useDefualtContext();
 
     function handlePriorityChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -167,7 +168,8 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
                         </div>
                         <div className="sm:col-span-3">
                             <label className="text-xs text-foreground/60">Priority</label>
-                            <Select name="priority" value={priority?.id || ""} onChange={handlePriorityChange}>
+                            <Select name="priority" value={priority?.id || ""} onChange={handlePriorityChange} required>
+                                <option value="">Select priority...</option>
                                 {priorities.map((p) => (
                                     <option key={p.id} value={p.id}>
                                         {p.name}
@@ -183,7 +185,7 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
                             <div className="text-xs text-foreground/60">Select what you are requesting.</div>
                         </div>
                         <div className="sm:col-span-3">
-                            <Select value={type?.id || ""} onChange={handleTypeChange}>
+                            <Select name="type" value={type?.id || ""} onChange={handleTypeChange} required>
                                 <option value="">Select type...</option>
                                 {types.map((t) => (
                                     <option key={t.id} value={t.id}>
@@ -204,6 +206,7 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
                                 type="datetime-local"
                                 value={due}
                                 onChange={(e) => setDue(e.target.value)}
+                                required
                             />
                             {deadlineWarning && (
                                 <div className="text-xs text-yellow-600">{deadlineWarning}</div>
@@ -292,10 +295,12 @@ function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, set
                 <Button
                     type="button"
                     onClick={() => {
+                        if (!validateStep2()) return;
                         const next = 3 as const;
                         setStep(next);
                         setMaxStepReached((prev) => (prev < next ? next : prev));
                     }}
+                    disabled={!validateStep2()}
                 >
                     Continue to Step 3
                 </Button>
