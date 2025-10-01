@@ -152,13 +152,13 @@ export function useRequestFormController() {
       priority: priority?.id || '',
       status: statuses.find(s => s.value === 0)?.id || '',
       type: type?.id || '',
-      flow: [],
+      flow: eventFlow,
     };
 
     const requestEquipment: RequestEquipment[] = selectedEquipment.map((eq) => ({
       request_id: "",
       equipment_id: eq.id,
-      quantity: eq.quantity || 1,
+      quantity: eq.quantity,
       approved: false,
       equipment: eq,
     }));
@@ -173,6 +173,7 @@ export function useRequestFormController() {
       request_id: '',
       venue_id: v.id,
       venue: v,
+      approved: false,
     })); // Not implemented yet
 
     const created = await service.create({
@@ -271,3 +272,5 @@ export function useRequestFormController() {
     setSubmitted,
   } as const;
 }
+
+export type RequestFormController = ReturnType<typeof useRequestFormController>;

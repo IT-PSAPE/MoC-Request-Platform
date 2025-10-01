@@ -7,10 +7,14 @@ import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { useDefaultContext } from "@/components/providers/default-provider";
 import EmptyState from "@/components/ui/EmptyState";
-import { useRequestFormController } from "@/features/requests/formController";
+import type { RequestFormController } from "@/features/requests/formController";
 import { EquipmentTable, SongTable, VenueTable } from "@/lib/database";
 
-function DetailsForm() {
+type Props = {
+    controller: RequestFormController;
+};
+
+function DetailsForm({ controller }: Props) {
     const { supabase, types, priorities } = useDefaultContext();
 
     const {
@@ -33,7 +37,7 @@ function DetailsForm() {
         // setAttachments,
         selectedVenues,
         toggleVenue,
-    } = useRequestFormController();
+    } = controller;
 
     function handlePriorityChange(e: React.ChangeEvent<HTMLSelectElement>) {
         setPriority(priorities.find((p) => p.id === e.target.value) || null);

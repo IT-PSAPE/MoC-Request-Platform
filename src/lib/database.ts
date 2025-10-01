@@ -8,13 +8,13 @@ const EquipmentTable = {
 
 const SongTable = {
     select: async (supabase: SupabaseClient) => {
-        return supabase.from("equipment").select("*").order("name");
+        return supabase.from("song").select("*").order("name");
     }
 }
 
 const VenueTable = {
     select: async (supabase: SupabaseClient) => {
-        return supabase.from("equipment").select("*").order("name");
+        return supabase.from("venue").select("*").order("name");
     }
 }
 

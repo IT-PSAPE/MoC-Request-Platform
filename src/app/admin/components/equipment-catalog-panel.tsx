@@ -31,7 +31,7 @@ function EquipmentCatalogPanel({items, setActive}: Props) {
             if (res.error) return;
             setEquipment(res.data);
         });
-    }, []);
+    }, [supabase]);
 
     return (
         <ScrollArea className="max-w-full flex-1 min-h-0">

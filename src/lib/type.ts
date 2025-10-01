@@ -76,6 +76,7 @@ type RequestSong = {
 type RequestVenue = {
     request_id: string;
     venue_id: string;
+    approved: boolean;
     venue: Venue;
 };
 

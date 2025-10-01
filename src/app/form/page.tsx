@@ -9,7 +9,9 @@ import DetailsForm from "./components/details-form";
 import FlowForm from "./components/flow-form";
 
 export default function SubmitPage() {
-  const { step, maxStepReached, setStep, submitted, onSubmit } = useRequestFormController();
+  const controller = useRequestFormController();
+  
+  const { step, maxStepReached, setStep, submitted, onSubmit } = controller;
 
   return (
     <div className="mx-auto max-w-7xl w-full py-8 px-4">
@@ -24,13 +26,13 @@ export default function SubmitPage() {
 
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-6">
-        {step === 1 && <QuestionForm />}
-        {step === 2 && <DetailsForm />}
-        {step === 3 && <FlowForm />}
+        {step === 1 && <QuestionForm controller={controller} />}
+        {step === 2 && <DetailsForm controller={controller} />}
+        {step === 3 && <FlowForm controller={controller} />}
       </form>
 
       {/* Success screen */}
-      {submitted && <SuccessScreen />}
+      {submitted && <SuccessScreen controller={controller} />}
     </div>
   );
 }

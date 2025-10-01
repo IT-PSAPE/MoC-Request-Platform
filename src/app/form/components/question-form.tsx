@@ -1,14 +1,37 @@
-import { Dispatch, SetStateAction } from "react";
-
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Divider from "@/components/ui/Divider";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
-import { useRequestFormController } from "@/features/requests/formController";
+import type { RequestFormController } from "@/features/requests/formController";
 
-function QuestionForm() {
-    const { who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTxt, setWhereTxt, why, setWhy, how, setHow, additionalInfo, setAdditionalInfo, validateStep1, resetForm, setStep, setMaxStepReached } = useRequestFormController();
+type Props = {
+    controller: RequestFormController;
+};
+
+function QuestionForm({ controller }: Props) {
+    const {
+        who,
+        setWho,
+        what,
+        setWhat,
+        whenTxt,
+        setWhenTxt,
+        whereTxt,
+        setWhereTxt,
+        why,
+        setWhy,
+        how,
+        setHow,
+        additionalInfo,
+        setAdditionalInfo,
+        validateStep1,
+        resetForm,
+        setStep,
+        setMaxStepReached,
+    } = controller;
+
+    const canContinue = validateStep1();
 
     return (
         <>
@@ -105,14 +128,14 @@ function QuestionForm() {
                 <Button
                     type="button"
                     onClick={() => {
-                        if (!validateStep1()) return;
+                        if (!canContinue) return;
                         const next = 2 as const;
                         setStep(next);
                         setMaxStepReached((prev) => (prev < next ? next : prev));
 
                         console.log("Proceeding to step 2");
                     }}
-                    disabled={!validateStep1()}
+                    disabled={!canContinue}
                 >
                     Continue to Step 2
                 </Button>

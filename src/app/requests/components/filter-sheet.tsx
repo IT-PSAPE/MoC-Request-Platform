@@ -21,7 +21,7 @@ type Props = {
 }
 
 function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFilter, typeFilter: kindFilter, setTypeFilter, dueStart, setDueStart, dueEnd, setDueEnd, resetFilters }: Props) {
-    const defualt = useDefaultContext();
+    const defaults = useDefaultContext();
 
     function updatePriorityFilter(e: React.ChangeEvent<HTMLSelectElement>) {
         const { value } = e.target;
@@ -31,7 +31,7 @@ function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFil
             return;
         }
 
-        const priority = defualt.priorities.find(p => p.id === value);
+        const priority = defaults.priorities.find(p => p.id === value);
 
         setPriorityFilter(priority || null);
     }
@@ -44,7 +44,7 @@ function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFil
             return;
         }
 
-        const type = defualt.types.find(t => t.id === value);
+        const type = defaults.types.find(t => t.id === value);
 
         setTypeFilter(type || null);
     }
@@ -56,7 +56,7 @@ function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFil
                     <div className="text-xs text-foreground/60 mb-1">Priority</div>
                     <Select value={priorityFilter?.id ?? ""} onChange={updatePriorityFilter}>
                         <option value="">All</option>
-                        {defualt.priorities.map((priority) => (
+                        {defaults.priorities.map((priority) => (
                             <option key={priority.id} value={priority.id}>
                                 {priority.name}
                             </option>
@@ -67,7 +67,7 @@ function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFil
                     <div className="text-xs text-foreground/60 mb-1">Type</div>
                     <Select value={kindFilter?.id ?? ""} onChange={updateTypeFilter}>
                         <option value="">All</option>
-                        {defualt.types.map((type) => (
+                        {defaults.types.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
                             </option>

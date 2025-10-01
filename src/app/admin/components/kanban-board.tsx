@@ -11,12 +11,12 @@ type Props = {
 }
 
 function KanbanBoard({ grouped, updateStatus, setActive }: Props) {
-    const defualts = useDefaultContext();
+    const defaults = useDefaultContext();
 
     return (
         <ScrollArea className="max-w-full flex-1 min-h-0">
             <div className="flex gap-4 pb-2 pr-2 px-4 h-full">
-                {defualts.statuses.map((status) => (
+                {defaults.statuses.map((status) => (
                     <div key={status.id} className="min-w-64 flex-1 h-full flex flex-col bg-foreground/2 rounded-md p-3">
                         {(() => {
                             const list = grouped[status.value] ?? [];

@@ -3,17 +3,21 @@ import Divider from "@/components/ui/Divider";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 // import Select from "@/components/ui/Select";
-import { useRequestFormController } from "@/features/requests/formController";
+import type { RequestFormController } from "@/features/requests/formController";
+
+type Props = {
+    controller: RequestFormController;
+};
 
 
-function FlowForm() {
+function FlowForm({ controller }: Props) {
     const {
         eventFlow,
         addFlowStep,
         removeFlowStep,
         updateFlowLabel,
         setStep,
-    } = useRequestFormController();
+    } = controller;
 
     return (
         <>
