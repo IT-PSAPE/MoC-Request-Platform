@@ -109,6 +109,8 @@ function QuestionForm() {
                         const next = 2 as const;
                         setStep(next);
                         setMaxStepReached((prev) => (prev < next ? next : prev));
+
+                        console.log("Proceeding to step 2");
                     }}
                     disabled={!validateStep1()}
                 >

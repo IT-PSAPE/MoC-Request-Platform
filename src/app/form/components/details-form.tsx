@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -6,9 +6,9 @@ import Divider from "@/components/ui/Divider";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { useDefaultContext } from "@/components/providers/default-provider";
-// import Dropzone from "@/components/ui/Dropzone";
 import EmptyState from "@/components/ui/EmptyState";
 import { useRequestFormController } from "@/features/requests/formController";
+import { EquipmentTable, SongTable, VenueTable } from "@/lib/database";
 
 function DetailsForm() {
     const { supabase, types, priorities } = useDefaultContext();
@@ -44,24 +44,21 @@ function DetailsForm() {
     const [venues, setVenues] = useState<Venue[]>([]);
 
     useEffect(() => {
-        const req = supabase.from("equipment").select("*").order("name");
-        req.then((res) => {
+        EquipmentTable.select(supabase).then((res) => {
             if (res.error) return;
             setEquipment(res.data);
-        });
+        })
     }, [supabase]);
 
     useEffect(() => {
-        const req = supabase.from("song").select("*").order("name");
-        req.then((res) => {
+        SongTable.select(supabase).then((res) => {
             if (res.error) return;
             setSongs(res.data);
         });
     }, [supabase]);
 
     useEffect(() => {
-        const req = supabase.from("venue").select("*").order("name");
-        req.then((res) => {
+        VenueTable.select(supabase).then((res) => {
             if (res.error) return;
             setVenues(res.data);
         });

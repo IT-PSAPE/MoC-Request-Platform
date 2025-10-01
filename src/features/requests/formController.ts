@@ -1,12 +1,11 @@
 "use client";
 import { useMemo, useState, FormEvent } from "react";
-import { deadlineRequirementDays } from "@/features/utils";
 import RequestService from "@/features/requests/request-service";
 import { useDefaultContext } from "@/components/providers/default-provider";
 
 export function useRequestFormController() {
   const service = RequestService;
-  const { supabase, statuses} = useDefaultContext();
+  const { supabase, statuses } = useDefaultContext();
 
   // Step state
   const [step, setStep] = useState<FormSteps>(1);
@@ -49,6 +48,27 @@ export function useRequestFormController() {
     }
     return null;
   }, [type, due]);
+
+  function deadlineRequirementDays(k: RequestType | null): number {
+    if (!k) return 0;
+
+    switch (k.name.toLowerCase()) {
+      case "event":
+        return 1; // 24h
+      case "video editing":
+        return 3;
+      case "video filming editing":
+        return 5;
+      case "design flyer":
+        return 1;
+      case "design special":
+        return 2;
+      case "equipment":
+        return 0; // no deadline restriction
+      default:
+        return 0;
+    }
+  }
 
   function toggleEquipment(eq: Equipment) {
     setSelectedEquipment((prev) => {
@@ -140,16 +160,19 @@ export function useRequestFormController() {
       equipment_id: eq.id,
       quantity: eq.quantity || 1,
       approved: false,
+      equipment: eq,
     }));
-    
+
     const requestSongs: RequestSong[] = selectedSongs.map((s) => ({
       request_id: '',
       song_id: s.id,
+      song: s,
     }));
-    
+
     const requestVenues: RequestVenue[] = selectedVenues.map((v) => ({
       request_id: '',
       venue_id: v.id,
+      venue: v,
     })); // Not implemented yet
 
     const created = await service.create({

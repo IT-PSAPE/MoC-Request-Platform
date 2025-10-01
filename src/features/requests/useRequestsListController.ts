@@ -13,7 +13,7 @@ const DEFAULT_SORT_RULES: ReadonlyArray<SortRule> = [
 ] as const;
 
 export function useRequestsListController() {
-  const defualtContext = useDefaultContext();
+  const defaultContext = useDefaultContext();
   const service = RequestService;
 
   // Data
@@ -38,7 +38,7 @@ export function useRequestsListController() {
 
   // Load
   useEffect(() => {
-    service.list(defualtContext.supabase).then((res) => setRequests(res));
+    service.list(defaultContext.supabase).then((res) => setRequests(res));
   }, []);
 
   // Derived: filtered

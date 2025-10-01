@@ -64,16 +64,19 @@ type RequestEquipment = {
     equipment_id: string;
     quantity: number;
     approved: boolean;
+    equipment: Equipment;
 };
 
 type RequestSong = {
     request_id: string;
     song_id: string;
+    song: Song;
 };
 
 type RequestVenue = {
     request_id: string;
     venue_id: string;
+    venue: Venue;
 };
 
 // Request

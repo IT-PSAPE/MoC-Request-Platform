@@ -152,6 +152,14 @@ async function create({ supabase, request, attachments, songs, venues, equipment
 
     const requestId = insertedRequests[0].id;
 
+    if (equipment.length > 0) {
+        const equipmentToInsert = equipment.map(eq => ({ ...eq, request_id: requestId }));
+        const { error: eqError } = await supabase.from('request_equipment').insert(equipmentToInsert);
+        if (eqError) {
+            console.error('Failed to insert equipment:', eqError);
+        }
+    }
+
     if (attachments.length > 0) {
         const attachmentsToInsert = attachments.map(att => ({ ...att, request: requestId }));
         const { error: attError } = await supabase.from('attachment').insert(attachmentsToInsert);
