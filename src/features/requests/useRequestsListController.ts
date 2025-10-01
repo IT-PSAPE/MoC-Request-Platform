@@ -13,7 +13,7 @@ const DEFAULT_SORT_RULES: ReadonlyArray<SortRule> = [
 ] as const;
 
 export function useRequestsListController() {
-  const defaultContext = useDefaultContext();
+  const { supabase } = useDefaultContext();
   const service = RequestService;
 
   // Data
@@ -38,8 +38,8 @@ export function useRequestsListController() {
 
   // Load
   useEffect(() => {
-    service.list(defaultContext.supabase).then((res) => setRequests(res));
-  }, []);
+    service.list(supabase).then((res) => setRequests(res));
+  }, [service, supabase]);
 
   // Derived: filtered
   const filtered = useMemo(() => {

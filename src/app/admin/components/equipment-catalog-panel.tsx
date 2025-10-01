@@ -14,10 +14,10 @@ function EquipmentCatalogPanel({items, setActive}: Props) {
 
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     // Compute equipment with active requests and quantities
-    const activeReqs = items.filter((r) => r.status.value === 1 || r.status.value === 2);
+    const activeReq = items.filter((r) => r.status.value === 1 || r.status.value === 2);
     const byEquipment: Record<string, { request: FetchRequest; quantity: number }[]> = {};
 
-    activeReqs.forEach((r) => {
+    activeReq.forEach((r) => {
         (r.equipment || []).forEach((e) => {
             const qty = typeof e.quantity === "number" ? Math.max(1, Math.floor(e.quantity)) : 1;
             if (!byEquipment[e.equipment.id]) byEquipment[e.equipment.id] = [];

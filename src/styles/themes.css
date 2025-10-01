@@ -8,5 +8,5 @@ html[data-theme="admin"] {
             var(--color-olive-700) 40%);
     --color-primary-base: var(--color-olive-500);
     --color-primary-dark: var(--color-olive-700);
-    --color-primary-darker: var(--color-olive-900);
+    --color-primary-darker: var(--color-olive-900) 
 }

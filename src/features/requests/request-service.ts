@@ -40,12 +40,9 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
         due: request.due as string,
         flow: request.flow as string[],
         created_at: request.created_at as string,
-        // @ts-ignore
-        priority: request.priority as Priority,
-        // @ts-ignore
-        status: request.status as Status,
-        // @ts-ignore
-        type: request.type as RequestType,
+        priority: request.priority as unknown as Priority,
+        status: request.status as unknown as Status,
+        type: request.type as unknown as RequestType,
         attachment: request.attachment as Attachment[],
         note: request.note as Note[],
         equipment: request.equipment,
@@ -99,12 +96,9 @@ async function get(supabase: SupabaseClient, id: string): Promise<FetchRequest |
         due: request.due as string,
         flow: request.flow as string[],
         created_at: request.created_at as string,
-        // @ts-ignore
-        priority: request.priority as Priority,
-        // @ts-ignore
-        status: request.status as Status,
-        // @ts-ignore
-        type: request.type as RequestType,
+        priority: request.priority as unknown as Priority,
+        status: request.status as unknown as Status,
+        type: request.type as unknown as RequestType,
         attachment: request.attachment as Attachment[],
         note: request.note as Note[],
         equipment: request.equipment,
@@ -121,11 +115,23 @@ async function updateStatus(supabase: SupabaseClient, id: string, status: Status
 }
 
 async function addNote(supabase: SupabaseClient, id: string, note: string): Promise<void> {
-    const user = await supabase.auth.getUser();
+    const { data: userData, error: userError } = await supabase.auth.getUser();
 
-    if (!user) return;
+    if (userError) {
+        console.error("Failed to resolve current user", userError);
+        return;
+    }
 
-    const { error } = await supabase.from('note').insert({ request: id, author: user.data.user?.id, note: note });
+    const userId = userData.user?.id;
+    if (!userId) {
+        console.error("Missing authenticated user for addNote");
+        return;
+    }
+
+    const { error } = await supabase.from('note').insert({ request: id, author: userId, note: note });
+    if (error) {
+        console.error("Failed to insert note", error);
+    }
 }
 
 type CreateRequestParams = {

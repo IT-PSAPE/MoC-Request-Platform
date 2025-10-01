@@ -19,7 +19,7 @@ function RootProvider({ children }: { children: React.ReactNode }) {
         }
 
         setSupabase(createClient(supabaseUrl, supabaseAnonKey));
-    }, []);
+    }, [supabaseUrl, supabaseAnonKey]);
 
     if (!supabase) {
         return <div>Loading...</div>;
