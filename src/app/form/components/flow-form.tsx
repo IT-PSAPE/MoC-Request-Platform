@@ -1,20 +1,20 @@
-import { Dispatch, SetStateAction } from "react";
-
 import Card from "@/components/ui/Card";
 import Divider from "@/components/ui/Divider";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import Select from "@/components/ui/Select";
+// import Select from "@/components/ui/Select";
+import { useRequestFormController } from "@/features/requests/formController";
 
-type Props = {
-    eventFlow: string[];
-    addFlowStep: (type: "segment" | "song") => void;
-    removeFlowStep: (index: number) => void
-    updateFlowLabel: (index: number, label: string) => void
-    setStep: Dispatch<SetStateAction<FormSteps>>
-}
 
-function FlowForm({ eventFlow, addFlowStep, removeFlowStep, updateFlowLabel, setStep }: Props) {
+function FlowForm() {
+    const {
+        eventFlow,
+        addFlowStep,
+        removeFlowStep,
+        updateFlowLabel,
+        setStep,
+    } = useRequestFormController();
+
     return (
         <>
             <Card>

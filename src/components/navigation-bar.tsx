@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 import Button from "./ui/Button";
 import { useAuthContext } from "./providers/auth-provider";
 

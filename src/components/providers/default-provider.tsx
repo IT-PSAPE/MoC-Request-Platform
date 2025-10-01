@@ -3,7 +3,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 
-type DefualtContextType = {
+type DefaultContextType = {
     statuses: Status[];
     priorities: Priority[];
     types: RequestType[];
@@ -13,9 +13,9 @@ type DefualtContextType = {
     supabase: SupabaseClient;
 };
 
-export const DefualtContext = createContext<DefualtContextType | null>(null);
+export const DefaultContext = createContext<DefaultContextType | null>(null);
 
-export function DefualtContextProvider({ children, supabase }: { children: React.ReactNode, supabase: SupabaseClient}) {
+export function DefaultContextProvider({ children, supabase }: { children: React.ReactNode, supabase: SupabaseClient}) {
     const [statuses, setStatuses] = useState<Status[]>([]);
     const [priorities, setPriorities] = useState<Priority[]>([]);
     const [types, setTypes] = useState<RequestType[]>([]);
@@ -74,16 +74,16 @@ export function DefualtContextProvider({ children, supabase }: { children: React
     };
 
     return (
-        <DefualtContext.Provider value={context}>
+        <DefaultContext.Provider value={context}>
             {children}
-        </DefualtContext.Provider>
+        </DefaultContext.Provider>
     );
 }
 
-export function useDefualtContext() {
-    const context = useContext(DefualtContext);
+export function useDefaultContext() {
+    const context = useContext(DefaultContext);
 
-    if (!context) throw new Error("useDefualtContext must be used within a DefualtContextProvider");
+    if (!context) throw new Error("useDefaultContext must be used within a DefaultContextProvider");
 
     return context;
 }

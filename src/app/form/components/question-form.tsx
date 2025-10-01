@@ -5,29 +5,11 @@ import Card from "@/components/ui/Card";
 import Divider from "@/components/ui/Divider";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
+import { useRequestFormController } from "@/features/requests/formController";
 
-type Props = {
-    who: string;
-    setWho: Dispatch<SetStateAction<string>>;
-    what: string;
-    setWhat: Dispatch<SetStateAction<string>>;
-    whenTxt: string;
-    setWhenTxt: Dispatch<SetStateAction<string>>;
-    whereTxt: string;
-    setWhereTxt: Dispatch<SetStateAction<string>>;
-    why: string;
-    setWhy: Dispatch<SetStateAction<string>>;
-    how: string;
-    setHow: Dispatch<SetStateAction<string>>;
-    additionalInfo: string;
-    setAdditionalInfo: Dispatch<SetStateAction<string>>;
-    validateStep1: () => boolean;
-    resetForm: () => void;
-    setStep: Dispatch<SetStateAction<FormSteps>>;
-    setMaxStepReached: Dispatch<SetStateAction<FormSteps>>;
-}
+function QuestionForm() {
+    const { who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTxt, setWhereTxt, why, setWhy, how, setHow, additionalInfo, setAdditionalInfo, validateStep1, resetForm, setStep, setMaxStepReached } = useRequestFormController();
 
-function QuestionForm({ who, setWho, what, setWhat, whenTxt, setWhenTxt, whereTxt, setWhereTxt, why, setWhy, how, setHow, additionalInfo, setAdditionalInfo, validateStep1, resetForm, setStep, setMaxStepReached }: Props) {
     return (
         <>
             <Card>

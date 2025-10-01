@@ -4,7 +4,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Sheet from "@/components/ui/Sheet";
-import { useDefualtContext } from "@/components/providers/defualt-provider";
+import { useDefaultContext } from "@/components/providers/default-provider";
 
 type Props = {
     filterOpen: boolean;
@@ -21,7 +21,7 @@ type Props = {
 }
 
 function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFilter, typeFilter: kindFilter, setTypeFilter, dueStart, setDueStart, dueEnd, setDueEnd, resetFilters }: Props) {
-    const defualt = useDefualtContext();
+    const defualt = useDefaultContext();
 
     function updatePriorityFilter(e: React.ChangeEvent<HTMLSelectElement>) {
         const { value } = e.target;

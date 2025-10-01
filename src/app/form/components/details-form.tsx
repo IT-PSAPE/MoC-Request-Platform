@@ -5,34 +5,35 @@ import Card from "@/components/ui/Card";
 import Divider from "@/components/ui/Divider";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
-import { useDefualtContext } from "@/components/providers/defualt-provider";
+import { useDefaultContext } from "@/components/providers/default-provider";
 // import Dropzone from "@/components/ui/Dropzone";
 import EmptyState from "@/components/ui/EmptyState";
+import { useRequestFormController } from "@/features/requests/formController";
 
-type Props = {
-    type: RequestType | null;
-    due: string;
-    deadlineWarning: string | null;
-    setType: Dispatch<SetStateAction<RequestType | null>>;
-    setDue: Dispatch<SetStateAction<string>>;
-    setStep: (value: SetStateAction<FormSteps>) => void;
-    setMaxStepReached: Dispatch<SetStateAction<FormSteps>>;
+function DetailsForm() {
+    const { supabase, types, priorities } = useDefaultContext();
 
-    selectedEquipment: Equipment[];
-    selectedSongs: Song[];
-    toggleEquipment: (equipment: Equipment) => void;
-    setEquipmentQuantity: (equipmentId: string, quantity: number) => void;
-    toggleSong: (song: Song) => void;
-    priority: Priority | null;
-    setPriority: Dispatch<SetStateAction<Priority | null>>;
-    attachments: Attachment[];
-    setAttachments: Dispatch<SetStateAction<Attachment[]>>;
-    selectedVenues: Venue[];
-    toggleVenue: (venue: Venue) => void;
-}
-
-function DetailsForm({ type, setType, due, setDue, deadlineWarning, setStep, setMaxStepReached, selectedEquipment, selectedSongs, toggleEquipment, setEquipmentQuantity, toggleSong, priority, setPriority, attachments, setAttachments, selectedVenues, toggleVenue}: Props) {
-    const { supabase, types, priorities } = useDefualtContext();
+    const {
+        type,
+        setType,
+        due,
+        setDue,
+        deadlineWarning,
+        setStep,
+        setMaxStepReached,
+        // validateStep2,
+        selectedEquipment,
+        selectedSongs,
+        toggleEquipment,
+        setEquipmentQuantity,
+        toggleSong,
+        priority,
+        setPriority,
+        // attachments,
+        // setAttachments,
+        selectedVenues,
+        toggleVenue,
+    } = useRequestFormController();
 
     function handlePriorityChange(e: React.ChangeEvent<HTMLSelectElement>) {
         setPriority(priorities.find((p) => p.id === e.target.value) || null);

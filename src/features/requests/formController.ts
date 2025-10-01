@@ -2,11 +2,11 @@
 import { useMemo, useState, FormEvent } from "react";
 import { deadlineRequirementDays } from "@/features/utils";
 import RequestService from "@/features/requests/request-service";
-import { useDefualtContext } from "@/components/providers/defualt-provider";
+import { useDefaultContext } from "@/components/providers/default-provider";
 
 export function useRequestFormController() {
   const service = RequestService;
-  const { supabase, statuses} = useDefualtContext();
+  const { supabase, statuses} = useDefaultContext();
 
   // Step state
   const [step, setStep] = useState<FormSteps>(1);

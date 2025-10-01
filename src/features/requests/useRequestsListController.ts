@@ -1,5 +1,5 @@
 "use client";
-import { useDefualtContext } from "@/components/providers/defualt-provider";
+import { useDefaultContext } from "@/components/providers/default-provider";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import RequestService from "./request-service";
 
@@ -13,7 +13,7 @@ const DEFAULT_SORT_RULES: ReadonlyArray<SortRule> = [
 ] as const;
 
 export function useRequestsListController() {
-  const defualtContext = useDefualtContext();
+  const defualtContext = useDefaultContext();
   const service = RequestService;
 
   // Data

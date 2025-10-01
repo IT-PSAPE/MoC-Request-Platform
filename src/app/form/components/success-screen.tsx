@@ -1,14 +1,12 @@
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/ui/Button";
+import { useRequestFormController } from "@/features/requests/formController";
 
+function SuccessScreen() {
 
-type Props = {
-    submitted: string;
-    resetForm: () => void;
-}
+    const { submitted, resetForm } = useRequestFormController();
 
-function SuccessScreen({ submitted, resetForm }: Props) {
     const router = useRouter();
 
     return (

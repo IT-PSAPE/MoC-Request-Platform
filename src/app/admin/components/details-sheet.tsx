@@ -4,7 +4,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import Sheet from "@/components/ui/Sheet";
 import AddNote from "./add-notes";
 import Select from "@/components/ui/Select";
-import { useDefualtContext } from "@/components/providers/defualt-provider";
+import { useDefaultContext } from "@/components/providers/default-provider";
 
 type Props = {
     active: FetchRequest | null;
@@ -17,7 +17,7 @@ type Props = {
 }
 
 function DetailsSheet({ active, setActive, updateStatus, refreshActive, setSongChecked, setEquipmentChecked, addNote }: Props) {
-  const defualtContext = useDefualtContext();
+  const defualtContext = useDefaultContext();
   
     return (
         <Sheet

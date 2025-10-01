@@ -1,4 +1,4 @@
-import { useDefualtContext } from "@/components/providers/defualt-provider";
+import { useDefaultContext } from "@/components/providers/default-provider";
 import EmptyState from "@/components/ui/EmptyState";
 import RequestCard from "@/components/ui/RequestCard";
 import ScrollArea from "@/components/ui/ScrollArea";
@@ -11,7 +11,7 @@ type Props = {
 }
 
 function KanbanBoard({ grouped, updateStatus, setActive }: Props) {
-    const defualts = useDefualtContext();
+    const defualts = useDefaultContext();
 
     return (
         <ScrollArea className="max-w-full flex-1 min-h-0">

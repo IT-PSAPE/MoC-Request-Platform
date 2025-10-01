@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import EmptyState from "@/components/ui/EmptyState";
 import ScrollArea from "@/components/ui/ScrollArea";
-import { useDefualtContext } from "@/components/providers/defualt-provider";
+import { useDefaultContext } from "@/components/providers/default-provider";
 
 type Props = {
     items: FetchRequest[];
@@ -10,7 +10,7 @@ type Props = {
 }
 
 function EquipmentCatalogPanel({items, setActive}: Props) {
-    const { supabase } = useDefualtContext();
+    const { supabase } = useDefaultContext();
 
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     // Compute equipment with active requests and quantities

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { AuthContextProvider } from "./providers/auth-provider";
-import { DefualtContextProvider } from "./providers/defualt-provider";
+import { DefaultContextProvider } from "./providers/default-provider";
 
 function RootProvider({ children }: { children: React.ReactNode }) {
     const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
@@ -27,9 +27,9 @@ function RootProvider({ children }: { children: React.ReactNode }) {
 
     return (
         <AuthContextProvider supabase={supabase}>
-            <DefualtContextProvider supabase={supabase}>
+            <DefaultContextProvider supabase={supabase}>
                 {children}
-            </DefualtContextProvider>
+            </DefaultContextProvider>
         </AuthContextProvider>
     );
 }

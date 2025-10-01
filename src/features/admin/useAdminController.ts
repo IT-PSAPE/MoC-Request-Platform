@@ -1,10 +1,10 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useDefualtContext } from "@/components/providers/defualt-provider";
+import { useDefaultContext } from "@/components/providers/default-provider";
 import RequestService from "../requests/request-service";
 
 export function useAdminController() {
-  const defualtContext = useDefualtContext();
+  const defualtContext = useDefaultContext();
   const service = RequestService;
 
   // start as `null` so consumers can tell "not yet checked" vs false
