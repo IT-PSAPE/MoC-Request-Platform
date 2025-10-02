@@ -9,7 +9,6 @@ import EquipmentCatalogPanel from "./components/equipment-catalog-panel";
 import DetailsSheet from "./components/details-sheet";
 import Sidebar from "./components/sidebar";
 import { useAuthContext } from "@/components/providers/auth-provider";
-import LoginPage from "../login/page";
 import Loader from "@/components/ui/loader";
 
 export default function AdminPage() {
@@ -29,7 +28,7 @@ export default function AdminPage() {
   }, [authed, initialized, router]);
 
   if (!initialized) {
-    return <LoginPage />
+    return <Loader label="Loading..." className="flex-1" />;
   }
 
   if (!authed || !user) {
