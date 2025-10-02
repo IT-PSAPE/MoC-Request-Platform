@@ -18,7 +18,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
       }}
       className="space-y-3"
     >
-      <p className="text-sm text-foreground/70">Demo-only authentication. Use password: <code>admin</code>.</p>
+      <p className="text-sm text-foreground/70">Only MoC Members can login</p>
       <input
         type="email"
         placeholder="email"
