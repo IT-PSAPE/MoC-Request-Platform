@@ -1,29 +1,27 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { AuthContextProvider } from "./providers/auth-provider";
 import { DefaultContextProvider } from "./providers/default-provider";
-import LoginPage from "@/app/login/page";
+import Loader from "@/components/ui/loader";
 
 function RootProvider({ children }: { children: React.ReactNode }) {
-    const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
+    const supabase = useMemo<SupabaseClient | null>(() => {
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-
-    useEffect(() => {
         if (!supabaseUrl || !supabaseAnonKey) {
             console.error("Missing Supabase URL or Anon Key");
-            return;
+            return null;
         }
 
-        setSupabase(createClient(supabaseUrl, supabaseAnonKey));
-    }, [supabaseUrl, supabaseAnonKey]);
+        return createClient(supabaseUrl, supabaseAnonKey);
+    }, []);
 
     if (!supabase) {
-        return <LoginPage />
+        return <Loader label="Initializing" className="flex-1" />;
     }
 
     return (
