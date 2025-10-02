@@ -11,7 +11,7 @@ export default function LoginFormContainer() {
 
   async function onLogin(email: string, password: string) {
     const ok = await login(email, password);
-    const next = searchParams.get("next") ?? "/admin";
+    const next = searchParams.get("next") ?? "./admin";
 
     if (ok) router.push(next);
   }

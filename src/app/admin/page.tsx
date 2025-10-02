@@ -23,7 +23,7 @@ export default function AdminPage() {
   useEffect(() => {
     if (initialized && !authed) {
       // redirect to dedicated login page, preserving return location
-      router.push(`/login?next=${encodeURIComponent("/admin")}`);
+      router.push(`./login?next=${encodeURIComponent("/admin")}`);
     }
   }, [authed, initialized, router]);
 

@@ -48,8 +48,8 @@ export default function NavigationBar() {
   function Actions() {
     return (
       authed
-        ? <Button variant='secondary' size='sm' onClick={() => router.push('/admin')}>Dashboard</Button>
-        : <Button variant='secondary' size='sm' onClick={() => router.push('/login')}>Login</Button>
+        ? <Link href="/admin"><Button variant='secondary' size='sm'>Dashboard</Button></Link>
+        : <Link href="/login"><Button variant='secondary' size='sm'>Login</Button></Link>
     )
   }
 
