@@ -65,6 +65,9 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
+      - name: Check Environment Variables
+        run: echo "SUPABASE_URL - ${{ secrets.SUPABASE_URL }} | SUPABASE_ANON_KEY - ${{ secrets.SUPABASE_ANON_KEY }}"
+
       # Inject secrets only where needed (build step), from the 'production' environment
       - name: Build with Next.js
         env:
