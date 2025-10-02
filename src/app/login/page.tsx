@@ -2,13 +2,14 @@ import Card from "@/components/ui/Card";
 import LoginFormContainer from "@/components/ui/LoginFormContainer";
 
 type LoginPageProps = {
-  searchParams?: Record<string, string | string[] | undefined>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default function LoginPage({ searchParams }: LoginPageProps) {
-  const nextParam = searchParams?.next;
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const nextParam = resolvedSearchParams?.next;
   const next = Array.isArray(nextParam) ? nextParam[0] : nextParam ?? "/admin";
-
+  
   return (
     <div className="mx-auto max-w-sm py-16">
       <Card title="Admin Login">
