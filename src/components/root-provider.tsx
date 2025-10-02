@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { AuthContextProvider } from "./providers/auth-provider";
 import { DefaultContextProvider } from "./providers/default-provider";
+import LoginPage from "@/app/login/page";
 
 function RootProvider({ children }: { children: React.ReactNode }) {
     const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
@@ -22,7 +23,7 @@ function RootProvider({ children }: { children: React.ReactNode }) {
     }, [supabaseUrl, supabaseAnonKey]);
 
     if (!supabase) {
-        return <div>Loading...</div>;
+        return <LoginPage />
     }
 
     return (
