@@ -9,8 +9,8 @@ import Loader from "@/components/ui/loader";
 
 function RootProvider({ children }: { children: React.ReactNode }) {
     const supabase = useMemo<SupabaseClient | null>(() => {
-        const supabaseUrl = process.env.SUPABASE_URL;
-        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
         if (!supabaseUrl || !supabaseAnonKey) {
             console.error("Missing Supabase URL or Anon Key");
