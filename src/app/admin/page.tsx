@@ -7,12 +7,12 @@ import { useAdminController } from "@/features/admin/useAdminController";
 import KanbanBoard from "./components/kanban-board";
 import EquipmentCatalogPanel from "./components/equipment-catalog-panel";
 import DetailsSheet from "./components/details-sheet";
-import Sidebar from "./components/siebar";
+import Sidebar from "./components/sidebar";
 import { useAuthContext } from "@/components/providers/auth-provider";
 
 export default function AdminPage() {
   const { authed, user, initialized } = useAuthContext();
-  const controloler = useAdminController();
+  const controller = useAdminController();
 
   const router = useRouter();
 
@@ -49,30 +49,30 @@ export default function AdminPage() {
           <>
             <div className="w-full px-4 text-2xl font-semibold mb-4">Requests</div>
             <KanbanBoard
-              grouped={controloler.grouped}
-              updateStatus={controloler.updateStatus}
-              setActive={controloler.setActive}
+              grouped={controller.grouped}
+              updateStatus={controller.updateStatus}
+              setActive={controller.setActive}
             />
           </>
         ) : (
           <>
             <div className="w-full px-4 text-2xl font-semibold mb-4">Equipment Catalog</div>
             <EquipmentCatalogPanel
-              items={controloler.items}
-              setActive={controloler.setActive}
+              items={controller.items}
+              setActive={controller.setActive}
             />
           </>
         )}
 
         {/* Details sheet stays available for both tabs */}
         <DetailsSheet
-          active={controloler.active}
-          setActive={controloler.setActive}
-          updateStatus={controloler.updateStatus}
-          refreshActive={controloler.refreshActive}
-          setEquipmentChecked={controloler.setEquipmentChecked}
-          setSongChecked={controloler.setSongChecked}
-          addNote={controloler.addNote}
+          active={controller.active}
+          setActive={controller.setActive}
+          updateStatus={controller.updateStatus}
+          refreshActive={controller.refreshActive}
+          setEquipmentChecked={controller.setEquipmentChecked}
+          setSongChecked={controller.setSongChecked}
+          addNote={controller.addNote}
         />
       </section>
     </div>

@@ -2,9 +2,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDefaultContext } from "@/components/providers/default-provider";
 import RequestService from "../requests/request-service";
+import { RequestEquipmentTable, RequestSongTable } from "@/lib/database";
 
 export function useAdminController() {
-  const defualtContext = useDefaultContext();
+  const defaultContext = useDefaultContext();
   const service = RequestService;
 
   // start as `null` so consumers can tell "not yet checked" vs false
@@ -13,32 +14,44 @@ export function useAdminController() {
 
   // Load
   useEffect(() => {
-    service.list(defualtContext.supabase).then((res) => setItems(res));
-  }, []);
+    const req = service.list(defaultContext.supabase)
+    
+    req.then((res) => setItems(res));
+  }, [service, defaultContext.supabase]);
 
   const refreshItems = useCallback(() => {
-    service.list(defualtContext.supabase).then((res) => setItems(res));
-  }, []);
+    const req = service.list(defaultContext.supabase)
+    
+    req.then((res) => setItems(res));
+  }, [service, defaultContext.supabase]);
 
   const refreshActive = useCallback(async () => {
-    if (active) setActive(await service.get(defualtContext.supabase, active.id));
-  }, [active]);
+    if (active) setActive(await service.get(defaultContext.supabase, active.id));
+  }, [active, defaultContext.supabase, service]);
 
   const updateStatus = useCallback((id: string, status: Status) => {
-    service.updateStatus(defualtContext.supabase, id, status).then(() => refreshItems());
-  }, [refreshItems]);
+    const req = service.updateStatus(defaultContext.supabase, id, status)
+    
+    req.then(() => refreshItems());
+  }, [refreshItems, defaultContext.supabase, service]);
 
   const addNote = useCallback(async (id: string, note: string) => {
-    service.addNote(defualtContext.supabase, id, note).then(() => { refreshItems(); refreshActive(); });
-  }, [refreshItems, refreshActive]);
+    const req = service.addNote(defaultContext.supabase, id, note)
+    
+    req.then(() => { refreshItems(); refreshActive(); });
+  }, [refreshItems, refreshActive, defaultContext.supabase, service]);
 
   const setEquipmentChecked = useCallback((requestId: string, equipmentId: string, checked: boolean) => {
-
-  }, []);
+    const req = RequestEquipmentTable.update(defaultContext.supabase, requestId, equipmentId, { approved: checked })
+    
+    req.then(() => { refreshItems(); refreshActive(); });
+  }, [defaultContext.supabase, refreshActive, refreshItems]);
 
   const setSongChecked = useCallback((requestId: string, songId: string, checked: boolean) => {
-
-  }, []);
+    const req = RequestSongTable.update(defaultContext.supabase, requestId, songId, { available: checked })
+    
+    req.then(() => { refreshItems(); refreshActive(); });
+  }, [defaultContext.supabase, refreshActive, refreshItems]);
 
   const grouped = useMemo(() => {
     const g: Record<number, FetchRequest[]> = { 0: [], 1: [], 2: [], 3: [], 4: [] };

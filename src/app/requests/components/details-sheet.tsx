@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import EmptyState from "@/components/ui/EmptyState";
 import Sheet from "@/components/ui/Sheet";
 import Badge from "@/components/ui/Badge";
-import { statusColor } from "@/features/defualts";
+import { statusColor } from "@/features/defaults";
 
 type Props = {
     active: FetchRequest | null;
