@@ -34,7 +34,7 @@ function SortSheet({sortOpen, setSortOpen, sortRules, setSortRules, resetSorts}:
                         </div>
                     </div>
                 ))}
-                <div className="pt-2 flex items-center justify-between gap-2">
+                <div className="pt-2 flex flex-col md:flex-row items-center justify-between gap-2">
                     <Button type="button" size="sm" className="w-full" variant="secondary" onClick={resetSorts}>Reset Sort</Button>
                     <Button type="button" size="sm" className="w-full" onClick={() => setSortOpen(false)}>Apply Sort</Button>
                 </div>

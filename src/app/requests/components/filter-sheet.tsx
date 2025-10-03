@@ -76,12 +76,12 @@ function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFil
                 </div>
                 <div>
                     <div className="text-xs text-foreground/60 mb-1">Date Range (Due)</div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col md:flex-row gap-2">
                         <Input type="datetime-local" value={dueStart} onChange={(e) => setDueStart(e.target.value)} />
                         <Input type="datetime-local" value={dueEnd} onChange={(e) => setDueEnd(e.target.value)} />
                     </div>
                 </div>
-                <div className="pt-2 flex items-center justify-between gap-2">
+                <div className="pt-2 flex flex-col md:flex-row items-center justify-between gap-2">
                     <Button type="button" size="sm" className="w-full" variant="secondary" onClick={resetFilters}>Reset Filters</Button>
                     <Button type="button" size="sm" className="w-full" onClick={() => setFilterOpen(false)}>Apply Filters</Button>
                 </div>

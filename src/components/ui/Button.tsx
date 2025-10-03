@@ -12,7 +12,7 @@ export default function Button({
   size = "md",
   ...props
 }: Props) {
-  const base = "inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+  const base = "inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none w-full md:w-fit";
   const variants = {
     primary: "bg-black text-background hover:bg-[#383838] dark:hover:bg-[#ccc]",
     secondary: "bg-transparent border border-gray-200 text-foreground hover:bg-foreground/5",

@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Button from "./ui/Button";
 import { useAuthContext } from "./providers/auth-provider";
 
@@ -16,14 +17,35 @@ export default function NavigationBar() {
     { href: "/requests", label: "Requests" },
   ];
 
-  function Links() {
+  const [open, setOpen] = useState(false);
+
+  // prevent background scroll when mobile menu is open
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  // close menu when navigating
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  function Links({ vertical, onLinkClick }: { vertical?: boolean; onLinkClick?: () => void }) {
     return (
-      <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-sm border border-gray-200 bg-gray-50 mx-auto">
+      <div className={vertical ? "flex flex-col gap-2 p-2 rounded-lg w-full border border-gray-200 bg-gray-50" : "flex gap-1 p-0.5 rounded-lg w-full max-w-sm border border-gray-200 bg-gray-50 mx-auto"}>
         {links.map((l) => (
           <Link
             key={l.href}
             href={l.href}
-            className={`px-4 py-1.5 rounded-md text-sm grow text-center leading-1.2 border ${pathname === l.href ? 'border-gray-200 bg-white  drop-shadow-sm' : 'border-transparent text-gray-500'}`}
+            onClick={() => onLinkClick?.()}
+            className={`px-4 py-1.5 rounded-md text-sm ${vertical ? 'text-left' : 'grow text-center leading-1.2'} border ${pathname === l.href ? 'border-gray-200 bg-white  drop-shadow-sm' : 'border-transparent text-gray-500'}`}
           >
             {l.label}
           </Link>
@@ -54,12 +76,62 @@ export default function NavigationBar() {
   }
 
   return (
-    <nav className="sticky top-0 z-10">
+    <nav className="sticky top-0 z-10 bg-white">
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-4">
-        <div className="w-full max-w-[120px]"> <Logo /> </div>
-        <div className="w-full"><Links /></div>
-        <div className="w-full max-w-[120px] text-sm "><Actions /></div>
+        <div className="flex items-center gap-4 w-full">
+          <div className="w-[120px]"><Logo /></div>
+
+          {/* Desktop links */}
+          <div className="hidden md:flex flex-1"><Links /></div>
+
+          {/* Mobile hamburger */}
+          <div className="md:hidden ml-auto">
+            <button
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              onClick={() => setOpen((s) => !s)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:bg-gray-100"
+            >
+              {open ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              )}
+            </button>
+          </div>
+
+          {/* Desktop actions */}
+          <div className="hidden md:block w-[120px] text-sm text-right"><Actions /></div>
+        </div>
       </div>
+
+      {/* Mobile full-screen overlay menu */}
+      {open && (
+        <div className="md:hidden fixed inset-0 z-40 bg-white flex flex-col">
+          <div className="flex items-center justify-between px-4 py-3 border-b">
+            <div className="w-[120px]"><Logo /></div>
+            <div className="flex items-center">
+              <button aria-label="Close menu" onClick={() => setOpen(false)} className="ml-auto p-2 rounded-md text-gray-600 hover:bg-gray-100">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div className="p-6 flex-1 overflow-auto">
+            <Links vertical onLinkClick={() => setOpen(false)} />
+
+            <div className="mt-6">
+              <div className="w-full text-sm">
+                {authed ? (
+                  <Link href="/admin" onClick={() => setOpen(false)}><Button variant='secondary' size='sm' className="w-full">Dashboard</Button></Link>
+                ) : (
+                  <Link href="/login" onClick={() => setOpen(false)}><Button variant='secondary' size='sm' className="w-full">Login</Button></Link>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

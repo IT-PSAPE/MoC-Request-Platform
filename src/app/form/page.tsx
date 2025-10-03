@@ -18,10 +18,12 @@ export default function SubmitPage() {
       <h1 className="text-2xl font-semibold mb-2">Submit a Request</h1>
       <p className="text-sm text-foreground/80 mb-6">Follow the steps to complete your request.</p>
 
-      {/* Step indicator (clickable for visited steps) */}
-      <div className="flex items-center gap-2 mb-6">
-        <StepIndicator step={step} maxStepReached={maxStepReached} setStep={setStep} />
-        <div className="ml-2 text-xs text-foreground/60">Step {step} of 3</div>
+      {/* Step indicator (clickable for visited steps) - label on top for mobile */}
+      <div className="flex flex-col md:flex-row items-center gap-2 mb-6">
+        <div className="order-2 md:order-1 w-full md:w-[320px] grid grid-cols-3 gap-1">
+          <StepIndicator step={step} maxStepReached={maxStepReached} setStep={setStep} />
+        </div>
+        <div className="order-1 md:order-2 text-xs text-foreground/60 md:ml-2">Step {step} of 3</div>
       </div>
 
       {/* Form */}

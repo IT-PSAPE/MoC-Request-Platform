@@ -41,6 +41,7 @@ export default function Sheet({
         className={cn(
           "absolute right-0 top-0 h-full bg-background border-l border-foreground/15 shadow-xl flex flex-col",
           "transition-transform",
+          "max-w-full",
           open ? "translate-x-0" : "translate-x-full"
         )}
         style={{ width }}

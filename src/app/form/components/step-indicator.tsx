@@ -15,7 +15,6 @@ function StepIndicator({ step, maxStepReached, setStep }: Props) {
                 onClick={() => reached && setStep(s as FormSteps)}
                 className={`h-2 rounded-full ${active ? "bg-foreground/80" : "bg-foreground/20"} ${reached ? "cursor-pointer" : "cursor-not-allowed opacity-60"
                     }`}
-                style={{ width: 100 }}
                 aria-label={`Go to step ${s}`}
                 disabled={!reached}
             />
