@@ -25,7 +25,7 @@ function DetailsForm({ controller }: Props) {
         deadlineWarning,
         setStep,
         setMaxStepReached,
-        // validateStep2,
+        validateStep2,
         selectedEquipment,
         selectedSongs,
         toggleEquipment,
@@ -67,6 +67,14 @@ function DetailsForm({ controller }: Props) {
             setVenues(res.data);
         });
     }, [supabase]);
+
+    // If priorities are provided by the default context and controller hasn't set a priority,
+    // default to the first priority so validation picks it up (predefined default behavior).
+    useEffect(() => {
+        if (!priority && priorities && priorities.length > 0) {
+            setPriority(priorities[0]);
+        }
+    }, [priorities, priority, setPriority]);
 
 
     function handleTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -293,6 +301,7 @@ function DetailsForm({ controller }: Props) {
                 </Button>
                 <Button
                     type="button"
+                    disabled={!validateStep2()}
                     onClick={() => {
                         const next = 3 as const;
                         setStep(next);
