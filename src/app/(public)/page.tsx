@@ -2,7 +2,7 @@ import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 
-export default function Home() {
+export default function PublicHome() {
   return (
     <div className="py-10 w-full flex-1 flex items-center">
       <div className="w-full mx-auto max-w-3xl text-left space-y-20 px-4">

@@ -18,12 +18,20 @@ const EquipmentTable = {
 const SongTable = {
     select: async (supabase: SupabaseClient) => {
         return supabase.from("song").select("*").order("name");
+    },
+    update: async (supabase: SupabaseClient, songId: string, update:{ [key: string]: Val } ) => {
+        return supabase.from("song").update(update)
+            .eq("id", songId);
     }
 }
 
 const VenueTable = {
     select: async (supabase: SupabaseClient) => {
         return supabase.from("venue").select("*").order("name");
+    },
+    update: async (supabase: SupabaseClient, venueId: string, update:{ [key: string]: Val } ) => {
+        return supabase.from("venue").update(update)
+            .eq("id", venueId);
     }
 }
 
