@@ -3,7 +3,7 @@ type TextProps = {
     style: "title" | "subtitle" | "body" | "caption";
 };
 
-function Text({ children, style }: TextProps) {
+function Text({ children, style = "body" }: TextProps) {
 
     const styleClasses = {
         title: "text-2xl font-bold",
