@@ -10,9 +10,10 @@ type AdminContextType = {
     equipment: Equipment[];
     songs: Song[];
     venues: Venue[];
+    tab: TabItem;
+    updateEquipment: (id: string, available: number) => void;
     updateVenue: (venueId: string, available: boolean) => void;
     updateSong: (venueId: string, type: 'instrumental' | 'lyrics', available: boolean) => void;
-    tab: TabItem;
     setTab: (tab: TabItem) => void;
 };
 
@@ -84,7 +85,6 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
     }
 
     const updateSong = async (songID: string, type: 'instrumental' | 'lyrics', available: boolean) => {
-        console.log("Updating song", songID, type, available);
         const { error } = await SongTable.update(supabase, songID, { [type]: available });
 
         if (error) {
@@ -99,6 +99,21 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         );
     }
 
+    const updateEquipment = async (id: string, available: number) => {
+        const { error } = await EquipmentTable.update(supabase, id, { available });
+
+        if (error) {
+            console.error("Failed to update equipment", error);
+            return;
+        }
+
+        setEquipment((prevEquipment) =>
+            prevEquipment.map((eq) =>
+                eq.id === id ? { ...eq, available } : eq
+            )
+        );
+    }
+
     const context = {
         equipment,
         songs,
@@ -107,6 +122,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         updateVenue,
         updateSong,
         setTab,
+        updateEquipment,
     };
 
     return (

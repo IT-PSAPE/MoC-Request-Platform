@@ -10,7 +10,7 @@ function AdminLayout() {
 
   return (
     <AdminContextProvider supabase={supabase} >
-      <div className="flex w-full h-full bg-secondary" >
+      <div className="flex w-full h-full" >
         <Sidebar />
         <AdminMainContent ></AdminMainContent>
       </div>

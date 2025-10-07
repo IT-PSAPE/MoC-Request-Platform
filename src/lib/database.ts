@@ -12,6 +12,10 @@ type Val =
 const EquipmentTable = {
     select: async (supabase: SupabaseClient) => {
         return supabase.from("equipment").select("*").order("name");
+    },
+    update: async (supabase: SupabaseClient, equipmentId: string, update:{ [key: string]: Val } ) => {
+        return supabase.from("equipment").update(update)
+            .eq("id", equipmentId);
     }
 }
 
