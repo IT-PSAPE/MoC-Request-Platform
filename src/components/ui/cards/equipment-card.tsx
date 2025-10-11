@@ -1,42 +1,51 @@
 import { cn } from "@/lib/cn";
+import NumberInput from "../number-input";
+import Button from "../Button";
+import Text from "../text";
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "../sheet/sheet";
 
-interface VenueCardProps {
+interface EquipmentCardProps {
     className?: string;
-    equipmentName: string;
-    id: string;
-    quantity: number;
-    available: number;
+    equipment: Equipment;
     update: (available: number) => void;
 }
 
-export function EquipmentCard({ className, equipmentName, id, quantity, available, update }: VenueCardProps) {
+export function EquipmentCard({ equipment, className, update }: EquipmentCardProps) {
     return (
-        <div className={cn("flex flex-col p-4 border border-secondary rounded-lg shadow-md", className)}>
-            <div className="flex flex-col w-full">
-                <div className="flex flex-1 items-center justify-between gap-4 ">
-                    <h3 className="font-semibold text-sm">{equipmentName}</h3>
-                    <span className="text-xs text-muted-foreground"> Qty: {quantity} </span>
+        <div className={cn("flex flex-col border border-secondary rounded-lg shadow-md", className)}>
+            <div className=" p-4 " >
+                <div className="flex flex-col w-full">
+                    <div className="flex flex-1 items-center justify-between gap-4 ">
+                        <h3 className="font-semibold text-sm">{equipment.name}</h3>
+                        <span className="text-xs text-muted-foreground"> Qty: {equipment.quantity} </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">ID: {equipment.id}</p>
                 </div>
-                <p className="text-xs text-muted-foreground">ID: {id}</p>
+                <div className="mt-4 flex gap-1 items-center">
+                    <span className="text-xs text-muted-foreground" >Available:</span>
+                    <NumberInput value={equipment.available} onChange={update} />
+                </div>
             </div>
-            <div className="mt-4 flex gap-1 items-center">
-                <span className="text-xs text-muted-foreground" >Available:</span>
-                <NumberInput value={available} onChange={update} />
+            <div className="p-3 border-t border-secondary">
+                <Sheet>
+                    <SheetTrigger>
+                        <Button type="button" variant="secondary" className="w-full">Open details</Button>
+                    </SheetTrigger>
+                    <SheetContent>
+                        <SheetHeader>
+                            <Text style="title-h6">{equipment.name}</Text>
+                        </SheetHeader>
+                        <div className="flex-1">
+                        </div>
+                        <SheetFooter className="flex justify-end gap-3">
+                            <SheetClose className="w-full">
+                                <Button className="w-full" variant="secondary">Cancel</Button>
+                            </SheetClose>
+                            <Button className="w-full">Save Changes</Button>
+                        </SheetFooter>
+                    </SheetContent>
+                </Sheet>
             </div>
-        </div>
-    );
-}
-
-function NumberInput({ value, onChange }: { value: number; onChange: (value: number) => void }) {
-    return (
-        <div className="flex border border-secondary rounded-md overflow-hidden text-md">
-            <button className="w-5 aspect-1 border-r border-secondary hover:bg-secondary" onClick={() => onChange(value - 1)}>
-                -
-            </button>
-            <input type="text" className="max-w-10 :focus-visible:outline-none! focus:outline-none focus:border-none text-center" value={value} onChange={(e) => onChange(parseInt(e.target.value || '0'))} />
-            <button className="w-5 aspect-1 border-l border-secondary hover:bg-secondary" onClick={() => onChange(value + 1)}>
-                +
-            </button>
         </div>
     );
 }

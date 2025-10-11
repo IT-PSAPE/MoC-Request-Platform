@@ -13,8 +13,8 @@ export default function EquipmentContent() {
     return (
         <>
             <Header>
-                <Text style="title">Equipment</Text>
-                <Text style="body">Supporting Text</Text>
+                <Text style="title-h4">Equipment</Text>
+                <Text style="paragraph-md">Supporting Text</Text>
             </Header>
             <div className={cn("grid gap-4 p-6", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
                 {isEmpty ? (
@@ -22,14 +22,11 @@ export default function EquipmentContent() {
                 ) : equipment.map((equipment) => (
                     <EquipmentCard
                         key={equipment.id}
-                        equipmentName={equipment.name}
-                        id={equipment.id}
-                        quantity={equipment.quantity}
-                        available={equipment.available}
+                        equipment={equipment}
                         update={(change) => {
                             const clamped = Math.max(0, Math.min(isFinite(equipment.quantity) ? equipment.quantity : 9999, change));
 
-                            if (clamped === equipment.quantity || clamped === equipment.available) return
+                            if (clamped === equipment.available || (clamped === equipment.available && clamped !== equipment.quantity)) return
 
                             updateEquipment(equipment.id, clamped);
                         }}

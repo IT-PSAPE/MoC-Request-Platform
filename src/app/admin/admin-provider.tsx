@@ -1,5 +1,6 @@
 'use client';
 
+import RequestService from "@/features/requests/request-service";
 import { EquipmentTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard';
 
 type AdminContextType = {
+    requests: FetchRequest[]
     equipment: Equipment[];
     songs: Song[];
     venues: Venue[];
@@ -20,21 +22,26 @@ type AdminContextType = {
 export const AdminContext = createContext<AdminContextType | null>(null);
 
 export function AdminContextProvider({ children, supabase }: { children: React.ReactNode, supabase: SupabaseClient }) {
+    const service = RequestService;
+
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [songs, setSongs] = useState<Song[]>([]);
     const [venues, setVenues] = useState<Venue[]>([]);
     // const [requests, setRequests] = useState<Request[]>([]);
+    const [requests, setRequests] = useState<FetchRequest[]>([]);
     const [tab, setTab] = useState<TabItem>('dashboard');
+
 
     useEffect(() => {
         let isMounted = true;
 
         const loadDefaults = async () => {
             try {
-                const [equipmentResult, songsResult, venuesResult] = await Promise.all([
+                const [equipmentResult, songsResult, venuesResult, requestsResults] = await Promise.all([
                     EquipmentTable.select(supabase),
                     SongTable.select(supabase),
                     VenueTable.select(supabase),
+                    service.list(supabase),
                 ]);
 
                 if (!isMounted) return;
@@ -56,6 +63,9 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
                 } else {
                     setVenues((venuesResult.data ?? []) as Venue[]);
                 }
+
+                setRequests((requestsResults ?? []) as FetchRequest[]);
+
             } catch (error) {
                 if (!isMounted) return;
                 console.error("Unexpected error loading defaults", error);
@@ -67,7 +77,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         return () => {
             isMounted = false;
         };
-    }, [supabase]);
+    }, [supabase, service]);
 
     const updateVenue = async (venueId: string, available: boolean) => {
         const { error } = await VenueTable.update(supabase, venueId, { available });
@@ -115,6 +125,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
     }
 
     const context = {
+        requests,
         equipment,
         songs,
         venues,
