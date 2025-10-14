@@ -1,6 +1,8 @@
+'use client';
+import { useEffect, useState } from "react";
+
 import { useDefaultContext } from "@/components/providers/default-provider";
 import { EquipmentTable, SongTable, VenueTable } from "@/lib/database";
-import { useEffect, useState } from "react";
 import FormField from "../form-field";
 import { TextInput } from "../input";
 import Divider from "../divider";

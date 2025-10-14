@@ -1,5 +1,6 @@
 import { useAdminContext } from "@/app/admin/admin-provider";
 import { cn } from "@/lib/cn";
+import Link from "next/link";
 
 function Divider() {
     return (
@@ -49,7 +50,9 @@ export default function Sidebar() {
                 </MenuItem>
             </div>
             <div className="p-2 pt-0 flex-none" >
-                <MenuItem >Venues</MenuItem>
+                <Link href="/" >
+                    <MenuItem >Home Page</MenuItem>
+                </Link>
             </div>
         </div>
     );

@@ -5,8 +5,6 @@ import { useDefaultContext } from "@/components/providers/default-provider";
 import { ReactNode } from "react";
 import RequestCard from "@/components/ui/RequestCard";
 import { useAdminContext } from "../../admin-provider";
-// import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "@/components/ui/sheet/sheet";
-// import Button from "@/components/ui/Button";
 
 export default function RequestsContent() {
     const { statuses } = useDefaultContext();
@@ -49,21 +47,7 @@ function KanbanBoard({ columns, data }: KanbanProps) {
                         <KanbanHeader column={column} count={requestsForColumn.length} />
                         <KanbanContent >
                             {requestsForColumn.map((request) => (
-                                <>
-                                    <RequestCard key={request.id + '1'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '2'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '3'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '4'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '5'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '6'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '7'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '8'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '9'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '10'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '11'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '12'} request={request} setActive={() => { }} />
-                                    <RequestCard key={request.id + '13'} request={request} setActive={() => { }} />
-                                </>
+                                <RequestCard key={request.id} request={request} setActive={() => { }} />
                             ))}
                         </KanbanContent>
                     </KanbanColumn>

@@ -1,8 +1,10 @@
+'use client';
+import { useState } from "react";
+
 import EmptyState from "@/components/ui/EmptyState";
 import FormField from "../form-field";
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/icon";
-import { useState } from "react";
 import FlowField from "../flow-field";
 
 export default function FormThree() {

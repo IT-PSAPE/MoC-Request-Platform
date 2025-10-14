@@ -27,7 +27,6 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [songs, setSongs] = useState<Song[]>([]);
     const [venues, setVenues] = useState<Venue[]>([]);
-    // const [requests, setRequests] = useState<Request[]>([]);
     const [requests, setRequests] = useState<FetchRequest[]>([]);
     const [tab, setTab] = useState<TabItem>('dashboard');
 
