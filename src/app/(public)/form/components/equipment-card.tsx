@@ -1,6 +1,5 @@
-import Card from "@/components/ui/Card";
 import Checkbox from "@/components/ui/checkbox";
-import { CardContent, CardFooter } from "@/components/ui/public-card";
+import { Card, CardContent, CardFooter } from "@/components/ui/public-card";
 import Divider from "./divider";
 
 import Text from "@/components/ui/text";
