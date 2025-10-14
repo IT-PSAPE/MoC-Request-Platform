@@ -408,7 +408,7 @@
 	/* RADIUS
     /* ============================================================= */
 
-	--radius-none: 0rem;
+	/* --radius-none: 0rem;
 	--radius-xs: 0.25rem;
 	--radius-sm: 0.125rem;
 	--radius-DEFAULT: 0.25rem;
@@ -417,5 +417,5 @@
 	--radius-xl: 0.75rem;
 	--radius-2xl: 1rem;
 	--radius-3xl: 1.5rem;
-	--radius-full: 999rem;
+	--radius-full: 999rem; */
 }

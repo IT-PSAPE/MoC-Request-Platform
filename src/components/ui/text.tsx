@@ -1,3 +1,5 @@
+import { cn } from "@/lib/cn";
+
 type TextProps = {
     children?: React.ReactNode;
     style?:
@@ -20,12 +22,13 @@ type TextProps = {
     | "subheading-bg"
     | "subheading-md"
     | "subheading-sm"
-    | "subheading-xs"
+    | "subheading-xs",
+    className?: string;
 };
 
-function Text({ children, style }: TextProps) {
+function Text({ children, style, className }: TextProps) {
     return (
-        <div className={style} >{children}</div>
+        <div className={cn(className, style)} >{children}</div>
     );
 }
 

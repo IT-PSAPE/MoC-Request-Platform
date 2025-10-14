@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+// import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Sheet from "@/components/ui/Sheet";
 import { useDefaultContext } from "@/components/providers/default-provider";
@@ -77,8 +77,8 @@ function FilterSheet({ filterOpen, setFilterOpen, priorityFilter, setPriorityFil
                 <div>
                     <div className="text-xs text-foreground/60 mb-1">Date Range (Due)</div>
                     <div className="flex gap-2">
-                        <Input type="datetime-local" value={dueStart} onChange={(e) => setDueStart(e.target.value)} />
-                        <Input type="datetime-local" value={dueEnd} onChange={(e) => setDueEnd(e.target.value)} />
+                        {/* <Input type="datetime-local" value={dueStart} onChange={(e) => setDueStart(e.target.value)} />
+                        <Input type="datetime-local" value={dueEnd} onChange={(e) => setDueEnd(e.target.value)} /> */}
                     </div>
                 </div>
                 <div className="pt-2 flex items-center justify-between gap-2">

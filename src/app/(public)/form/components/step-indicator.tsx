@@ -1,26 +1,23 @@
-type Props = {
-    step: FormSteps;
-    maxStepReached: FormSteps;
-    setStep: (step: FormSteps) => void;
-}
+import { cn } from "@/lib/cn";
+import { useFormContext } from "./form-provider";
 
-function StepIndicator({ step, maxStepReached, setStep }: Props) {
-    return [1, 2, 3].map((s) => {
-        const reached = (maxStepReached as FormSteps) >= (s as FormSteps);
-        const active = (step as FormSteps) >= (s as FormSteps);
-        return (
-            <button
-                type="button"
-                key={s}
-                onClick={() => reached && setStep(s as FormSteps)}
-                className={`h-2 rounded-full ${active ? "bg-foreground/80" : "bg-foreground/20"} ${reached ? "cursor-pointer" : "cursor-not-allowed opacity-60"
-                    }`}
-                style={{ width: 100 }}
-                aria-label={`Go to step ${s}`}
-                disabled={!reached}
-            />
-        );
-    });
-}
+export default function StepIndicator() {
+    const { step } = useFormContext();
 
-export default StepIndicator;
+    const steps = [1, 2, 3]
+
+    return (
+        <div className="flex items-center gap-8 mb-6">
+            <div className="h-1.5 w-65 flex gap-2 items-center">
+                {
+                    steps.map((s) => {
+                        return (
+                            <div key={s} className={cn("w-full h-full rounded-full", step >= s ? "bg-brand-solid" : "bg-quaternary")}></div>
+                        )
+                    })
+                }
+            </div>
+            <div className="ml-2 text-xs text-foreground/60">Step {step} of {steps.length}</div>
+        </div>
+    )
+}

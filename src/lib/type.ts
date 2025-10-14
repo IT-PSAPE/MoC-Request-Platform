@@ -25,6 +25,7 @@ type Equipment = {
     name: string;
     quantity: number;
     available: number;
+    description: string;
 };
 
 type Song = {
@@ -38,6 +39,7 @@ type Venue = {
     id: string;
     name: string;
     available: boolean;
+    description: string;
 };
 
 type Attachment = {
