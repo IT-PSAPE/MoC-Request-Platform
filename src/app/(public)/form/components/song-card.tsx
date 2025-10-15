@@ -25,7 +25,7 @@ export default function SongCard({ song, checked }: { song: Song, checked: boole
                 </div>
             </CardContent>
             <CardFooter>
-                <Button className="w-full" variant="secondary" >Add Venue</Button>
+                <Button className="w-full" variant="secondary" >Add Song</Button>
             </CardFooter>
         </Card>
     )

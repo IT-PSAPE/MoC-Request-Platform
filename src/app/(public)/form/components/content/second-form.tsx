@@ -10,35 +10,12 @@ import EmptyState from "@/components/ui/EmptyState";
 import VenueCard from "../ventue-card";
 import EquipmentCard from "../equipment-card";
 import SongCard from "../song-card";
+import { useFormContext } from "../form-provider";
+import RequestItemCard from "../item-card";
 
 
 export default function SecondForm() {
-    const { supabase } = useDefaultContext();
-
-    const [equipment, setEquipment] = useState<Equipment[]>([]);
-    const [songs, setSongs] = useState<Song[]>([]);
-    const [venues, setVenues] = useState<Venue[]>([]);
-
-    useEffect(() => {
-        EquipmentTable.select(supabase).then((res) => {
-            if (res.error) return;
-            setEquipment(res.data);
-        })
-    }, [supabase]);
-
-    useEffect(() => {
-        SongTable.select(supabase).then((res) => {
-            if (res.error) return;
-            setSongs(res.data);
-        });
-    }, [supabase]);
-
-    useEffect(() => {
-        VenueTable.select(supabase).then((res) => {
-            if (res.error) return;
-            setVenues(res.data);
-        });
-    }, [supabase]);
+    const { songs, venues, items } = useFormContext();
 
     return (
         <>
@@ -69,10 +46,10 @@ export default function SecondForm() {
             <FormField label="Select equipment" description="(optional)" mode="column">
                 {
                     venues.length === 0 ? (
-                        <EmptyState message="No Equipment available." />
+                        <EmptyState message="No Request Item available." />
                     ) : (
                         <div className="grid grid-cols-3 gap-2">
-                            {equipment.map((equipment) => <EquipmentCard key={equipment.id} equipment={equipment} checked={false} />)}
+                            {items.map((item) => <RequestItemCard key={item.id} item={item} checked={false} />)}
                         </div>
                     )
                 }

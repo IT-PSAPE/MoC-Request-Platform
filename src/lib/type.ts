@@ -20,6 +20,13 @@ type RequestType = {
     name: string;
 };
 
+type RequestItem = {
+    id: string;
+    name: string;
+    description: string;
+    available: boolean;
+};
+
 type Equipment = {
     id: string;
     name: string;

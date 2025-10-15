@@ -9,6 +9,12 @@ type Val =
   | object        // JSON/JSONB
   | Val[];        // arrays, e.g. text[], int[], json[]
 
+const RequestItemTable = {
+    select: async (supabase: SupabaseClient) => {
+        return supabase.from("request_item").select("*").order("name");
+    }
+}
+
 const EquipmentTable = {
     select: async (supabase: SupabaseClient) => {
         return supabase.from("equipment").select("*").order("name");
@@ -55,4 +61,4 @@ const RequestSongTable = {
     }
 }
 
-export { EquipmentTable, SongTable, VenueTable, RequestEquipmentTable, RequestSongTable };
+export { EquipmentTable, SongTable, VenueTable, RequestEquipmentTable, RequestSongTable, RequestItemTable };
