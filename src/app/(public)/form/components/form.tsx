@@ -12,7 +12,7 @@ import Text from "@/components/ui/text";
 
 
 export default function Form() {
-    const { onSubmit, step, setStep } = useFormContext();
+    const { request, onSubmit, step, setStep } = useFormContext();
 
     function handlePrimaryAction() {
         switch (step) {
@@ -37,6 +37,17 @@ export default function Form() {
             case 3:
                 setStep(2);
                 break;
+        }
+    }
+
+    function handleButtonDisability() {
+        switch (step) {
+            case 1:
+                return request.who.length === 0 || request.what.length === 0 || request.when.length === 0 || request.where.length === 0 || request.why.length === 0 || request.how.length === 0;
+            case 2:
+                return request.priority.length === 0 || request.type.length === 0 || request.due?.length === 0;
+            case 3:
+                return false;
         }
     }
 
@@ -66,7 +77,7 @@ export default function Form() {
                     <Button className="w-full" variant="secondary" onClick={handleSecondaryAction} >
                         {step === 1 ? 'Reset' : 'Back'}
                     </Button>
-                    <Button className="w-full" onClick={handlePrimaryAction} >
+                    <Button className="w-full" onClick={handlePrimaryAction} disabled={handleButtonDisability()} >
                         {step === 3 ? 'Submit' : 'Continue'}
                     </Button>
                 </div>

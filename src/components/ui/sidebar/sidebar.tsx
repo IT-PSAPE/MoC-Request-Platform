@@ -39,6 +39,9 @@ export default function Sidebar() {
                     Dashboard
                 </MenuItem>
                 <Divider />
+                <MenuItem onClick={() => setTab('request-items')} current={tab === 'request-items'}>
+                    Request Items
+                </MenuItem>
                 <MenuItem onClick={() => setTab('equipment')} current={tab === 'equipment'}>
                     Equipment
                 </MenuItem>

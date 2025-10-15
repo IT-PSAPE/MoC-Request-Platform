@@ -1,14 +1,10 @@
 'use client';
-import { useEffect, useState } from "react";
 
-import { useDefaultContext } from "@/components/providers/default-provider";
-import { EquipmentTable, SongTable, VenueTable } from "@/lib/database";
 import FormField from "../form-field";
 import { TextInput } from "../input";
 import Divider from "../divider";
 import EmptyState from "@/components/ui/EmptyState";
 import VenueCard from "../ventue-card";
-import EquipmentCard from "../equipment-card";
 import SongCard from "../song-card";
 import { useFormContext } from "../form-provider";
 import RequestItemCard from "../item-card";
@@ -16,19 +12,38 @@ import RequestItemCard from "../item-card";
 
 export default function SecondForm() {
     const { songs, venues, items } = useFormContext();
+    const { setRequest } = useFormContext();
+
+    function handlePriorityChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setRequest((request) => {
+            return { ...request, priority: event.target.value }
+        })
+    }
+
+    function handleTypeChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setRequest((request) => {
+            return { ...request, type: event.target.value }
+        })
+    }
+
+    function handleDueChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setRequest((request) => {
+            return { ...request, due: event.target.value }
+        })
+    }
 
     return (
         <>
             <FormField label="Priority" description="Higher priority may be processed sooner.">
-                <TextInput />
+                <TextInput onChange={handlePriorityChange} />
             </FormField>
             <Divider />
             <FormField label="Type of Request" description="Select what you are requesting.">
-                <TextInput />
+                <TextInput onChange={handleTypeChange} />
             </FormField>
             <Divider />
             <FormField label="Due Date" description="We will warn on tight deadlines.">
-                <TextInput />
+                <TextInput onChange={handleDueChange} />
             </FormField>
             <Divider />
             <FormField label="Select Venue" description="(optional)" mode="column">

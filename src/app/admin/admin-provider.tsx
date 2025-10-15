@@ -1,14 +1,15 @@
 'use client';
 
 import RequestService from "@/features/requests/request-service";
-import { EquipmentTable, SongTable, VenueTable } from "@/lib/database";
+import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 
-type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard';
+type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
 
 type AdminContextType = {
     requests: FetchRequest[]
+    items: RequestItem[];
     equipment: Equipment[];
     songs: Song[];
     venues: Venue[];
@@ -25,6 +26,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
     const service = RequestService;
 
     const [equipment, setEquipment] = useState<Equipment[]>([]);
+    const [items, setItems] = useState<RequestItem[]>([]);
     const [songs, setSongs] = useState<Song[]>([]);
     const [venues, setVenues] = useState<Venue[]>([]);
     const [requests, setRequests] = useState<FetchRequest[]>([]);
@@ -36,10 +38,11 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
 
         const loadDefaults = async () => {
             try {
-                const [equipmentResult, songsResult, venuesResult, requestsResults] = await Promise.all([
+                const [equipmentResult, songsResult, venuesResult, itemsResult, requestsResults] = await Promise.all([
                     EquipmentTable.select(supabase),
                     SongTable.select(supabase),
                     VenueTable.select(supabase),
+                    RequestItemTable.select(supabase),
                     service.list(supabase),
                 ]);
 
@@ -55,6 +58,12 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
                     console.error("Failed to load priorities", songsResult.error);
                 } else {
                     setSongs((songsResult.data ?? []) as Song[]);
+                }
+
+                if (itemsResult.error) {
+                    console.error("Failed to load items", itemsResult.error);
+                } else {
+                    setItems((itemsResult.data ?? []) as RequestItem[]);
                 }
 
                 if (venuesResult.error) {
@@ -125,6 +134,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
 
     const context = {
         requests,
+        items,
         equipment,
         songs,
         venues,
