@@ -4,15 +4,16 @@ import Button from "@/components/ui/Button";
 import FirstForm from "./content/first-form";
 import SecondForm from "./content/second-form";
 import FormThree from "./content/third-form";
-import Divider from "./divider";
-import { useFormContext } from "./form-provider";
+import Divider from "@/components/ui/divider";
+import { useFormContext } from "../form-provider";
 import StepIndicator from "./step-indicator";
 
 import Text from "@/components/ui/text";
+import SuccessScreen from "./success-card";
 
 
 export default function Form() {
-    const { request, onSubmit, step, setStep } = useFormContext();
+    const { request, onSubmit, step, setStep, reset, submit, submitted } = useFormContext();
 
     function handlePrimaryAction() {
         switch (step) {
@@ -23,6 +24,7 @@ export default function Form() {
                 setStep(3);
                 break;
             case 3:
+                submit();
                 break;
         }
     }
@@ -30,7 +32,7 @@ export default function Form() {
     function handleSecondaryAction() {
         switch (step) {
             case 1:
-                break;
+                reset();
             case 2:
                 setStep(1);
                 break;
@@ -57,7 +59,6 @@ export default function Form() {
         3: <FormThree />,
     }[step];
 
-
     return (
         <div className="w-full max-w-6xl mx-auto py-6 px-4 space-y-8">
             {/* Header */}
@@ -66,9 +67,7 @@ export default function Form() {
             {/* Form */}
             <form onSubmit={onSubmit} className="space-y-8">
                 <Divider />
-
                 {currentForm}
-
                 <Divider />
             </form>
 
@@ -82,6 +81,8 @@ export default function Form() {
                     </Button>
                 </div>
             </div>
+
+            {submitted && <SuccessScreen />}
         </div>
     )
 }

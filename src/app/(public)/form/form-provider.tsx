@@ -3,18 +3,25 @@
 import { useDefaultContext } from "@/components/providers/default-provider";
 import { RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { createContext, Dispatch, FormEventHandler, SetStateAction, useContext, useEffect, useState } from "react";
+import FormService from "./form-service";
 
 type FormSteps = 1 | 2 | 3;
 
 type FormContextType = {
     request: FormRequest
     step: FormSteps,
-    setStep: Dispatch<SetStateAction<FormSteps>>
-    setRequest: Dispatch<SetStateAction<FormRequest>>
-    onSubmit: FormEventHandler<HTMLFormElement>
     songs: Song[]
     venues: Venue[]
     items: RequestItem[]
+    isProcessing: boolean
+    submitted: string | null
+    setStep: Dispatch<SetStateAction<FormSteps>>
+    setRequest: Dispatch<SetStateAction<FormRequest>>
+    onSubmit: FormEventHandler<HTMLFormElement>
+    setIsProcessing: Dispatch<SetStateAction<boolean>>
+    setSubmitted: Dispatch<SetStateAction<string | null>>
+    reset: () => void
+    submit: () => void
 };
 
 export const FormContext = createContext<FormContextType | null>(null);
@@ -32,13 +39,15 @@ const emptyRequest: FormRequest = {
     priority: '',
     status: '',
     type: '',
-    equipment: [],
+    equipments: [],
     attachments: [],
     songs: [],
+    venues: [],
+    items: [],
 }
 
 export function FormContextProvider({ children }: { children: React.ReactNode }) {
-    const { supabase } = useDefaultContext();
+    const { supabase, statuses } = useDefaultContext();
 
     const [request, setRequest] = useState<FormRequest>(emptyRequest)
     const [step, setStep] = useState<FormSteps>(1);
@@ -46,6 +55,10 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
     const [songs, setSongs] = useState<Song[]>([]);
     const [venues, setVenues] = useState<Venue[]>([]);
     const [items, setItems] = useState<RequestItem[]>([]);
+
+    const [submitted, setSubmitted] = useState<string | null>(null);
+
+    const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
     useEffect(() => {
         let mounted = true;
@@ -78,18 +91,36 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+    }
 
+    function reset() {
+        setRequest(emptyRequest);
+        setStep(1);
+    }
+
+    async function submit() {
+        setIsProcessing(true);
+
+        setSubmitted(await FormService.create(request, statuses, supabase));
+
+        setIsProcessing(false);
     }
 
     const context = {
         request,
         step,
-        onSubmit,
-        setStep,
-        setRequest,
         songs,
         venues,
         items,
+        isProcessing,
+        submitted,
+        setSubmitted,
+        onSubmit,
+        setStep,
+        setRequest,
+        reset,
+        submit,
+        setIsProcessing,
     };
 
     return (

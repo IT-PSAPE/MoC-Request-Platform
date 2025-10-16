@@ -1,9 +1,9 @@
 'use client';
 
-import RequestService from "@/features/requests/request-service";
 import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
+import { list } from "./admin-service";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
 
@@ -23,15 +23,12 @@ type AdminContextType = {
 export const AdminContext = createContext<AdminContextType | null>(null);
 
 export function AdminContextProvider({ children, supabase }: { children: React.ReactNode, supabase: SupabaseClient }) {
-    const service = RequestService;
-
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [items, setItems] = useState<RequestItem[]>([]);
     const [songs, setSongs] = useState<Song[]>([]);
     const [venues, setVenues] = useState<Venue[]>([]);
     const [requests, setRequests] = useState<FetchRequest[]>([]);
     const [tab, setTab] = useState<TabItem>('dashboard');
-
 
     useEffect(() => {
         let isMounted = true;
@@ -43,7 +40,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
                     SongTable.select(supabase),
                     VenueTable.select(supabase),
                     RequestItemTable.select(supabase),
-                    service.list(supabase),
+                    list(supabase),
                 ]);
 
                 if (!isMounted) return;
@@ -85,7 +82,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         return () => {
             isMounted = false;
         };
-    }, [supabase, service]);
+    }, [supabase]);
 
     const updateVenue = async (venueId: string, available: boolean) => {
         const { error } = await VenueTable.update(supabase, venueId, { available });

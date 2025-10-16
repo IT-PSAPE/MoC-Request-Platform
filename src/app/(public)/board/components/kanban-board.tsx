@@ -3,11 +3,11 @@ import Header from "@/app/admin/components/header";
 import { Column, KanbanBoard } from "@/components/ui/kanban/kanban";
 import { useDefaultContext } from "@/components/providers/default-provider";
 
-import { useAdminContext } from "../../admin-provider";
+import { useBoardContext } from "../board-provider";
 
 export default function RequestsContent() {
     const { statuses } = useDefaultContext();
-    const { requests } = useAdminContext();
+    const { requests } = useBoardContext();
 
     const columns: Column[] = statuses.map((status) => ({ [status.id]: status.name }));
 

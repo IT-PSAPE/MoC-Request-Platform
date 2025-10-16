@@ -1,17 +1,40 @@
 'use client';
-import { useState } from "react";
 
 import EmptyState from "@/components/ui/EmptyState";
 import FormField from "../form-field";
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/icon";
 import FlowField from "../flow-field";
+import { useFormContext } from "../../form-provider";
 
 export default function FormThree() {
-    const [steps, setSteps] = useState<string[]>([]);
+    const { request, setRequest } = useFormContext();
 
     function handleStepDelete(index: number) {
-        setSteps((prev) => prev.filter((_, i) => i !== index));
+        setRequest((prev) => {
+            return {
+                ...prev,
+                flow: prev.flow.filter((_, i) => i !== index)
+            }
+        });
+    }
+
+    function handleAddStep() {
+        setRequest((prev) => {
+            return {
+                ...prev,
+                flow: [...prev.flow, `Step ${prev.flow.length + 1}`]
+            }
+        })
+    }
+
+    function handleStepChange(index: number, value: string) {
+        setRequest((prev) => {
+            return {
+                ...prev,
+                flow: prev.flow.map((v, i) => i === index ? value : v)
+            }
+        });
     }
 
 
@@ -19,16 +42,22 @@ export default function FormThree() {
         <FormField label="Event Flow" description="(optional)" mode="column">
             <div className="space-y-4">
                 {
-                    steps.length < 1 ?
+                    request.flow.length < 1 ?
                         <EmptyState />
-                        : steps.map((s, i) => {
+                        : request.flow.map((s, i) => {
                             return (
-                                <FlowField key={i} index={i + 1} handleStepDelete={() => handleStepDelete(i)} />
+                                <FlowField
+                                    key={i}
+                                    index={i + 1}
+                                    value={s}
+                                    handleStepDelete={() => handleStepDelete(i)}
+                                    handleChange={(event) => handleStepChange(i, event.target.value)}
+                                />
                             )
                         })
                 }
                 <div className="flex justify-center">
-                    <Button type="button" variant="secondary" onClick={() => setSteps((prev) => [...prev, `Step ${steps.length + 1}`])}>
+                    <Button type="button" variant="secondary" onClick={handleAddStep}>
                         <Icon name="line:plus" /> Add Step
                     </Button>
                 </div>

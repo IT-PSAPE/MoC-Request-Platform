@@ -1,17 +1,17 @@
-import Divider from "../divider";
 import FormField from "../form-field";
-import { useFormContext } from "../form-provider";
+import { useFormContext } from "../../form-provider";
 import { TextArea, TextInput } from "../input";
+import Divider from "@/components/ui/divider";
 
 export default function FirstForm() {
-    const { setRequest } = useFormContext();
+    const { request, setRequest } = useFormContext();
 
     function handleWhoChange(event: React.ChangeEvent<HTMLInputElement>) {
         setRequest((request) => {
             return { ...request, who: event.target.value }
         })
     }
-    
+
     function handleWhatChange(event: React.ChangeEvent<HTMLInputElement>) {
         setRequest((request) => {
             return { ...request, what: event.target.value }
@@ -51,31 +51,31 @@ export default function FirstForm() {
     return (
         <>
             <FormField label="Who" description="Full name or organization">
-                <TextInput placeholder="Who is making the request?" onChange={handleWhoChange} />
+                <TextInput placeholder="Who is making the request?" onChange={handleWhoChange} value={request.who} />
             </FormField>
             <Divider />
             <FormField label="What" description="Describe the task or deliverable.">
-                <TextInput placeholder="What is being requested?" onChange={handleWhatChange} />
+                <TextInput placeholder="What is being requested?" onChange={handleWhatChange} value={request.what} />
             </FormField>
             <Divider />
             <FormField label="When" description="Deadlines, dates, or time window.">
-                <TextInput placeholder="When is it needed?" onChange={handleWhenChange} />
+                <TextInput placeholder="When is it needed?" onChange={handleWhenChange} value={request.when} />
             </FormField>
             <Divider />
             <FormField label="Where" description="Location or channel.">
-                <TextInput placeholder="Who is making the request?" onChange={handleWhereChange} />
+                <TextInput placeholder="Who is making the request?" onChange={handleWhereChange} value={request.where} />
             </FormField>
             <Divider />
             <FormField label="Why" description="Goals, context, or problem being solved.">
-                <TextInput placeholder="Why is this needed?" onChange={handleWhyChange} />
+                <TextInput placeholder="Why is this needed?" onChange={handleWhyChange} value={request.why} />
             </FormField>
             <Divider />
             <FormField label="How" description="Constraints, process, or preferred approach.">
-                <TextArea placeholder="How should it be done?" onChange={handleHowChange} />
+                <TextArea placeholder="How should it be done?" onChange={handleHowChange} value={request.how} />
             </FormField>
             <Divider />
             <FormField label="Additional Info" description="Anything else we should know?">
-                <TextArea placeholder="Anything else we should know?" onChange={handleInfoChange} />
+                <TextArea placeholder="Anything else we should know?" onChange={handleInfoChange} value={request.info || ""} />
             </FormField>
         </>
     )

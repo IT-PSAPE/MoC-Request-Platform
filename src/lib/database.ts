@@ -45,14 +45,6 @@ const VenueTable = {
     }
 }
 
-const RequestEquipmentTable = {
-    update: async (supabase: SupabaseClient, requestId: string, equipmentId: string, update:{ [key: string]: Val } ) => {
-        return supabase.from("request_equipment").update(update)
-            .eq("request_id", requestId)
-            .eq("equipment_id", equipmentId);
-    }
-}
-
 const RequestSongTable = {
     update: async (supabase: SupabaseClient, requestId: string, songId: string, update:{ [key: string]: Val } ) => {
         return supabase.from("request_song").update(update)
@@ -61,4 +53,4 @@ const RequestSongTable = {
     }
 }
 
-export { EquipmentTable, SongTable, VenueTable, RequestEquipmentTable, RequestSongTable, RequestItemTable };
+export { EquipmentTable, SongTable, VenueTable, RequestSongTable, RequestItemTable };

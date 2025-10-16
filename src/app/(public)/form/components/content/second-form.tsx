@@ -2,25 +2,27 @@
 
 import FormField from "../form-field";
 import { TextInput } from "../input";
-import Divider from "../divider";
+import Divider from "@/components/ui/divider";
 import EmptyState from "@/components/ui/EmptyState";
 import VenueCard from "../ventue-card";
 import SongCard from "../song-card";
-import { useFormContext } from "../form-provider";
+import { useFormContext } from "../../form-provider";
 import RequestItemCard from "../item-card";
-
+import Select, { Option } from "@/components/ui/form/select";
+import { useDefaultContext } from "@/components/providers/default-provider";
 
 export default function SecondForm() {
     const { songs, venues, items } = useFormContext();
-    const { setRequest } = useFormContext();
+    const { priorities, types } = useDefaultContext();
+    const { request, setRequest } = useFormContext();
 
-    function handlePriorityChange(event: React.ChangeEvent<HTMLInputElement>) {
+    function handlePriorityChange(event: React.ChangeEvent<HTMLSelectElement>) {
         setRequest((request) => {
             return { ...request, priority: event.target.value }
         })
     }
 
-    function handleTypeChange(event: React.ChangeEvent<HTMLInputElement>) {
+    function handleTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
         setRequest((request) => {
             return { ...request, type: event.target.value }
         })
@@ -35,15 +37,29 @@ export default function SecondForm() {
     return (
         <>
             <FormField label="Priority" description="Higher priority may be processed sooner.">
-                <TextInput onChange={handlePriorityChange} />
+                <Select onChange={handlePriorityChange} value={request.priority}>
+                    <Option value=''>Select priority...</Option>
+                    {
+                        priorities.map((priority) => (
+                            <Option key={priority.id} value={priority.id}>{priority.name}</Option>
+                        ))
+                    }
+                </Select>
             </FormField>
             <Divider />
             <FormField label="Type of Request" description="Select what you are requesting.">
-                <TextInput onChange={handleTypeChange} />
+                <Select onChange={handleTypeChange} value={request.type}>
+                    <Option value=''>Select type...</Option>
+                    {
+                        types.map((type) => (
+                            <Option key={type.id} value={type.id}>{type.name}</Option>
+                        ))
+                    }
+                </Select>
             </FormField>
             <Divider />
             <FormField label="Due Date" description="We will warn on tight deadlines.">
-                <TextInput onChange={handleDueChange} />
+                <TextInput type="datetime-local" value={request.due} onChange={handleDueChange} />
             </FormField>
             <Divider />
             <FormField label="Select Venue" description="(optional)" mode="column">
@@ -52,7 +68,7 @@ export default function SecondForm() {
                         <EmptyState message="No venues available." />
                     ) : (
                         <div className="grid grid-cols-3 gap-2">
-                            {venues.map((venue) => <VenueCard key={venue.id} venue={venue} checked={false} />)}
+                            {venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)}
                         </div>
                     )
                 }
@@ -60,11 +76,11 @@ export default function SecondForm() {
             <Divider />
             <FormField label="Select equipment" description="(optional)" mode="column">
                 {
-                    venues.length === 0 ? (
+                    items.length === 0 ? (
                         <EmptyState message="No Request Item available." />
                     ) : (
                         <div className="grid grid-cols-3 gap-2">
-                            {items.map((item) => <RequestItemCard key={item.id} item={item} checked={false} />)}
+                            {items.map((item) => <RequestItemCard key={item.id} item={item} />)}
                         </div>
                     )
                 }
@@ -72,11 +88,11 @@ export default function SecondForm() {
             <Divider />
             <FormField label="Select songs" description="(optional)" mode="column">
                 {
-                    venues.length === 0 ? (
+                    songs.length === 0 ? (
                         <EmptyState message="No song available." />
                     ) : (
                         <div className="grid grid-cols-3 gap-2">
-                            {songs.map((song) => <SongCard key={song.id} song={song} checked={false} />)}
+                            {songs.map((song) => <SongCard key={song.id} song={song} />)}
                         </div>
                     )
                 }

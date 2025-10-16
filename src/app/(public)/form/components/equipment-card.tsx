@@ -1,14 +1,30 @@
 import Checkbox from "@/components/ui/checkbox";
 import { Card, CardContent, CardFooter } from "@/components/ui/public-card";
-import Divider from "./divider";
+import Divider from "@/components/ui/divider";
 
 import Text from "@/components/ui/text";
 import Button from "@/components/ui/Button";
+import { useFormContext } from "../form-provider";
 
 
-export default function EquipmentCard({ equipment, checked }: { equipment: Equipment, checked: boolean }) {
+export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
+  const { request, setRequest } = useFormContext();
+
+  const checked = request.equipments.some((e) => e.id === equipment.id);
+
+  function handleButtonClick() {
+    console.log(equipment);
+    
+    setRequest((prev) => {
+      return {
+        ...prev,
+        equipments: checked ? prev.equipments.filter((v) => v.id !== equipment.id) : [...prev.equipments, equipment]
+      }
+    })
+  }
+
   return (
-    <Card className="has-checked:border-brand">
+    <Card className="has-checked:border-brand has-checked:outline-2 has-checked:outline-border-brand/20">
       <CardContent>
         <div className="flex items-center gap-2" >
           <Checkbox checked={checked} />
@@ -22,7 +38,7 @@ export default function EquipmentCard({ equipment, checked }: { equipment: Equip
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full" variant="secondary" >Add Venue</Button>
+        <Button className="w-full" variant="secondary" onClick={handleButtonClick} >{checked ? 'Remove' : 'Add'}  Venue</Button>
       </CardFooter>
     </Card>
   )

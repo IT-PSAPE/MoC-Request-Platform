@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { useFormContext } from "./form-provider";
+import { useFormContext } from "../form-provider";
 
 export default function StepIndicator() {
     const { step } = useFormContext();

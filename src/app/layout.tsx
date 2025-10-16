@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import RootProvider from "@/components/root-provider";
-import NavigationBar from "@/components/navigation-bar";
 
 const manrope = Manrope({
   variable: "--font-manrope",

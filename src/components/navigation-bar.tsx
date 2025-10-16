@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Button from "./ui/Button";
 import { useAuthContext } from "./providers/auth-provider";
 
@@ -8,12 +8,11 @@ export default function NavigationBar() {
   const { authed } = useAuthContext();
 
   const pathname = usePathname();
-  const router = useRouter();
 
   const links = [
     { href: "/", label: "Home" },
     { href: "/form", label: "Form" },
-    { href: "/requests", label: "Requests" },
+    { href: "/board", label: "Requests Board" },
   ];
 
   function Links() {
