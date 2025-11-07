@@ -18,6 +18,8 @@ type Status = {
 type RequestType = {
     id: string;
     name: string;
+    notice: number;
+    warning: string;
 };
 
 type RequestItem = {
