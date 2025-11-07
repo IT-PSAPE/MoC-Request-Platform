@@ -55,4 +55,13 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
     return requests;
 }
 
-export { list };
+async function updateRequestStatus(supabase: SupabaseClient, requestId: string, statusId: string): Promise<{ error: any }> {
+    const { error } = await supabase
+        .from("request")
+        .update({ status: statusId })
+        .eq("id", requestId);
+
+    return { error };
+}
+
+export { list, updateRequestStatus };

@@ -7,7 +7,7 @@ import { useAdminContext } from "../../admin-provider";
 
 export default function RequestsContent() {
     const { statuses } = useDefaultContext();
-    const { requests } = useAdminContext();
+    const { requests, updateRequestStatusOptimistic } = useAdminContext();
 
     const columns: Column[] = statuses.map((status) => ({ [status.id]: status.name }));
 
@@ -15,9 +15,14 @@ export default function RequestsContent() {
         <>
             <Header>
                 <Text style="title-h4">Requests</Text>
-                <Text style="paragraph-md">Supporting Text</Text>
+                <Text style="paragraph-md">Drag and drop requests to update their status</Text>
             </Header>
-            <KanbanBoard columns={columns} data={requests} />
+            <KanbanBoard 
+                columns={columns} 
+                data={requests} 
+                isDraggable={true}
+                onRequestStatusChange={updateRequestStatusOptimistic}
+            />
         </>
     );
 }

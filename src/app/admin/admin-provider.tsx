@@ -3,7 +3,7 @@
 import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list } from "./admin-service";
+import { list, updateRequestStatus } from "./admin-service";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
 
@@ -17,6 +17,7 @@ type AdminContextType = {
     updateEquipment: (id: string, available: number) => void;
     updateVenue: (venueId: string, available: boolean) => void;
     updateSong: (venueId: string, type: 'instrumental' | 'lyrics', available: boolean) => void;
+    updateRequestStatusOptimistic: (requestId: string, newStatusId: string) => Promise<void>;
     setTab: (tab: TabItem) => void;
 };
 
@@ -129,6 +130,34 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         );
     }
 
+    const updateRequestStatusOptimistic = async (requestId: string, newStatusId: string) => {
+        // Find the status object for the new status ID
+        const newStatus = (await supabase.from("status").select("*").eq("id", newStatusId).single()).data;
+        
+        if (!newStatus) {
+            console.error("Status not found");
+            return;
+        }
+
+        // Optimistically update the local state
+        setRequests((prevRequests) =>
+            prevRequests.map((request) =>
+                request.id === requestId ? { ...request, status: newStatus as Status } : request
+            )
+        );
+
+        // Update the database
+        const { error } = await updateRequestStatus(supabase, requestId, newStatusId);
+
+        if (error) {
+            console.error("Failed to update request status", error);
+            // Revert the optimistic update by re-fetching the data
+            const updatedRequests = await list(supabase);
+            setRequests(updatedRequests);
+            throw error;
+        }
+    }
+
     const context = {
         requests,
         items,
@@ -138,6 +167,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         tab,
         updateVenue,
         updateSong,
+        updateRequestStatusOptimistic,
         setTab,
         updateEquipment,
     };
