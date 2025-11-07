@@ -1,4 +1,4 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
 
 async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
     const data = await supabase.from("request").select(
@@ -55,7 +55,7 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
     return requests;
 }
 
-async function updateRequestStatus(supabase: SupabaseClient, requestId: string, statusId: string): Promise<{ error: any }> {
+async function updateRequestStatus(supabase: SupabaseClient, requestId: string, statusId: string): Promise<{ error: PostgrestError | null }> {
     const { error } = await supabase
         .from("request")
         .update({ status: statusId })
