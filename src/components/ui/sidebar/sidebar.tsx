@@ -1,6 +1,7 @@
 import { useAdminContext } from "@/app/admin/admin-provider";
 import { cn } from "@/lib/cn";
 import Link from "next/link";
+import Icon from "../icon";
 
 function Divider() {
     return (
@@ -19,7 +20,7 @@ type MenuItemProps = {
 function MenuItem({ current, children, onClick }: MenuItemProps) {
     return (
         <div className="p-0.5 text-sm" onClick={onClick} >
-            <div className={cn("px-3 py-2 border rounded-lg", (current ? "bg-primary border-secondary" : "border-transparent bg-transparent"))} >
+            <div className={cn("px-3 py-2 border rounded-lg flex items-center gap-2 transition-shadow cursor-pointer", (current ? "bg-primary border-secondary hover:shadow-sm" : "border-transparent bg-transparent"))} >
                 {children}
             </div>
         </div>
@@ -54,7 +55,7 @@ export default function Sidebar() {
             </div>
             <div className="p-2 pt-0 flex-none" >
                 <Link href="/" >
-                    <MenuItem >Home Page</MenuItem>
+                    <MenuItem current ><Icon name="line:home_line" /> Home Page</MenuItem>
                 </Link>
             </div>
         </div>

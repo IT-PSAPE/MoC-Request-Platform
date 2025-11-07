@@ -146,7 +146,7 @@ type FetchRequest = {
     type: RequestType;
     attachment: Attachment[];
     note: Note[];
-    equipment: RequestedItem[];
+    item: RequestedItem[];
     song: RequestedSong[];
     venue: RequestedVenue[];
 };

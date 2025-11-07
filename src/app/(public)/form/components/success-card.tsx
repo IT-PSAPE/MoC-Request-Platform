@@ -11,7 +11,7 @@ function SuccessScreen() {
             <div className="text-green-600 text-sm font-medium">Request submitted successfully!</div>
             <div className="text-xs text-foreground/70 mt-1">Your tracking ID: <code>{submitted}</code></div>
             <div className="mt-3 flex flex-col sm:flex-row gap-2">
-                <Link href="/requests"><Button type="button" className="w-full sm:w-auto">View Requests</Button></Link>
+                <Link href="/board"><Button type="button" className="w-full sm:w-auto">View Requests</Button></Link>
                 <Button
                     type="button"
                     variant="secondary"

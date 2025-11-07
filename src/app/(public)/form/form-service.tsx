@@ -54,7 +54,7 @@ const FormService = {
 
             console.log(requestedItems);
 
-            const { error: songError } = await supabase.from('requested_item').insert(requestedItems);
+            const { error: songError } = await supabase.from('request_item').insert(requestedItems);
 
             if (songError) console.error('Failed to insert request item:', songError);
         }

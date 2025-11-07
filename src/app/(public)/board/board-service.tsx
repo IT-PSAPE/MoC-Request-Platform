@@ -18,15 +18,18 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
         type(*),
         attachment(*),
         note(*),
-        equipment:request_equipment(*, equipment(*)),
         song:request_song(*, song(*)),
-        venue:request_venue(*, venue(*))
+        venue:request_venue(*, venue(*)),
+        item:request_item(*, item(*))
       `);
 
     if (data.error) {
         console.error("Failed to load requests", data.error);
         return [];
     }
+
+    console.log(data.data);
+
 
     const requests = data.data.map((request) => ({
         id: request.id as string,
@@ -45,7 +48,7 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
         type: request.type as unknown as RequestType,
         attachment: request.attachment as Attachment[],
         note: request.note as Note[],
-        equipment: request.equipment,
+        item: request.item,
         song: request.song,
         venue: request.venue,
     }));

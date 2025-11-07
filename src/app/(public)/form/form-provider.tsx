@@ -95,6 +95,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
 
     function reset() {
         setRequest(emptyRequest);
+        setSubmitted(null);
         setStep(1);
     }
 

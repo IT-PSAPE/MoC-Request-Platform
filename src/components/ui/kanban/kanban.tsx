@@ -27,6 +27,7 @@ function KanbanBoard({ columns, data }: KanbanProps) {
                         <KanbanHeader column={column} count={requestsForColumn.length} />
                         <KanbanContent >
                             {requestsForColumn.map((request) => (
+                                console.log(request),
                                 <RequestCard key={request.id} request={request} setActive={() => { }} />
                             ))}
                         </KanbanContent>
@@ -39,7 +40,7 @@ function KanbanBoard({ columns, data }: KanbanProps) {
 
 function KanbanColumn({ children }: { children?: ReactNode }) {
     return (
-        <div className="flex-1 flex flex-col bg-secondary rounded-md overflow-clip">
+        <div className="flex-1 flex flex-col bg-secondary rounded-md overflow-clip min-w-[250px]">
             {children}
         </div>
     )

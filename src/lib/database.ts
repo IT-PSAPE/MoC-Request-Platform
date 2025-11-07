@@ -11,7 +11,7 @@ type Val =
 
 const RequestItemTable = {
     select: async (supabase: SupabaseClient) => {
-        return supabase.from("request_item").select("*").order("name");
+        return supabase.from("item").select("*").order("name");
     }
 }
 
