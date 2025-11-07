@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Text from "@/components/ui/text";
@@ -7,7 +8,13 @@ export default function PublicHome() {
   return (
     <>
       <div className="absolute top-0 left-0 right-0 h-full -z-10 overflow-hidden">
-        <img src="/images/public-home-bg.avif" alt="Background image" className="w-full" />
+        <Image 
+          src="/images/public-home-bg.avif" 
+          alt="Background image" 
+          fill
+          className="object-cover"
+          priority
+        />
       </div>
       <div className="py-10 w-full flex-1 flex items-center">
         <div className="w-full mx-auto max-w-3xl text-left space-y-20 px-4">
