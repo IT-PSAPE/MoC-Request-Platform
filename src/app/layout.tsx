@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
-import NavigationBar from "@/components/navigation-bar";
 import RootProvider from "@/components/root-provider";
 
-const figTree = Figtree({
-  variable: "--font-figtree",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -15,21 +14,11 @@ export const metadata: Metadata = {
   description: "Submit, track, and process requests",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        suppressHydrationWarning
-        className={`${figTree.variable} antialiased flex flex-col h-screen bg-primary`}
-      >
-        <RootProvider>
-          <NavigationBar />
-          <main className="mx-auto w-full flex flex-col h-full min-h-0 overflow-x-auto"> {children} </main>
-        </RootProvider>
+    <html lang="en" className={manrope.className} suppressHydrationWarning>
+      <body suppressHydrationWarning className={`antialiased flex flex-col h-screen bg-secondary overflow-clip`} >
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );

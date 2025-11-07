@@ -18,12 +18,23 @@ type Status = {
 type RequestType = {
     id: string;
     name: string;
+    notice: number;
+    warning: string;
+};
+
+type RequestItem = {
+    id: string;
+    name: string;
+    description: string;
+    available: boolean;
 };
 
 type Equipment = {
     id: string;
     name: string;
     quantity: number;
+    available: number;
+    description: string;
 };
 
 type Song = {
@@ -37,6 +48,7 @@ type Venue = {
     id: string;
     name: string;
     available: boolean;
+    description: string;
 };
 
 type Attachment = {
@@ -59,25 +71,19 @@ type Note = {
 
 // JOIN TABLES
 
-type RequestEquipment = {
+type RequestedItem = {
     request_id: string;
-    equipment_id: string;
-    quantity: number;
-    approved: boolean;
-    equipment: Equipment;
+    item_id: string;
 };
 
-type RequestSong = {
+type RequestedSong = {
     request_id: string;
     song_id: string;
-    song: Song;
 };
 
-type RequestVenue = {
+type RequestedVenue = {
     request_id: string;
     venue_id: string;
-    approved: boolean;
-    venue: Venue;
 };
 
 // Request
@@ -105,12 +111,12 @@ type FormRequest = {
     why: string;
     how: string;
     info: string | null;
-    due: string | null;
+    due: string;
     flow: string[];
     priority: string;
     status: string;
     type: string;
-    equipment: { id: string; quantity: number }[];
+    equipments: { id: string; quantity: number }[];
     attachments: {
         id: string;
         request: string;
@@ -121,6 +127,8 @@ type FormRequest = {
         created: string;
     }[];
     songs: { id: string }[];
+    venues: { id: string }[];
+    items: { id: string }[];
 };
 
 type FetchRequest = {
@@ -140,11 +148,7 @@ type FetchRequest = {
     type: RequestType;
     attachment: Attachment[];
     note: Note[];
-    equipment: RequestEquipment[];
-    song: RequestSong[];
-    venue: RequestVenue[];
+    item: RequestedItem[];
+    song: RequestedSong[];
+    venue: RequestedVenue[];
 };
-
-// 
-
-type  FormSteps = 1 | 2 | 3;

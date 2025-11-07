@@ -15,8 +15,8 @@ interface RequestCardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 function RequestCard({ request: r, setActive, className, onClick, onDragStart, ...divProps }: RequestCardProps) {
   const title = r.what || "Request";
-  const description = r.info || r.why || "";
-  const totalQty = (r.equipment || []).reduce((sum, e) => sum + (typeof e.quantity === "number" ? Math.max(1, Math.floor(e.quantity)) : 1), 0);
+  const description = r.why || r.how || "";
+  const totalQty = (r.item || []).length;
   const headerType = r.type ? r.type.name.replace(/_/g, " ") : "Request";
   const headerDate = formatDateMDY(r.due || r.created_at);
   const footerDate = formatDateDayMon(r.created_at);

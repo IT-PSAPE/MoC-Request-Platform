@@ -9,29 +9,39 @@ type Val =
   | object        // JSON/JSONB
   | Val[];        // arrays, e.g. text[], int[], json[]
 
+const RequestItemTable = {
+    select: async (supabase: SupabaseClient) => {
+        return supabase.from("item").select("*").order("name");
+    }
+}
+
 const EquipmentTable = {
     select: async (supabase: SupabaseClient) => {
         return supabase.from("equipment").select("*").order("name");
+    },
+    update: async (supabase: SupabaseClient, equipmentId: string, update:{ [key: string]: Val } ) => {
+        return supabase.from("equipment").update(update)
+            .eq("id", equipmentId);
     }
 }
 
 const SongTable = {
     select: async (supabase: SupabaseClient) => {
         return supabase.from("song").select("*").order("name");
+    },
+    update: async (supabase: SupabaseClient, songId: string, update:{ [key: string]: Val } ) => {
+        return supabase.from("song").update(update)
+            .eq("id", songId);
     }
 }
 
 const VenueTable = {
     select: async (supabase: SupabaseClient) => {
         return supabase.from("venue").select("*").order("name");
-    }
-}
-
-const RequestEquipmentTable = {
-    update: async (supabase: SupabaseClient, requestId: string, equipmentId: string, update:{ [key: string]: Val } ) => {
-        return supabase.from("request_equipment").update(update)
-            .eq("request_id", requestId)
-            .eq("equipment_id", equipmentId);
+    },
+    update: async (supabase: SupabaseClient, venueId: string, update:{ [key: string]: Val } ) => {
+        return supabase.from("venue").update(update)
+            .eq("id", venueId);
     }
 }
 
@@ -43,4 +53,4 @@ const RequestSongTable = {
     }
 }
 
-export { EquipmentTable, SongTable, VenueTable, RequestEquipmentTable, RequestSongTable };
+export { EquipmentTable, SongTable, VenueTable, RequestSongTable, RequestItemTable };

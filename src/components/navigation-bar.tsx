@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Button from "./ui/Button";
 import { useAuthContext } from "./providers/auth-provider";
 
@@ -9,43 +8,21 @@ export default function NavigationBar() {
   const { authed } = useAuthContext();
 
   const pathname = usePathname();
-  const router = useRouter();
 
   const links = [
     { href: "/", label: "Home" },
     { href: "/form", label: "Form" },
-    { href: "/requests", label: "Requests" },
+    { href: "/board", label: "Requests Board" },
   ];
 
-  const [open, setOpen] = useState(false);
-
-  // prevent background scroll when mobile menu is open
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
-  // close menu when navigating
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  function Links({ vertical, onLinkClick }: { vertical?: boolean; onLinkClick?: () => void }) {
+  function Links() {
     return (
-      <div className={vertical ? "flex flex-col gap-2 p-2 rounded-lg w-full border border-gray-200 bg-gray-50" : "flex gap-1 p-0.5 rounded-lg w-full max-w-sm border border-gray-200 bg-gray-50 mx-auto"}>
+      <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-sm border border-gray-200 bg-gray-50 mx-auto">
         {links.map((l) => (
           <Link
             key={l.href}
             href={l.href}
-            onClick={() => onLinkClick?.()}
-            className={`px-4 py-1.5 rounded-md text-sm ${vertical ? 'text-left' : 'grow text-center leading-1.2'} border ${pathname === l.href ? 'border-gray-200 bg-white  drop-shadow-sm' : 'border-transparent text-gray-500'}`}
+            className={`px-4 py-1.5 rounded-md text-sm grow text-center leading-1.2 border ${pathname === l.href ? 'border-gray-200 bg-white  drop-shadow-sm' : 'border-transparent text-gray-500'}`}
           >
             {l.label}
           </Link>
@@ -56,7 +33,7 @@ export default function NavigationBar() {
 
   function Logo() {
     return (
-      <Link href={"/"} aria-label="MOC Request Platform">
+      <Link href={"/"} aria-label="MOC Request Platform" className="text-brand-teriary">
         <svg width="60" height="21" viewBox="0 0 60 21" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M52.8483 0.822912C54.3371 0.822912 55.6578 1.06267 56.8098 1.54122C57.9794 2.01972 58.9986 2.67501 59.8669 3.5079L57.0759 6.32594C56.5797 5.79422 55.9762 5.37779 55.2672 5.07648C54.5761 4.77531 53.7698 4.6243 52.8483 4.6243C52.033 4.6243 51.2797 4.76694 50.5885 5.05052C49.9151 5.31638 49.3301 5.70599 48.8338 6.21993C48.3554 6.73388 47.974 7.354 47.6904 8.08059C47.4245 8.80724 47.2923 9.60506 47.2923 10.4735C47.2923 11.3597 47.4245 12.1668 47.6904 12.8934C47.974 13.62 48.3554 14.2402 48.8338 14.7541C49.3301 15.2681 49.915 15.667 50.5885 15.9506C51.2797 16.2341 52.0331 16.3757 52.8483 16.3757C53.8054 16.3757 54.6383 16.2248 55.3473 15.9235C56.0562 15.6222 56.668 15.2058 57.182 14.6741L60 17.4921C59.0962 18.3251 58.0595 18.9813 56.8899 19.4599C55.7379 19.9384 54.3995 20.177 52.8754 20.1771C51.4752 20.1771 50.1721 19.9384 48.9669 19.4599C47.7794 18.9636 46.7336 18.2722 45.8297 17.3861C44.9435 16.4999 44.2522 15.4717 43.7559 14.3019C43.2597 13.1144 43.0117 11.8382 43.0117 10.4735C43.0117 9.1089 43.2598 7.84179 43.7559 6.67211C44.2522 5.48462 44.9435 4.45642 45.8297 3.58795C46.7159 2.71955 47.7525 2.04572 48.9398 1.56718C50.1451 1.07091 51.4482 0.822916 52.8483 0.822912Z" fill="currentColor" />
           <path d="M31.7276 13.2385C33.1278 13.2385 34.4216 13.4876 35.609 13.9839C36.8142 14.4624 37.86 15.1444 38.7462 16.0306C39.6501 16.8991 40.3508 17.9273 40.847 19.1148C40.9886 19.4484 41.1072 19.7915 41.2084 20.1425H36.7557C36.5037 19.578 36.1761 19.0841 35.7691 18.6626C35.2729 18.1309 34.6787 17.732 33.9874 17.4661C33.314 17.1826 32.5606 17.041 31.7276 17.041C30.6111 17.041 29.6272 17.289 28.7765 17.7853C27.9436 18.2638 27.2966 18.946 26.8358 19.832C26.7821 19.9332 26.7318 20.0369 26.6843 20.1425H22.2404C22.3431 19.7822 22.4641 19.4298 22.6093 19.0877C23.1055 17.9182 23.796 16.8989 24.682 16.0306C25.5681 15.1444 26.6057 14.4624 27.7932 13.9839C28.9984 13.4876 30.3097 13.2385 31.7276 13.2385Z" fill="currentColor" />
@@ -76,62 +53,12 @@ export default function NavigationBar() {
   }
 
   return (
-    <nav className="sticky top-0 z-10 bg-white">
+    <nav className="sticky top-0 z-10">
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-4">
-        <div className="flex items-center gap-4 w-full">
-          <div className="w-[120px]"><Logo /></div>
-
-          {/* Desktop links */}
-          <div className="hidden md:flex flex-1"><Links /></div>
-
-          {/* Mobile hamburger */}
-          <div className="md:hidden ml-auto">
-            <button
-              aria-label={open ? 'Close menu' : 'Open menu'}
-              aria-expanded={open}
-              onClick={() => setOpen((s) => !s)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:bg-gray-100"
-            >
-              {open ? (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              ) : (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              )}
-            </button>
-          </div>
-
-          {/* Desktop actions */}
-          <div className="hidden md:block w-[120px] text-sm text-right"><Actions /></div>
-        </div>
+        <div className="w-full max-w-[120px]"> <Logo /> </div>
+        <div className="w-full"><Links /></div>
+        <div className="w-full max-w-[120px] text-sm "><Actions /></div>
       </div>
-
-      {/* Mobile full-screen overlay menu */}
-      {open && (
-        <div className="md:hidden fixed inset-0 z-40 bg-white flex flex-col">
-          <div className="flex items-center justify-between px-4 py-3 border-b">
-            <div className="w-[120px]"><Logo /></div>
-            <div className="flex items-center">
-              <button aria-label="Close menu" onClick={() => setOpen(false)} className="ml-auto p-2 rounded-md text-gray-600 hover:bg-gray-100">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="p-6 flex-1 overflow-auto">
-            <Links vertical onLinkClick={() => setOpen(false)} />
-
-            <div className="mt-6">
-              <div className="w-full text-sm">
-                {authed ? (
-                  <Link href="/admin" onClick={() => setOpen(false)}><Button variant='secondary' size='sm' className="w-full">Dashboard</Button></Link>
-                ) : (
-                  <Link href="/login" onClick={() => setOpen(false)}><Button variant='secondary' size='sm' className="w-full">Login</Button></Link>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </nav>
   );
 }

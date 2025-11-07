@@ -1,6 +1,6 @@
 /* Focus */
 *:focus-visible {
-    @apply outline-offset-2 outline-primary-alpha-16 outline-solid outline-2
+    @apply outline-offset-2 outline-pink-400 outline-solid outline-2
 }
 
 /* ──────────────────────────────────────────────────────────── */

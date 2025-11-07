@@ -1,0 +1,67 @@
+'use client';
+
+import EmptyState from "@/components/ui/EmptyState";
+import FormField from "../form-field";
+import Button from "@/components/ui/Button";
+import Icon from "@/components/ui/icon";
+import FlowField from "../flow-field";
+import { useFormContext } from "../../form-provider";
+
+export default function FormThree() {
+    const { request, setRequest } = useFormContext();
+
+    function handleStepDelete(index: number) {
+        setRequest((prev) => {
+            return {
+                ...prev,
+                flow: prev.flow.filter((_, i) => i !== index)
+            }
+        });
+    }
+
+    function handleAddStep() {
+        setRequest((prev) => {
+            return {
+                ...prev,
+                flow: [...prev.flow, ``]
+            }
+        })
+    }
+
+    function handleStepChange(index: number, value: string) {
+        setRequest((prev) => {
+            return {
+                ...prev,
+                flow: prev.flow.map((v, i) => i === index ? value : v)
+            }
+        });
+    }
+
+
+    return (
+        <FormField label="Event Flow" description="(optional)" mode="column">
+            <div className="space-y-4">
+                {
+                    request.flow.length < 1 ?
+                        <EmptyState />
+                        : request.flow.map((s, i) => {
+                            return (
+                                <FlowField
+                                    key={i}
+                                    index={i + 1}
+                                    value={s}
+                                    handleStepDelete={() => handleStepDelete(i)}
+                                    handleChange={(event) => handleStepChange(i, event.target.value)}
+                                />
+                            )
+                        })
+                }
+                <div className="flex justify-center">
+                    <Button type="button" variant="secondary" onClick={handleAddStep}>
+                        <Icon name="line:plus" /> Add Step
+                    </Button>
+                </div>
+            </div>
+        </FormField>
+    )
+}

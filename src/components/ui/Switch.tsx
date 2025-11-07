@@ -7,11 +7,10 @@ export type SwitchProps = {
   onCheckedChange: (checked: boolean) => void;
   id?: string;
   disabled?: boolean;
-  className?: string;
   "aria-label"?: string;
 };
 
-export default function Switch({ checked, onCheckedChange, id, disabled, className, ...rest }: SwitchProps) {
+export default function Switch({ checked, onCheckedChange, id, disabled, ...rest }: SwitchProps) {
   return (
     <button
       type="button"
@@ -20,20 +19,27 @@ export default function Switch({ checked, onCheckedChange, id, disabled, classNa
       aria-disabled={disabled}
       id={id}
       onClick={() => !disabled && onCheckedChange(!checked)}
-      className={cn(
-        "relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ",
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
-        checked ? "bg-foreground" : "bg-foreground/20",
-        className
-      )}
       {...rest}
+      className="h-5 w-8 flex items-center justify-center"
     >
-      <span
-        className={cn(
-          "inline-block h-4 w-4 transform rounded-full bg-background transition-transform",
-          checked ? "translate-x-6" : "translate-x-1"
-        )}
-      />
+      <div className={cn(
+        "relative inline-flex h-4 w-7 items-center rounded-full transition-colors flex-shrink-0 ",
+        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+        checked ? "bg-brand-solid" : "bg-quaternary",
+      )}>
+        <span
+          className={cn(
+            "inline-flex items-center justify-center h-3 w-3 transform rounded-full bg-background transition-transform ",
+            checked ? "translate-x-3.5" : "translate-x-0.5"
+          )}
+        >
+          <span className={cn(
+            "h-1 w-1 rounded-full",
+            disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+            checked ? "bg-brand-solid" : "bg-quaternary",
+          )}></span>
+        </span>
+      </div>
     </button>
   );
 }
