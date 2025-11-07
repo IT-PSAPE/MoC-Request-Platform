@@ -15,6 +15,7 @@ type FormContextType = {
     items: RequestItem[]
     isProcessing: boolean
     submitted: string | null
+    noticeAlert: string | null
     setStep: Dispatch<SetStateAction<FormSteps>>
     setRequest: Dispatch<SetStateAction<FormRequest>>
     onSubmit: FormEventHandler<HTMLFormElement>
@@ -22,6 +23,7 @@ type FormContextType = {
     setSubmitted: Dispatch<SetStateAction<string | null>>
     reset: () => void
     submit: () => void
+    checkNoticePeriod: (types: { id: string; notice?: number; warning?: string }[]) => void
 };
 
 export const FormContext = createContext<FormContextType | null>(null);
@@ -59,6 +61,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
     const [submitted, setSubmitted] = useState<string | null>(null);
 
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
+    const [noticeAlert, setNoticeAlert] = useState<string | null>(null);
 
     useEffect(() => {
         let mounted = true;
@@ -93,10 +96,37 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
         event.preventDefault();
     }
 
+    function checkNoticePeriod(types: { id: string; notice?: number; warning?: string }[]) {
+        if (!request.due || !request.type) {
+            setNoticeAlert(null);
+            return;
+        }
+        
+        const selectedType = types.find(t => t.id === request.type);
+        if (!selectedType?.notice) {
+            setNoticeAlert(null);
+            return;
+        }
+        
+        const dueDate = new Date(request.due);
+        const now = new Date();
+        const noticeHours = selectedType.notice * 24; // Convert days to hours
+        
+        // Calculate difference in hours
+        const diffHours = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60));
+        
+        if (diffHours < noticeHours) {
+            setNoticeAlert(selectedType.warning || 'The selected due date does not meet the required notice period for this request type.');
+        } else {
+            setNoticeAlert(null);
+        }
+    }
+
     function reset() {
         setRequest(emptyRequest);
         setSubmitted(null);
         setStep(1);
+        setNoticeAlert(null);
     }
 
     async function submit() {
@@ -115,6 +145,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
         items,
         isProcessing,
         submitted,
+        noticeAlert,
         setSubmitted,
         onSubmit,
         setStep,
@@ -122,6 +153,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
         reset,
         submit,
         setIsProcessing,
+        checkNoticePeriod,
     };
 
     return (

@@ -10,11 +10,12 @@ import { useFormContext } from "../../form-provider";
 import RequestItemCard from "../item-card";
 import Select, { Option } from "@/components/ui/form/select";
 import { useDefaultContext } from "@/components/providers/default-provider";
+import InlineAlert from "@/components/ui/inline-alert";
+import { useEffect } from "react";
 
 export default function SecondForm() {
-    const { songs, venues, items } = useFormContext();
+    const { songs, venues, items, request, setRequest, noticeAlert, checkNoticePeriod } = useFormContext();
     const { priorities, types } = useDefaultContext();
-    const { request, setRequest } = useFormContext();
 
     function handlePriorityChange(event: React.ChangeEvent<HTMLSelectElement>) {
         setRequest((request) => {
@@ -25,14 +26,21 @@ export default function SecondForm() {
     function handleTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
         setRequest((request) => {
             return { ...request, type: event.target.value }
-        })
+        });
+        checkNoticePeriod(types);
     }
 
     function handleDueChange(event: React.ChangeEvent<HTMLInputElement>) {
         setRequest((request) => {
             return { ...request, due: event.target.value }
-        })
+        });
+        checkNoticePeriod(types);
     }
+
+    // Check notice period when component mounts or when types change
+    useEffect(() => {
+        checkNoticePeriod(types);
+    }, [types, checkNoticePeriod]);
 
     return (
         <>
@@ -61,6 +69,7 @@ export default function SecondForm() {
             <FormField label="Due Date" description="We will warn on tight deadlines.">
                 <TextInput type="datetime-local" value={request.due} onChange={handleDueChange} />
             </FormField>
+            {noticeAlert && <InlineAlert message={noticeAlert} />}
             <Divider />
             <FormField label="Select Venue" description="(optional)" mode="column">
                 {
