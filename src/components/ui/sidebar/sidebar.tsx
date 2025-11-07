@@ -2,14 +2,7 @@ import { useAdminContext } from "@/app/admin/admin-provider";
 import { cn } from "@/lib/cn";
 import Link from "next/link";
 import Icon from "../icon";
-
-function Divider() {
-    return (
-        <div className="py-4 px-1.5" >
-            <div className="border-b border-secondary" ></div>
-        </div>
-    );
-}
+import Divider from "../divider";
 
 type MenuItemProps = {
     children?: React.ReactNode;
