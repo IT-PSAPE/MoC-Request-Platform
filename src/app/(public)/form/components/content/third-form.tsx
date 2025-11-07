@@ -23,7 +23,7 @@ export default function FormThree() {
         setRequest((prev) => {
             return {
                 ...prev,
-                flow: [...prev.flow, `Step ${prev.flow.length + 1}`]
+                flow: [...prev.flow, ``]
             }
         })
     }

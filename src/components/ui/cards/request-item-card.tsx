@@ -16,7 +16,8 @@ export function RequestItemCard({ item, className }: RequestItemCardProps) {
                     <div className="flex flex-1 items-center justify-between gap-4 ">
                         <h3 className="font-semibold text-sm">{item.name}</h3>
                     </div>
-                    <p className="text-xs text-muted-foreground">ID: {item.id}</p>
+                    <p className="text-xs mb-2 text-tertiary">ID: {item.id}</p>
+                    <Text style="paragraph-sm"><span className="text-tertiary">Description:</span> {item.description}</Text>
                 </div>
             </div>
             <div className="p-3 border-t border-secondary">

@@ -28,9 +28,6 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
         return [];
     }
 
-    console.log(data.data);
-
-
     const requests = data.data.map((request) => ({
         id: request.id as string,
         who: request.who as string,

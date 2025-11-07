@@ -7,7 +7,7 @@ export default function Select({ className, children, ...props }: Props) {
   return (
     <select
       className={cn(
-        "w-full p-2.5 bg-[#FCFCFC] border border-secondary rounded-lg shadow-sm paragraph-sm",
+        "w-full p-2.5 bg-primary border border-primary rounded-lg shadow-sm paragraph-sm",
         className
       )}
       {...props}

@@ -30,7 +30,7 @@ export default function FirstForm() {
         })
     }
 
-    function handleWhyChange(event: React.ChangeEvent<HTMLInputElement>) {
+    function handleWhyChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
         setRequest((request) => {
             return { ...request, why: event.target.value }
         })
@@ -67,7 +67,7 @@ export default function FirstForm() {
             </FormField>
             <Divider />
             <FormField label="Why" description="Goals, context, or problem being solved.">
-                <TextInput placeholder="Why is this needed?" onChange={handleWhyChange} value={request.why} />
+                <TextArea placeholder="Why is this needed?" onChange={handleWhyChange} value={request.why} />
             </FormField>
             <Divider />
             <FormField label="How" description="Constraints, process, or preferred approach.">

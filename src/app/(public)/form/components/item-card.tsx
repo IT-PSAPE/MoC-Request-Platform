@@ -1,3 +1,5 @@
+import { MouseEvent } from "react";
+
 import Checkbox from "@/components/ui/checkbox";
 import { Card, CardContent, CardFooter } from "@/components/ui/public-card";
 import Divider from "@/components/ui/divider";
@@ -10,10 +12,10 @@ import { useFormContext } from "../form-provider";
 export default function RequestItemCard({ item }: { item: RequestItem }) {
   const { request, setRequest } = useFormContext();
 
-  const checked = request.items.some((i) => i.id === item.id);
+  const checked = request.items.some((i) => i.id === item.id);  
 
-  function handleButtonClick() {
-    console.log(item);
+  function handleCardClick(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
 
     setRequest((prev) => {
       return {
@@ -24,7 +26,7 @@ export default function RequestItemCard({ item }: { item: RequestItem }) {
   }
 
   return (
-    <Card className="has-checked:border-brand has-checked:outline-2 has-checked:outline-border-brand/20">
+    <Card className="has-checked:border-brand cursor-pointer" onClick={handleCardClick}>
       <CardContent>
         <div className="flex items-center gap-2" >
           <Checkbox checked={checked} />
@@ -37,9 +39,6 @@ export default function RequestItemCard({ item }: { item: RequestItem }) {
           <Text style="paragraph-sm" className="text-quaternary">{item.description}</Text>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button className="w-full" variant="secondary" onClick={handleButtonClick} >{checked ? 'Remove' : 'Add'}  Equipment</Button>
-      </CardFooter>
     </Card>
   )
 }

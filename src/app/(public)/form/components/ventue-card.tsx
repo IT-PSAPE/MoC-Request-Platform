@@ -12,8 +12,8 @@ export default function VenueCard({ venue }: { venue: Venue }) {
 
   const checked = request.venues.some((v) => v.id === venue.id);
 
-  function handleButtonClick() {
-    console.log(venue);
+  function handleCardClick(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
 
     setRequest((prev) => {
       return {
@@ -24,7 +24,7 @@ export default function VenueCard({ venue }: { venue: Venue }) {
   }
 
   return (
-    <Card className="has-checked:border-brand has-checked:outline-2 has-checked:outline-border-brand/20">
+    <Card className="has-checked:border-brand cursor-pointer" onClick={handleCardClick}>
       <CardContent>
         <div className="flex items-center gap-2" >
           <Checkbox checked={checked} />
@@ -37,9 +37,6 @@ export default function VenueCard({ venue }: { venue: Venue }) {
           <Text style="paragraph-sm" className="text-quaternary">{venue.description}</Text>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button className="w-full" variant="secondary" onClick={handleButtonClick} >{checked ? 'Remove' : 'Add'} Venue</Button>
-      </CardFooter>
     </Card>
   )
 }

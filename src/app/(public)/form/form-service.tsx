@@ -33,43 +33,41 @@ const FormService = {
 
         // =======================================================================================================
 
-        if (request.venues.length > 0) {
-            const venuesToInsert = request.venues.map(v => ({
-                request_id: requestId,
-                venue_id: v.id,
-            }));
-
-            const { error: venueError } = await supabase.from('request_venue').insert(venuesToInsert);
-
-            if (venueError) console.error('Failed to insert venues:', venueError);
-        }
-
-        // =======================================================================================================
-
         if (request.items.length > 0) {
-            const requestedItems = request.items.map(r => ({
+            const requestedItems = request.items.map(item => ({
                 request_id: requestId,
-                item_id: r.id,
+                item_id: item.id,
             }));
 
-            console.log(requestedItems);
+            const { error: error } = await supabase.from('request_item').insert(requestedItems);
 
-            const { error: songError } = await supabase.from('request_item').insert(requestedItems);
-
-            if (songError) console.error('Failed to insert request item:', songError);
+            if (error) console.error('Failed to insert request item:', error);
         }
 
         // =======================================================================================================
 
         if (request.songs.length > 0) {
-            const requestedSongs = request.songs.map(s => ({
+            const requestedSongs = request.songs.map(song => ({
                 request_id: requestId,
-                song_id: s.id,
+                song_id: song.id,
             }));
 
-            const { error: songError } = await supabase.from('request_song').insert(requestedSongs);
+            const { error: error } = await supabase.from('request_song').insert(requestedSongs);
 
-            if (songError) console.error('Failed to insert songs:', songError);
+            if (error) console.error('Failed to insert songs:', error);
+        }
+
+        // =======================================================================================================
+
+        if (request.venues.length > 0) {
+            const venuesToInsert = request.venues.map(venue => ({
+                request_id: requestId,
+                venue_id: venue.id,
+            }));
+
+            const { error: error } = await supabase.from('request_venue').insert(venuesToInsert);
+
+            if (error) console.error('Failed to insert venues:', error);
         }
 
         return requestId;

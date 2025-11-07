@@ -13,8 +13,6 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
   const checked = request.equipments.some((e) => e.id === equipment.id);
 
   function handleButtonClick() {
-    console.log(equipment);
-    
     setRequest((prev) => {
       return {
         ...prev,

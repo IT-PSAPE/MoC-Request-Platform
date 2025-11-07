@@ -12,8 +12,8 @@ export default function SongCard({ song }: { song: Song }) {
 
     const checked = request.songs.some((s) => s.id === song.id);
 
-    function handleButtonClick() {
-        console.log(song);
+    function handleCardClick(event: React.MouseEvent<HTMLDivElement>) {
+        event.stopPropagation();
 
         setRequest((prev) => {
             return {
@@ -24,7 +24,7 @@ export default function SongCard({ song }: { song: Song }) {
     }
 
     return (
-        <Card className="has-checked:border-brand has-checked:outline-2 has-checked:outline-border-brand/20">
+        <Card className="has-checked:border-brand cursor-pointer" onClick={handleCardClick}>
             <CardContent className="flex-1">
                 <div className="flex gap-2" >
                     <div className="py-1" >
@@ -40,9 +40,6 @@ export default function SongCard({ song }: { song: Song }) {
                     <Text style="paragraph-sm">Instrumental: <span className="text-quaternary">{song.instrumental ? "available" : "unavailable"}</span></Text>
                 </div>
             </CardContent>
-            <CardFooter>
-                <Button className="w-full" variant="secondary" onClick={handleButtonClick} >{checked ? 'Remove' : 'Add'}  Song</Button>
-            </CardFooter>
         </Card>
     )
 }

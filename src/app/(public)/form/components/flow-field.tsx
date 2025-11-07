@@ -1,13 +1,20 @@
 import Icon from "@/components/ui/icon";
-import { TextInput } from "./input";
+import { TextArea } from "./input";
 import Text from "@/components/ui/text";
 
-export default function FlowField({ index, handleStepDelete, handleChange, value}: { index: number, handleStepDelete: () => void, handleChange: React.ChangeEventHandler<HTMLInputElement>, value: string }) {
+type FlowFieldProps = {
+    index: number;
+    handleStepDelete: () => void;
+    handleChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+    value: string;
+}
+
+export default function FlowField({ index, handleStepDelete, handleChange, value}: FlowFieldProps) {
     return (
-        <div>
-            <Text style="paragraph-sm" className="text-quaternary">Step {index}</Text>
+        <div className="flex flex-col gap-1">
+            <Text style="paragraph-sm" className="text-quaternary ml-2">Step {index}</Text>
             <div className="flex items-center gap-1">
-                <TextInput placeholder="Describe the step..." onChange={handleChange} value={value} />
+                <TextArea placeholder="Describe the step..." className="h-40" onChange={handleChange} value={value} />
                 <div className="p-2 text-quaternary hover:text-error hover:bg-error-primary rounded-md cursor-pointer" onClick={() => handleStepDelete()}>
                     <Icon name="line:trash" />
                 </div>

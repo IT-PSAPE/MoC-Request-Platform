@@ -27,7 +27,6 @@ function KanbanBoard({ columns, data }: KanbanProps) {
                         <KanbanHeader column={column} count={requestsForColumn.length} />
                         <KanbanContent >
                             {requestsForColumn.map((request) => (
-                                console.log(request),
                                 <RequestCard key={request.id} request={request} setActive={() => { }} />
                             ))}
                         </KanbanContent>
