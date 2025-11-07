@@ -8,13 +8,7 @@ export default function PublicHome() {
   return (
     <>
       <div className="absolute top-0 left-0 right-0 h-full -z-10 overflow-hidden">
-        <Image 
-          src="/images/public-home-bg.avif" 
-          alt="Background image" 
-          fill
-          className="object-cover"
-          priority
-        />
+        <img className="w-full" src="/images/public-home-bg.avif" alt="Background image" />
       </div>
       <div className="py-10 w-full flex-1 flex items-center">
         <div className="w-full mx-auto max-w-3xl text-left space-y-20 px-4">
