@@ -1,6 +1,6 @@
 "use client";
 
-import { BoardContextProvider } from "./board-provider";
+import { BoardContextProvider } from "@/contexts/board-context";
 import RequestsContent from "./components/kanban-board";
 
 export default function RequestsPage() {

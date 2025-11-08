@@ -1,6 +1,6 @@
-import Button from "@/components/ui/Button";
+import Button from "@/components/common/button";
 import Link from "next/link";
-import { useFormContext } from "../form-provider";
+import { useFormContext } from "@/contexts/form-context";
 
 function SuccessScreen() {
 

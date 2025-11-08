@@ -1,11 +1,11 @@
 import { cn } from "@/lib/cn";
 
-import Text from "@/components/ui/text";
-import EmptyState from "@/components/ui/EmptyState";
+import Text from "@/components/common/text";
+import EmptyState from "@/components/common/empty-state";
 import Header from "../../components/header";
 
-import { useAdminContext } from "../../admin-provider";
-import { SongCard } from "@/components/ui/cards/song-card";
+import { useAdminContext } from "@/contexts/admin-context";
+import { SongCard } from "@/components/common/cards/song-card";
 
 export default function SongContent() {
     const { songs, updateSong } = useAdminContext();

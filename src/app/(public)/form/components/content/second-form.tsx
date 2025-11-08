@@ -2,15 +2,15 @@
 
 import FormField from "../form-field";
 import { TextInput } from "../input";
-import Divider from "@/components/ui/divider";
-import EmptyState from "@/components/ui/EmptyState";
+import Divider from "@/components/common/divider";
+import EmptyState from "@/components/common/empty-state";
 import VenueCard from "../ventue-card";
 import SongCard from "../song-card";
-import { useFormContext } from "../../form-provider";
+import { useFormContext } from "@/contexts/form-context";
 import RequestItemCard from "../item-card";
-import Select, { Option } from "@/components/ui/form/select";
-import { useDefaultContext } from "@/components/providers/default-provider";
-import InlineAlert from "@/components/ui/inline-alert";
+import Select, { Option } from "@/components/common/forms/select";
+import { useDefaultContext } from "@/contexts/defaults-context";
+import InlineAlert from "@/components/common/inline-alert";
 import { useEffect } from "react";
 
 export default function SecondForm() {

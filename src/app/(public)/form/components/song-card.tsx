@@ -1,9 +1,9 @@
-import Checkbox from "@/components/ui/checkbox";
-import { Card, CardContent } from "@/components/ui/public-card";
-import Divider from "@/components/ui/divider";
+import Checkbox from "@/components/common/checkbox";
+import { Card, CardContent } from "@/components/common/public-card";
+import Divider from "@/components/common/divider";
 
-import Text from "@/components/ui/text";
-import { useFormContext } from "../form-provider";
+import Text from "@/components/common/text";
+import { useFormContext } from "@/contexts/form-context";
 
 
 export default function SongCard({ song }: { song: Song }) {

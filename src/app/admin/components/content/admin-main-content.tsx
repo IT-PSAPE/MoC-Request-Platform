@@ -4,8 +4,8 @@ import RequestsContent from "./requests-content";
 import EquipmentContent from "./equipment-content";
 import VenueContent from "./venues-content";
 import SongContent from "./songs-content";
-import { useAdminContext } from "../../admin-provider";
-import Breadcrumbs from "@/components/ui/breadcrumbs";
+import { useAdminContext } from "@/contexts/admin-context";
+import Breadcrumbs from "@/components/common/breadcrumbs";
 import RequestItemContent from "./request-item-content";
 
 export default function AdminMainContent() {

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn"
 import { SheetContextProvider, useSheetContext } from "./sheet-provider"
-import { IconButton } from "../Button";
+import { IconButton } from "../button";
 import Icon from "../icon";
 
 function Sheet({ children }: { children: React.ReactNode }) {

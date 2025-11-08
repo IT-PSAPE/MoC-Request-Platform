@@ -1,14 +1,14 @@
 'use client';
 
-import Button from "@/components/ui/Button";
+import Button from "@/components/common/button";
 import FirstForm from "./content/first-form";
 import SecondForm from "./content/second-form";
 import FormThree from "./content/third-form";
-import Divider from "@/components/ui/divider";
-import { useFormContext } from "../form-provider";
+import Divider from "@/components/common/divider";
+import { useFormContext } from "@/contexts/form-context";
 import StepIndicator from "./step-indicator";
 
-import Text from "@/components/ui/text";
+import Text from "@/components/common/text";
 import SuccessScreen from "./success-card";
 
 
