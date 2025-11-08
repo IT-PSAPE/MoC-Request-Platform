@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import Button from "../Button";
+import Button from "../button";
 import Text from "../text";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "../sheet/sheet";
 

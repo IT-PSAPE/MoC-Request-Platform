@@ -3,7 +3,7 @@
 import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list, updateRequestStatus } from "./admin-service";
+import { list, updateRequestStatus } from "@/services/admin-service";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
 

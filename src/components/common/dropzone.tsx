@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
-import Button from "./Button";
+import Button from "./button";
 
 const MAX_BYTES = 5 * 1024 * 1024; // 5MB cap for demo
 

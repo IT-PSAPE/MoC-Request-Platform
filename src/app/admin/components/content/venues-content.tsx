@@ -1,11 +1,11 @@
 import { cn } from "@/lib/cn";
 
-import { VenueCard } from "@/components/ui/cards/venue-card";
-import Text from "@/components/ui/text";
-import EmptyState from "@/components/ui/EmptyState";
+import { VenueCard } from "@/components/common/cards/venue-card";
+import Text from "@/components/common/text";
+import EmptyState from "@/components/common/empty-state";
 import Header from "../../components/header";
 
-import { useAdminContext } from "../../admin-provider";
+import { useAdminContext } from "@/contexts/admin-context";
 
 export default function VenueContent() {
     const { venues, updateVenue } = useAdminContext();

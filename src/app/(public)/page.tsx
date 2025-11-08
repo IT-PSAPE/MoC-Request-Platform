@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
-import Text from "@/components/ui/text";
+import Card from "@/components/common/card";
+import Button from "@/components/common/button";
+import Text from "@/components/common/text";
 
 export default function PublicHome() {
   return (

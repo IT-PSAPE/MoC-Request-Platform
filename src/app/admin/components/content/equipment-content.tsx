@@ -1,9 +1,9 @@
 import { cn } from "@/lib/cn";
-import Text from "@/components/ui/text";
-import EmptyState from "@/components/ui/EmptyState";
+import Text from "@/components/common/text";
+import EmptyState from "@/components/common/empty-state";
 import Header from "../../components/header";
-import { useAdminContext } from "../../admin-provider";
-import { EquipmentCard } from "@/components/ui/cards/equipment-card";
+import { useAdminContext } from "@/contexts/admin-context";
+import { EquipmentCard } from "@/components/common/cards/equipment-card";
 
 export default function EquipmentContent() {
     const { equipment, updateEquipment } = useAdminContext();

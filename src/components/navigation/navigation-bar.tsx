@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Button from "./ui/Button";
-import { useAuthContext } from "./providers/auth-provider";
+import Button from "@/components/common/button";
+import { useAuthContext } from "@/contexts/auth-context";
 
 export default function NavigationBar() {
   const { authed } = useAuthContext();

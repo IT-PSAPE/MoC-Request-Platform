@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import Switch from "../Switch";
+import Switch from "../switch";
 
 interface VenueCardProps {
   className?: string;

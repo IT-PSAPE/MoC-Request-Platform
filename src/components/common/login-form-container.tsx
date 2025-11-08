@@ -1,8 +1,8 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuthContext } from "@/components/providers/auth-provider";
+import { useAuthContext } from "@/contexts/auth-context";
 import { useState } from "react";
-import Button from "./Button";
+import Button from "./button";
 
 export default function LoginFormContainer() {
   const { login } = useAuthContext();

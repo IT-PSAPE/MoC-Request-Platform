@@ -1,9 +1,9 @@
 import { cn } from "@/lib/cn";
-import Text from "@/components/ui/text";
-import EmptyState from "@/components/ui/EmptyState";
+import Text from "@/components/common/text";
+import EmptyState from "@/components/common/empty-state";
 import Header from "../header";
-import { useAdminContext } from "../../admin-provider";
-import { RequestItemCard } from "@/components/ui/cards/request-item-card";
+import { useAdminContext } from "@/contexts/admin-context";
+import { RequestItemCard } from "@/components/common/cards/request-item-card";
 
 export default function RequestItemContent() {
     const { items } = useAdminContext();
