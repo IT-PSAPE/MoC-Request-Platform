@@ -17,7 +17,7 @@ export default function NavigationBar() {
 
   function Links() {
     return (
-      <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-sm border border-gray-200 bg-gray-50 mx-auto">
+      <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-sm border border-gray-200 bg-gray-50 mx-auto max-md:contents">
         {links.map((l) => (
           <Link
             key={l.href}
@@ -47,17 +47,30 @@ export default function NavigationBar() {
   function Actions() {
     return (
       authed
-        ? <Link href="/admin"><Button variant='secondary' size='sm'>Dashboard</Button></Link>
-        : <Link href="/login"><Button variant='secondary' size='sm'>Login</Button></Link>
+        ? <Link href="/admin"><Button variant='secondary' size='sm' className="max-md:w-full">Dashboard</Button></Link>
+        : <Link href="/login"><Button variant='secondary' size='sm' className="max-md:w-full">Login</Button></Link>
+    )
+  }
+
+  function MenuBar() {
+    return (
+      <div className="hidden w-8 h-6 flex-col justify-between max-md:flex">
+        <div className="w-full h-[1px] bg-[currentColor]" />
+        <div className="w-full h-[1px] bg-[currentColor]" />
+        <div className="w-full h-[1px] bg-[currentColor]" />
+      </div>
     )
   }
 
   return (
     <nav className="sticky top-0 z-10">
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-4">
-        <div className="w-full max-w-[120px]"> <Logo /> </div>
-        <div className="w-full"><Links /></div>
-        <div className="w-full max-w-[120px] text-sm "><Actions /></div>
+        <div className="w-full max-w-[120px] max-md:max-w-full"> <Logo /> </div>
+        <MenuBar />
+        <div className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary max-md:flex max-md:p-4">
+          <div className="w-full max-md:w-full max-md:flex max-md:flex-col max-md:gap-4"><Links /></div>
+          <div className="w-full max-w-[120px] text-sm max-md:max-w-full"><Actions /></div>
+        </div>
       </div>
     </nav>
   );
