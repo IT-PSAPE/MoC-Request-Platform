@@ -64,4 +64,16 @@ async function updateRequestStatus(supabase: SupabaseClient, requestId: string, 
     return { error };
 }
 
-export { list, updateRequestStatus };
+async function addComment(supabase: SupabaseClient, requestId: string, comment: string, author: string): Promise<{ error: PostgrestError | null }> {
+    const { error } = await supabase
+        .from("note")
+        .insert({
+            request: requestId,
+            note: comment,
+            author: author,
+        });
+
+    return { error };
+}
+
+export { list, updateRequestStatus, addComment };

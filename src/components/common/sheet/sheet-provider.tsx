@@ -9,8 +9,26 @@ type SheetContextType = {
 
 export const SheetContext = createContext<SheetContextType | null>(null);
 
-export function SheetContextProvider({ children }: { children: React.ReactNode}) {
-    const [open, setOpen] = useState(false);
+type SheetContextProviderProps = {
+    children: React.ReactNode;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
+}
+
+export function SheetContextProvider({ children, open: controlledOpen, onOpenChange }: SheetContextProviderProps) {
+    const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+    const isControlled = controlledOpen !== undefined;
+    const open = isControlled ? controlledOpen : uncontrolledOpen;
+
+    const setOpen: Dispatch<SetStateAction<boolean>> = (value) => {
+        if (isControlled) {
+            const nextValue = typeof value === "function" ? value(open) : value;
+            onOpenChange?.(nextValue);
+            return;
+        }
+
+        setUncontrolledOpen(value);
+    };
 
     const context: SheetContextType = { open, setOpen };
 

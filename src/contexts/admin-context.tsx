@@ -3,7 +3,8 @@
 import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list, updateRequestStatus } from "@/services/admin-service";
+import { list, updateRequestStatus, addComment } from "@/services/admin-service";
+import { useAuthContext } from "./auth-context";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
 
@@ -18,6 +19,7 @@ type AdminContextType = {
     updateVenue: (venueId: string, available: boolean) => void;
     updateSong: (venueId: string, type: 'instrumental' | 'lyrics', available: boolean) => void;
     updateRequestStatusOptimistic: (requestId: string, newStatusId: string) => Promise<void>;
+    addCommentToRequest: (requestId: string, comment: string) => Promise<void>;
     setTab: (tab: TabItem) => void;
 };
 
@@ -30,6 +32,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
     const [venues, setVenues] = useState<Venue[]>([]);
     const [requests, setRequests] = useState<FetchRequest[]>([]);
     const [tab, setTab] = useState<TabItem>('dashboard');
+    const { user } = useAuthContext();
 
     useEffect(() => {
         let isMounted = true;
@@ -158,6 +161,37 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         }
     }
 
+    const addCommentToRequest = async (requestId: string, comment: string) => {
+        if (!user) {
+            throw new Error("User must be logged in to add comments");
+        }
+        
+        // Add comment to database
+        const { error } = await addComment(supabase, requestId, comment, user.id);
+
+        if (error) {
+            console.error("Failed to add comment", error);
+            throw error;
+        }
+
+        // Optimistically update the local state
+        const newNote: Note = {
+            id: `temp-${Date.now()}`,
+            author: user.id,
+            request: requestId,
+            note: comment,
+            created: new Date().toISOString()
+        };
+
+        setRequests((prevRequests) =>
+            prevRequests.map((request) =>
+                request.id === requestId 
+                    ? { ...request, note: [...(request.note || []), newNote] }
+                    : request
+            )
+        );
+    }
+
     const context = {
         requests,
         items,
@@ -168,6 +202,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         updateVenue,
         updateSong,
         updateRequestStatusOptimistic,
+        addCommentToRequest,
         setTab,
         updateEquipment,
     };
