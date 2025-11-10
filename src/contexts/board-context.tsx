@@ -1,8 +1,8 @@
 'use client';
 
-import { useDefaultContext } from "@/components/providers/default-provider";
+import { useDefaultContext } from "@/contexts/defaults-context";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list } from "./board-service";
+import { list } from "@/services/board-service";
 
 type BoardSteps = 1 | 2 | 3;
 

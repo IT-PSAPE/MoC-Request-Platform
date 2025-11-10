@@ -1,8 +1,8 @@
 import { ReactNode, useState, DragEvent } from "react";
 
-import Text from "@/components/ui/text";
-import EmptyState from "@/components/ui/EmptyState";
-import RequestCard from "@/components/ui/RequestCard";
+import Text from "@/components/common/text";
+import EmptyState from "@/components/common/empty-state";
+import RequestCard from "@/components/common/request-card";
 import { cn } from "@/lib/cn";
 
 type Column = { [key: string]: string }
@@ -12,9 +12,10 @@ type KanbanProps = {
     data: FetchRequest[]
     isDraggable?: boolean
     onRequestStatusChange?: (requestId: string, newStatusId: string) => Promise<void>
+    onRequestClick?: (request: FetchRequest) => void
 }
 
-function KanbanBoard({ columns, data, isDraggable = false, onRequestStatusChange }: KanbanProps) {
+function KanbanBoard({ columns, data, isDraggable = false, onRequestStatusChange, onRequestClick }: KanbanProps) {
     const [draggedRequestId, setDraggedRequestId] = useState<string | null>(null);
     const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
     // Indicator is column-based; no need to track item index
@@ -102,6 +103,7 @@ function KanbanBoard({ columns, data, isDraggable = false, onRequestStatusChange
                                     isDragging={draggedRequestId === request.id}
                                     onDragStart={(e) => handleDragStart(e, request.id)}
                                     onDragEnd={handleDragEnd}
+                                    onRequestClick={onRequestClick}
                                 />
                             ))}
                             {isDragging && dragOverColumnId === columnKey && (
@@ -170,29 +172,81 @@ function DraggableRequestCard({
     isDragging,
     onDragStart,
     onDragEnd,
+    onRequestClick,
 }: {
     request: FetchRequest;
     isDraggable: boolean;
     isDragging: boolean;
     onDragStart: (e: DragEvent<HTMLDivElement>) => void;
     onDragEnd: () => void;
+    onRequestClick?: (request: FetchRequest) => void;
 }) {
+    const [isDragStarted, setIsDragStarted] = useState(false);
+    const [mouseDownTime, setMouseDownTime] = useState<number | null>(null);
+
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isDraggable) return;
+        setMouseDownTime(Date.now());
+        setIsDragStarted(false);
+    };
+
+    const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isDraggable || !mouseDownTime) return;
+        
+        const timeDiff = Date.now() - mouseDownTime;
+        // If it was a quick click (less than 200ms) and no drag was started, treat as click
+        if (timeDiff < 200 && !isDragStarted && onRequestClick) {
+            e.preventDefault();
+            e.stopPropagation();
+            onRequestClick(request);
+        }
+        
+        setMouseDownTime(null);
+        setIsDragStarted(false);
+    };
+
+    const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
+        if (!isDraggable) return;
+        setIsDragStarted(true);
+        onDragStart(e);
+    };
+
+    const handleDragEnd = () => {
+        setIsDragStarted(false);
+        onDragEnd();
+    };
+
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        // If dragging is enabled, we handle clicks through mouseUp to avoid conflicts
+        if (isDraggable) {
+            e.preventDefault();
+            return;
+        }
+        // If not draggable, allow normal click behavior
+        if (onRequestClick) {
+            onRequestClick(request);
+        }
+    };
+
     return (
         <div
             draggable={isDraggable}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onClick={handleClick}
             className={cn(
                 "transition-opacity",
                 isDragging && "opacity-50",
-                isDraggable && "cursor-move"
+                isDraggable ? "cursor-move" : "cursor-pointer"
             )}
         >
             <RequestCard 
                 request={request} 
-                setActive={() => {}} 
+                setActive={() => {}} // Disable RequestCard's internal click handling
                 className={cn(
-                    isDraggable && "hover:shadow-lg transition-shadow"
+                    "hover:shadow-lg transition-shadow"
                 )}
             />
         </div>

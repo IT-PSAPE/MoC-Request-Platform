@@ -1,8 +1,10 @@
-import { useAdminContext } from "@/app/admin/admin-provider";
+'use client';
+
+import { useAdminContext } from "@/contexts/admin-context";
 import { cn } from "@/lib/cn";
 import Link from "next/link";
-import Icon from "../icon";
-import Divider from "../divider";
+import Icon from "@/components/common/icon";
+import Divider from "@/components/common/divider";
 
 type MenuItemProps = {
     children?: React.ReactNode;

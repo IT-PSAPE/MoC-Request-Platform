@@ -1,10 +1,10 @@
-import Checkbox from "@/components/ui/checkbox";
-import { Card, CardContent, CardFooter } from "@/components/ui/public-card";
-import Divider from "@/components/ui/divider";
+import Checkbox from "@/components/common/checkbox";
+import { Card, CardContent, CardFooter } from "@/components/common/public-card";
+import Divider from "@/components/common/divider";
 
-import Text from "@/components/ui/text";
-import Button from "@/components/ui/Button";
-import { useFormContext } from "../form-provider";
+import Text from "@/components/common/text";
+import Button from "@/components/common/button";
+import { useFormContext } from "@/contexts/form-context";
 
 
 export default function EquipmentCard({ equipment }: { equipment: Equipment }) {

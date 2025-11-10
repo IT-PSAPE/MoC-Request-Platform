@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn";
-import NumberInput from "../form/number-input";
-import Button from "../Button";
+import NumberInput from "../forms/number-input";
+import Button from "../button";
 import Text from "../text";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "../sheet/sheet";
 

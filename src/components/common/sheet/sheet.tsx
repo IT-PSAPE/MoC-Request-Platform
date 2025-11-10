@@ -1,11 +1,17 @@
 import { cn } from "@/lib/cn"
 import { SheetContextProvider, useSheetContext } from "./sheet-provider"
-import { IconButton } from "../Button";
+import { IconButton } from "../button";
 import Icon from "../icon";
 
-function Sheet({ children }: { children: React.ReactNode }) {
+type SheetProps = {
+    children: React.ReactNode;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
+}
+
+function Sheet({ children, open, onOpenChange }: SheetProps) {
     return (
-        <SheetContextProvider>{children}</SheetContextProvider>
+        <SheetContextProvider open={open} onOpenChange={onOpenChange}>{children}</SheetContextProvider>
     )
 }
 

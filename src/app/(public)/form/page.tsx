@@ -1,4 +1,4 @@
-import { FormContextProvider } from "./form-provider";
+import { FormContextProvider } from "@/contexts/form-context";
 import Form from "./components/form";
 
 export default function SubmitPage() {

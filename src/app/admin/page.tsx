@@ -1,8 +1,8 @@
 "use client"
 
-import { AdminContextProvider } from "./admin-provider";
-import { useDefaultContext } from "@/components/providers/default-provider";
-import Sidebar from "@/components/ui/sidebar/sidebar";
+import { AdminContextProvider } from "@/contexts/admin-context";
+import { useDefaultContext } from "@/contexts/defaults-context";
+import Sidebar from "@/components/navigation/sidebar";
 import AdminMainContent from "./components/content/admin-main-content";
 
 function AdminLayout() {
