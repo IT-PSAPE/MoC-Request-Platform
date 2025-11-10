@@ -16,7 +16,7 @@ export default function SongContent() {
         <>
             <Header>
                 <Text style="title-h4">Songs</Text>
-                <Text style="paragraph-md">All venues MoC will need to be aware of when  requests come in</Text>
+                <Text style="paragraph-md">Manage the catalog of approved songs and whether lyrics or instrumentals are available.</Text>
             </Header>
             <div className={cn("grid gap-4 p-6", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
                 {isEmpty ? (

@@ -14,7 +14,7 @@ export default function RequestsContent() {
         <>
             <Header>
                 <Text style="title-h4">Requests</Text>
-                <Text style="paragraph-md">Supporting Text</Text>
+                <Text style="paragraph-md">Track each request as it moves from intake through completion.</Text>
             </Header>
             <KanbanBoard columns={columns} data={requests} />
         </>
