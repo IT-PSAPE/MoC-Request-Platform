@@ -5,7 +5,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <>
             <NavigationBar />
-            <main className="w-full overflow-clip h-full min-h-0">
+            {/* <main className="w-full overflow-clip h-full min-h-0"> */}
+            <main className="w-full overflow-y-auto h-full min-h-0 max-md:overflow-auto max-md:h-fit">
                 <MainContent>
                     {children}
                 </MainContent>

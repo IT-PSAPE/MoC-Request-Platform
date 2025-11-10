@@ -16,7 +16,7 @@ export default function VenueContent() {
         <>
             <Header>
                 <Text style="title-h4">Venues</Text>
-                <Text style="paragraph-md">All venues MoC will need to be aware of when  requests come in</Text>
+                <Text style="paragraph-md">Keep venue readiness up to date so request owners know where events can take place.</Text>
             </Header>
             <div className={cn("grid gap-4 p-6", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
                 {venues.length === 0 ? (

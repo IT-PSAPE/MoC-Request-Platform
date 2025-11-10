@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en" className={manrope.className} suppressHydrationWarning>
-      <body suppressHydrationWarning className={`antialiased flex flex-col h-screen bg-secondary overflow-clip`} >
+      <body suppressHydrationWarning className="antialiased flex flex-col h-screen bg-secondary overflow-hidden max-md:overflow-auto max-md:h-fit">
         <RootProvider>{children}</RootProvider>
       </body>
     </html>
