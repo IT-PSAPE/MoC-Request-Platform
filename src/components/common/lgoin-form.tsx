@@ -3,6 +3,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
 import { useState } from "react";
 import Button from "./button";
+import Input from "./forms/input";
+import Text from "./text";
 
 export default function LoginFormContainer() {
   const { login } = useAuthContext();
@@ -19,29 +21,26 @@ export default function LoginFormContainer() {
 
     if (ok) router.push(next);
   }
-  return (
 
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onLogin(email, password);
-      }}
-      className="space-y-3"
-    >
-      <p className="text-sm text-foreground/70">Only MoC Members can login</p>
-      <input
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    onLogin(email, password);
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="space-y-3">
+      <Text style="paragraph-sm">Only MoC Members can login</Text>
+      <Input
         type="email"
         placeholder="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-full rounded-md border border-foreground/20 bg-transparent px-3 py-2 text-sm focus:outline-none"
       />
-      <input
+      <Input
         type="password"
-        placeholder="Password"
+        placeholder="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="w-full rounded-md border border-foreground/20 bg-transparent px-3 py-2 text-sm focus:outline-none"
       />
       <Button type="submit">Login</Button>
     </form>

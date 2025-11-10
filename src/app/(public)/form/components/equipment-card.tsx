@@ -1,5 +1,5 @@
 import Checkbox from "@/components/common/checkbox";
-import { Card, CardContent, CardFooter } from "@/components/common/public-card";
+import { Card, CardContent, CardFooter } from "@/components/common/cards/public-card";
 import Divider from "@/components/common/divider";
 
 import Text from "@/components/common/text";

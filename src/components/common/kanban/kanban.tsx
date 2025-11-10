@@ -2,7 +2,7 @@ import { ReactNode, useState, DragEvent } from "react";
 
 import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
-import RequestCard from "@/components/common/request-card";
+import RequestCard from "@/components/common/cards/request-card";
 import { cn } from "@/lib/cn";
 
 type Column = { [key: string]: string }

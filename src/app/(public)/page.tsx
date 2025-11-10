@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Card from "@/components/common/card";
+import Card from "@/components/common/cards/card";
 import Button from "@/components/common/button";
 import Text from "@/components/common/text";
 
