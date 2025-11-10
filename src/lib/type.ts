@@ -74,16 +74,19 @@ type Note = {
 type RequestedItem = {
     request_id: string;
     item_id: string;
+    item: RequestItem;
 };
 
 type RequestedSong = {
     request_id: string;
     song_id: string;
+    song: Song;
 };
 
 type RequestedVenue = {
     request_id: string;
     venue_id: string;
+    venue: Venue;
 };
 
 // Request

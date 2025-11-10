@@ -177,14 +177,14 @@ function DraggableRequestCard({
     request: FetchRequest;
     isDraggable: boolean;
     isDragging: boolean;
-    onDragStart: (e: DragEvent<HTMLDivElement>) => void;
+    onDragStart: (event: DragEvent<HTMLDivElement>) => void;
     onDragEnd: () => void;
     onRequestClick?: (request: FetchRequest) => void;
 }) {
     const [isDragStarted, setIsDragStarted] = useState(false);
     const [mouseDownTime, setMouseDownTime] = useState<number | null>(null);
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseDown = () => {
         if (!isDraggable) return;
         setMouseDownTime(Date.now());
         setIsDragStarted(false);

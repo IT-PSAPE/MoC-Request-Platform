@@ -162,12 +162,12 @@ export default function RequestDetailsSheet({
                   <Text style="label-md" className="mb-3">Available Venues</Text>
                   {request.venue && request.venue.length > 0 ? (
                     <div className="space-y-2">
-                      {request.venue.map((venueItem: any, index) => (
-                        <div key={venueItem.venue?.id || index} className="p-3 bg-secondary/50 rounded-md">
-                          <Text style="paragraph-sm">{venueItem.venue?.name || `Venue ${index + 1}`}</Text>
-                          {venueItem.venue?.description && (
+                      {request.venue.map((venue: RequestedVenue, index) => (
+                        <div key={venue.venue?.id || index} className="p-3 bg-secondary/50 rounded-md">
+                          <Text style="paragraph-sm">{venue.venue?.name || `Venue ${index + 1}`}</Text>
+                          {venue.venue?.description && (
                             <Text style="paragraph-xs" className="text-foreground/70 mt-1">
-                              {venueItem.venue.description}
+                              {venue.venue.description}
                             </Text>
                           )}
                         </div>
@@ -188,12 +188,12 @@ export default function RequestDetailsSheet({
                   <Text style="label-md" className="mb-3">Selected Equipment</Text>
                   {request.item && request.item.length > 0 ? (
                     <div className="space-y-2">
-                      {request.item.map((equipmentItem: any, index) => (
-                        <div key={equipmentItem.item?.id || index}>
-                          <Text style="paragraph-sm">{equipmentItem.item?.name || `Item ${index + 1}`}</Text>
-                          {equipmentItem.item?.description && (
+                      {request.item.map((equipment: RequestedItem, index) => (
+                        <div key={equipment.item?.id || index}>
+                          <Text style="paragraph-sm">{equipment.item?.name || `Item ${index + 1}`}</Text>
+                          {equipment.item?.description && (
                             <Text style="paragraph-xs" className="text-foreground/70 mt-1">
-                              {equipmentItem.item.description}
+                              {equipment.item.description}
                             </Text>
                           )}
                         </div>
@@ -231,16 +231,16 @@ export default function RequestDetailsSheet({
                   <Text style="label-md" className="mb-3">Songs</Text>
                   {request.song && request.song.length > 0 ? (
                     <div className="space-y-2">
-                      {request.song.map((songItem: any, index) => (
-                        <div key={songItem.song?.id || index} className="p-3 bg-secondary/50 rounded-md">
-                          <Text style="paragraph-sm">{songItem.song?.name || `Song ${index + 1}`}</Text>
+                      {request.song.map((song: RequestedSong, index) => (
+                        <div key={song.song?.id || index} className="p-3 bg-secondary/50 rounded-md">
+                          <Text style="paragraph-sm">{song.song?.name || `Song ${index + 1}`}</Text>
                           <div className="flex gap-2 mt-2">
-                            {songItem.song?.instrumental && (
+                            {song.song?.instrumental && (
                               <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-100 text-blue-800 text-xs">
                                 Instrumental
                               </span>
                             )}
-                            {songItem.song?.lyrics && (
+                            {song.song?.lyrics && (
                               <span className="inline-flex items-center px-2 py-1 rounded-md bg-green-100 text-green-800 text-xs">
                                 Lyrics
                               </span>
