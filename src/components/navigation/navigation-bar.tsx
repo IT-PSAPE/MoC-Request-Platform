@@ -17,13 +17,18 @@ export default function NavigationBar() {
   ];
 
   function Links() {
+    const handleLinkClick = () => {
+      setIsMenuOpen(false);
+    };
+
     return (
       <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-sm border border-gray-200 bg-gray-50 mx-auto max-md:contents">
         {links.map((l) => (
           <Link
             key={l.href}
             href={l.href}
-            className={`px-4 py-1.5 rounded-md text-sm grow text-center leading-1.2 border ${pathname === l.href ? 'border-gray-200 bg-white  drop-shadow-sm' : 'border-transparent text-gray-500'}`}
+            onClick={handleLinkClick}
+            className={`px-4 py-1.5 rounded-md text-sm grow text-center leading-1.2 border ${pathname === l.href ? 'border-gray-200 bg-white drop-shadow-sm' : 'border-transparent text-gray-500'}`}
           >
             {l.label}
           </Link>
@@ -46,10 +51,28 @@ export default function NavigationBar() {
   }
 
   function Actions() {
+    const handleActionClick = () => {
+      setIsMenuOpen(false);
+    };
+
     return (
       authed
-        ? <Link href="/admin"><Button variant='secondary' size='sm' className="max-md:w-full">Dashboard</Button></Link>
-        : <Link href="/login"><Button variant='secondary' size='sm' className="max-md:w-full">Login</Button></Link>
+        ? (
+            <Link 
+              href="/admin" 
+              onClick={handleActionClick}
+            >
+              <Button variant='secondary' size='sm' className="max-md:w-full">Dashboard</Button>
+            </Link>
+          )
+        : (
+            <Link 
+              href="/login" 
+              onClick={handleActionClick}
+            >
+              <Button variant='secondary' size='sm' className="max-md:w-full">Login</Button>
+            </Link>
+          )
     )
   }
 
@@ -57,7 +80,7 @@ export default function NavigationBar() {
 
   function MenuBar() {
     const barClass =
-      "absolute left-0 block h-[1px] w-full bg-[currentColor] transition-all duration-200 ease-in-out origin-center";
+      "absolute left-0 block h-[2px] rounded-md w-full bg-[currentColor] transition-all duration-200 ease-in-out origin-center transition-all ";
 
     return (
       <button
@@ -87,7 +110,7 @@ export default function NavigationBar() {
         <div className="w-full max-w-[120px] relative z-1 max-md:max-w-full"> <Logo /> </div>
         <MenuBar />
         <div
-          className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary max-md:flex max-md:p-4 max-md:pt-16 max-md:w-full max-md:data-[status=open]:left-[100%]"
+          className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary max-md:flex transition-all duration-200 ease-in-out max-md:p-4 max-md:pt-16 max-md:w-full max-md:data-[status=closed]:left-[100%]"
           data-status={isMenuOpen ? 'open' : 'closed'}
         >
           <div className="w-full max-md:w-full max-md:flex max-md:flex-col max-md:gap-4"><Links /></div>
