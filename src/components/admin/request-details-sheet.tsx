@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from "react";
-import { Sheet, SheetContent, SheetHeader } from "@/components/common/sheet/sheet";
+import { Sheet, SheetContent, SheetFooter, SheetHeader } from "@/components/common/sheet/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";
 import EmptyState from "@/components/common/empty-state";
-import Button from "@/components/common/button";
+import Button, { IconButton } from "@/components/common/button";
+import Icon from "@/components/common/icon";
 import { TextArea } from "@/app/(public)/form/components/input";
 
 interface RequestDetailsSheetProps {
@@ -13,16 +14,20 @@ interface RequestDetailsSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onAddComment?: (requestId: string, comment: string) => Promise<void>;
+  onDeleteRequest?: (requestId: string) => Promise<void>;
 }
 
 export default function RequestDetailsSheet({
   request,
   isOpen,
   onClose,
-  onAddComment
+  onAddComment,
+  onDeleteRequest
 }: RequestDetailsSheetProps) {
   const [newComment, setNewComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   if (!request) return null;
 
@@ -61,6 +66,30 @@ export default function RequestDetailsSheet({
 
   const formatRequestType = (type: RequestType) => {
     return type?.name?.replace(/_/g, " ") || "Not specified";
+  };
+
+  const handleDeleteRequest = async () => {
+    if (!request || !onDeleteRequest || isDeleting) return;
+    setIsDeleting(true);
+    try {
+      await onDeleteRequest(request.id);
+      setIsConfirmOpen(false);
+      onClose();
+    } catch (error) {
+      console.error("Failed to delete request:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleOpenConfirm = () => {
+    if (!onDeleteRequest) return;
+    setIsConfirmOpen(true);
+  };
+
+  const handleCloseConfirm = () => {
+    if (isDeleting) return;
+    setIsConfirmOpen(false);
   };
 
   return (
@@ -310,9 +339,71 @@ export default function RequestDetailsSheet({
                 </section>
               </div>
             </div>
+            <SheetFooter>
+              <Button
+                variant="destructive"
+                className="w-full"
+                onClick={handleOpenConfirm}
+                disabled={!onDeleteRequest}
+              >
+                Delete Request
+              </Button>
+            </SheetFooter>
           </div>
         </SheetContent>
       </Sheet>
+
+      {isConfirmOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-linear-to-b from-black/20 to-black/50 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              handleCloseConfirm();
+            }
+          }}
+        >
+          <div className="w-full max-w-md bg-background rounded-xl border border-secondary shadow-lg">
+            <div className="flex items-start justify-between px-5 py-4 border-b border-secondary">
+              <div>
+                <Text style="title-h6">Delete Request</Text>
+                <Text style="paragraph-sm" className="text-foreground/70 mt-1">
+                  This action cannot be undone. All associated data with this request will be removed.
+                </Text>
+              </div>
+              <IconButton
+                size="sm"
+                variant="ghost"
+                onClick={handleCloseConfirm}
+                disabled={isDeleting}
+              >
+                <Icon name="line:close" />
+              </IconButton>
+            </div>
+            <div className="px-5 py-6 space-y-2">
+              <Text style="label-sm" className="text-foreground/70">Request</Text>
+              <Text style="title-h6">{request?.what || "Untitled Request"}</Text>
+            </div>
+            <div className="flex items-center justify-end gap-3 px-5 py-4 border-t border-secondary">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleCloseConfirm}
+                disabled={isDeleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleDeleteRequest}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

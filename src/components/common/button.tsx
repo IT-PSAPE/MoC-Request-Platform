@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "destructive";
   size?: "sm" | "md" | "lg";
 };
 
@@ -17,6 +17,7 @@ export default function Button({
     primary: "bg-brand-solid text-background hover:bg-brand-solid-hover",
     secondary: "bg-transparent border border-gray-200 text-foreground hover:bg-foreground/5",
     ghost: "bg-transparent text-foreground hover:bg-foreground/10",
+    destructive: "bg-error-solid text-white hover:bg-error-solid-hover",
   } as const;
   const sizes = {
     sm: "h-8 px-3 text-sm",
@@ -40,6 +41,7 @@ export function IconButton({
     primary: "bg-brand-solid text-background hover:bg-brand-solid-hover",
     secondary: "bg-transparent border border-gray-200 text-foreground hover:bg-foreground/5",
     ghost: "bg-transparent text-foreground hover:bg-foreground/10",
+    destructive: "bg-error-solid text-white hover:bg-error-solid-hover",
   } as const;
   const sizes = {
     sm: "h-8 w-8",
