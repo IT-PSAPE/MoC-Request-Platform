@@ -8,7 +8,7 @@ import RequestDetailsSheet from "@/components/admin/request-details-sheet";
 
 export default function RequestsContent() {
     const { statuses } = useDefaultContext();
-    const { requests, updateRequestStatusOptimistic, addCommentToRequest } = useAdminContext();
+    const { requests, updateRequestStatusOptimistic, addCommentToRequest, deleteRequestById } = useAdminContext();
     const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const selectedRequest = useMemo(() => {
@@ -54,6 +54,7 @@ export default function RequestsContent() {
                 isOpen={isSheetOpen}
                 onClose={handleCloseSheet}
                 onAddComment={addCommentToRequest}
+                onDeleteRequest={deleteRequestById}
             />
         </>
     );
