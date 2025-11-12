@@ -3,7 +3,7 @@
 import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list, updateRequestStatus, addComment } from "@/services/admin-service";
+import { list, updateRequestStatus, addComment, deleteRequest as deleteRequestService } from "@/services/admin-service";
 import { useAuthContext } from "./auth-context";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
@@ -20,6 +20,7 @@ type AdminContextType = {
     updateSong: (venueId: string, type: 'instrumental' | 'lyrics', available: boolean) => void;
     updateRequestStatusOptimistic: (requestId: string, newStatusId: string) => Promise<void>;
     addCommentToRequest: (requestId: string, comment: string) => Promise<void>;
+    deleteRequestById: (requestId: string) => Promise<void>;
     setTab: (tab: TabItem) => void;
 };
 
@@ -192,6 +193,17 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         );
     }
 
+    const deleteRequestById = async (requestId: string) => {
+        const { error } = await deleteRequestService(supabase, requestId);
+
+        if (error) {
+            console.error("Failed to delete request", error);
+            throw error;
+        }
+
+        setRequests((prevRequests) => prevRequests.filter((request) => request.id !== requestId));
+    }
+
     const context = {
         requests,
         items,
@@ -203,6 +215,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         updateSong,
         updateRequestStatusOptimistic,
         addCommentToRequest,
+        deleteRequestById,
         setTab,
         updateEquipment,
     };

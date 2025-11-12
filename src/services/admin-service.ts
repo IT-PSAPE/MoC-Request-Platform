@@ -76,4 +76,13 @@ async function addComment(supabase: SupabaseClient, requestId: string, comment: 
     return { error };
 }
 
-export { list, updateRequestStatus, addComment };
+async function deleteRequest(supabase: SupabaseClient, requestId: string): Promise<{ error: PostgrestError | null }> {
+    const { error } = await supabase
+        .from("request")
+        .delete()
+        .eq("id", requestId);
+
+    return { error };
+}
+
+export { list, updateRequestStatus, addComment, deleteRequest };
