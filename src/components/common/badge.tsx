@@ -16,8 +16,11 @@ const colorMap = {
 
 export default function Badge({ children, color = "gray" }: Props) {
   return (
-    <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium", colorMap[color])}>
-      {children}
-    </span>
+    <div className={cn("inline-flex items-center paragraph-xs rounded-sm px-2 py-0.5 gap-1 ", colorMap[color])}>
+      <div className={cn("h-2 w-2 rounded-full bg-current")} />
+      <span className="">
+        {children}
+      </span>
+    </div>
   );
 }
