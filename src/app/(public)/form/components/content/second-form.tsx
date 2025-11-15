@@ -17,15 +17,15 @@ export default function SecondForm() {
     const { songs, venues, items, request, setRequest, noticeAlert, checkNoticePeriod } = useFormContext();
     const { priorities, types } = useDefaultContext();
 
-    function handlePriorityChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    function handlePriorityChange(value: string) {
         setRequest((request) => {
-            return { ...request, priority: event.target.value }
+            return { ...request, priority: value }
         })
     }
 
-    function handleTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    function handleTypeChange(value: string) {
         setRequest((request) => {
-            return { ...request, type: event.target.value }
+            return { ...request, type: value }
         });
         checkNoticePeriod(types);
     }
@@ -45,8 +45,7 @@ export default function SecondForm() {
     return (
         <>
             <FormField label="Priority" description="Higher priority may be processed sooner.">
-                <Select onChange={handlePriorityChange} value={request.priority}>
-                    <Option value=''>Select priority...</Option>
+                <Select onValueChange={handlePriorityChange} value={request.priority} placeholder="Select priority...">
                     {
                         priorities.map((priority) => (
                             <Option key={priority.id} value={priority.id}>{priority.name}</Option>
@@ -56,8 +55,7 @@ export default function SecondForm() {
             </FormField>
             <Divider />
             <FormField label="Type of Request" description="Select what you are requesting.">
-                <Select onChange={handleTypeChange} value={request.type}>
-                    <Option value=''>Select type...</Option>
+                <Select onValueChange={handleTypeChange} value={request.type} placeholder="Select type...">
                     {
                         types.map((type) => (
                             <Option key={type.id} value={type.id}>{type.name}</Option>

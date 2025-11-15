@@ -6,6 +6,7 @@ import Select, { Option } from "@/components/common/forms/select";
 import EmptyState from "@/components/common/empty-state";
 import { useDefaultContext } from "@/contexts/defaults-context";
 import { cn } from "@/lib/cn";
+import Icon from "../icon";
 
 type SortField = 'title' | 'type' | 'status' | 'dueDate' | 'createdAt' | 'items';
 type SortDirection = 'asc' | 'desc';
@@ -13,7 +14,6 @@ type SortDirection = 'asc' | 'desc';
 interface RequestListProps {
   requests: FetchRequest[];
   onRequestClick?: (request: FetchRequest) => void;
-  className?: string;
   isPublicView?: boolean;
 }
 
@@ -33,7 +33,7 @@ const statusDotColors: Record<number, string> = {
   4: "bg-red-500",
 };
 
-export function RequestList({ requests, onRequestClick, className, isPublicView = false }: RequestListProps) {
+export function RequestList({ requests, onRequestClick, isPublicView = false }: RequestListProps) {
   const { types } = useDefaultContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('all');
@@ -148,7 +148,7 @@ export function RequestList({ requests, onRequestClick, className, isPublicView 
   };
 
   return (
-    <div className={className}>
+    <div className="px-6 pb-4">
       {/* Filters and Search */}
       <div className="mb-6 space-y-4">
         <div className="flex flex-col sm:flex-row gap-4">
@@ -166,8 +166,9 @@ export function RequestList({ requests, onRequestClick, className, isPublicView 
           {/* Type Filter */}
           <Select
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
+            onValueChange={setTypeFilter}
             className="w-full sm:w-[200px]"
+            placeholder="All Types"
           >
             <Option value="all">All Types</Option>
             {types.map((type) => (
@@ -180,8 +181,9 @@ export function RequestList({ requests, onRequestClick, className, isPublicView 
           {/* Sort Options */}
           <Select
             value={sortField}
-            onChange={(e) => setSortField(e.target.value as SortField)}
+            onValueChange={(value) => setSortField(value as SortField)}
             className="w-full sm:w-[180px]"
+            placeholder="Sort by"
           >
             <Option value="createdAt">Created Date</Option>
             <Option value="dueDate">Due Date</Option>
@@ -199,9 +201,9 @@ export function RequestList({ requests, onRequestClick, className, isPublicView 
             className="shrink-0"
           >
             {sortDirection === 'asc' ? (
-              <ChevronUpIcon className="h-4 w-4" />
+              <Icon name="line:chevron_up" size={16} />
             ) : (
-              <ChevronDownIcon className="h-4 w-4" />
+              <Icon name="line:chevron_down" size={16} />
             )}
           </IconButton>
         </div>
@@ -242,8 +244,8 @@ export function RequestList({ requests, onRequestClick, className, isPublicView 
                     />
                   ))
                 ) : (
-                  <EmptyState 
-                    title="No requests" 
+                  <EmptyState
+                    title="No requests"
                     message={`No requests in ${group.status.name.replace(/_/g, ' ').toLowerCase()} status`}
                     className="my-2"
                   />
@@ -252,9 +254,9 @@ export function RequestList({ requests, onRequestClick, className, isPublicView 
             </div>
           ))
         ) : (
-          <EmptyState 
+          <EmptyState
             title={searchTerm || typeFilter !== 'all' ? "No results found" : "No requests"}
-            message={searchTerm || typeFilter !== 'all' 
+            message={searchTerm || typeFilter !== 'all'
               ? "No requests found matching your filters. Try adjusting your search or filters."
               : "There are no requests to display at this time."}
             className="my-8"
@@ -264,21 +266,3 @@ export function RequestList({ requests, onRequestClick, className, isPublicView 
     </div>
   );
 }
-
-// Icon components
-function ChevronUpIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className}>
-      <path d="M18 15l-6-6-6 6" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className}>
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
-}
-

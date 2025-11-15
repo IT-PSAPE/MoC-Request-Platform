@@ -1,5 +1,6 @@
 import { cn } from "@/lib/cn";
 import Badge from "../badge";
+import Text from "@/components/common/text";
 
 interface RequestListItemProps {
   request: FetchRequest;
@@ -8,11 +9,11 @@ interface RequestListItemProps {
   isPublicView?: boolean;
 }
 
-export function RequestListItem({ 
-  request, 
-  onRequestClick, 
-  className, 
-  isPublicView = false 
+export function RequestListItem({
+  request,
+  onRequestClick,
+  className,
+  isPublicView = false
 }: RequestListItemProps) {
   const title = request.what || "Request";
   const description = request.why || request.how || "";
@@ -27,26 +28,22 @@ export function RequestListItem({
   return (
     <div
       className={cn(
-        "group flex items-center justify-between p-3 rounded-md",
+        "group flex items-center justify-between p-3 rounded-md flex-wrap gap-2",
         className,
-        isPublicView 
-          ? "bg-white border border-gray-200" 
+        isPublicView
+          ? "bg-white border border-gray-200"
           : "bg-primary hover:bg-secondary transition-colors cursor-pointer"
       )}
       onClick={!isPublicView ? handleClick : undefined}
     >
       {/* Left side - Title and description */}
-      <div className="flex-1 min-w-0 max-w-md">
-        <h3 className="text-sm font-medium text-gray-900">{title}</h3>
-        {description && (
-          <p className="text-sm text-gray-500 line-clamp-1 mt-0.5">{description}</p>
-        )}
+      <div className="w-full max-w-md">
+        <Text style="label-md" className="text-primary">{title}</Text>
+        {description && (<Text style="paragraph-xs" className="text-sm text-gray-500 line-clamp-1 mt-0.5">{description}</Text>)}
       </div>
 
       {/* Right side - Type badge - Always show request type */}
-      <Badge color="gray">
-        {requestType}
-      </Badge>
+      <Badge color="gray">{requestType}</Badge>
     </div>
   );
 }

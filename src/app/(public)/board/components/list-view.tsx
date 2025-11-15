@@ -12,13 +12,11 @@ export default function RequestsListView() {
                 <Text style="title-h4">Requests</Text>
                 <Text style="paragraph-md">Track each request as it moves from intake through completion.</Text>
             </Header>
-            <div className="px-4">
-                <RequestList 
-                    requests={requests} 
-                    onRequestClick={undefined} // No click handler for public view
-                    isPublicView={true} // Indicate this is a public view
-                />
-            </div>
+            <RequestList
+                requests={requests}
+                onRequestClick={undefined} // No click handler for public view
+                isPublicView={true} // Indicate this is a public view
+            />
         </div>
     );
 }
