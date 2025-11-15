@@ -6,7 +6,7 @@ import { useAdminContext } from "@/contexts/admin-context";
 import RequestDetailsSheet from "@/components/admin/request-details-sheet";
 
 export default function RequestsContent() {
-    const { requests, addCommentToRequest, deleteRequestById } = useAdminContext();
+    const { requests, addCommentToRequest, deleteRequestById, updateRequestStatusOptimistic } = useAdminContext();
     const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const selectedRequest = useMemo(() => {
@@ -40,7 +40,8 @@ export default function RequestsContent() {
             <RequestList 
                 requests={requests} 
                 onRequestClick={handleRequestClick}
-                className="px-3"
+                isPublic={false}
+                onRequestStatusChange={updateRequestStatusOptimistic}
             />
             
             <RequestDetailsSheet

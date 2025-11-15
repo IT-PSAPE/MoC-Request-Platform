@@ -15,7 +15,7 @@ export default function RequestsListView() {
             <RequestList
                 requests={requests}
                 onRequestClick={undefined} // No click handler for public view
-                isPublicView={true} // Indicate this is a public view
+                isPublic={true} // Indicate this is a public view (no drag-and-drop)
             />
         </div>
     );

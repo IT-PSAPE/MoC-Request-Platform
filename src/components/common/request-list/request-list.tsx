@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, DragEvent } from "react";
 import { RequestListItem } from "@/components/common/cards/request-list-item";
 import { IconButton } from "@/components/common/button";
 import Input from "@/components/common/forms/input";
@@ -14,7 +14,8 @@ type SortDirection = 'asc' | 'desc';
 interface RequestListProps {
   requests: FetchRequest[];
   onRequestClick?: (request: FetchRequest) => void;
-  isPublicView?: boolean;
+  isPublic?: boolean;
+  onRequestStatusChange?: (requestId: string, newStatusId: string) => Promise<void>;
 }
 
 const statusColors: Record<number, string> = {
@@ -33,28 +34,27 @@ const statusDotColors: Record<number, string> = {
   4: "bg-red-500",
 };
 
-export function RequestList({ requests, onRequestClick, isPublicView = false }: RequestListProps) {
-  const { types } = useDefaultContext();
+export function RequestList({ requests, onRequestClick, isPublic = true, onRequestStatusChange }: RequestListProps) {
+  const { types, statuses } = useDefaultContext();
+  const [draggedRequestId, setDraggedRequestId] = useState<string | null>(null);
+  const [dragOverStatusId, setDragOverStatusId] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const isDraggable = !isPublic && !!onRequestStatusChange;
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [sortField, setSortField] = useState<SortField>('createdAt');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
-  // Get unique statuses from requests and sort by value
+  // Get all available statuses from defaults context and sort by value
   const uniqueStatuses = useMemo(() => {
-    const statusMap = new Map<string, { name: string; value: number }>();
-    requests.forEach(request => {
-      if (request.status) {
-        statusMap.set(String(request.status.id), {
-          name: request.status.name,
-          value: request.status.value
-        });
-      }
-    });
-    return Array.from(statusMap.entries())
-      .map(([id, data]) => ({ id, name: data.name, value: data.value }))
+    return statuses
+      .map(status => ({ 
+        id: String(status.id), 
+        name: status.name, 
+        value: status.value 
+      }))
       .sort((a, b) => a.value - b.value);
-  }, [requests]);
+  }, [statuses]);
 
 
   // Filter and sort requests
@@ -123,12 +123,9 @@ export function RequestList({ requests, onRequestClick, isPublicView = false }: 
   const groupedRequests = useMemo(() => {
     const groups = new Map<string, { status: Status; requests: FetchRequest[] }>();
 
-    // Initialize groups with all statuses
-    uniqueStatuses.forEach(status => {
-      const statusObj = requests.find(r => String(r.status?.id) === status.id)?.status;
-      if (statusObj) {
-        groups.set(status.id, { status: statusObj, requests: [] });
-      }
+    // Initialize groups with all available statuses from defaults context
+    statuses.forEach(status => {
+      groups.set(String(status.id), { status, requests: [] });
     });
 
     // Add requests to their respective groups
@@ -141,10 +138,68 @@ export function RequestList({ requests, onRequestClick, isPublicView = false }: 
 
     // Convert to array and sort by status value
     return Array.from(groups.values()).sort((a, b) => a.status.value - b.status.value);
-  }, [filteredAndSortedRequests, uniqueStatuses, requests]);
+  }, [filteredAndSortedRequests, statuses]);
 
   const toggleSortDirection = () => {
     setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+  };
+
+  // Drag handlers similar to KanbanBoard
+  const handleDragStart = (e: DragEvent<HTMLDivElement>, requestId: string) => {
+    if (!isDraggable) return;
+    
+    setDraggedRequestId(requestId);
+    setIsDragging(true);
+    
+    // Create a ghost image for dragging
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
+    dragImage.style.opacity = '0.8';
+    dragImage.style.pointerEvents = 'none';
+    dragImage.style.boxSizing = 'border-box';
+    dragImage.style.width = `${rect.width}px`;
+    dragImage.style.maxWidth = `${rect.width}px`;
+    dragImage.style.minWidth = `${rect.width}px`;
+    dragImage.style.position = 'fixed';
+    dragImage.style.top = '-10000px';
+    dragImage.style.left = '-10000px';
+    dragImage.style.zIndex = '9999';
+    document.body.appendChild(dragImage);
+    
+    const offsetX = (e.nativeEvent as unknown as MouseEvent).offsetX ?? 0;
+    const offsetY = (e.nativeEvent as unknown as MouseEvent).offsetY ?? 0;
+    e.dataTransfer.setDragImage(dragImage, offsetX, offsetY);
+    setTimeout(() => document.body.removeChild(dragImage), 0);
+    
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragEnd = () => {
+    setDraggedRequestId(null);
+    setDragOverStatusId(null);
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>, statusId: string) => {
+    if (!isDraggable) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverStatusId(statusId);
+  };
+
+  const handleDrop = async (e: DragEvent<HTMLDivElement>, statusId: string) => {
+    if (!isDraggable || !onRequestStatusChange) return;
+    e.preventDefault();
+    
+    if (draggedRequestId && onRequestStatusChange) {
+      await onRequestStatusChange(draggedRequestId, statusId);
+    }
+    
+    handleDragEnd();
+  };
+
+  const handleDragLeave = () => {
+    setDragOverStatusId(null);
   };
 
   return (
@@ -218,7 +273,16 @@ export function RequestList({ requests, onRequestClick, isPublicView = false }: 
       <div className="space-y-4">
         {groupedRequests.length > 0 ? (
           groupedRequests.map((group) => (
-            <div key={group.status.id} className="bg-secondary rounded-lg">
+            <div 
+              key={group.status.id} 
+              className={cn(
+                "bg-secondary rounded-lg transition-all",
+                isDraggable && dragOverStatusId === group.status.id && "ring-2 ring-blue-500 ring-offset-2"
+              )}
+              onDragOver={(e) => handleDragOver(e, group.status.id)}
+              onDrop={(e) => handleDrop(e, group.status.id)}
+              onDragLeave={handleDragLeave}
+            >
               {/* Status Header */}
               <div className="flex items-center gap-2 px-4 py-3">
                 <span className="w-3.5 h-3.5 rounded-full p-0.5 bg-primary flex items-center justify-center">
@@ -233,14 +297,21 @@ export function RequestList({ requests, onRequestClick, isPublicView = false }: 
               </div>
 
               {/* Requests in this status */}
-              <div className="space-y-2 px-2 pb-2">
+              <div className={cn(
+                "space-y-2 px-2 pb-2",
+                isDraggable && "min-h-[60px]"
+              )}>
                 {group.requests.length > 0 ? (
                   group.requests.map((request) => (
-                    <RequestListItem
+                    <DraggableRequestListItem
                       key={request.id}
                       request={request}
-                      onRequestClick={isPublicView ? undefined : onRequestClick}
-                      isPublicView={isPublicView}
+                      isDraggable={isDraggable}
+                      isDragging={draggedRequestId === request.id}
+                      onDragStart={(e) => handleDragStart(e, request.id)}
+                      onDragEnd={handleDragEnd}
+                      onRequestClick={isPublic ? undefined : onRequestClick}
+                      isPublic={isPublic}
                     />
                   ))
                 ) : (
@@ -249,6 +320,9 @@ export function RequestList({ requests, onRequestClick, isPublicView = false }: 
                     message={`No requests in ${group.status.name.replace(/_/g, ' ').toLowerCase()} status`}
                     className="my-2"
                   />
+                )}
+                {isDragging && dragOverStatusId === group.status.id && (
+                  <div className="h-1 bg-blue-500 rounded-full animate-pulse mt-2" />
                 )}
               </div>
             </div>
@@ -263,6 +337,94 @@ export function RequestList({ requests, onRequestClick, isPublicView = false }: 
           />
         )}
       </div>
+    </div>
+  );
+}
+
+// Draggable wrapper for RequestListItem, similar to DraggableRequestCard in KanbanBoard
+function DraggableRequestListItem({
+  request,
+  isDraggable,
+  isDragging,
+  onDragStart,
+  onDragEnd,
+  onRequestClick,
+  isPublic,
+}: {
+  request: FetchRequest;
+  isDraggable: boolean;
+  isDragging: boolean;
+  onDragStart: (event: DragEvent<HTMLDivElement>) => void;
+  onDragEnd: () => void;
+  onRequestClick?: (request: FetchRequest) => void;
+  isPublic: boolean;
+}) {
+  const [isDragStarted, setIsDragStarted] = useState(false);
+  const [mouseDownTime, setMouseDownTime] = useState<number | null>(null);
+
+  const handleMouseDown = () => {
+    if (!isDraggable) return;
+    setMouseDownTime(Date.now());
+    setIsDragStarted(false);
+  };
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDraggable || !mouseDownTime) return;
+    
+    const timeDiff = Date.now() - mouseDownTime;
+    // If it was a quick click (less than 200ms) and no drag was started, treat as click
+    if (timeDiff < 200 && !isDragStarted && onRequestClick) {
+      e.preventDefault();
+      e.stopPropagation();
+      onRequestClick(request);
+    }
+    
+    setMouseDownTime(null);
+    setIsDragStarted(false);
+  };
+
+  const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
+    if (!isDraggable) return;
+    setIsDragStarted(true);
+    onDragStart(e);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragStarted(false);
+    onDragEnd();
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // If dragging is enabled, we handle clicks through mouseUp to avoid conflicts
+    if (isDraggable) {
+      e.preventDefault();
+      return;
+    }
+    // If not draggable, allow normal click behavior
+    if (onRequestClick) {
+      onRequestClick(request);
+    }
+  };
+
+  return (
+    <div
+      draggable={isDraggable}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onClick={handleClick}
+      className={cn(
+        "transition-opacity",
+        isDragging && "opacity-50",
+        isDraggable ? "cursor-move" : "cursor-pointer"
+      )}
+    >
+      <RequestListItem 
+        request={request} 
+        onRequestClick={undefined} // Disable RequestListItem's internal click handling
+        isPublicView={isPublic}
+      />
     </div>
   );
 }
