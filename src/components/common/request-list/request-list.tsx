@@ -144,6 +144,15 @@ export function RequestList({ requests, onRequestClick, isPublic = true, onReque
     setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
   };
 
+  const typeFilterLabel = useMemo(() => {
+    if (typeFilter === 'all') {
+      return 'All Types';
+    }
+
+    const match = types.find((type) => String(type.id) === typeFilter);
+    return match ? match.name.replace(/_/g, ' ') : 'All Types';
+  }, [typeFilter, types]);
+
   // Drag handlers similar to KanbanBoard
   const handleDragStart = (e: DragEvent<HTMLDivElement>, requestId: string) => {
     if (!isDraggable) return;
@@ -224,6 +233,7 @@ export function RequestList({ requests, onRequestClick, isPublic = true, onReque
             onValueChange={setTypeFilter}
             className="w-full sm:w-[200px]"
             placeholder="All Types"
+            displayValue={typeFilterLabel}
           >
             <Option value="all">All Types</Option>
             {types.map((type) => (

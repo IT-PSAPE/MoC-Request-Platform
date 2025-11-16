@@ -192,11 +192,13 @@ function ScrollIndicator({ position, onClick }: ScrollIndicatorProps) {
 type SelectTriggerProps = {
   placeholder: string;
   disabled?: boolean;
+  displayValue?: string;
 };
 
-function SelectTrigger({ placeholder, disabled }: SelectTriggerProps) {
+function SelectTrigger({ placeholder, disabled, displayValue }: SelectTriggerProps) {
   const { open, setOpen, value, triggerRef } = useSelectContext();
-  const label = value || placeholder;
+  const label = displayValue ?? (value || placeholder);
+  const showPlaceholder = !value && !displayValue;
 
   return (
     <button
@@ -214,7 +216,7 @@ function SelectTrigger({ placeholder, disabled }: SelectTriggerProps) {
       aria-expanded={open}
       aria-haspopup="listbox"
     >
-      <span className={cn("truncate text-left", !value && "text-gray-500")}>{label}</span>
+      <span className={cn("truncate text-left", showPlaceholder && "text-gray-500")}>{label}</span>
       <Icon name="line:chevron_down" size={16} className="ml-2 text-gray-500" />
     </button>
   );
@@ -317,8 +319,10 @@ function SelectOption({ value, children, disabled, className }: SelectOptionProp
         "px-2.5 py-1.5 cursor-pointer paragraph-sm rounded-md",
         "transition-colors duration-100",
         isHighlighted && !isSelected && "bg-secondary",
+        // isSelected && "bg-brand-solid/10 text-brand-solid",
         disabled && "opacity-50 cursor-not-allowed",
-        !disabled && !isSelected && "hover:bg-secondary",
+        // !disabled && !isSelected && "hover:bg-secondary",
+        !disabled && "hover:bg-secondary",
         className
       )}
       role="option"
@@ -350,6 +354,7 @@ type SelectProps = {
   className?: string;
   disabled?: boolean;
   name?: string;
+  displayValue?: string;
 };
 
 function Select({
@@ -360,13 +365,14 @@ function Select({
   className,
   disabled,
   name,
+  displayValue,
 }: SelectProps) {
   const controller = useSelectController({ value: controlledValue, onValueChange });
 
   return (
     <SelectContext.Provider value={controller}>
       <div className={cn("relative", className)}>
-        <SelectTrigger placeholder={placeholder} disabled={disabled} />
+        <SelectTrigger placeholder={placeholder} disabled={disabled} displayValue={displayValue} />
         {controller.open && <SelectDropdown>{children}</SelectDropdown>}
         {name && <SelectHiddenInput name={name} value={controller.value} />}
       </div>
