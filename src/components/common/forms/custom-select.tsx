@@ -300,13 +300,15 @@ function SelectOption({ value, children, disabled, className }: SelectOptionProp
   const isHighlighted = highlightedIndex === index;
 
   useEffect(() => {
-    if (!optionRef.current) return;
-    const newIndex = optionsRef.current.size;
+    const optionElement = optionRef.current;
+    if (!optionElement) return;
+    const optionsMap = optionsRef.current;
+    const newIndex = optionsMap.size;
     setIndex(newIndex);
-    optionsRef.current.set(newIndex, optionRef.current);
+    optionsMap.set(newIndex, optionElement);
 
     return () => {
-      optionsRef.current.delete(newIndex);
+      optionsMap.delete(newIndex);
     };
   }, [optionsRef]);
 

@@ -39,7 +39,7 @@ export function useStorageBucket(bucketName: string, folder = '', options?: {
     queryFn: async () => {
       if (!supabase) throw new Error('Supabase client not available');
       
-      let query = supabase.storage.from(bucketName).list(folder, options);
+      const query = supabase.storage.from(bucketName).list(folder, options);
       
       const { data, error } = await query;
       

@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, useState } from "react";
-import type { ChangeEvent, Dispatch, DragEvent, MouseEvent as ReactMouseEvent, ReactNode, SetStateAction } from "react";
+import type { ChangeEvent, DragEvent, MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { RequestListItem } from "@/components/common/cards/request-list-item";
-import Button, { IconButton } from "@/components/common/button";
+import { IconButton } from "@/components/common/button";
 import Input from "@/components/common/forms/input";
 import Select, { Option } from "@/components/common/forms/select";
 import EmptyState from "@/components/common/empty-state";
@@ -85,7 +85,7 @@ function useRequestListContext() {
 
 function RequestListLayout() {
   return (
-    <div className="px-6 pb-4">
+    <div className="pb-4">
       <RequestListFilters />
       <RequestListGroups />
     </div>
@@ -108,7 +108,6 @@ function RequestListProvider({
   const [dragOverStatusId, setDragOverStatusId] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const isDraggable = !isPublic && !!onRequestStatusChange;
-  const [layout, setLayout] = useState<ListView>("list");
 
   const filteredRequests = useMemo(() => {
     let result = [...requests];
@@ -311,7 +310,7 @@ function RequestListFilters() {
   };
 
   return (
-    <div className="mb-6 space-y-4">
+    <div className="px-(--margin) mb-6 space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div className="flex-1 max-w-[400px]">
           <Input
@@ -370,10 +369,10 @@ function RequestListFilters() {
           <div className="flex-1 max-w-[200px]">
             <TabContextProvider defaultTab={listView}>
               <TabList>
-                <TabItem value="column" onClick={(value, event) => setListView("column")}>
+                <TabItem value="column" onClick={() => setListView("column")}>
                   <Icon className="mr-1" name="line:column" size={16} />Column
                 </TabItem>
-                <TabItem value="list" onClick={(value, event) => setListView("list")}>
+                <TabItem value="list" onClick={() => setListView("list")}>
                   <Icon className="mr-1" name="line:row" size={16} />List
                 </TabItem>
               </TabList>
@@ -396,7 +395,7 @@ function RequestListGroups() {
   const { listView } = useDefaultContext();
 
   return (
-    <div className={cn(listView === "column" ? "flex gap-4 items-start overflow-y-auto *:min-w-[280px]" : "space-y-4")}>
+    <div className={cn("px-(--margin)", listView === "column" ? "flex gap-4 items-start overflow-y-auto *:min-w-xs" : "space-y-4")}>
       {groupedRequests.length > 0 ? (
         groupedRequests.map((group) => (
           <RequestListGroup className="flex-1" key={group.status.id} group={group} />

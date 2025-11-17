@@ -1,6 +1,5 @@
 'use client';
 
-import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext } from "react";
 import { useAuthContext } from "./auth-context";
 import { 
@@ -68,12 +67,10 @@ export const AdminContextCached = createContext<AdminContextType | null>(null);
 
 export function AdminContextCachedProvider({ 
   children, 
-  supabase,
   tab = 'dashboard',
   onTabChange
 }: { 
   children: React.ReactNode; 
-  supabase: SupabaseClient;
   tab?: TabItem;
   onTabChange?: (tab: TabItem) => void;
 }) {

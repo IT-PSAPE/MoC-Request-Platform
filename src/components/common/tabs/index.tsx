@@ -44,7 +44,7 @@ function TabItem({ children, value, onClick }: TabItemProps) {
 
     useEffect(() => {
         if (defaultTab === 'null') setValue(value);
-    }, [value, setValue]);
+    }, [defaultTab, value, setValue]);
 
 
     function handleClick(event: React.MouseEvent) {

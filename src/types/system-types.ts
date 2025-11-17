@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 type ListView = "column" | "list";
 
 type IndicatorColor = "gray" | "blue" | "yellow" | "green" | "red";

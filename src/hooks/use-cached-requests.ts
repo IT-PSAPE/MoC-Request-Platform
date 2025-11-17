@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from './use-supabase-client';
-import { QueryKeys, getInvalidationKeys } from '@/lib/query-keys';
+import { QueryKeys } from '@/lib/query-keys';
 import { list, updateRequestStatus, addComment, deleteRequest } from '@/services/admin-service';
 
 // Hook for fetching requests with automatic caching
