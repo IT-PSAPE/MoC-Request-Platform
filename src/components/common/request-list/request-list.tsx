@@ -1,21 +1,60 @@
-import { useState, useMemo, DragEvent } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
+import type { ChangeEvent, Dispatch, DragEvent, MouseEvent as ReactMouseEvent, ReactNode, SetStateAction } from "react";
 import { RequestListItem } from "@/components/common/cards/request-list-item";
-import { IconButton } from "@/components/common/button";
+import Button, { IconButton } from "@/components/common/button";
 import Input from "@/components/common/forms/input";
 import Select, { Option } from "@/components/common/forms/select";
 import EmptyState from "@/components/common/empty-state";
 import { useDefaultContext } from "@/contexts/defaults-context";
 import { cn } from "@/lib/cn";
 import Icon from "../icon";
+import Text from "../text";
+import { TabContextProvider, TabItem, TabList } from "../tabs";
 
-type SortField = 'title' | 'type' | 'status' | 'dueDate' | 'createdAt' | 'items';
-type SortDirection = 'asc' | 'desc';
+type SortField = "title" | "type" | "status" | "dueDate" | "createdAt" | "items";
+type SortDirection = "asc" | "desc";
+type RequestGroup = { status: Status; requests: FetchRequest[] };
 
 interface RequestListProps {
   requests: FetchRequest[];
   onRequestClick?: (request: FetchRequest) => void;
   isPublic?: boolean;
   onRequestStatusChange?: (requestId: string, newStatusId: string) => Promise<void>;
+}
+
+interface RequestListContextValue {
+  requests: FetchRequest[];
+  filteredRequests: FetchRequest[];
+  groupedRequests: RequestGroup[];
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  typeFilter: string;
+  setTypeFilter: (value: string) => void;
+  typeFilterLabel: string;
+  sortField: SortField;
+  setSortField: (value: SortField) => void;
+  sortDirection: SortDirection;
+  toggleSortDirection: () => void;
+  types: RequestType[];
+  isPublic: boolean;
+  onRequestClick?: (request: FetchRequest) => void;
+  isDraggable: boolean;
+  draggedRequestId: string | null;
+  dragOverStatusId: string | null;
+  isDragging: boolean;
+  handleDragStart: (event: DragEvent<HTMLDivElement>, requestId: string) => void;
+  handleDragEnd: () => void;
+  handleDragOver: (event: DragEvent<HTMLDivElement>, statusId: string) => void;
+  handleDrop: (event: DragEvent<HTMLDivElement>, statusId: string) => Promise<void>;
+  handleDragLeave: () => void;
+}
+
+type IndicatorProps = {
+  color: IndicatorColor;
+};
+
+interface RequestListProviderProps extends RequestListProps {
+  children: ReactNode;
 }
 
 const statusColors: Record<number, string> = {
@@ -26,161 +65,162 @@ const statusColors: Record<number, string> = {
   4: "text-red-600",
 };
 
-const statusDotColors: Record<number, string> = {
-  0: "bg-gray-500",
-  1: "bg-blue-500",
-  2: "bg-yellow-500",
-  3: "bg-green-600",
-  4: "bg-red-500",
+const statusDotColors: Record<number, IndicatorColor> = {
+  0: "gray",
+  1: "blue",
+  2: "yellow",
+  3: "green",
+  4: "red",
 };
 
-export function RequestList({ requests, onRequestClick, isPublic = true, onRequestStatusChange }: RequestListProps) {
+const RequestListContext = createContext<RequestListContextValue | undefined>(undefined);
+
+function useRequestListContext() {
+  const context = useContext(RequestListContext);
+  if (!context) {
+    throw new Error("RequestList components must be used within RequestListProvider");
+  }
+  return context;
+}
+
+function RequestListLayout() {
+  return (
+    <div className="px-6 pb-4">
+      <RequestListFilters />
+      <RequestListGroups />
+    </div>
+  );
+}
+
+function RequestListProvider({
+  children,
+  requests,
+  onRequestClick,
+  isPublic = true,
+  onRequestStatusChange,
+}: RequestListProviderProps) {
   const { types, statuses } = useDefaultContext();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [sortField, setSortField] = useState<SortField>("createdAt");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [draggedRequestId, setDraggedRequestId] = useState<string | null>(null);
   const [dragOverStatusId, setDragOverStatusId] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const isDraggable = !isPublic && !!onRequestStatusChange;
-  const [searchTerm, setSearchTerm] = useState('');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [sortField, setSortField] = useState<SortField>('createdAt');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [layout, setLayout] = useState<ListView>("list");
 
-  // Get all available statuses from defaults context and sort by value
-  const uniqueStatuses = useMemo(() => {
-    return statuses
-      .map(status => ({ 
-        id: String(status.id), 
-        name: status.name, 
-        value: status.value 
-      }))
-      .sort((a, b) => a.value - b.value);
-  }, [statuses]);
-
-
-  // Filter and sort requests
-  const filteredAndSortedRequests = useMemo(() => {
+  const filteredRequests = useMemo(() => {
     let result = [...requests];
 
-    // Apply search filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(request =>
-        (request.what?.toLowerCase().includes(term)) ||
-        (request.why?.toLowerCase().includes(term)) ||
-        (request.how?.toLowerCase().includes(term)) ||
-        (request.type?.name.toLowerCase().includes(term))
+      result = result.filter((request) =>
+        request.what?.toLowerCase().includes(term) ||
+        request.why?.toLowerCase().includes(term) ||
+        request.how?.toLowerCase().includes(term) ||
+        request.type?.name.toLowerCase().includes(term)
       );
     }
 
-    // Apply type filter
-    if (typeFilter !== 'all') {
-      result = result.filter(request => String(request.type?.id) === typeFilter);
+    if (typeFilter !== "all") {
+      result = result.filter((request) => String(request.type?.id) === typeFilter);
     }
 
-    // Apply sorting
     result.sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
+      let aValue: string | number = 0;
+      let bValue: string | number = 0;
 
       switch (sortField) {
-        case 'title':
-          aValue = a.what || '';
-          bValue = b.what || '';
+        case "title":
+          aValue = a.what || "";
+          bValue = b.what || "";
           break;
-        case 'type':
-          aValue = a.type?.name || '';
-          bValue = b.type?.name || '';
+        case "type":
+          aValue = a.type?.name || "";
+          bValue = b.type?.name || "";
           break;
-        case 'status':
-          aValue = a.status?.name || '';
-          bValue = b.status?.name || '';
+        case "status":
+          aValue = a.status?.name || "";
+          bValue = b.status?.name || "";
           break;
-        case 'dueDate':
+        case "dueDate":
           aValue = a.due ? new Date(a.due).getTime() : 0;
           bValue = b.due ? new Date(b.due).getTime() : 0;
           break;
-        case 'createdAt':
+        case "createdAt":
           aValue = new Date(a.created_at).getTime();
           bValue = new Date(b.created_at).getTime();
           break;
-        case 'items':
+        case "items":
           aValue = a.item?.length || 0;
           bValue = b.item?.length || 0;
           break;
       }
 
-      if (sortDirection === 'asc') {
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
+      return sortDirection === "asc" ? (aValue > bValue ? 1 : -1) : (aValue < bValue ? 1 : -1);
     });
 
     return result;
   }, [requests, searchTerm, typeFilter, sortField, sortDirection]);
 
-  // Group requests by status
   const groupedRequests = useMemo(() => {
-    const groups = new Map<string, { status: Status; requests: FetchRequest[] }>();
+    const groups = new Map<string, RequestGroup>();
 
-    // Initialize groups with all available statuses from defaults context
-    statuses.forEach(status => {
+    statuses.forEach((status) => {
       groups.set(String(status.id), { status, requests: [] });
     });
 
-    // Add requests to their respective groups
-    filteredAndSortedRequests.forEach(request => {
+    filteredRequests.forEach((request) => {
       const statusId = String(request.status?.id);
       if (groups.has(statusId)) {
         groups.get(statusId)!.requests.push(request);
       }
     });
 
-    // Convert to array and sort by status value
     return Array.from(groups.values()).sort((a, b) => a.status.value - b.status.value);
-  }, [filteredAndSortedRequests, statuses]);
-
-  const toggleSortDirection = () => {
-    setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-  };
+  }, [filteredRequests, statuses]);
 
   const typeFilterLabel = useMemo(() => {
-    if (typeFilter === 'all') {
-      return 'All Types';
+    if (typeFilter === "all") {
+      return "All Types";
     }
 
     const match = types.find((type) => String(type.id) === typeFilter);
-    return match ? match.name.replace(/_/g, ' ') : 'All Types';
+    return match ? match.name.replace(/_/g, " ") : "All Types";
   }, [typeFilter, types]);
 
-  // Drag handlers similar to KanbanBoard
-  const handleDragStart = (e: DragEvent<HTMLDivElement>, requestId: string) => {
+  const toggleSortDirection = () => {
+    setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+  };
+
+  const handleDragStart = (event: DragEvent<HTMLDivElement>, requestId: string) => {
     if (!isDraggable) return;
-    
+
     setDraggedRequestId(requestId);
     setIsDragging(true);
-    
-    // Create a ghost image for dragging
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
-    dragImage.style.opacity = '0.8';
-    dragImage.style.pointerEvents = 'none';
-    dragImage.style.boxSizing = 'border-box';
+
+    const currentTarget = event.currentTarget as HTMLElement;
+    const rect = currentTarget.getBoundingClientRect();
+    const dragImage = currentTarget.cloneNode(true) as HTMLElement;
+    dragImage.style.opacity = "0.8";
+    dragImage.style.pointerEvents = "none";
+    dragImage.style.boxSizing = "border-box";
     dragImage.style.width = `${rect.width}px`;
     dragImage.style.maxWidth = `${rect.width}px`;
     dragImage.style.minWidth = `${rect.width}px`;
-    dragImage.style.position = 'fixed';
-    dragImage.style.top = '-10000px';
-    dragImage.style.left = '-10000px';
-    dragImage.style.zIndex = '9999';
+    dragImage.style.position = "fixed";
+    dragImage.style.top = "-10000px";
+    dragImage.style.left = "-10000px";
+    dragImage.style.zIndex = "9999";
     document.body.appendChild(dragImage);
-    
-    const offsetX = (e.nativeEvent as unknown as MouseEvent).offsetX ?? 0;
-    const offsetY = (e.nativeEvent as unknown as MouseEvent).offsetY ?? 0;
-    e.dataTransfer.setDragImage(dragImage, offsetX, offsetY);
+
+    const offsetX = (event.nativeEvent as unknown as MouseEvent).offsetX ?? 0;
+    const offsetY = (event.nativeEvent as unknown as MouseEvent).offsetY ?? 0;
+    event.dataTransfer.setDragImage(dragImage, offsetX, offsetY);
     setTimeout(() => document.body.removeChild(dragImage), 0);
-    
-    e.dataTransfer.effectAllowed = 'move';
+
+    event.dataTransfer.effectAllowed = "move";
   };
 
   const handleDragEnd = () => {
@@ -189,21 +229,21 @@ export function RequestList({ requests, onRequestClick, isPublic = true, onReque
     setIsDragging(false);
   };
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>, statusId: string) => {
+  const handleDragOver = (event: DragEvent<HTMLDivElement>, statusId: string) => {
     if (!isDraggable) return;
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
     setDragOverStatusId(statusId);
   };
 
-  const handleDrop = async (e: DragEvent<HTMLDivElement>, statusId: string) => {
+  const handleDrop = async (event: DragEvent<HTMLDivElement>, statusId: string) => {
     if (!isDraggable || !onRequestStatusChange) return;
-    e.preventDefault();
-    
-    if (draggedRequestId && onRequestStatusChange) {
+    event.preventDefault();
+
+    if (draggedRequestId) {
       await onRequestStatusChange(draggedRequestId, statusId);
     }
-    
+
     handleDragEnd();
   };
 
@@ -211,23 +251,79 @@ export function RequestList({ requests, onRequestClick, isPublic = true, onReque
     setDragOverStatusId(null);
   };
 
-  return (
-    <div className="px-6 pb-4">
-      {/* Filters and Search */}
-      <div className="mb-6 space-y-4">
-        <div className="flex flex-col sm:flex-row gap-4">
-          {/* Search */}
-          <div className="flex-1">
-            <Input
-              type="text"
-              placeholder="Search requests..."
-              value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-              className="w-full"
-            />
-          </div>
+  const value: RequestListContextValue = {
+    requests,
+    filteredRequests,
+    groupedRequests,
+    searchTerm,
+    setSearchTerm,
+    typeFilter,
+    setTypeFilter,
+    typeFilterLabel,
+    sortField,
+    setSortField,
+    sortDirection,
+    toggleSortDirection,
+    types,
+    isPublic,
+    onRequestClick,
+    isDraggable,
+    draggedRequestId,
+    dragOverStatusId,
+    isDragging,
+    handleDragStart,
+    handleDragEnd,
+    handleDragOver,
+    handleDrop,
+    handleDragLeave,
+  };
 
-          {/* Type Filter */}
+  return (
+    <RequestListContext.Provider value={value}>
+      {children}
+    </RequestListContext.Provider>
+  );
+}
+
+function RequestListFilters() {
+  const {
+    searchTerm,
+    setSearchTerm,
+    typeFilter,
+    setTypeFilter,
+    typeFilterLabel,
+    sortField,
+    setSortField,
+    sortDirection,
+    toggleSortDirection,
+    types,
+    filteredRequests,
+    requests,
+  } = useRequestListContext();
+
+  const {
+    listView,
+    setListView,
+  } = useDefaultContext();
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  return (
+    <div className="mb-6 space-y-4">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between">
+        <div className="flex-1 max-w-[400px]">
+          <Input
+            type="text"
+            placeholder="Search requests..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="hidden">
           <Select
             value={typeFilter}
             onValueChange={setTypeFilter}
@@ -238,12 +334,11 @@ export function RequestList({ requests, onRequestClick, isPublic = true, onReque
             <Option value="all">All Types</Option>
             {types.map((type) => (
               <Option key={type.id} value={String(type.id)}>
-                {type.name.replace(/_/g, ' ')}
+                {type.name.replace(/_/g, " ")}
               </Option>
             ))}
           </Select>
 
-          {/* Sort Options */}
           <Select
             value={sortField}
             onValueChange={(value) => setSortField(value as SortField)}
@@ -258,119 +353,166 @@ export function RequestList({ requests, onRequestClick, isPublic = true, onReque
             <Option value="items">Items Count</Option>
           </Select>
 
-          {/* Sort Direction */}
           <IconButton
             variant="secondary"
             size="md"
             onClick={toggleSortDirection}
             className="shrink-0"
           >
-            {sortDirection === 'asc' ? (
+            {sortDirection === "asc" ? (
               <Icon name="line:chevron_up" size={16} />
             ) : (
               <Icon name="line:chevron_down" size={16} />
             )}
           </IconButton>
         </div>
-
-        {/* Results count */}
-        <div className="text-sm text-gray-600">
-          Showing {filteredAndSortedRequests.length} of {requests.length} requests
+        <div className="flex items-center gap-2">
+          <div className="flex-1 max-w-[200px]">
+            <TabContextProvider defaultTab={listView}>
+              <TabList>
+                <TabItem value="column" onClick={(value, event) => setListView("column")}>
+                  <Icon className="mr-1" name="line:column" size={16} />Column
+                </TabItem>
+                <TabItem value="list" onClick={(value, event) => setListView("list")}>
+                  <Icon className="mr-1" name="line:row" size={16} />List
+                </TabItem>
+              </TabList>
+            </TabContextProvider>
+          </div>
+          {/* <Button variant="secondary" className={"!h-9.5"}><Icon className="mr-1" name="line:filter" size={16} />Filter</Button> */}
         </div>
       </div>
 
-      {/* Request List Grouped by Status */}
-      <div className="space-y-4">
-        {groupedRequests.length > 0 ? (
-          groupedRequests.map((group) => (
-            <div 
-              key={group.status.id} 
-              className={cn(
-                "bg-secondary rounded-lg transition-all",
-                isDraggable && dragOverStatusId === group.status.id && "ring-2 ring-blue-500 ring-offset-2"
-              )}
-              onDragOver={(e) => handleDragOver(e, group.status.id)}
-              onDrop={(e) => handleDrop(e, group.status.id)}
-              onDragLeave={handleDragLeave}
-            >
-              {/* Status Header */}
-              <div className="flex items-center gap-2 px-4 py-3">
-                <span className="w-3.5 h-3.5 rounded-full p-0.5 bg-primary flex items-center justify-center">
-                  <div className={cn("h-2 w-2 rounded-full", statusDotColors[group.status.value])} />
-                </span>
-                <h3 className={cn("text-sm font-medium capitalize", statusColors[group.status.value])}>
-                  {group.status.name.replace(/_/g, ' ')}
-                </h3>
-                <span className="text-sm text-gray-500">
-                  {group.requests.length} request{group.requests.length !== 1 ? 's' : ''}
-                </span>
-              </div>
-
-              {/* Requests in this status */}
-              <div className={cn(
-                "space-y-2 px-2 pb-2",
-                isDraggable && "min-h-[60px]"
-              )}>
-                {group.requests.length > 0 ? (
-                  group.requests.map((request) => (
-                    <DraggableRequestListItem
-                      key={request.id}
-                      request={request}
-                      isDraggable={isDraggable}
-                      isDragging={draggedRequestId === request.id}
-                      onDragStart={(e) => handleDragStart(e, request.id)}
-                      onDragEnd={handleDragEnd}
-                      onRequestClick={isPublic ? undefined : onRequestClick}
-                      isPublic={isPublic}
-                    />
-                  ))
-                ) : (
-                  <EmptyState
-                    title="No requests"
-                    message={`No requests in ${group.status.name.replace(/_/g, ' ').toLowerCase()} status`}
-                    className="my-2"
-                  />
-                )}
-                {isDragging && dragOverStatusId === group.status.id && (
-                  <div className="h-1 bg-blue-500 rounded-full animate-pulse mt-2" />
-                )}
-              </div>
-            </div>
-          ))
-        ) : (
-          <EmptyState
-            title={searchTerm || typeFilter !== 'all' ? "No results found" : "No requests"}
-            message={searchTerm || typeFilter !== 'all'
-              ? "No requests found matching your filters. Try adjusting your search or filters."
-              : "There are no requests to display at this time."}
-            className="my-8"
-          />
-        )}
+      <div className="text-sm text-gray-600">
+        Showing {filteredRequests.length} of {requests.length} requests
       </div>
     </div>
   );
 }
 
-// Draggable wrapper for RequestListItem, similar to DraggableRequestCard in KanbanBoard
-function DraggableRequestListItem({
-  request,
-  isDraggable,
-  isDragging,
-  onDragStart,
-  onDragEnd,
-  onRequestClick,
-  isPublic,
-}: {
-  request: FetchRequest;
-  isDraggable: boolean;
-  isDragging: boolean;
-  onDragStart: (event: DragEvent<HTMLDivElement>) => void;
-  onDragEnd: () => void;
-  onRequestClick?: (request: FetchRequest) => void;
-  isPublic: boolean;
-}) {
+function RequestListGroups() {
+  const { groupedRequests, searchTerm, typeFilter } = useRequestListContext();
+
+  const { listView } = useDefaultContext();
+
+  return (
+    <div className={cn(listView === "column" ? "flex gap-4 items-start overflow-y-auto *:min-w-[280px]" : "space-y-4")}>
+      {groupedRequests.length > 0 ? (
+        groupedRequests.map((group) => (
+          <RequestListGroup className="flex-1" key={group.status.id} group={group} />
+        ))
+      ) : (
+        <EmptyState
+          title={searchTerm || typeFilter !== "all" ? "No results found" : "No requests"}
+          message={
+            searchTerm || typeFilter !== "all"
+              ? "No requests found matching your filters. Try adjusting your search or filters."
+              : "There are no requests to display at this time."
+          }
+          className="my-8"
+        />
+      )}
+    </div>
+  );
+}
+
+function RequestListGroup({ group, className }: { group: RequestGroup, className?: string }) {
+  const {
+    isDraggable,
+    dragOverStatusId,
+    handleDragOver,
+    handleDrop,
+    handleDragLeave,
+  } = useRequestListContext();
+
+  const isActive = isDraggable && dragOverStatusId === group.status.id;
+
+  return (
+    <div
+      className={cn(
+        "bg-secondary rounded-lg transition-outline ",
+        isActive && "ring-2 ring-blue-500 ring-offset-2",
+        className,
+      )}
+      onDragOver={(event) => handleDragOver(event, group.status.id)}
+      onDrop={(event) => handleDrop(event, group.status.id)}
+      onDragLeave={handleDragLeave}
+    >
+      <RequestListGroupHeader group={group} />
+      <RequestListGroupBody group={group} />
+    </div>
+  );
+}
+
+function Indicator({ color }: IndicatorProps) {
+  const colors: Record<IndicatorColor, string> = {
+    gray: "bg-gray-500",
+    blue: "bg-blue-500",
+    yellow: "bg-yellow-500",
+    green: "bg-green-500",
+    red: "bg-red-500",
+  };
+
+  return (
+    <span className="w-3.5 h-3.5 rounded-full p-0.5 bg-primary flex items-center justify-center">
+      <div className={cn("h-2 w-2 rounded-full", colors[color])} />
+    </span>
+  );
+}
+
+function RequestListGroupHeader({ group }: { group: RequestGroup }) {
+  const dotColor = statusDotColors[group.status.value] || "gray";
+  const textColor = statusColors[group.status.value] || "text-gray-600";
+
+  return (
+    <div className="flex items-center gap-2 px-4 py-3">
+      <Indicator color={dotColor} />
+      <Text style="label-sm" className={cn("text-sm capitalize", textColor)}>
+        {group.status.name.replace(/_/g, " ")}
+      </Text>
+      <Text style="paragraph-xs" className="text-gray-500">
+        {group.requests.length} request{group.requests.length !== 1 ? "s" : ""}
+      </Text>
+    </div>
+  );
+}
+
+function RequestListGroupBody({ group }: { group: RequestGroup }) {
+  const { isDraggable, dragOverStatusId, isDragging } = useRequestListContext();
+
+  return (
+    <div className={cn("space-y-2 px-2 pb-2", isDraggable && "min-h-[60px]")}>
+      {group.requests.length > 0 ? (
+        group.requests.map((request) => (
+          <DraggableRequestListItem key={request.id} request={request} />
+        ))
+      ) : (
+        <EmptyState
+          title="No requests"
+          message={`No requests in ${group.status.name.replace(/_/g, " ").toLowerCase()} status`}
+          className="my-2"
+        />
+      )}
+      {isDragging && dragOverStatusId === group.status.id && (
+        <div className="h-1 bg-blue-500 rounded-full animate-pulse mt-2" />
+      )}
+    </div>
+  );
+}
+
+function DraggableRequestListItem({ request }: { request: FetchRequest }) {
+  const {
+    isDraggable,
+    draggedRequestId,
+    handleDragStart,
+    handleDragEnd,
+    onRequestClick,
+    isPublic,
+  } = useRequestListContext();
   const [isDragStarted, setIsDragStarted] = useState(false);
   const [mouseDownTime, setMouseDownTime] = useState<number | null>(null);
+  const requestClickHandler = isPublic ? undefined : onRequestClick;
+  const isDragging = draggedRequestId === request.id;
 
   const handleMouseDown = () => {
     if (!isDraggable) return;
@@ -378,49 +520,47 @@ function DraggableRequestListItem({
     setIsDragStarted(false);
   };
 
-  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseUp = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (!isDraggable || !mouseDownTime) return;
-    
+
     const timeDiff = Date.now() - mouseDownTime;
-    // If it was a quick click (less than 200ms) and no drag was started, treat as click
-    if (timeDiff < 200 && !isDragStarted && onRequestClick) {
-      e.preventDefault();
-      e.stopPropagation();
-      onRequestClick(request);
+    if (timeDiff < 200 && !isDragStarted && requestClickHandler) {
+      event.preventDefault();
+      event.stopPropagation();
+      requestClickHandler(request);
     }
-    
+
     setMouseDownTime(null);
     setIsDragStarted(false);
   };
 
-  const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
+  const handleLocalDragStart = (event: DragEvent<HTMLDivElement>) => {
     if (!isDraggable) return;
     setIsDragStarted(true);
-    onDragStart(e);
+    handleDragStart(event, request.id);
   };
 
-  const handleDragEnd = () => {
+  const handleLocalDragEnd = () => {
     setIsDragStarted(false);
-    onDragEnd();
+    handleDragEnd();
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // If dragging is enabled, we handle clicks through mouseUp to avoid conflicts
+  const handleClick = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (isDraggable) {
-      e.preventDefault();
+      event.preventDefault();
       return;
     }
-    // If not draggable, allow normal click behavior
-    if (onRequestClick) {
-      onRequestClick(request);
+
+    if (requestClickHandler) {
+      requestClickHandler(request);
     }
   };
 
   return (
     <div
       draggable={isDraggable}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+      onDragStart={handleLocalDragStart}
+      onDragEnd={handleLocalDragEnd}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onClick={handleClick}
@@ -430,11 +570,19 @@ function DraggableRequestListItem({
         isDraggable ? "cursor-move" : "cursor-pointer"
       )}
     >
-      <RequestListItem 
-        request={request} 
-        onRequestClick={undefined} // Disable RequestListItem's internal click handling
+      <RequestListItem
+        request={request}
+        onRequestClick={undefined}
         isPublicView={isPublic}
       />
     </div>
+  );
+}
+
+export function RequestList(props: RequestListProps) {
+  return (
+    <RequestListProvider {...props}>
+      <RequestListLayout />
+    </RequestListProvider>
   );
 }

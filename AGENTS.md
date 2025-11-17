@@ -14,8 +14,9 @@
 1. **Search first.** Before writing JSX, inspect `src/components/common`, `src/components/ui`, and feature-specific folders for an existing building block. Reuse `Button`/`IconButton`, `Badge`, `Input`, `Select`, `Checkbox`, `Switch`, `Sheet`, etc. Example: `RequestList` already imports `Input`, `Select`, and `Badge` to assemble filterable lists (`src/components/common/request-list/request-list.tsx`).
 2. **Only create a component when nothing fits.** If you must author a new one, colocate it with related UI (e.g., under `src/components/<feature>/`). Follow the house style: declare `type Props = {...}` (or a named interface) above the component, default-export a function component, and add smaller subcomponents when the parent grows (see `RequestList` + `RequestListItem`).
 3. **Break up large UIs.** Multi-section experiences (cards, sheets, multi-step forms) should be split into focused children so logic stays isolated. For example, the admin requests experience separates `RequestsContent`, `RequestList`, and `RequestDetailsSheet`.
-4. **Use shared primitives.** When you need badges, statuses, icons, loaders, or text styles, pull from existing components (`src/components/common/badge.tsx`, `.../icon.tsx`, `.../loader.tsx`). Wrap new behavior around them instead of recreating the visuals from scratch.
-5. **Stick to Tailwind utilities.** No inline styles or third-party UI libraries (README explicitly forbids shadcn). Compose Tailwind classes with the existing token names.
+4. **Model shared state with colocated context.** When those subcomponents need to react to the same filters, drag state, or grouping, create a lightweight provider (like the refactored `RequestListContext`) and let each section (`Group`, `GroupHeader`, `GroupBody`, etc.) read from it instead of prop drilling.
+5. **Use shared primitives.** When you need badges, statuses, icons, loaders, or text styles, pull from existing components (`src/components/common/badge.tsx`, `.../icon.tsx`, `.../loader.tsx`). Wrap new behavior around them instead of recreating the visuals from scratch.
+6. **Stick to Tailwind utilities.** No inline styles or third-party UI libraries (README explicitly forbids shadcn). Compose Tailwind classes with the existing token names.
 
 ## Data & state guidelines
 - Context providers own long-lived state. Consume `AuthContext`, `AdminContext`, `BoardContext`, `DefaultContext`, or `FormContext` through their hooks rather than instantiating new stores.
@@ -35,6 +36,7 @@
 - Do favor existing components, hooks, and contexts; extend them via props/children before adding new files.
 - Do keep prop and state types explicit using the shared domain definitions.
 - Do split multi-purpose components into smaller, named children to preserve readability.
+- Do wrap multi-section views in a colocated context provider when subcomponents need shared filters, drag/drop state, or counts so they can remain dumb presentational nodes.
 - Do reference `src/styles/global.css`/`tokens.css` when selecting colors or typography utilities.
 - Do document non-obvious logic with short comments (only when the code isn’t self-explanatory).
 - Do keep diffs narrow, reference the relevant paths in discussions, and ensure new code stays client/server compatible (add `'use client'` only when you truly need browser APIs).

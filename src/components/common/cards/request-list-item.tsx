@@ -9,41 +9,48 @@ interface RequestListItemProps {
   isPublicView?: boolean;
 }
 
-export function RequestListItem({
-  request,
-  onRequestClick,
-  className,
-  isPublicView = false
-}: RequestListItemProps) {
+export function RequestListItem({ request, onRequestClick, className, isPublicView = false }: RequestListItemProps) {
   const title = request.what || "Request";
   const description = request.why || request.how || "";
   const requestType = request.type ? request.type.name.replace(/_/g, " ") : "Request";
+  const date = request.created_at ? new Date(request.created_at).toLocaleDateString() : "";
+
+  const requestColorMap: Record<string, BadgeColor> = {
+    "Video Filming & Production": "teal",
+    "Video Editing": "yellow",
+    "Design Flyer": "pink",
+    "Video Filming": "green",
+    "Equipment": "orange",
+    "Event": "blue",
+    "Design Special": "purple",
+  };
 
   const handleClick = () => {
-    if (onRequestClick) {
-      onRequestClick(request);
-    }
-  };
+    if (onRequestClick) { onRequestClick(request); }
+  };  
 
   return (
     <div
       className={cn(
-        "group flex items-center justify-between p-3 rounded-md flex-wrap gap-2",
+        "group flex items-center justify-between p-3 rounded-md flex-wrap gap-2 bg-primary hover:shadow-sm transition-shadow cursor-pointer",
         className,
         isPublicView
-          ? "bg-white border border-gray-200"
-          : "bg-primary hover:bg-secondary transition-colors cursor-pointer"
+          ? ""
+          : "cursor-pointer"
       )}
       onClick={!isPublicView ? handleClick : undefined}
     >
       {/* Left side - Title and description */}
       <div className="w-full max-w-md">
-        <Text style="label-md" className="text-primary">{title}</Text>
-        {description && (<Text style="paragraph-xs" className="text-sm text-gray-500 line-clamp-1 mt-0.5">{description}</Text>)}
+        <Text style="label-sm" className="text-primary line-clamp-1">{title}</Text>
+        {description && (<Text style="paragraph-xs" className="text-sm text-quaternary line-clamp-2 mt-0.5">{description}</Text>)}
       </div>
 
       {/* Right side - Type badge - Always show request type */}
-      <Badge color="gray">{requestType}</Badge>
+      <div className="space-x-2">
+        <Badge color={requestColorMap[request.type?.name] || "gray"}>{requestType}</Badge>
+        <Badge color="gray">{date}</Badge>
+      </div>
     </div>
   );
 }

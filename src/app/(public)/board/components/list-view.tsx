@@ -7,7 +7,7 @@ export default function RequestsListView() {
     const { requests } = useBoardContext();
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 w-full max-w-7xl mx-auto">
             <Header>
                 <Text style="title-h4">Requests</Text>
                 <Text style="paragraph-md">Track each request as it moves from intake through completion.</Text>

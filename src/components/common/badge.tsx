@@ -3,24 +3,31 @@ import { cn } from "@/lib/cn";
 
 type Props = {
   children: ReactNode;
-  color?: "gray" | "green" | "yellow" | "red" | "blue";
+  indicator?: boolean;
+  color?: BadgeColor;
+  className?: string;
 };
 
-const colorMap = {
-  gray: "bg-foreground/10 text-foreground",
-  green: "bg-green-600/20 text-green-500",
-  yellow: "bg-yellow-500/20 text-yellow-500",
-  red: "bg-red-500/20 text-red-500",
-  blue: "bg-blue-500/20 text-blue-400",
-};
+export default function Badge({ children, color = "gray", indicator, className }: Props) {
+  const colorMap = {
+    gray: "bg-utility-gray-100 text-utility-gray-600",
+    green: "bg-utility-green-100 text-utility-green-600",
+    yellow: "bg-utility-yellow-100 text-utility-yellow-600",
+    red: "bg-utility-red-100 text-utility-red-600",
+    blue: "bg-utility-blue-100 text-utility-blue-600",
+    purple: "bg-utility-purple-100 text-utility-purple-600",
+    pink: "bg-utility-pink-100 text-utility-pink-600",
+    teal: "bg-utility-teal-100 text-utility-teal-600",
+    orange: "bg-utility-orange-100 text-utility-orange-600",
+    slate: "bg-utility-slate-100 text-utility-slate-600",
+  };
 
-export default function Badge({ children, color = "gray" }: Props) {
   return (
-    <div className={cn("inline-flex items-center paragraph-xs rounded-sm px-2 py-0.5 gap-1 ", colorMap[color])}>
-      <div className={cn("h-2 w-2 rounded-full bg-current")} />
+    <span className={cn("inline-flex items-center paragraph-xs rounded-sm px-2 py-0.5 gap-1.5 ", colorMap[color], className)}>
+      {indicator && <span className={cn("h-1.5 w-1.5 rounded-full bg-current")} />}
       <span className="">
         {children}
       </span>
-    </div>
+    </span>
   );
 }
