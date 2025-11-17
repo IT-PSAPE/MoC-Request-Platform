@@ -10,7 +10,7 @@ export default function PublicHome() {
       <div className="absolute top-0 left-0 right-0 h-full -z-10 overflow-hidden">
         <div className="relative w-full h-full">
           <Image
-            className="object-cover"
+            className="object-cover !h-auto !bottom-0"
             src="/MoC-Request-Platform/images/public-home-bg.avif"
             alt="Background image"
             fill
