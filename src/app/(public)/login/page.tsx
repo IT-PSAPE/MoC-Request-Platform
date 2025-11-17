@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import Card from "@/components/common/card";
-import LoginFormContainer from "@/components/common/login-form-container";
+import Card from "@/components/common/cards/card";
+import LoginFormContainer from "@/components/common/lgoin-form";
 import Loader from "@/components/common/loader";
 
 export default function LoginPage() {

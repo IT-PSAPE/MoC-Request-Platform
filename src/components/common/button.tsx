@@ -12,7 +12,7 @@ export default function Button({
   size = "md",
   ...props
 }: Props) {
-  const base = "inline-flex items-center justify-center rounded-md font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none";
+  const base = "inline-flex items-center justify-center gap-1 font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none";
   const variants = {
     primary: "bg-brand-solid text-background hover:bg-brand-solid-hover",
     secondary: "bg-transparent border border-gray-200 text-foreground hover:bg-foreground/5",
@@ -20,9 +20,9 @@ export default function Button({
     destructive: "bg-error-solid text-white hover:bg-error-solid-hover",
   } as const;
   const sizes = {
-    sm: "h-8 px-3 text-sm",
-    md: "h-10 px-4 text-sm",
-    lg: "h-12 px-6 text-base",
+    sm: "h-8 px-3 text-sm rounded-md",
+    md: "h-10 px-4 text-sm rounded-lg",
+    lg: "h-12 px-6 text-base rounded-xl",
   } as const;
 
   return (
@@ -36,7 +36,7 @@ export function IconButton({
   size = "md",
   ...props
 }: Props) {
-  const base = "inline-flex items-center justify-center rounded-md";
+  const base = "inline-flex items-center justify-center";
   const variants = {
     primary: "bg-brand-solid text-background hover:bg-brand-solid-hover",
     secondary: "bg-transparent border border-gray-200 text-foreground hover:bg-foreground/5",
@@ -44,9 +44,9 @@ export function IconButton({
     destructive: "bg-error-solid text-white hover:bg-error-solid-hover",
   } as const;
   const sizes = {
-    sm: "h-8 w-8",
-    md: "h-10 w-10",
-    lg: "h-12 w-12",
+    sm: "h-8 w-8 rounded-md",
+    md: "h-10 w-10 rounded-lg",
+    lg: "h-12 w-12 rounded-xl",
   } as const;
 
   return (

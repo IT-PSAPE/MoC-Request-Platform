@@ -2,6 +2,8 @@
 @import "../styles/global.css";
 @import "../styles/tokens.css";
 @import "../styles/themes.css";
+@import "../styles/utility-colors.css";
+@import "../styles/size.css";
 
 :root {
   --background: #ffffff;

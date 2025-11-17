@@ -8,6 +8,7 @@ import EmptyState from "@/components/common/empty-state";
 import Button, { IconButton } from "@/components/common/button";
 import Icon from "@/components/common/icon";
 import { TextArea } from "@/app/(public)/form/components/input";
+import Badge from "../common/badge";
 
 interface RequestDetailsSheetProps {
   request: FetchRequest | null;
@@ -107,9 +108,7 @@ export default function RequestDetailsSheet({
       >
         <SheetContent>
           <div className="flex flex-col h-full">
-            <SheetHeader>
-              <Text style="title-h5">Request Details</Text>
-            </SheetHeader>
+            <SheetHeader><span></span></SheetHeader>
 
             {/* Scrollable content with invisible scrollbar */}
             <div
@@ -121,24 +120,22 @@ export default function RequestDetailsSheet({
             >
               <div className="space-y-6">
                 {/* Overview Section */}
-                <section>
-                  <Text style="label-md" className="mb-3">Overview</Text>
-                  <div className="space-y-3">
-                    <div>
-                      <Text style="label-sm" className="text-foreground/70 mb-1">Request Name</Text>
-                      <Text style="paragraph-md">{request.what || "Untitled Request"}</Text>
+                <section className="space-y-5">
+                  <Text style="title-h6">{request.what || "Untitled Request"}</Text>
+                  <div className="space-y-4">
+                    <div className="w-full flex items-start gap-sm grid grid-cols-2">
+                      <Text style="label-sm" className="text-secondary">Created time</Text>
+                      <Text style="paragraph-sm">{formatDate(request.created_at)}</Text>
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Text style="label-sm" className="text-foreground/70 mb-1">Priority</Text>
-                        <Text style="paragraph-sm">{formatPriority(request.priority)}</Text>
-                      </div>
-                      <div>
-                        <Text style="label-sm" className="text-foreground/70 mb-1">Type</Text>
-                        <Text style="paragraph-sm">{formatRequestType(request.type)}</Text>
-                      </div>
+                    <div className="w-full flex items-start gap-sm grid grid-cols-2">
+                      <Text style="label-sm" className="text-secondary">Priority</Text>
+                      <Badge className="w-fit">{formatPriority(request.priority)}</Badge>
                     </div>
-                    <div>
+                    <div className="w-full flex items-start gap-sm grid grid-cols-2">
+                      <Text style="label-sm" className="text-secondary">Type</Text>
+                      <Badge className="w-fit">{formatRequestType(request.type)}</Badge>
+                    </div>
+                    <div className="w-full flex items-start gap-sm grid grid-cols-2">
                       <Text style="label-sm" className="text-foreground/70 mb-1">Due Date</Text>
                       <Text style="paragraph-sm">{formatDate(request.due)}</Text>
                     </div>
@@ -330,6 +327,7 @@ export default function RequestDetailsSheet({
                           onClick={handleAddComment}
                           disabled={!newComment.trim() || isSubmittingComment}
                           size="sm"
+                          className="w-full"
                         >
                           {isSubmittingComment ? "Adding..." : "Add Comment"}
                         </Button>

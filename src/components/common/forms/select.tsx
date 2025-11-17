@@ -3,7 +3,8 @@ import { cn } from "@/lib/cn";
 
 type Props = SelectHTMLAttributes<HTMLSelectElement>;
 
-export default function Select({ className, children, ...props }: Props) {
+// Native HTML select (deprecated - use CustomSelect instead)
+function NativeSelect({ className, children, ...props }: Props) {
   return (
     <select
       className={cn(
@@ -17,11 +18,13 @@ export default function Select({ className, children, ...props }: Props) {
   );
 }
 
-
+// Native HTML option (deprecated - use SelectOption from custom-select instead)
 function Option({...props}: React.DetailedHTMLProps<React.OptionHTMLAttributes<HTMLOptionElement>, HTMLOptionElement>) {
   return (
     <option {...props} />
   );
 }
 
-export { Option }
+// Re-export the custom select as the default
+export { Select as default, SelectOption as Option } from "./custom-select";
+export { NativeSelect, Option as NativeOption };

@@ -1,15 +1,17 @@
 'use client';
 
 import { SupabaseClient } from "@supabase/supabase-js";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
 type DefaultContextType = {
     statuses: Status[];
     priorities: Priority[];
     types: RequestType[];
-    setStatuses: (statuses: Status[]) => void;
-    setPriorities: (priorities: Priority[]) => void;
-    setTypes: (types: RequestType[]) => void;
+    listView: ListView;
+    setListView: Dispatch<SetStateAction<ListView>>;
+    setStatuses: Dispatch<SetStateAction<Status[]>>;
+    setPriorities: Dispatch<SetStateAction<Priority[]>>;
+    setTypes: Dispatch<SetStateAction<RequestType[]>>;
     supabase: SupabaseClient;
 };
 
@@ -19,6 +21,7 @@ export function DefaultContextProvider({ children, supabase }: { children: React
     const [statuses, setStatuses] = useState<Status[]>([]);
     const [priorities, setPriorities] = useState<Priority[]>([]);
     const [types, setTypes] = useState<RequestType[]>([]);
+    const [listView, setListView] = useState<ListView>("column");
 
     useEffect(() => {
         let isMounted = true;
@@ -67,9 +70,11 @@ export function DefaultContextProvider({ children, supabase }: { children: React
         statuses,
         priorities,
         types,
+        listView,
         setStatuses,
         setPriorities,
         setTypes,
+        setListView,
         supabase,
     };
 

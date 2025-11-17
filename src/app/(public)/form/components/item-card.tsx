@@ -1,5 +1,5 @@
 import Checkbox from "@/components/common/checkbox";
-import { Card, CardContent } from "@/components/common/public-card";
+import { Card, CardContent } from "@/components/common/cards/public-card";
 import Divider from "@/components/common/divider";
 
 import Text from "@/components/common/text";
@@ -28,6 +28,7 @@ export default function RequestItemCard({ item }: { item: RequestItem }) {
         <div className="flex items-center gap-2" >
           <Checkbox checked={checked} />
           <Text style="label-md">{item.name}</Text>
+          <Text style="paragraph-sm">Left: {item.name}</Text>
         </div>
         <div className="py-3">
           <Divider />
