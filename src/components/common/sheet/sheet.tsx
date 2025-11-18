@@ -45,7 +45,7 @@ function SheetContent({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <div className="fixed inset-0 bg-linear-to-b from-black/20 to-black/40 backdrop-blur-xs p-2" onClick={handleBarrieClick}>
+        <div className="fixed z-9999 inset-0 bg-linear-to-b from-black/20 to-black/40 backdrop-blur-xs p-2" onClick={handleBarrieClick}>
             <div className="w-full max-w-sm h-full flex flex-col ml-auto bg-primary rounded-xl">
                 {children}
             </div>

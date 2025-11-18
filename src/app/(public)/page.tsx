@@ -6,17 +6,18 @@ import Text from "@/components/common/text";
 
 export default function PublicHome() {
   return (
-    <>
+    <div className="isolate relative h-full w-full">
       <div className="absolute top-0 left-0 right-0 h-full -z-10 overflow-hidden">
         <div className="relative w-full h-full">
-          <Image
+          <img className="absolute top-0 left-0 right-0 w-full -z-10 overflow-hidden" src="/images/public-home-bg.avif" alt="Background image" />
+          {/* <Image
             className="object-cover !h-auto !bottom-0"
             src="/MoC-Request-Platform/images/public-home-bg.avif"
             alt="Background image"
             fill
             priority
             sizes="100vw"
-          />
+          /> */}
         </div>
       </div>
       <div className="py-10 w-full flex-1 flex items-center">
@@ -53,6 +54,6 @@ export default function PublicHome() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

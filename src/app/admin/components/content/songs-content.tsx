@@ -18,7 +18,7 @@ export default function SongContent() {
                 <Text style="title-h4">Songs</Text>
                 <Text style="paragraph-md">Manage the catalog of approved songs and whether lyrics or instrumentals are available.</Text>
             </Header>
-            <div className={cn("grid gap-4 p-6", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
+            <div className={cn("grid gap-4 py-6 px-(--margin) max-md:flex max-md:flex-col", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
                 {isEmpty ? (
                     <EmptyState message="No songs available" />
                 ) : songs.map((song) => (

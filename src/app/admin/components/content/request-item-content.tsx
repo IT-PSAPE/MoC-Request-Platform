@@ -16,7 +16,7 @@ export default function RequestItemContent() {
                 <Text style="title-h4">Request Items</Text>
                 <Text style="paragraph-md">Curate the predefined items teams can attach to their submissions.</Text>
             </Header>
-            <div className={cn("grid gap-4 p-6", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
+            <div className={cn("grid gap-4 py-6 px-(--margin) max-md:flex max-md:flex-col", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
                 {isEmpty ? (
                     <EmptyState message="No request items available yet." />
                 ) : items.map((item) => (

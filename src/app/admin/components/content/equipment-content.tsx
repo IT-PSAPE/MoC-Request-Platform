@@ -16,7 +16,7 @@ export default function EquipmentContent() {
                 <Text style="title-h4">Equipment</Text>
                 <Text style="paragraph-md">Adjust availability for each resource before assigning it to a request.</Text>
             </Header>
-            <div className={cn("grid gap-4 p-6", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
+            <div className={cn("grid gap-4 py-6 px-(--margin) max-md:flex max-md:flex-col", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
                 {isEmpty ? (
                     <EmptyState message="No equipment tracked yet." />
                 ) : equipment.map((equipment) => (
