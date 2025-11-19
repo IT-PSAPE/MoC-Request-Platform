@@ -3,49 +3,48 @@ import Switch from "../switch";
 import Button from "../button";
 import Text from "../text";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "../sheet/sheet";
+import { useAdminContext } from "@/contexts/admin-context";
 
-interface VenueCardProps {
-    songTitle: string;
-    songId: string;
-    instrumental: boolean;
-    lyrics: boolean;
-    onToggleInstrumental: (available: boolean) => void;
-    onToggleLyrics: (available: boolean) => void;
+interface SongCardProps {
+    song: Song;
 }
 
 
-export function SongCard({
-    songTitle,
-    songId: songId,
-    instrumental,
-    lyrics,
-    onToggleInstrumental,
-    onToggleLyrics,
-}: VenueCardProps) {
+export function SongCard({ song }: SongCardProps) {
+    const { updateSong } = useAdminContext();
+
+    const onToggleLyrics = (isActive: boolean) => {
+        updateSong(song.id, 'lyrics', isActive);
+    };
+
+    const onToggleInstrumental = (isActive: boolean) => {
+        updateSong(song.id, 'instrumental', isActive);
+    };
+
     return (
         <div className={cn("border border-secondary rounded-lg shadow-md")}>
             <div className="flex flex-col p-4 ">
                 <div className="">
-                    <h3 className="font-semibold text-sm">{songTitle}</h3>
-                    <p className="text-xs text-muted-foreground">ID: {songId}</p>
+                    <h3 className="font-semibold text-sm">{song.name}</h3>
+                    <p className="text-xs text-muted-foreground">ID: {song.id}</p>
                 </div>
                 <div className="space-y-1 mt-4" >
                     <div className="flex items-center gap-2">
                         <Switch
-                            checked={instrumental}
+                            checked={song.instrumental}
                             onCheckedChange={onToggleInstrumental}
                         />
                         <span className="text-xs text-muted-foreground">
-                            Instrumental {instrumental ? "Available" : "Unavailable"}
+                            Instrumental {song.instrumental ? "Available" : "Unavailable"}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Switch
-                            checked={lyrics}
+                            checked={song.lyrics}
                             onCheckedChange={onToggleLyrics}
                         />
                         <span className="text-xs text-muted-foreground">
-                            Lyrics {lyrics ? "Available" : "Unavailable"}
+                            Lyrics {song.lyrics ? "Available" : "Unavailable"}
                         </span>
                     </div>
                 </div>
@@ -57,7 +56,7 @@ export function SongCard({
                     </SheetTrigger>
                     <SheetContent>
                         <SheetHeader>
-                            <Text style="title-h6">{songTitle}</Text>
+                            <Text style="title-h6">{song.name}</Text>
                         </SheetHeader>
                         <div className="flex-1">
                         </div>

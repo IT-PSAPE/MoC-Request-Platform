@@ -4,6 +4,7 @@ import EmptyState from "@/components/common/empty-state";
 import Header from "../header";
 import { useAdminContext } from "@/contexts/admin-context";
 import { RequestItemCard } from "@/components/common/cards/request-item-card";
+import { GridContainer } from "@/components/common/grid-container";
 
 export default function RequestItemContent() {
     const { items } = useAdminContext();
@@ -16,16 +17,13 @@ export default function RequestItemContent() {
                 <Text style="title-h4">Request Items</Text>
                 <Text style="paragraph-md">Curate the predefined items teams can attach to their submissions.</Text>
             </Header>
-            <div className={cn("grid gap-4 py-6 px-(--margin) max-md:flex max-md:flex-col", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
+            <GridContainer>
                 {isEmpty ? (
                     <EmptyState message="No request items available yet." />
                 ) : items.map((item) => (
-                    <RequestItemCard
-                        key={item.id}
-                        item={item}
-                    />
+                    <RequestItemCard key={item.id} item={item} />
                 ))}
-            </div>
+            </GridContainer>
         </>
     );
 }

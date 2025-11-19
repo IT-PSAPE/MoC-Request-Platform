@@ -1,0 +1,9 @@
+import { cn } from "@/lib/cn";
+
+export function GridContainer({ children, isEmpty }: { children: React.ReactNode, isEmpty?: boolean }) {
+    return (
+        <div className={cn("grid gap-4 py-6 px-(--margin) max-md:flex max-md:flex-col", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
+            {children}
+        </div>
+    );
+}
