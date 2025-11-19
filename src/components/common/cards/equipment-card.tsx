@@ -1,16 +1,15 @@
 import { cn } from "@/lib/cn";
 import NumberInput from "../forms/number-input";
 import Button from "../button";
-import Text from "../text";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "../sheet/sheet";
 import { useAdminContext } from "@/contexts/admin-context";
 
 interface EquipmentCardProps {
     className?: string;
     equipment: Equipment;
+    onClick?: (equipment: Equipment) => void;
 }
 
-export function EquipmentCard({ equipment, className }: EquipmentCardProps) {
+export function EquipmentCard({ equipment, className, onClick }: EquipmentCardProps) {
     const { updateEquipment } = useAdminContext();
 
     function updateQuantity(quantity: number) {
@@ -37,24 +36,14 @@ export function EquipmentCard({ equipment, className }: EquipmentCardProps) {
                 </div>
             </div>
             <div className="p-3 border-t border-secondary">
-                <Sheet>
-                    <SheetTrigger>
-                        <Button type="button" variant="secondary" className="w-full">Open details</Button>
-                    </SheetTrigger>
-                    <SheetContent>
-                        <SheetHeader>
-                            <Text style="title-h6">{equipment.name}</Text>
-                        </SheetHeader>
-                        <div className="flex-1">
-                        </div>
-                        <SheetFooter className="flex justify-end gap-3">
-                            <SheetClose className="w-full">
-                                <Button className="w-full" variant="secondary">Cancel</Button>
-                            </SheetClose>
-                            <Button className="w-full">Save Changes</Button>
-                        </SheetFooter>
-                    </SheetContent>
-                </Sheet>
+                <Button 
+                    type="button" 
+                    variant="secondary" 
+                    className="w-full"
+                    onClick={() => onClick?.(equipment)}
+                >
+                    Open details
+                </Button>
             </div>
         </div>
     );

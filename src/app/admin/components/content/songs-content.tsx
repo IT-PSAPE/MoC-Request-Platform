@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { useEffect, useMemo, useState } from "react";
 
 import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
@@ -7,9 +7,34 @@ import Header from "../../components/header";
 import { useAdminContext } from "@/contexts/admin-context";
 import { SongCard } from "@/components/common/cards/song-card";
 import { GridContainer } from "@/components/common/grid-container";
+import AdminSongDetailsSheet from "@/components/common/details-sheet/admin-songs-details-sheet";
 
 export default function SongContent() {
     const { songs } = useAdminContext();
+    const [selectedSongId, setSelectedSongId] = useState<string | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    
+    const selectedSong = useMemo(() => {
+        if (!selectedSongId) return null;
+        return songs.find((song) => song.id === selectedSongId) ?? null;
+    }, [songs, selectedSongId]);
+
+    const handleSongClick = (song: Song) => {
+        setSelectedSongId(song.id);
+        setIsSheetOpen(true);
+    };
+
+    const handleCloseSheet = () => {
+        setIsSheetOpen(false);
+        setSelectedSongId(null);
+    };
+
+    useEffect(() => {
+        if (!selectedSong && isSheetOpen) {
+            setIsSheetOpen(false);
+            setSelectedSongId(null);
+        }
+    }, [selectedSong, isSheetOpen]);
 
     return (
         <>
@@ -21,9 +46,19 @@ export default function SongContent() {
                 {songs.length === 0 ? (
                     <EmptyState message="No songs available" />
                 ) : songs.map((song) => (
-                    <SongCard key={song.id} song={song} />
+                    <SongCard 
+                        key={song.id} 
+                        song={song}
+                        onClick={handleSongClick}
+                    />
                 ))}
             </GridContainer>
+
+            <AdminSongDetailsSheet
+                song={selectedSong}
+                isOpen={isSheetOpen}
+                onClose={handleCloseSheet}
+            />
         </>
     );
 }

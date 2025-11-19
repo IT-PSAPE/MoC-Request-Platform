@@ -1,16 +1,15 @@
 import { cn } from "@/lib/cn";
 import Switch from "../switch";
 import Button from "../button";
-import Text from "../text";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "../sheet/sheet";
 import { useAdminContext } from "@/contexts/admin-context";
 
 interface VenueCardProps {
   className?: string;
   venue: Venue;
+  onClick?: (venue: Venue) => void;
 }
 
-export function VenueCard({className, venue }: VenueCardProps) {
+export function VenueCard({className, venue, onClick }: VenueCardProps) {
   const { updateVenue } = useAdminContext();
 
   const onToggleActive = (isActive: boolean) => {
@@ -35,24 +34,14 @@ export function VenueCard({className, venue }: VenueCardProps) {
         </div>
       </div>
       <div className="p-3 border-t border-secondary">
-        <Sheet>
-          <SheetTrigger>
-            <Button type="button" variant="secondary" className="w-full">Open details</Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <Text style="title-h6">{venue.name}</Text>
-            </SheetHeader>
-            <div className="flex-1">
-            </div>
-            <SheetFooter className="flex justify-end gap-3">
-              <SheetClose className="w-full">
-                <Button className="w-full" variant="secondary">Cancel</Button>
-              </SheetClose>
-              <Button className="w-full">Save Changes</Button>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
+        <Button 
+          type="button" 
+          variant="secondary" 
+          className="w-full"
+          onClick={() => onClick?.(venue)}
+        >
+          Open details
+        </Button>
       </div>
     </div>
   );
