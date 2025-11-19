@@ -1,16 +1,11 @@
-"use client";
+import type { Metadata } from "next";
+import RequestsPageClient from "./components/requests-page-client";
 
-import { BoardContextProvider } from "@/contexts/board-context";
-import { Suspense } from "react";
-import RequestsListView from "./components/list-view";
-import Loader from "@/components/common/loader";
+export const metadata: Metadata = {
+  title: "Request Board | MOC Request Platform",
+  description: "Review Ministry of Culture requests in a Kanban board, filter updates, and follow each submission's progress.",
+};
 
 export default function RequestsPage() {
-  return (
-    <BoardContextProvider>
-      <Suspense fallback={<Loader label="Loading requests" />}>
-        <RequestsListView />
-      </Suspense>
-    </BoardContextProvider>
-  );
+  return <RequestsPageClient />;
 }

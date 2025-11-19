@@ -131,7 +131,7 @@ type FormRequest = {
     }[];
     songs: { id: string }[];
     venues: { id: string }[];
-    items: { id: string }[];
+    items: { id: string; quantity: number }[];
 };
 
 type FetchRequest = {

@@ -1,6 +1,14 @@
-export default function NumberInput({ value, onChange }: { value: number; onChange: (value: number) => void }) {
+import { cn } from "@/lib/cn";
+
+type NumberInputProps = {
+    value: number;
+    onChange: (value: number) => void;
+    className?: string;
+}
+
+export default function NumberInput({ value, onChange, className }: NumberInputProps) {
     return (
-        <div className="flex border border-secondary rounded-md text-md">
+        <div className={cn("flex border border-secondary rounded-md text-md w-fit", className)}>
             <button className="w-5 aspect-1 border-r border-secondary hover:bg-secondary" onClick={() => onChange(value - 1)}>
                 -
             </button>

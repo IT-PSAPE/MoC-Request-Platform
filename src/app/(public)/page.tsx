@@ -1,8 +1,13 @@
-import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Card from "@/components/common/cards/card";
 import Button from "@/components/common/button";
 import Text from "@/components/common/text";
+
+export const metadata: Metadata = {
+  title: "MOC Request Platform",
+  description: "Discover how to submit cultural assistance requests or track progress through the official Ministry of Culture request platform.",
+};
 
 export default function PublicHome() {
   return (
