@@ -1,16 +1,11 @@
-"use client";
+import type { Metadata } from "next";
+import BoardPageClient from "./board-page-client";
 
-import { BoardContextProvider } from "@/contexts/board-context";
-import { Suspense } from "react";
-import RequestsListView from "./components/list-view";
-import Loader from "@/components/common/loader";
+export const metadata: Metadata = {
+  title: "Request Board | MOC Request Platform",
+  description: "Review submitted requests in a Kanban board to monitor ownership and progress.",
+};
 
 export default function RequestsPage() {
-  return (
-    <BoardContextProvider>
-      <Suspense fallback={<Loader label="Loading requests" />}>
-        <RequestsListView />
-      </Suspense>
-    </BoardContextProvider>
-  );
+  return <BoardPageClient />;
 }

@@ -1,19 +1,11 @@
 'use client';
 
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
+import { SheetContextProviderProps, SheetContextType } from "./types";
 
-type SheetContextType = {
-    open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
-};
 
 export const SheetContext = createContext<SheetContextType | null>(null);
 
-type SheetContextProviderProps = {
-    children: React.ReactNode;
-    open?: boolean;
-    onOpenChange?: (open: boolean) => void;
-}
 
 export function SheetContextProvider({ children, open: controlledOpen, onOpenChange }: SheetContextProviderProps) {
     const [uncontrolledOpen, setUncontrolledOpen] = useState(false);

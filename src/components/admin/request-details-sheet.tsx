@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Sheet, SheetContent, SheetFooter, SheetHeader } from "@/components/common/sheet/sheet";
+import { Sheet } from "@/components/common/sheet/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";
 import EmptyState from "@/components/common/empty-state";
@@ -100,15 +100,15 @@ export default function RequestDetailsSheet({
           display: none;
         }
       `}</style>
-      <Sheet
+      <Sheet.Root
         open={isOpen}
         onOpenChange={(open) => {
           if (!open) onClose();
         }}
       >
-        <SheetContent>
+        <Sheet.Content>
           <div className="flex flex-col h-full">
-            <SheetHeader><span></span></SheetHeader>
+            <Sheet.Header><span></span></Sheet.Header>
 
             {/* Scrollable content with invisible scrollbar */}
             <div
@@ -337,7 +337,7 @@ export default function RequestDetailsSheet({
                 </section>
               </div>
             </div>
-            <SheetFooter>
+            <Sheet.Footer>
               <Button
                 variant="destructive"
                 className="w-full"
@@ -346,10 +346,10 @@ export default function RequestDetailsSheet({
               >
                 Delete Request
               </Button>
-            </SheetFooter>
+            </Sheet.Footer>
           </div>
-        </SheetContent>
-      </Sheet>
+        </Sheet.Content>
+      </Sheet.Root>
 
       {isConfirmOpen && (
         <div

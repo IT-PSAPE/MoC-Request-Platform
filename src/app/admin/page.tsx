@@ -1,21 +1,11 @@
-"use client"
+import type { Metadata } from "next";
+import AdminPageClient from "./admin-page-client";
 
-import { AdminContextProvider } from "@/contexts/admin-context";
-import { useDefaultContext } from "@/contexts/defaults-context";
-import Sidebar from "@/components/navigation/sidebar";
-import AdminMainContent from "./components/content/admin-main-content";
+export const metadata: Metadata = {
+  title: "Admin Dashboard | MOC Request Platform",
+  description: "Manage incoming requests, triage work, and keep Ministry of Culture reviews organized.",
+};
 
-function AdminLayout() {
-  const { supabase } = useDefaultContext();
-
-  return (
-    <AdminContextProvider supabase={supabase} >
-      <div className="flex w-full h-full" >
-        <Sidebar />
-        <AdminMainContent ></AdminMainContent>
-      </div>
-    </AdminContextProvider>
-  );
+export default function AdminPage() {
+  return <AdminPageClient />;
 }
-
-export default AdminLayout;

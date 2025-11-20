@@ -1,15 +1,20 @@
 import { createContext, useContext, useMemo, useState } from "react";
-import type { ChangeEvent, DragEvent, MouseEvent as ReactMouseEvent, ReactNode } from "react";
-import { RequestListItem } from "@/components/common/cards/request-list-item";
+import type { DragEvent, MouseEvent as ReactMouseEvent, ReactNode } from "react";
+import { RequestListItem } from "@/components/common/request-list/request-list-item";
 import { IconButton } from "@/components/common/button";
-import Input from "@/components/common/forms/input";
+import Button from "@/components/common/button";
 import Select, { Option } from "@/components/common/forms/select";
 import EmptyState from "@/components/common/empty-state";
 import { useDefaultContext } from "@/contexts/defaults-context";
 import { cn } from "@/lib/cn";
-import Icon from "../icon";
-import Text from "../text";
-import { TabContextProvider, TabItem, TabList } from "../tabs";
+import Icon from "@/components/common/icon";
+import Text from "@/components/common/text";
+import { TabContextProvider, TabItem, TabList } from "@/components/common/tabs";
+import { Popover } from "@/components/common/popover/popover";
+import { FilterProvider, useFilterContext } from "./filter-provider";
+import { FilterPopover } from "./filter-popover";
+import { SortPopover } from "./sort-popover";
+import Badge from "@/components/common/badge";
 
 type SortField = "title" | "type" | "status" | "dueDate" | "createdAt" | "items";
 type SortDirection = "asc" | "desc";
@@ -26,8 +31,6 @@ interface RequestListContextValue {
   requests: FetchRequest[];
   filteredRequests: FetchRequest[];
   groupedRequests: RequestGroup[];
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
   typeFilter: string;
   setTypeFilter: (value: string) => void;
   typeFilterLabel: string;
@@ -57,22 +60,6 @@ interface RequestListProviderProps extends RequestListProps {
   children: ReactNode;
 }
 
-const statusColors: Record<number, string> = {
-  0: "text-gray-600",
-  1: "text-blue-600",
-  2: "text-yellow-600",
-  3: "text-green-600",
-  4: "text-red-600",
-};
-
-const statusDotColors: Record<number, IndicatorColor> = {
-  0: "gray",
-  1: "blue",
-  2: "yellow",
-  3: "green",
-  4: "red",
-};
-
 const RequestListContext = createContext<RequestListContextValue | undefined>(undefined);
 
 function useRequestListContext() {
@@ -100,7 +87,7 @@ function RequestListProvider({
   onRequestStatusChange,
 }: RequestListProviderProps) {
   const { types, statuses } = useDefaultContext();
-  const [searchTerm, setSearchTerm] = useState("");
+  const { filters, sort } = useFilterContext();
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
@@ -112,25 +99,57 @@ function RequestListProvider({
   const filteredRequests = useMemo(() => {
     let result = [...requests];
 
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
+    // Apply date range filter
+    if (filters.dateRange.from || filters.dateRange.to) {
+      result = result.filter((request) => {
+        if (!request.due) return false;
+        const dueDate = new Date(request.due);
+        const fromDate = filters.dateRange.from ? new Date(filters.dateRange.from) : null;
+        const toDate = filters.dateRange.to ? new Date(filters.dateRange.to) : null;
+
+        if (fromDate && dueDate < fromDate) return false;
+        if (toDate && dueDate > toDate) return false;
+        return true;
+      });
+    }
+
+    // Apply request types filter
+    if (filters.requestTypes.length > 0) {
       result = result.filter((request) =>
-        request.what?.toLowerCase().includes(term) ||
-        request.why?.toLowerCase().includes(term) ||
-        request.how?.toLowerCase().includes(term) ||
-        request.type?.name.toLowerCase().includes(term)
+        request.type && filters.requestTypes.includes(String(request.type.id))
       );
     }
 
+    // Apply priorities filter
+    if (filters.priorities.length > 0) {
+      result = result.filter((request) => {
+        // Compare with the priority ID from the request
+        return request.priority && filters.priorities.includes(String(request.priority.id));
+      });
+    }
+
+
+    // Legacy type filter (keeping for backward compatibility)
     if (typeFilter !== "all") {
       result = result.filter((request) => String(request.type?.id) === typeFilter);
     }
 
+    // Apply sorting based on filter context
     result.sort((a, b) => {
       let aValue: string | number = 0;
       let bValue: string | number = 0;
 
-      switch (sortField) {
+      // Map filter sort field to legacy sort field
+      const currentSortField =
+        sort.field === "name" ? "title" :
+          sort.field === "createDate" ? "createdAt" :
+            sort.field === "dueDate" ? "dueDate" :
+              sort.field === "type" ? "type" :
+                sortField;
+
+      const currentSortDirection = sort.direction || sortDirection;
+
+      switch (currentSortField) {
         case "title":
           aValue = a.what || "";
           bValue = b.what || "";
@@ -157,11 +176,11 @@ function RequestListProvider({
           break;
       }
 
-      return sortDirection === "asc" ? (aValue > bValue ? 1 : -1) : (aValue < bValue ? 1 : -1);
+      return currentSortDirection === "asc" ? (aValue > bValue ? 1 : -1) : (aValue < bValue ? 1 : -1);
     });
 
     return result;
-  }, [requests, searchTerm, typeFilter, sortField, sortDirection]);
+  }, [requests, filters, sort, typeFilter, sortField, sortDirection]);
 
   const groupedRequests = useMemo(() => {
     const groups = new Map<string, RequestGroup>();
@@ -254,8 +273,6 @@ function RequestListProvider({
     requests,
     filteredRequests,
     groupedRequests,
-    searchTerm,
-    setSearchTerm,
     typeFilter,
     setTypeFilter,
     typeFilterLabel,
@@ -286,8 +303,6 @@ function RequestListProvider({
 
 function RequestListFilters() {
   const {
-    searchTerm,
-    setSearchTerm,
     typeFilter,
     setTypeFilter,
     typeFilterLabel,
@@ -296,8 +311,6 @@ function RequestListFilters() {
     sortDirection,
     toggleSortDirection,
     types,
-    filteredRequests,
-    requests,
   } = useRequestListContext();
 
   const {
@@ -305,22 +318,9 @@ function RequestListFilters() {
     setListView,
   } = useDefaultContext();
 
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
   return (
     <div className="px-(--margin) mb-6 space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <div className="flex-1 max-w-[400px]">
-          <Input
-            type="text"
-            placeholder="Search requests..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="w-full"
-          />
-        </div>
 
         <div className="hidden">
           <Select
@@ -366,9 +366,9 @@ function RequestListFilters() {
           </IconButton>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex-1 max-w-[200px]">
+          <div className="flex-1 max-w-[200px] max-md:max-w-full">
             <TabContextProvider defaultTab={listView}>
-              <TabList>
+              <TabList className="max-md:w-full">
                 <TabItem value="column" onClick={() => setListView("column")}>
                   <Icon className="mr-1" name="line:column" size={16} />Column
                 </TabItem>
@@ -380,17 +380,63 @@ function RequestListFilters() {
           </div>
           {/* <Button variant="secondary" className={"!h-9.5"}><Icon className="mr-1" name="line:filter" size={16} />Filter</Button> */}
         </div>
+
+        {/* <RequestListControlls activeFilterCount={activeFilterCount} hasActiveFilters={hasActiveFilters} /> */}
       </div>
 
-      <div className="text-sm text-gray-600">
-        Showing {filteredRequests.length} of {requests.length} requests
-      </div>
+      {/* <div className="text-sm text-gray-600">Showing {filteredRequests.length} of {requests.length} requests</div> */}
     </div>
   );
 }
 
+function RequestListControlls({ activeFilterCount, hasActiveFilters }: { activeFilterCount: number; hasActiveFilters: boolean }) {
+  function FilterBadge() {
+    return activeFilterCount > 0 ? (
+      <Badge className="">
+        {activeFilterCount}
+      </Badge>
+    ) : null;
+  }
+
+  return (
+    <div className="flex gap-2">
+      {/* Filter Popover */}
+      <Popover.Provider>
+        <Popover.Root>
+          <Popover.Trigger>
+            <Button variant={hasActiveFilters ? "primary" : "secondary"} size="sm" className="relative" >
+              <Icon className="mr-1" name="line:filter" size={16} />
+              Filter
+              <FilterBadge />
+            </Button>
+          </Popover.Trigger>
+          <Popover.Content position="bottom-right" maxWidth="320px">
+            <FilterPopover />
+          </Popover.Content>
+        </Popover.Root>
+      </Popover.Provider>
+
+      {/* Sort By Popover */}
+      <Popover.Provider>
+        <Popover.Root>
+          <Popover.Trigger>
+            <Button variant="secondary" size="sm">
+              <Icon className="mr-1" name="line:chevron_down" size={16} />
+              Sort by
+            </Button>
+          </Popover.Trigger>
+          <Popover.Content position="bottom-right" maxWidth="280px">
+            <SortPopover />
+          </Popover.Content>
+        </Popover.Root>
+      </Popover.Provider>
+    </div>
+  )
+}
+
 function RequestListGroups() {
-  const { groupedRequests, searchTerm, typeFilter } = useRequestListContext();
+  const { groupedRequests, typeFilter } = useRequestListContext();
+  const { hasActiveFilters } = useFilterContext();
 
   const { listView } = useDefaultContext();
 
@@ -402,9 +448,9 @@ function RequestListGroups() {
         ))
       ) : (
         <EmptyState
-          title={searchTerm || typeFilter !== "all" ? "No results found" : "No requests"}
+          title={hasActiveFilters || typeFilter !== "all" ? "No results found" : "No requests"}
           message={
-            searchTerm || typeFilter !== "all"
+            hasActiveFilters || typeFilter !== "all"
               ? "No requests found matching your filters. Try adjusting your search or filters."
               : "There are no requests to display at this time."
           }
@@ -460,6 +506,22 @@ function Indicator({ color }: IndicatorProps) {
 }
 
 function RequestListGroupHeader({ group }: { group: RequestGroup }) {
+  const statusColors: Record<number, string> = {
+    0: "text-gray-600",
+    1: "text-blue-600",
+    2: "text-yellow-600",
+    3: "text-green-600",
+    4: "text-red-600",
+  };
+
+  const statusDotColors: Record<number, IndicatorColor> = {
+    0: "gray",
+    1: "blue",
+    2: "yellow",
+    3: "green",
+    4: "red",
+  };
+
   const dotColor = statusDotColors[group.status.value] || "gray";
   const textColor = statusColors[group.status.value] || "text-gray-600";
 
@@ -580,8 +642,10 @@ function DraggableRequestListItem({ request }: { request: FetchRequest }) {
 
 export function RequestList(props: RequestListProps) {
   return (
-    <RequestListProvider {...props}>
-      <RequestListLayout />
-    </RequestListProvider>
+    <FilterProvider>
+      <RequestListProvider {...props}>
+        <RequestListLayout />
+      </RequestListProvider>
+    </FilterProvider>
   );
 }

@@ -1,14 +1,41 @@
-import { cn } from "@/lib/cn";
+import { useEffect, useMemo, useState } from "react";
 import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
-import Header from "../../components/header";
+import Header from "@/components/common/header";
+
 import { useAdminContext } from "@/contexts/admin-context";
 import { EquipmentCard } from "@/components/common/cards/equipment-card";
+import { GridContainer } from "@/components/common/grid-container";
+import AdminEquipmentDetailsSheet from "@/components/admin/details-sheet/admin-equipment-details-sheet";
+
+
 
 export default function EquipmentContent() {
-    const { equipment, updateEquipment } = useAdminContext();
+    const { equipment } = useAdminContext();
+    const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    
+    const selectedEquipment = useMemo(() => {
+        if (!selectedEquipmentId) return null;
+        return equipment.find((item) => item.id === selectedEquipmentId) ?? null;
+    }, [equipment, selectedEquipmentId]);
 
-    const isEmpty = equipment.length === 0;
+    const handleEquipmentClick = (equipment: Equipment) => {
+        setSelectedEquipmentId(equipment.id);
+        setIsSheetOpen(true);
+    };
+
+    const handleCloseSheet = () => {
+        setIsSheetOpen(false);
+        setSelectedEquipmentId(null);
+    };
+
+    useEffect(() => {
+        if (!selectedEquipment && isSheetOpen) {
+            setIsSheetOpen(false);
+            setSelectedEquipmentId(null);
+        }
+    }, [selectedEquipment, isSheetOpen]);
 
     return (
         <>
@@ -16,23 +43,23 @@ export default function EquipmentContent() {
                 <Text style="title-h4">Equipment</Text>
                 <Text style="paragraph-md">Adjust availability for each resource before assigning it to a request.</Text>
             </Header>
-            <div className={cn("grid gap-4 p-6", isEmpty ? "grid-cols-1" : "grid-cols-3")}>
-                {isEmpty ? (
+            <GridContainer isEmpty={equipment.length === 0}>
+                {equipment.length === 0 ? (
                     <EmptyState message="No equipment tracked yet." />
-                ) : equipment.map((equipment) => (
-                    <EquipmentCard
-                        key={equipment.id}
-                        equipment={equipment}
-                        update={(change) => {
-                            const clamped = Math.max(0, Math.min(isFinite(equipment.quantity) ? equipment.quantity : 9999, change));
-
-                            if (clamped === equipment.available || (clamped === equipment.available && clamped !== equipment.quantity)) return
-
-                            updateEquipment(equipment.id, clamped);
-                        }}
+                ) : equipment.map((item) => (
+                    <EquipmentCard 
+                        key={item.id} 
+                        equipment={item}
+                        onClick={handleEquipmentClick}
                     />
                 ))}
-            </div>
+            </GridContainer>
+
+            <AdminEquipmentDetailsSheet
+                equipment={selectedEquipment}
+                isOpen={isSheetOpen}
+                onClose={handleCloseSheet}
+            />
         </>
     );
 }

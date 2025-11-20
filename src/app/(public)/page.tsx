@@ -1,22 +1,20 @@
-import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Card from "@/components/common/cards/card";
 import Button from "@/components/common/button";
 import Text from "@/components/common/text";
 
+export const metadata: Metadata = {
+  title: "MOC Request Platform",
+  description: "Explore how to submit or review Ministry of Culture assistance requests through the online platform.",
+};
+
 export default function PublicHome() {
   return (
-    <>
+    <div className="isolate relative h-full w-full">
       <div className="absolute top-0 left-0 right-0 h-full -z-10 overflow-hidden">
         <div className="relative w-full h-full">
-          <Image
-            className="object-cover !h-auto !bottom-0"
-            src="/MoC-Request-Platform/images/public-home-bg.avif"
-            alt="Background image"
-            fill
-            priority
-            sizes="100vw"
-          />
+          <img className="absolute top-0 left-0 right-0 w-full -z-10 overflow-hidden" src="/MoC-Request-Platform/images/public-home-bg.avif" alt="Background image" />
         </div>
       </div>
       <div className="py-10 w-full flex-1 flex items-center">
@@ -53,6 +51,6 @@ export default function PublicHome() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
