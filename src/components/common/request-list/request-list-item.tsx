@@ -54,9 +54,9 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
       </div>
 
       {/* Right side - Type badge - Always show request type */}
-      <div className="space-x-2">
+      <div className="flex flex-nowrap gap-2">
         <Badge color={requestColorMap[request.type?.name] || "gray"}>{requestType}</Badge>
-        <Badge color={priorityColorMap[request.priority?.name] || "gray"}>{request.priority?.name}</Badge>
+        <Badge color={priorityColorMap[request.priority.name] || "gray"}>{request.priority.name}</Badge>
         <Badge color="gray">{date}</Badge>
       </div>
     </div>
