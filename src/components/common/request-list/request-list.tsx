@@ -7,14 +7,14 @@ import Select, { Option } from "@/components/common/forms/select";
 import EmptyState from "@/components/common/empty-state";
 import { useDefaultContext } from "@/contexts/defaults-context";
 import { cn } from "@/lib/cn";
-import Icon from "../icon";
-import Text from "../text";
-import { TabContextProvider, TabItem, TabList } from "../tabs";
-import { Popover } from "../popover/popover";
+import Icon from "@/components/common/icon";
+import Text from "@/components/common/text";
+import { TabContextProvider, TabItem, TabList } from "@/components/common/tabs";
+import { Popover } from "@/components/common/popover/popover";
 import { FilterProvider, useFilterContext } from "./filter-provider";
 import { FilterPopover } from "./filter-popover";
 import { SortPopover } from "./sort-popover";
-import Badge from "../badge";
+import Badge from "@/components/common/badge";
 
 type SortField = "title" | "type" | "status" | "dueDate" | "createdAt" | "items";
 type SortDirection = "asc" | "desc";
@@ -311,24 +311,12 @@ function RequestListFilters() {
     sortDirection,
     toggleSortDirection,
     types,
-    filteredRequests,
-    requests,
   } = useRequestListContext();
 
   const {
     listView,
     setListView,
   } = useDefaultContext();
-
-  const { hasActiveFilters, filters } = useFilterContext();
-
-  // Count active filters
-  const activeFilterCount =
-    (filters.dateRange.from || filters.dateRange.to ? 1 : 0) +
-    filters.requestTypes.length +
-    filters.priorities.length;
-
-
 
   return (
     <div className="px-(--margin) mb-6 space-y-4">

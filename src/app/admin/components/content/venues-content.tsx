@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { VenueCard } from "@/components/common/cards/venue-card";
 import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
-import Header from "../../components/header";
+import Header from "@/components/common/header";
 
 import { useAdminContext } from "@/contexts/admin-context";
 import { GridContainer } from "@/components/common/grid-container";

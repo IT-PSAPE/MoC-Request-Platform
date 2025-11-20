@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
-import Header from "../header";
+import Header from "@/components/common/header";
 
 import { useAdminContext } from "@/contexts/admin-context";
 import { RequestItemCard } from "@/components/common/cards/request-item-card";
