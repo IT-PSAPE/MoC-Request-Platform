@@ -1,9 +1,9 @@
 import { useAdminContext } from "@/contexts/admin-context";
-import { Sheet, SheetContent, SheetFooter, SheetHeader } from "../sheet/sheet";
-import Text from "../text";
-import Divider from "../divider";
-import NumberInput from "../forms/number-input";
-import Button from "../button";
+import { Sheet } from "@/components/common/sheet";
+import Text from "@/components/common/text";
+import Divider from "@/components/common/divider";
+import NumberInput from "@/components/common/forms/number-input";
+import Button from "@/components/common/button";
 
 interface AdminEquipmentDetailsSheetProps {
   equipment: Equipment | null;
@@ -23,14 +23,14 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent>
-        <SheetHeader>
+    <Sheet.Provider open={isOpen} onOpenChange={onClose}>
+      <Sheet.Content>
+        <Sheet.Header>
           <Text style="title-h5">{equipment.name}</Text>
           <Text style="paragraph-sm" className="text-muted-foreground">
             Equipment Details & Availability
           </Text>
-        </SheetHeader>
+        </Sheet.Header>
         
         <div className="flex-1 space-y-6 py-6 px-4">
           {/* Basic Info Section */}
@@ -96,12 +96,12 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
           </div>
         </div>
 
-        <SheetFooter>
+        <Sheet.Footer>
           <Button variant="secondary" onClick={onClose} className="w-full">
             Close
           </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </Sheet.Footer>
+      </Sheet.Content>
+    </Sheet.Provider>
   );
 }

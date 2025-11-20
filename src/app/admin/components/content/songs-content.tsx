@@ -7,7 +7,7 @@ import Header from "../../components/header";
 import { useAdminContext } from "@/contexts/admin-context";
 import { SongCard } from "@/components/common/cards/song-card";
 import { GridContainer } from "@/components/common/grid-container";
-import AdminSongDetailsSheet from "@/components/common/details-sheet/admin-songs-details-sheet";
+import AdminSongDetailsSheet from "@/components/admin/details-sheet/admin-songs-details-sheet";
 
 export default function SongContent() {
     const { songs } = useAdminContext();

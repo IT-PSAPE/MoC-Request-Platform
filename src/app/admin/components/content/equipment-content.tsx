@@ -6,7 +6,7 @@ import Header from "../../components/header";
 import { useAdminContext } from "@/contexts/admin-context";
 import { EquipmentCard } from "@/components/common/cards/equipment-card";
 import { GridContainer } from "@/components/common/grid-container";
-import AdminEquipmentDetailsSheet from "@/components/common/details-sheet/admin-equipment-details-sheet";
+import AdminEquipmentDetailsSheet from "@/components/admin/details-sheet/admin-equipment-details-sheet";
 
 
 

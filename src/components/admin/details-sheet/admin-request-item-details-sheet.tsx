@@ -1,7 +1,7 @@
-import { Sheet, SheetContent, SheetFooter, SheetHeader } from "../sheet/sheet";
-import Text from "../text";
-import Divider from "../divider";
-import Button from "../button";
+import { Sheet } from "@/components/common/sheet";
+import Text from "@/components/common/text";
+import Divider from "@/components/common/divider";
+import Button from "@/components/common/button";
 
 interface AdminRequestItemDetailsSheetProps {
   item: RequestItem | null;
@@ -13,14 +13,14 @@ export default function AdminRequestItemDetailsSheet({ item, isOpen, onClose }: 
   if (!item) return null;
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent>
-        <SheetHeader>
+    <Sheet.Provider open={isOpen} onOpenChange={onClose}>
+      <Sheet.Content>
+        <Sheet.Header>
           <Text style="title-h5">{item.name}</Text>
           <Text style="paragraph-sm" className="text-muted-foreground">
             Request Item Details
           </Text>
-        </SheetHeader>
+        </Sheet.Header>
         
         <div className="flex-1 space-y-6 py-6 px-4">
           {/* Basic Info Section */}
@@ -60,12 +60,12 @@ export default function AdminRequestItemDetailsSheet({ item, isOpen, onClose }: 
           </div>
         </div>
 
-        <SheetFooter>
+        <Sheet.Footer>
           <Button variant="secondary" onClick={onClose} className="w-full">
             Close
           </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </Sheet.Footer>
+      </Sheet.Content>
+    </Sheet.Provider>
   );
 }

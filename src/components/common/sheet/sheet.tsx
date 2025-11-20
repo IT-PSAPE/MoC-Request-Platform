@@ -2,14 +2,9 @@ import { cn } from "@/lib/cn"
 import { SheetContextProvider, useSheetContext } from "./sheet-provider"
 import { IconButton } from "../button";
 import Icon from "../icon";
+import { SheetProps } from "./types";
 
-type SheetProps = {
-    children: React.ReactNode;
-    open?: boolean;
-    onOpenChange?: (open: boolean) => void;
-}
-
-function Sheet({ children, open, onOpenChange }: SheetProps) {
+export function SheetRoot({ children, open, onOpenChange }: SheetProps) {
     return (
         <SheetContextProvider open={open} onOpenChange={onOpenChange}>{children}</SheetContextProvider>
     )
@@ -62,7 +57,7 @@ function SheetHeader({ children, className }: { children: React.ReactNode, class
                 {children}
             </div>
             <div>
-                <IconButton onClick={() => setOpen(false)} size="sm" variant="ghost"><Icon name="line:close"/></IconButton>
+                <IconButton onClick={() => setOpen(false)} size="sm" variant="ghost"><Icon name="line:close" /></IconButton>
             </div>
         </div>
     )
@@ -74,4 +69,16 @@ function SheetFooter({ children, className }: { children: React.ReactNode, class
     )
 }
 
-export { Sheet, SheetTrigger, SheetClose, SheetContent, SheetHeader, SheetFooter }
+
+const Sheet = {
+    Provider: SheetContextProvider,
+    useContent: useSheetContext,
+    Root: SheetRoot,
+    Trigger: SheetTrigger,
+    Close: SheetClose,
+    Content: SheetContent,
+    Header: SheetHeader,
+    Footer: SheetFooter,
+};
+
+export { Sheet }

@@ -62,9 +62,9 @@ function TabItem({ children, value, onClick }: TabItemProps) {
     );
 }
 
-function TabList({ children }: TabListProps) {
+function TabList({ children, className }: TabListProps & { className?: string }) {
     return (
-        <div className="flex p-0.5 gap-0.5 bg-secondary border border-secondary rounded-lg *:flex-1 w-full">
+        <div className={cn("flex p-0.5 gap-0.5 bg-secondary border border-secondary rounded-lg *:flex-1 w-full", className)}>
             {children}
         </div>
     );

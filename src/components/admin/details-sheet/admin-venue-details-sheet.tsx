@@ -1,9 +1,9 @@
 import { useAdminContext } from "@/contexts/admin-context";
-import { Sheet, SheetContent, SheetFooter, SheetHeader } from "../sheet/sheet";
-import Text from "../text";
-import Divider from "../divider";
-import Switch from "../switch";
-import Button from "../button";
+import { Sheet } from "@/components/common/sheet/sheet";
+import Text from "@/components/common/text";
+import Divider from "@/components/common/divider";
+import Switch from "@/components/common/switch";
+import Button from "@/components/common/button";
 
 interface AdminVenueDetailsSheetProps {
   venue: Venue | null;
@@ -21,15 +21,15 @@ export default function AdminVenueDetailsSheet({ venue, isOpen, onClose }: Admin
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent>
-        <SheetHeader>
+    <Sheet.Root open={isOpen} onOpenChange={onClose}>
+      <Sheet.Content>
+        <Sheet.Header>
           <Text style="title-h5">{venue.name}</Text>
           <Text style="paragraph-sm" className="text-muted-foreground">
             Venue Details & Settings
           </Text>
-        </SheetHeader>
-        
+        </Sheet.Header>
+
         <div className="flex-1 space-y-6 py-6 px-4">
           {/* Basic Info Section */}
           <div className="space-y-4">
@@ -66,12 +66,12 @@ export default function AdminVenueDetailsSheet({ venue, isOpen, onClose }: Admin
           </div>
         </div>
 
-        <SheetFooter>
+        <Sheet.Footer>
           <Button variant="secondary" onClick={onClose} className="w-full">
             Close
           </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </Sheet.Footer>
+      </Sheet.Content>
+    </Sheet.Root>
   );
 }

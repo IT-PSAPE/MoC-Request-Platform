@@ -25,6 +25,13 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
     "Design Special": "purple",
   };
 
+  const priorityColorMap: Record<string, BadgeColor> = {
+    "Low": "blue",
+    "Medium": "yellow",
+    "High": "orange",
+    "Urgent": "red",
+  };
+
   const handleClick = () => {
     if (onRequestClick) { onRequestClick(request); }
   };  
@@ -49,6 +56,7 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
       {/* Right side - Type badge - Always show request type */}
       <div className="space-x-2">
         <Badge color={requestColorMap[request.type?.name] || "gray"}>{requestType}</Badge>
+        <Badge color={priorityColorMap[request.priority?.name] || "gray"}>{request.priority?.name}</Badge>
         <Badge color="gray">{date}</Badge>
       </div>
     </div>
