@@ -1,0 +1,68 @@
+{
+  "name": "MoC Request Platform",
+  "short_name": "MoC Requests",
+  "description": "Submit, track, and process requests for the Ministry of Culture",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["productivity", "business"],
+  "icons": [
+    {
+      "src": "/images/request-platform-favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/request-platform-webclip.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/request-platform-webclip.png",
+      "sizes": "256x256",
+      "type": "image/png", 
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Request",
+      "short_name": "New Request", 
+      "description": "Submit a new request",
+      "url": "/request",
+      "icons": [
+        {
+          "src": "/images/request-platform-favicon.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "short_name": "Admin",
+      "description": "Access the admin dashboard",
+      "url": "/admin",
+      "icons": [
+        {
+          "src": "/images/request-platform-favicon.png", 
+          "sizes": "32x32"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/public-home-bg.avif",
+      "sizes": "1280x800", 
+      "type": "image/avif",
+      "form_factor": "wide"
+    }
+  ],
+  "prefer_related_applications": false
+}
