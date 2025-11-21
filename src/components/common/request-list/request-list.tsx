@@ -2,7 +2,6 @@ import { createContext, useContext, useMemo, useState } from "react";
 import type { DragEvent, MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { RequestListItem } from "@/components/common/request-list/request-list-item";
 import { IconButton } from "@/components/common/button";
-import Button from "@/components/common/button";
 import Select, { Option } from "@/components/common/forms/select";
 import EmptyState from "@/components/common/empty-state";
 import { useDefaultContext } from "@/contexts/defaults-context";
@@ -10,11 +9,7 @@ import { cn } from "@/lib/cn";
 import Icon from "@/components/common/icon";
 import Text from "@/components/common/text";
 import { TabContextProvider, TabItem, TabList } from "@/components/common/tabs";
-import { Popover } from "@/components/common/popover/popover";
 import { FilterProvider, useFilterContext } from "./filter-provider";
-import { FilterPopover } from "./filter-popover";
-import { SortPopover } from "./sort-popover";
-import Badge from "@/components/common/badge";
 
 type SortField = "title" | "type" | "status" | "dueDate" | "createdAt" | "items";
 type SortDirection = "asc" | "desc";
@@ -378,61 +373,14 @@ function RequestListFilters() {
               </TabList>
             </TabContextProvider>
           </div>
-          {/* <Button variant="secondary" className={"!h-9.5"}><Icon className="mr-1" name="line:filter" size={16} />Filter</Button> */}
         </div>
 
-        {/* <RequestListControlls activeFilterCount={activeFilterCount} hasActiveFilters={hasActiveFilters} /> */}
       </div>
 
-      {/* <div className="text-sm text-gray-600">Showing {filteredRequests.length} of {requests.length} requests</div> */}
     </div>
   );
 }
 
-function RequestListControlls({ activeFilterCount, hasActiveFilters }: { activeFilterCount: number; hasActiveFilters: boolean }) {
-  function FilterBadge() {
-    return activeFilterCount > 0 ? (
-      <Badge className="">
-        {activeFilterCount}
-      </Badge>
-    ) : null;
-  }
-
-  return (
-    <div className="flex gap-2">
-      {/* Filter Popover */}
-      <Popover.Provider>
-        <Popover.Root>
-          <Popover.Trigger>
-            <Button variant={hasActiveFilters ? "primary" : "secondary"} size="sm" className="relative" >
-              <Icon className="mr-1" name="line:filter" size={16} />
-              Filter
-              <FilterBadge />
-            </Button>
-          </Popover.Trigger>
-          <Popover.Content position="bottom-right" maxWidth="320px">
-            <FilterPopover />
-          </Popover.Content>
-        </Popover.Root>
-      </Popover.Provider>
-
-      {/* Sort By Popover */}
-      <Popover.Provider>
-        <Popover.Root>
-          <Popover.Trigger>
-            <Button variant="secondary" size="sm">
-              <Icon className="mr-1" name="line:chevron_down" size={16} />
-              Sort by
-            </Button>
-          </Popover.Trigger>
-          <Popover.Content position="bottom-right" maxWidth="280px">
-            <SortPopover />
-          </Popover.Content>
-        </Popover.Root>
-      </Popover.Provider>
-    </div>
-  )
-}
 
 function RequestListGroups() {
   const { groupedRequests, typeFilter } = useRequestListContext();
