@@ -12,8 +12,8 @@ export default function NavigationBar() {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/form", label: "Form" },
-    { href: "/board", label: "Requests Board" },
+    { href: "/form/", label: "Form" },
+    { href: "/board/", label: "Requests Board" },
   ];
 
   function Links() {

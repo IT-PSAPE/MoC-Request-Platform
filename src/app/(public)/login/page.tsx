@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Card from "@/components/common/cards/card";
-import LoginFormContainer from "@/components/common/lgoin-form";
+import LoginFormContainer from "@/components/common/login-form";
 import Loader from "@/components/common/loader";
 
 export const metadata: Metadata = {

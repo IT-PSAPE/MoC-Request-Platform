@@ -48,10 +48,26 @@ export function AuthContextProvider({ children, supabase }: { children: React.Re
             }
         };
 
+        // Initial session sync
         void syncSession();
+
+        // Listen to auth state changes
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange(async (event, session) => {
+            if (!isMounted) return;
+            
+            console.log('Auth state change:', event, session?.user?.email);
+            
+            const sessionUser = session?.user ?? null;
+            setUser(sessionUser);
+            setAuthed(Boolean(sessionUser));
+            setInitialized(true);
+        });
 
         return () => {
             isMounted = false;
+            subscription.unsubscribe();
         };
     }, [supabase]);
 
