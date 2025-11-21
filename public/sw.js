@@ -1,21 +1,17 @@
 const CACHE_NAME = 'moc-request-platform-v1';
-// Get the base path dynamically
-const isGitHubPages = self.location.pathname.includes('/MoC-Request-Platform/');
-const basePath = isGitHubPages ? '/MoC-Request-Platform' : '';
-
 const urlsToCache = [
-  `${basePath}/`,
-  `${basePath}/admin`,
-  `${basePath}/board`,
-  `${basePath}/form`,
-  `${basePath}/login`,
-  `${basePath}/offline`,
-  `${basePath}/manifest.json`,
-  `${basePath}/icons/icon-32x32.png`,
-  `${basePath}/icons/icon-192x192.png`,
-  `${basePath}/icons/icon-256x256.png`,
-  `${basePath}/icons/icon-512x512.png`,
-  `${basePath}/images/product-screenshots-1280x800.png`,
+  '/',
+  '/admin',
+  '/board',
+  '/form',
+  '/login',
+  '/offline',
+  '/manifest.json',
+  '/icons/icon-32x32.png',
+  '/icons/icon-192x192.png',
+  '/icons/icon-256x256.png',
+  '/icons/icon-512x512.png',
+  '/images/product-screenshots-1280x800.png',
 ];
 
 // Install service worker
@@ -64,7 +60,7 @@ self.addEventListener('fetch', (event) => {
           .catch(() => {
             // If both cache and network fail, show offline page
             if (event.request.destination === 'document') {
-              return caches.match(`${basePath}/offline`);
+              return caches.match('/offline');
             }
           });
       })
