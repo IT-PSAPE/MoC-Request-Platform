@@ -19,14 +19,26 @@
     },
     {
       "src": "/images/request-platform-webclip.png",
-      "sizes": "256x256",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
       "src": "/images/request-platform-webclip.png",
-      "sizes": "256x256",
+      "sizes": "192x192",
       "type": "image/png", 
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/request-platform-webclip.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/request-platform-webclip.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
@@ -35,7 +47,7 @@
       "name": "New Request",
       "short_name": "New Request", 
       "description": "Submit a new request",
-      "url": "/request",
+      "url": "/form",
       "icons": [
         {
           "src": "/images/request-platform-favicon.png",
