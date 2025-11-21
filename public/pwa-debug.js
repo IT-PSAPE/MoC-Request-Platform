@@ -3,6 +3,13 @@
 
 console.log('🔍 PWA Debug Helper Loaded');
 
+// Detect environment
+const isGitHubPages = window.location.hostname.includes('github.io');
+const basePath = isGitHubPages ? '/MoC-Request-Platform' : '';
+console.log(`🌐 Environment: ${isGitHubPages ? 'GitHub Pages' : 'Development'}`);
+console.log(`📂 Base Path: ${basePath || '/'}`);
+
+
 // Check PWA Installation Readiness
 function checkPWAReadiness() {
   const results = {

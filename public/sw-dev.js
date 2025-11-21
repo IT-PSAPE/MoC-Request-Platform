@@ -1,34 +1,30 @@
-const CACHE_NAME = 'moc-request-platform-v1';
-// Get the base path dynamically
-const isGitHubPages = self.location.pathname.includes('/MoC-Request-Platform/');
-const basePath = isGitHubPages ? '/MoC-Request-Platform' : '';
-
+const CACHE_NAME = 'moc-request-platform-dev-v1';
 const urlsToCache = [
-  `${basePath}/`,
-  `${basePath}/admin`,
-  `${basePath}/board`,
-  `${basePath}/form`,
-  `${basePath}/login`,
-  `${basePath}/offline`,
-  `${basePath}/manifest.json`,
-  `${basePath}/icons/icon-32x32.png`,
-  `${basePath}/icons/icon-192x192.png`,
-  `${basePath}/icons/icon-256x256.png`,
-  `${basePath}/icons/icon-512x512.png`,
-  `${basePath}/images/product-screenshots-1280x800.png`,
+  '/',
+  '/admin',
+  '/board',
+  '/form',
+  '/login',
+  '/offline',
+  '/manifest.json',
+  '/icons/icon-32x32.png',
+  '/icons/icon-192x192.png',
+  '/icons/icon-256x256.png',
+  '/icons/icon-512x512.png',
+  '/images/product-screenshots-1280x800.png',
 ];
 
 // Install service worker
 self.addEventListener('install', (event) => {
-  console.log('[SW] Install');
+  console.log('[SW-DEV] Install');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Precaching app shell');
+        console.log('[SW-DEV] Precaching app shell');
         return cache.addAll(urlsToCache);
       })
       .then(() => {
-        console.log('[SW] Skip waiting on install');
+        console.log('[SW-DEV] Skip waiting on install');
         return self.skipWaiting();
       })
   );
@@ -64,7 +60,7 @@ self.addEventListener('fetch', (event) => {
           .catch(() => {
             // If both cache and network fail, show offline page
             if (event.request.destination === 'document') {
-              return caches.match(`${basePath}/offline`);
+              return caches.match('/offline');
             }
           });
       })
@@ -73,7 +69,7 @@ self.addEventListener('fetch', (event) => {
 
 // Activate event
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activate');
+  console.log('[SW-DEV] Activate');
   const cacheWhitelist = [CACHE_NAME];
 
   event.waitUntil(
@@ -82,14 +78,14 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheWhitelist.indexOf(cacheName) === -1) {
-              console.log('[SW] Deleting old cache:', cacheName);
+              console.log('[SW-DEV] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
           })
         );
       })
       .then(() => {
-        console.log('[SW] Claiming clients');
+        console.log('[SW-DEV] Claiming clients');
         return self.clients.claim();
       })
   );

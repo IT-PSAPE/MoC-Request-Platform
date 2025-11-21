@@ -1,7 +1,7 @@
 {
-  "name": "MoC Request Platform",
-  "short_name": "MoC Requests",
-  "description": "Submit, track, and process requests for the Ministry of Culture",
+  "name": "MoC Request Platform (Dev)",
+  "short_name": "MoC Requests Dev",
+  "description": "Submit, track, and process requests for the Ministry of Culture - Development Version",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
