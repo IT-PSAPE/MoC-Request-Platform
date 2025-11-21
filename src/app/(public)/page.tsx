@@ -14,7 +14,7 @@ export default function PublicHome() {
     <div className="isolate relative h-full w-full">
       <div className="absolute top-0 left-0 right-0 h-full -z-10 overflow-hidden">
         <div className="relative w-full h-full">
-          <img className="absolute top-0 left-0 right-0 w-full -z-10 overflow-hidden" src="/MoC-Request-Platform/images/public-home-bg.avif" alt="Background image" />
+          <img className="absolute top-0 left-0 right-0 w-full -z-10 overflow-hidden" src="/images/public-home-bg.avif" alt="Background image" />
         </div>
       </div>
       <div className="py-10 w-full flex-1 flex items-center">
