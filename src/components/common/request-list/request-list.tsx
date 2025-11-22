@@ -389,7 +389,7 @@ function RequestListGroups() {
   const { listView } = useDefaultContext();
 
   return (
-    <div className={cn("px-(--margin)", listView === "column" ? "flex gap-4 items-start overflow-y-auto *:min-w-xs" : "space-y-4")}>
+    <div className={cn("px-(--margin)", listView === "column" ? "flex gap-4 items-start overflow-y-auto *:min-w-[280px]" : "space-y-4")}>
       {groupedRequests.length > 0 ? (
         groupedRequests.map((group) => (
           <RequestListGroup className="flex-1" key={group.status.id} group={group} />
@@ -423,7 +423,7 @@ function RequestListGroup({ group, className }: { group: RequestGroup, className
   return (
     <div
       className={cn(
-        "bg-secondary rounded-lg transition-outline ",
+        "bg-secondary rounded-lg transition-outline",
         isActive && "ring-2 ring-blue-500 ring-offset-2",
         className,
       )}
