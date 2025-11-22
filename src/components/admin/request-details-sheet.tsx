@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sheet } from "@/components/common/sheet/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";
@@ -9,6 +9,8 @@ import Button, { IconButton } from "@/components/common/button";
 import Icon from "@/components/common/icon";
 import { TextArea } from "@/app/(public)/form/components/input";
 import Badge from "../common/badge";
+import Select, { Option } from "@/components/common/forms/select";
+import { useDefaultContext } from "@/contexts/defaults-context";
 
 interface RequestDetailsSheetProps {
   request: FetchRequest | null;
@@ -16,6 +18,7 @@ interface RequestDetailsSheetProps {
   onClose: () => void;
   onAddComment?: (requestId: string, comment: string) => Promise<void>;
   onDeleteRequest?: (requestId: string) => Promise<void>;
+  onUpdateStatus?: (requestId: string, statusId: string) => Promise<void>;
 }
 
 export default function RequestDetailsSheet({
@@ -23,14 +26,40 @@ export default function RequestDetailsSheet({
   isOpen,
   onClose,
   onAddComment,
-  onDeleteRequest
+  onDeleteRequest,
+  onUpdateStatus,
 }: RequestDetailsSheetProps) {
   const [newComment, setNewComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const { statuses } = useDefaultContext();
+  const [selectedStatus, setSelectedStatus] = useState(request?.status?.id || "");
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  useEffect(() => {
+    if (request) {
+      setSelectedStatus(request.status?.id || "");
+    }
+  }, [request]);
 
   if (!request) return null;
+
+  const handleStatusChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatusId = event.target.value;
+    if (!onUpdateStatus || !request) return;
+
+    setIsUpdatingStatus(true);
+    setSelectedStatus(newStatusId);
+    try {
+      await onUpdateStatus(request.id, newStatusId);
+    } catch (error) {
+      console.error("Failed to update status:", error);
+      setSelectedStatus(request.status.id); // Revert on error
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
 
   const handleAddComment = async () => {
     if (!newComment.trim() || !onAddComment) return;
@@ -126,6 +155,25 @@ export default function RequestDetailsSheet({
                     <div className="w-full gap-sm grid grid-cols-2">
                       <Text style="label-sm" className="text-secondary">Created time</Text>
                       <Text style="paragraph-sm">{formatDate(request.created_at)}</Text>
+                    </div>
+                    <div className="w-full gap-sm grid grid-cols-2 items-center">
+                      <Text style="label-sm" className="text-secondary">Status</Text>
+                      {onUpdateStatus && statuses.length > 0 ? (
+                        <Select
+                          value={selectedStatus}
+                          onChange={handleStatusChange}
+                          disabled={isUpdatingStatus}
+                          className="py-1"
+                        >
+                          {statuses.map((status) => (
+                            <Option key={status.id} value={status.id}>
+                              {status.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      ) : (
+                        <Badge className="w-fit">{request.status.name}</Badge>
+                      )}
                     </div>
                     <div className="w-full gap-sm grid grid-cols-2">
                       <Text style="label-sm" className="text-secondary">Priority</Text>

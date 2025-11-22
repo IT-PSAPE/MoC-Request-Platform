@@ -52,6 +52,7 @@ export default function RequestsContent() {
                 onClose={handleCloseSheet}
                 onAddComment={addCommentToRequest}
                 onDeleteRequest={deleteRequestById}
+                onUpdateStatus={updateRequestStatusOptimistic}
             />
         </>
     );
