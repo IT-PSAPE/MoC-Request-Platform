@@ -99,9 +99,7 @@ export default function NavigationBar() {
   }
 
   return (
-    <>
-    <div className="standalone:h-[120px]"></div>
-      <nav className="sticky top-0 z-10 max-md:bg-secondary max-md:border-b max-md:border-secondary standalone:fixed standalone:pt-16 standalone:z-10">
+      <nav className="sticky top-0 z-10 max-md:bg-secondary max-md:border-b max-md:border-secondary">
         <div className="mx-auto max-w-[1280px] px-4 py-3 flex items-center gap-4">
           <div className="w-full max-w-[120px] relative z-1 max-md:max-w-full"> <Logo /> </div>
           <MenuBar />
@@ -114,6 +112,5 @@ export default function NavigationBar() {
           </div>
         </div>
       </nav>
-    </>
   );
 }

@@ -23,7 +23,7 @@ export default function Badge({ children, color = "gray", indicator, className }
   };
 
   return (
-    <span className={cn("inline-flex items-center paragraph-xs rounded-sm px-2 py-0.5 gap-1.5 ", colorMap[color], className)}>
+    <span className={cn("inline-flex items-center paragraph-xs rounded-sm px-2 py-0.5 gap-1.5 text-nowrap", colorMap[color], className)}>
       {indicator && <span className={cn("h-1.5 w-1.5 rounded-full bg-current")} />}
       <span className="">
         {children}
