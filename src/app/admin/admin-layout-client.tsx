@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import Sidebar from "@/components/navigation/sidebar";
-import { AdminContextProvider } from "@/contexts/admin-context";
-import { useDefaultContext } from "@/contexts/defaults-context";
-import AdminMainContent from "./components/content/admin-main-content";
+import { useState } from 'react';
+import { AdminContextProvider } from '@/contexts/admin-context';
+import { useDefaultContext } from '@/contexts/defaults-context';
+import Sidebar from '@/components/navigation/sidebar';
+import MainContent from '@/components/layout/main-content';
+import Breadcrumbs from '@/components/common/breadcrumbs';
 
-export default function AdminPageClient() {
+export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const { supabase } = useDefaultContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -45,7 +46,10 @@ export default function AdminPageClient() {
 
       <div className="flex w-full h-full max-md:h-fit">
         <Sidebar isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
-        <AdminMainContent />
+        <MainContent>
+          <Breadcrumbs />
+          {children}
+        </MainContent>
       </div>
     </AdminContextProvider>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 
 import Text from "@/components/common/text";
@@ -8,7 +10,6 @@ import { useAdminContext } from "@/contexts/admin-context";
 import { RequestItemCard } from "@/components/common/cards/request-item-card";
 import { GridContainer } from "@/components/common/grid-container";
 import AdminRequestItemDetailsSheet from "@/components/admin/details-sheet/admin-request-item-details-sheet";
-
 
 export default function RequestItemContent() {
     const { items } = useAdminContext();

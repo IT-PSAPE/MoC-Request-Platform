@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
@@ -7,8 +9,6 @@ import { useAdminContext } from "@/contexts/admin-context";
 import { EquipmentCard } from "@/components/common/cards/equipment-card";
 import { GridContainer } from "@/components/common/grid-container";
 import AdminEquipmentDetailsSheet from "@/components/admin/details-sheet/admin-equipment-details-sheet";
-
-
 
 export default function EquipmentContent() {
     const { equipment } = useAdminContext();

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 
 import { VenueCard } from "@/components/common/cards/venue-card";
