@@ -21,10 +21,10 @@ export function VenueCard({className, venue, onClick }: VenueCardProps) {
       <div className="flex items-center justify-between p-4 ">
         <div className="flex-1">
           <h3 className="font-semibold text-sm">{venue.name}</h3>
-          <p className="text-xs text-muted-foreground">ID: {venue.id}</p>
+          <p className="text-xs text-tertiary">ID: {venue.id}</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-tertiary">
             {venue.available ? "Available" : "Unavailable"}
           </span>
           <Switch

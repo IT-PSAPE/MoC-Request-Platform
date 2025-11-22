@@ -22,7 +22,7 @@ export default function NavigationBar() {
     };
 
     return (
-      <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-sm border border-gray-200 bg-gray-50 mx-auto max-md:contents">
+      <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-[384px] border border-gray-200 bg-gray-50 mx-auto max-md:contents">
         {links.map((l) => (
           <Link
             key={l.href}
@@ -58,21 +58,21 @@ export default function NavigationBar() {
     return (
       authed
         ? (
-            <Link 
-              href="/admin" 
-              onClick={handleActionClick}
-            >
-              <Button variant='secondary' size='sm' className="max-md:w-full">Dashboard</Button>
-            </Link>
-          )
+          <Link
+            href="/admin"
+            onClick={handleActionClick}
+          >
+            <Button variant='secondary' size='sm' className="max-md:w-full">Dashboard</Button>
+          </Link>
+        )
         : (
-            <Link 
-              href="/login" 
-              onClick={handleActionClick}
-            >
-              <Button variant='secondary' size='sm' className="max-md:w-full">Login</Button>
-            </Link>
-          )
+          <Link
+            href="/login"
+            onClick={handleActionClick}
+          >
+            <Button variant='secondary' size='sm' className="max-md:w-full">Login</Button>
+          </Link>
+        )
     )
   }
 
@@ -91,32 +91,29 @@ export default function NavigationBar() {
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         data-status={isMenuOpen ? 'open' : 'closed'}
       >
-        <span
-          className={`${barClass} ${isMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0"}`}
-        />
-        <span
-          className={`${barClass} top-1/2 -translate-y-1/2 ${isMenuOpen ? "scale-x-0" : "scale-x-100"}`}
-        />
-        <span
-          className={`${barClass} ${isMenuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "bottom-0"}`}
-        />
+        <span className={`${barClass} ${isMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0"}`} />
+        <span className={`${barClass} top-1/2 -translate-y-1/2 ${isMenuOpen ? "scale-x-0" : "scale-x-100"}`} />
+        <span className={`${barClass} ${isMenuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "bottom-0"}`} />
       </button>
     )
   }
 
   return (
-    <nav className="sticky top-0 z-10 max-md:bg-secondary max-md:border-b max-md:border-secondary">
-      <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-4">
-        <div className="w-full max-w-[120px] relative z-1 max-md:max-w-full"> <Logo /> </div>
-        <MenuBar />
-        <div
-          className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary max-md:flex transition-all duration-200 ease-in-out max-md:p-4 max-md:pt-16 max-md:w-full max-md:data-[status=closed]:left-[100%]"
-          data-status={isMenuOpen ? 'open' : 'closed'}
-        >
-          <div className="w-full max-md:w-full max-md:flex max-md:flex-col max-md:gap-4"><Links /></div>
-          <div className="w-full max-w-[120px] text-sm max-md:max-w-full"><Actions /></div>
+    <>
+    <div className="standalone:h-[120px]"></div>
+      <nav className="sticky top-0 z-10 max-md:bg-secondary max-md:border-b max-md:border-secondary standalone:fixed standalone:pt-16 standalone:z-10">
+        <div className="mx-auto max-w-[1280px] px-4 py-3 flex items-center gap-4">
+          <div className="w-full max-w-[120px] relative z-1 max-md:max-w-full"> <Logo /> </div>
+          <MenuBar />
+          <div
+            className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary max-md:flex transition-all duration-200 ease-in-out max-md:p-4 max-md:pt-16 max-md:w-full max-md:data-[status=closed]:left-[100%]"
+            data-status={isMenuOpen ? 'open' : 'closed'}
+          >
+            <div className="w-full max-md:w-full max-md:flex max-md:flex-col max-md:gap-4"><Links /></div>
+            <div className="w-full max-w-[120px] text-sm max-md:max-w-full"><Actions /></div>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }

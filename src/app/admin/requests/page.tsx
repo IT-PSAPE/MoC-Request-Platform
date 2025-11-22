@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import Text from "@/components/common/text";
 import Header from "@/components/common/header";
@@ -50,6 +52,7 @@ export default function RequestsContent() {
                 onClose={handleCloseSheet}
                 onAddComment={addCommentToRequest}
                 onDeleteRequest={deleteRequestById}
+                onUpdateStatus={updateRequestStatusOptimistic}
             />
         </>
     );

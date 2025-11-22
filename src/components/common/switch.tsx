@@ -29,7 +29,7 @@ export default function Switch({ checked, onCheckedChange, id, disabled, ...rest
       )}>
         <span
           className={cn(
-            "inline-flex items-center justify-center h-3 w-3 transform rounded-full bg-background transition-transform ",
+            "inline-flex items-center justify-center h-3 w-3 transform rounded-full bg-primary transition-transform ",
             checked ? "translate-x-3.5" : "translate-x-0.5"
           )}
         >

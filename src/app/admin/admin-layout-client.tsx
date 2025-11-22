@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import Sidebar from "@/components/navigation/sidebar";
-import { AdminContextProvider } from "@/contexts/admin-context";
-import { useDefaultContext } from "@/contexts/defaults-context";
-import AdminMainContent from "./components/content/admin-main-content";
+import { useState } from 'react';
+import { AdminContextProvider } from '@/contexts/admin-context';
+import { useDefaultContext } from '@/contexts/defaults-context';
+import Sidebar from '@/components/navigation/sidebar';
+import MainContent from '@/components/layout/main-content';
+import Breadcrumbs from '@/components/common/breadcrumbs';
 
-export default function AdminPageClient() {
+export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const { supabase } = useDefaultContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -19,7 +20,7 @@ export default function AdminPageClient() {
         type="button"
         aria-label="Toggle navigation menu"
         aria-expanded={isMobileMenuOpen}
-        className="hidden w-8 h-6 relative z-20 max-md:flex cursor-pointer items-center justify-center bg-transparent border-0 p-0 text-foreground"
+        className="hidden w-8 h-6 relative z-20 max-md:flex cursor-pointer items-center justify-center bg-transparent border-0 p-0 text-primary"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         data-status={isMobileMenuOpen ? "open" : "closed"}
       >
@@ -45,7 +46,10 @@ export default function AdminPageClient() {
 
       <div className="flex w-full h-full max-md:h-fit">
         <Sidebar isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
-        <AdminMainContent />
+        <MainContent>
+          <Breadcrumbs />
+          {children}
+        </MainContent>
       </div>
     </AdminContextProvider>
   );

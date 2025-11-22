@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sheet } from "@/components/common/sheet/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";
@@ -9,6 +9,8 @@ import Button, { IconButton } from "@/components/common/button";
 import Icon from "@/components/common/icon";
 import { TextArea } from "@/app/(public)/form/components/input";
 import Badge from "../common/badge";
+import Select, { Option } from "@/components/common/forms/select";
+import { useDefaultContext } from "@/contexts/defaults-context";
 
 interface RequestDetailsSheetProps {
   request: FetchRequest | null;
@@ -16,6 +18,7 @@ interface RequestDetailsSheetProps {
   onClose: () => void;
   onAddComment?: (requestId: string, comment: string) => Promise<void>;
   onDeleteRequest?: (requestId: string) => Promise<void>;
+  onUpdateStatus?: (requestId: string, statusId: string) => Promise<void>;
 }
 
 export default function RequestDetailsSheet({
@@ -23,14 +26,40 @@ export default function RequestDetailsSheet({
   isOpen,
   onClose,
   onAddComment,
-  onDeleteRequest
+  onDeleteRequest,
+  onUpdateStatus,
 }: RequestDetailsSheetProps) {
   const [newComment, setNewComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const { statuses } = useDefaultContext();
+  const [selectedStatus, setSelectedStatus] = useState(request?.status?.id || "");
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  useEffect(() => {
+    if (request) {
+      setSelectedStatus(request.status?.id || "");
+    }
+  }, [request]);
 
   if (!request) return null;
+
+  const handleStatusChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatusId = event.target.value;
+    if (!onUpdateStatus || !request) return;
+
+    setIsUpdatingStatus(true);
+    setSelectedStatus(newStatusId);
+    try {
+      await onUpdateStatus(request.id, newStatusId);
+    } catch (error) {
+      console.error("Failed to update status:", error);
+      setSelectedStatus(request.status.id); // Revert on error
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
 
   const handleAddComment = async () => {
     if (!newComment.trim() || !onAddComment) return;
@@ -123,20 +152,39 @@ export default function RequestDetailsSheet({
                 <section className="space-y-5">
                   <Text style="title-h6">{request.what || "Untitled Request"}</Text>
                   <div className="space-y-4">
-                    <div className="w-full flex items-start gap-sm grid grid-cols-2">
+                    <div className="w-full gap-sm grid grid-cols-2">
                       <Text style="label-sm" className="text-secondary">Created time</Text>
                       <Text style="paragraph-sm">{formatDate(request.created_at)}</Text>
                     </div>
-                    <div className="w-full flex items-start gap-sm grid grid-cols-2">
+                    <div className="w-full gap-sm grid grid-cols-2 items-center">
+                      <Text style="label-sm" className="text-secondary">Status</Text>
+                      {onUpdateStatus && statuses.length > 0 ? (
+                        <Select
+                          value={selectedStatus}
+                          onChange={handleStatusChange}
+                          disabled={isUpdatingStatus}
+                          className="py-1"
+                        >
+                          {statuses.map((status) => (
+                            <Option key={status.id} value={status.id}>
+                              {status.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      ) : (
+                        <Badge className="w-fit">{request.status.name}</Badge>
+                      )}
+                    </div>
+                    <div className="w-full gap-sm grid grid-cols-2">
                       <Text style="label-sm" className="text-secondary">Priority</Text>
                       <Badge className="w-fit">{formatPriority(request.priority)}</Badge>
                     </div>
-                    <div className="w-full flex items-start gap-sm grid grid-cols-2">
+                    <div className="w-full gap-sm grid grid-cols-2">
                       <Text style="label-sm" className="text-secondary">Type</Text>
                       <Badge className="w-fit">{formatRequestType(request.type)}</Badge>
                     </div>
-                    <div className="w-full flex items-start gap-sm grid grid-cols-2">
-                      <Text style="label-sm" className="text-foreground/70 mb-1">Due Date</Text>
+                    <div className="w-full gap-sm grid grid-cols-2">
+                      <Text style="label-sm" className="text-tertiary mb-1">Due Date</Text>
                       <Text style="paragraph-sm">{formatDate(request.due)}</Text>
                     </div>
                   </div>
@@ -149,32 +197,32 @@ export default function RequestDetailsSheet({
                   <Text style="label-md" className="mb-3">5Ws and 1H</Text>
                   <div className="space-y-3">
                     <div>
-                      <Text style="label-sm" className="text-foreground/70 mb-1">Who</Text>
+                      <Text style="label-sm" className="text-tertiary mb-1">Who</Text>
                       <Text style="paragraph-sm">{request.who || "Not specified"}</Text>
                     </div>
                     <div>
-                      <Text style="label-sm" className="text-foreground/70 mb-1">What</Text>
+                      <Text style="label-sm" className="text-tertiary mb-1">What</Text>
                       <Text style="paragraph-sm">{request.what || "Not specified"}</Text>
                     </div>
                     <div>
-                      <Text style="label-sm" className="text-foreground/70 mb-1">When</Text>
+                      <Text style="label-sm" className="text-tertiary mb-1">When</Text>
                       <Text style="paragraph-sm">{request.when || "Not specified"}</Text>
                     </div>
                     <div>
-                      <Text style="label-sm" className="text-foreground/70 mb-1">Where</Text>
+                      <Text style="label-sm" className="text-tertiary mb-1">Where</Text>
                       <Text style="paragraph-sm">{request.where || "Not specified"}</Text>
                     </div>
                     <div>
-                      <Text style="label-sm" className="text-foreground/70 mb-1">Why</Text>
+                      <Text style="label-sm" className="text-tertiary mb-1">Why</Text>
                       <Text style="paragraph-sm">{request.why || "Not specified"}</Text>
                     </div>
                     <div>
-                      <Text style="label-sm" className="text-foreground/70 mb-1">How</Text>
+                      <Text style="label-sm" className="text-tertiary mb-1">How</Text>
                       <Text style="paragraph-sm">{request.how || "Not specified"}</Text>
                     </div>
                     {request.info && (
                       <div>
-                        <Text style="label-sm" className="text-foreground/70 mb-1">Additional Information</Text>
+                        <Text style="label-sm" className="text-tertiary mb-1">Additional Information</Text>
                         <Text style="paragraph-sm">{request.info}</Text>
                       </div>
                     )}
@@ -189,10 +237,10 @@ export default function RequestDetailsSheet({
                   {request.venue && request.venue.length > 0 ? (
                     <div className="space-y-2">
                       {request.venue.map((venue: RequestedVenue, index) => (
-                        <div key={venue.venue?.id || index} className="p-3 bg-secondary/50 rounded-md">
+                        <div key={venue.venue?.id || index} className="p-3 bg-secondary rounded-md">
                           <Text style="paragraph-sm">{venue.venue?.name || `Venue ${index + 1}`}</Text>
                           {venue.venue?.description && (
-                            <Text style="paragraph-xs" className="text-foreground/70 mt-1">
+                            <Text style="paragraph-xs" className="text-tertiary mt-1">
                               {venue.venue.description}
                             </Text>
                           )}
@@ -218,28 +266,11 @@ export default function RequestDetailsSheet({
                         <div key={equipment.item?.id || index}>
                           <Text style="paragraph-sm">{equipment.item?.name || `Item ${index + 1}`}</Text>
                           {equipment.item?.description && (
-                            <Text style="paragraph-xs" className="text-foreground/70 mt-1">
+                            <Text style="paragraph-xs" className="text-tertiary mt-1">
                               {equipment.item.description}
                             </Text>
                           )}
                         </div>
-                        // <div key={equipmentItem.item?.id || index} className="p-3 bg-secondary/50 rounded-md">
-                        //   <div className="flex justify-between items-start">
-                        //     <div>
-                        //       <Text style="paragraph-sm">{equipmentItem.item?.name || `Item ${index + 1}`}</Text>
-                        //       {equipmentItem.item?.description && (
-                        //         <Text style="paragraph-xs" className="text-foreground/70 mt-1">
-                        //           {equipmentItem.item.description}
-                        //         </Text>
-                        //       )}
-                        //     </div>
-                        //     {equipmentItem.item?.quantity && (
-                        //       <Text style="label-sm" className="text-foreground/70">
-                        //         Available: {equipmentItem.item.quantity}
-                        //       </Text>
-                        //     )}
-                        //   </div>
-                        // </div>
                       ))}
                     </div>
                   ) : (
@@ -258,7 +289,7 @@ export default function RequestDetailsSheet({
                   {request.song && request.song.length > 0 ? (
                     <div className="space-y-2">
                       {request.song.map((song: RequestedSong, index) => (
-                        <div key={song.song?.id || index} className="p-3 bg-secondary/50 rounded-md">
+                        <div key={song.song?.id || index} className="p-3 bg-secondary rounded-md">
                           <Text style="paragraph-sm">{song.song?.name || `Song ${index + 1}`}</Text>
                           <div className="flex gap-2 mt-2">
                             {song.song?.instrumental && (
@@ -296,7 +327,7 @@ export default function RequestDetailsSheet({
                         <div key={note.id || index}>
                           <Text style="paragraph-sm">{note.note}</Text>
                           {note.created && (
-                            <Text style="paragraph-xs" className="text-foreground/50 mt-2">
+                            <Text style="paragraph-xs" className="text-primary/50 mt-2">
                               {formatDate(note.created)}
                             </Text>
                           )}
@@ -319,7 +350,7 @@ export default function RequestDetailsSheet({
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Add a comment..."
-                        className="w-full p-3 border border-foreground/15 rounded-md bg-background resize-none focus:outline-none focus:ring-2 focus:ring-brand-solid focus:border-transparent"
+                        className="w-full p-3 border border-secondary rounded-md bg-primary resize-none focus:outline-none focus:ring-2 focus:ring-brand-solid focus:border-transparent"
                         rows={3}
                       />
                       <div className="flex justify-end">
@@ -360,11 +391,11 @@ export default function RequestDetailsSheet({
             }
           }}
         >
-          <div className="w-full max-w-md bg-background rounded-xl border border-secondary shadow-lg">
+          <div className="w-full max-w-[448px] bg-primary rounded-xl border border-secondary shadow-lg">
             <div className="flex items-start justify-between px-5 py-4 border-b border-secondary">
               <div>
                 <Text style="title-h6">Delete Request</Text>
-                <Text style="paragraph-sm" className="text-foreground/70 mt-1">
+                <Text style="paragraph-sm" className="text-tertiary mt-1">
                   This action cannot be undone. All associated data with this request will be removed.
                 </Text>
               </div>
@@ -378,7 +409,7 @@ export default function RequestDetailsSheet({
               </IconButton>
             </div>
             <div className="px-5 py-6 space-y-2">
-              <Text style="label-sm" className="text-foreground/70">Request</Text>
+              <Text style="label-sm" className="text-tertiary">Request</Text>
               <Text style="title-h6">{request?.what || "Untitled Request"}</Text>
             </div>
             <div className="flex items-center justify-end gap-3 px-5 py-4 border-t border-secondary">

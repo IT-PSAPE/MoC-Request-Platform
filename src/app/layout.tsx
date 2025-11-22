@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import RootProvider from "@/providers/root-provider";
@@ -38,11 +38,18 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
+export const viewport:Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  userScalable: false,
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en" className={manrope.className} suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
         <meta name="theme-color" content="#2563eb" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -72,6 +79,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             `,
           }}
         />
+        <meta name="apple-mobile-web-app-title" content="MoC Requests" />
       </head>
       <body suppressHydrationWarning className="antialiased flex flex-col h-screen bg-secondary overflow-hidden max-md:overflow-auto max-md:h-fit">
         <RootProvider>{children}</RootProvider>

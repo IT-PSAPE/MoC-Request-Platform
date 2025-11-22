@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="mx-auto max-w-sm py-16">
+    <div className="mx-auto max-w-[384px] py-16">
       <Card title="Admin Login">
         <Suspense fallback={<Loader />}>
           <LoginFormContainer />

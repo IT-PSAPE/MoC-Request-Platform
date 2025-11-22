@@ -24,7 +24,7 @@ export function SongCard({ song, onClick }: SongCardProps) {
             <div className="flex flex-col p-4 ">
                 <div className="">
                     <h3 className="font-semibold text-sm">{song.name}</h3>
-                    <p className="text-xs text-muted-foreground">ID: {song.id}</p>
+                    <p className="text-xs text-tertiary">ID: {song.id}</p>
                 </div>
                 <div className="space-y-1 mt-4" >
                     <div className="flex items-center gap-2">
@@ -32,7 +32,7 @@ export function SongCard({ song, onClick }: SongCardProps) {
                             checked={song.instrumental}
                             onCheckedChange={onToggleInstrumental}
                         />
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-tertiary">
                             Instrumental {song.instrumental ? "Available" : "Unavailable"}
                         </span>
                     </div>
@@ -41,7 +41,7 @@ export function SongCard({ song, onClick }: SongCardProps) {
                             checked={song.lyrics}
                             onCheckedChange={onToggleLyrics}
                         />
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-tertiary">
                             Lyrics {song.lyrics ? "Available" : "Unavailable"}
                         </span>
                     </div>

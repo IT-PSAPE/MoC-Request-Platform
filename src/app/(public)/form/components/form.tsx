@@ -60,7 +60,7 @@ export default function Form() {
     }[step];
 
     return (
-        <div className="w-full max-w-6xl mx-auto py-6 px-4 space-y-8">
+        <div className="w-full max-w-[1152px] mx-auto py-6 px-4 space-y-8">
             {/* Header */}
             <FormHeader />
 

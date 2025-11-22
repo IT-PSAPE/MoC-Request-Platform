@@ -57,7 +57,7 @@ export function FilterPopover() {
         {/* Due Date Range */}
         <Popover.Group fieldName="Due date range">
           <div>
-            <Text style="paragraph-xs" className="text-foreground/50 mb-1">From:</Text>
+            <Text style="paragraph-xs" className="text-primary/50 mb-1">From:</Text>
             <Input
               type="date"
               value={pendingFilters.dateRange.from}
@@ -66,7 +66,7 @@ export function FilterPopover() {
             />
           </div>
           <div>
-            <Text style="paragraph-xs" className="text-foreground/50 mb-1">To:</Text>
+            <Text style="paragraph-xs" className="text-primary/50 mb-1">To:</Text>
             <Input
               type="date"
               value={pendingFilters.dateRange.to}
@@ -84,7 +84,7 @@ export function FilterPopover() {
                 checked={pendingFilters.requestTypes.includes(String(type.id))}
                 onChange={() => handleTypeToggle(String(type.id))}
               />
-              <Text style="paragraph-sm" className="text-foreground">
+              <Text style="paragraph-sm" className="text-primary">
                 {type.name.replace(/_/g, " ")}
               </Text>
             </label>
@@ -99,7 +99,7 @@ export function FilterPopover() {
                 checked={pendingFilters.priorities.includes(String(priority.id))}
                 onChange={() => handlePriorityToggle(String(priority.id))}
               />
-              <Text style="paragraph-sm" className="text-foreground">
+              <Text style="paragraph-sm" className="text-primary">
                 {priority.name.replace(/_/g, " ")}
               </Text>
             </label>

@@ -17,7 +17,7 @@ export default function StepIndicator() {
                     })
                 }
             </div>
-            <div className="ml-2 text-xs text-foreground/60">Step {step} of {steps.length}</div>
+            <div className="ml-2 text-xs text-quaternary">Step {step} of {steps.length}</div>
         </div>
     )
 }

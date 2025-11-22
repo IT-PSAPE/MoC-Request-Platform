@@ -1,57 +1,57 @@
 # moc-request-platform agent guide
 
 ## Mission & stack awareness
-- App: Next.js 15 App Router + TypeScript + Tailwind v4 (`src/app`, `src/components`). Data flows through Supabase via providers (`src/providers/root-provider.tsx`) and contexts under `src/contexts/`.
-- Domain types live in `src/lib/type.ts` (declared globally); reuse them instead of inventing new interfaces.
-- Services already wrap Supabase access (`src/services/*.ts`, `src/lib/database.ts`). Always extend these helpers instead of sprinkling `supabase.from(...)` calls throughout UI.
+- Next.js 15 App Router + TypeScript + Tailwind v4. UI lives under `src/app` and `src/components`.
+- Supabase is the data layer. The client is created via `useSupabaseClient` and injected through `RootProvider` (`src/providers/root-provider.tsx`) which wraps `QueryProvider`, `AuthContext`, `CacheSyncProvider`, and `DefaultContext`.
+- React Query handles fetching/caching; real-time invalidation is wired in `useRealtimeSubscriptions`.
+- Domain types are global in `src/lib/type.ts` and UI/system enums in `src/types/system-types.ts`. Reuse these instead of creating new interfaces.
+- README still references a legacy localStorage flow; the live code uses Supabase and contexts—follow this guide, not the README, for implementation details.
 
-## Styling, tokens, and typography
-- Tailwind is wired through CSS tokens. Color/typography utilities are defined in `src/styles/global.css`, `src/styles/tokens.css`, and overrides in `src/styles/themes.css`. Use semantic classes such as `bg-brand-solid`, `text-foreground`, `paragraph-sm`, or the `Text` component (`src/components/common/text.tsx`). Never hard-code colors or font sizes; map new styles to an existing CSS variable before use.
-- Utility helpers such as `cn` (`src/lib/cn.ts`) must be used to merge class names so variants remain composable.
-- If a class is missing, add the token once (matching `@theme` conventions) instead of embedding raw HEX or RGB values.
+## Styling, tokens, and primitives
+- Tailwind classes map to tokens in `src/styles/colors-*.css`, `src/styles/tokens.css`, and spacing tokens. Use semantic utilities like `bg-brand-solid`, `text-primary`, `paragraph-sm`, or the `Text` component (`src/components/common/text.tsx`); never hard-code colors or font sizes.
+- Merge classes with `cn` (`src/lib/cn.ts`) so variants stay composable. Add new tokens once (with `@theme` conventions) instead of embedding hex values.
+- Reuse primitives from `src/components/common`: `button.tsx`/`IconButton`, `badge.tsx`, form inputs (`forms/input.tsx`, `forms/select.tsx`, etc.), `checkbox.tsx`, `switch.tsx`, `tabs`, `sheet`, `popover`, `cards/*`, `loader`, `inline-alert`, and typography via `Text`.
+- Request UI building blocks already exist (`request-list` + `request-list-item`, cards, sheets). Prefer extending them over creating new patterns.
 
-## Component sourcing & composition rules
-1. **Search first.** Before writing JSX, inspect `src/components/common`, `src/components/ui`, and feature-specific folders for an existing building block. Reuse `Button`/`IconButton`, `Badge`, `Input`, `Select`, `Checkbox`, `Switch`, `Sheet`, etc. Example: `RequestList` already imports `Input`, `Select`, and `Badge` to assemble filterable lists (`src/components/common/request-list/request-list.tsx`).
-2. **Only create a component when nothing fits.** If you must author a new one, colocate it with related UI (e.g., under `src/components/<feature>/`). Follow the house style: declare `type Props = {...}` (or a named interface) above the component, default-export a function component, and add smaller subcomponents when the parent grows (see `RequestList` + `RequestListItem`).
-3. **Break up large UIs.** Multi-section experiences (cards, sheets, multi-step forms) should be split into focused children so logic stays isolated. For example, the admin requests experience separates `RequestsContent`, `RequestList`, and `RequestDetailsSheet`.
-4. **Model shared state with colocated context.** When those subcomponents need to react to the same filters, drag state, or grouping, create a lightweight provider (like the refactored `RequestListContext`) and let each section (`Group`, `GroupHeader`, `GroupBody`, etc.) read from it instead of prop drilling.
-5. **Use shared primitives.** When you need badges, statuses, icons, loaders, or text styles, pull from existing components (`src/components/common/badge.tsx`, `.../icon.tsx`, `.../loader.tsx`). Wrap new behavior around them instead of recreating the visuals from scratch.
-6. **Stick to Tailwind utilities.** No inline styles or third-party UI libraries (README explicitly forbids shadcn). Compose Tailwind classes with the existing token names.
+## Data, services, and state
+- Long-lived state comes from contexts: `AuthContext`, `DefaultContext` (statuses/priorities/types/list view + supabase), `FormContext`, `BoardContext`, and `AdminContext` (cached and non-cached variants). Use their hooks instead of new global stores.
+- Supabase interactions belong in services (`src/services/*.ts`) or table helpers (`src/lib/database.ts`). Extend these or the cached hooks in `src/hooks` rather than sprinkling `supabase.from(...)` in components.
+- Cached hooks (`use-cached-requests`, `use-cached-defaults`, `use-cached-storage`) pair with `QueryKeys` (`src/lib/query-keys.ts`) for consistent cache keys, optimistic updates, and invalidation. Let `CacheSyncProvider` manage real-time invalidation.
+- Status color rules live in `src/features/defaults.ts` and badge components—reuse them for consistent chips/indicators.
 
-## Data & state guidelines
-- Context providers own long-lived state. Consume `AuthContext`, `AdminContext`, `BoardContext`, `DefaultContext`, or `FormContext` through their hooks rather than instantiating new stores.
-- `useSupabaseClient` (`src/hooks/use-supabase-client.ts`) is the single entry point for creating Supabase clients; never call `createClient` elsewhere.
-- Business logic that talks to Supabase belongs in services or `src/lib/database.ts` helpers (e.g., `FormService.create`, `admin-service.ts`). Extend these modules to add operations so that components stay declarative.
-- Status-to-color rules already exist in `src/features/defaults.ts` and within badges—reuse the mappings so status colors stay consistent.
+## Auth and routing
+- Middleware (`middleware.ts`) uses `@supabase/ssr` to guard `/admin` routes server-side and redirects authenticated users away from `/login`.
+- Client protection uses `AuthGuard` (`src/components/common/auth-guard.tsx`) and the Supabase-backed `AuthContext`. `LoginForm` already wires to `login`; use it rather than rolling your own auth calls.
+- `SmartRedirect` gives a safe loading gate for pages that branch on auth.
 
 ## Implementation workflow
-1. **Understand the feature.** Read the relevant page/component in `src/app` plus any context/service powering it.
-2. **Inventory existing parts.** Grep for nouns like “badge”, “card”, or “sheet” to find reusable building blocks before coding.
-3. **Design with tokens.** Identify the semantic colors/typography utilities you need from `src/styles/global.css`/`tokens.css`.
-4. **Code with composition.** Glue existing components together, only adding the minimal new props/variants required. Use the `cn` helper for class merging.
-5. **Keep files tidy.** Extract helper components when JSX exceeds a single concern, colocate them, and keep prop types at the top of the file.
-6. **Verify.** Run `npm run lint` locally whenever you introduce logic or JSX changes. Ensure Supabase interactions go through the provided services.
+1) Read the relevant page in `src/app/**` plus its provider/service. Align with current Supabase + React Query flow rather than the legacy README.
+2) Inventory existing components under `src/components/common` (cards, sheets, lists, nav) before authoring new JSX. Keep new pieces colocated with their feature.
+3) Design with tokens and semantic classes; add tokens instead of raw values. Use `cn` for variants and add `'use client'` only when needed.
+4) For data, favor the cached hooks and service helpers; wire cache keys/invalidation via `QueryKeys` and let `CacheSyncProvider` handle live updates.
+5) Keep files focused: declare prop types at the top, extract subcomponents when JSX mixes concerns, and document only non-obvious logic.
+6) Verify with `npm run lint` when changing logic/JSX. Ensure Supabase env vars are present if running locally.
 
 ## Do’s
-- Do favor existing components, hooks, and contexts; extend them via props/children before adding new files.
-- Do keep prop and state types explicit using the shared domain definitions.
-- Do split multi-purpose components into smaller, named children to preserve readability.
-- Do wrap multi-section views in a colocated context provider when subcomponents need shared filters, drag/drop state, or counts so they can remain dumb presentational nodes.
-- Do reference `src/styles/global.css`/`tokens.css` when selecting colors or typography utilities.
-- Do document non-obvious logic with short comments (only when the code isn’t self-explanatory).
-- Do keep diffs narrow, reference the relevant paths in discussions, and ensure new code stays client/server compatible (add `'use client'` only when you truly need browser APIs).
+- Favor existing primitives/contexts/hooks; extend them via props or small variants before adding new files.
+- Keep types explicit using the shared domain definitions.
+- Split multi-section UIs into purposeful children and, when they share state (filters/drag counts), add a colocated provider.
+- Reference token files for colors/typography/spacing; keep class names semantic.
+- Leave short comments only where behavior is non-obvious.
+- Keep diffs narrow and compatible with server/client boundaries.
 
 ## Don’ts
-- Don’t invent new UI kits, raw CSS files, or duplicate primitives that already live in `src/components/common`.
-- Don’t hard-code colors, spacing, or fonts—always use the Tailwind classes bound to our CSS variables.
-- Don’t bypass contexts/services to call Supabase directly inside components.
-- Don’t store duplicated state when a context already exposes it.
-- Don’t add npm dependencies, env vars, or Tailwind plugins without explicit approval.
-- Don’t leave large anonymous blobs of JSX; always factor purposeful subcomponents.
+- Don’t add new UI kits, raw CSS files, or inline styles; avoid third-party component libs.
+- Don’t hard-code colors, spacing, or fonts—map to existing Tailwind token classes instead.
+- Don’t bypass services/hooks/contexts to talk to Supabase directly from components.
+- Don’t duplicate state that a context already exposes.
+- Don’t add dependencies, env vars, or Tailwind plugins without approval.
+- Don’t leave large anonymous JSX blobs—factor subcomponents.
 
 ## Quick references
-- Colors & typography: `src/styles/global.css`, `src/styles/tokens.css`, `src/styles/themes.css`
-- Primitive components: `src/components/common/*`
-- Feature composites: `src/components/admin/*`, `src/app/**/components`
-- Supabase helpers: `src/hooks/use-supabase-client.ts`, `src/lib/database.ts`, `src/services/*.ts`
+- Tokens & typography: `src/styles/colors-primitive.css`, `colors-token.css`, `colors-utility.css`, `spac-primitive.css`, `tokens.css`
+- Primitives: `src/components/common/*` (forms, tabs, sheet, popover, cards, loaders, text)
+- Feature composites: `src/components/admin/*`, `src/components/common/request-list/*`, `src/app/**`
+- Supabase helpers & caching: `src/hooks/use-supabase-client.ts`, `src/hooks/use-cached-*.ts`, `src/lib/query-keys.ts`, `src/services/*.ts`, `src/lib/database.ts`
 - Context providers: `src/providers/root-provider.tsx`, `src/contexts/*.tsx`
+- Auth flow: `middleware.ts`, `src/components/common/auth-guard.tsx`, `src/components/common/login-form.tsx`
