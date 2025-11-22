@@ -4,8 +4,3 @@
 @import "../styles/colors-utility.css";
 @import "../styles/spac-primitive.css";
 @import "../styles/tokens.css";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}

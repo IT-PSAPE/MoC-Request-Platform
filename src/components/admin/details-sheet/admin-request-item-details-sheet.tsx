@@ -17,7 +17,7 @@ export default function AdminRequestItemDetailsSheet({ item, isOpen, onClose }: 
       <Sheet.Content>
         <Sheet.Header>
           <Text style="title-h5">{item.name}</Text>
-          <Text style="paragraph-sm" className="text-muted-foreground">
+          <Text style="paragraph-sm" className="text-tertiary">
             Request Item Details
           </Text>
         </Sheet.Header>
@@ -28,15 +28,15 @@ export default function AdminRequestItemDetailsSheet({ item, isOpen, onClose }: 
             <Text style="title-h6">Basic Information</Text>
             <div className="space-y-3">
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Item Name</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Item Name</Text>
                 <Text style="paragraph-md">{item.name}</Text>
               </div>
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Item ID</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Item ID</Text>
                 <Text style="paragraph-sm" className="font-mono">{item.id}</Text>
               </div>
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Description</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Description</Text>
                 <Text style="paragraph-md">{item.description}</Text>
               </div>
             </div>

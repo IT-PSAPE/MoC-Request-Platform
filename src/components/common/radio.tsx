@@ -17,7 +17,7 @@ export default function Radio({ label, className, ...props }: RadioProps) {
         </div>
       </div>
       {label && (
-        <label htmlFor={props.id} className="text-sm text-foreground cursor-pointer select-none" >
+        <label htmlFor={props.id} className="text-sm text-primary cursor-pointer select-none" >
           {label}
         </label>
       )}

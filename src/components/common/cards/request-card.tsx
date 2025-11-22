@@ -35,7 +35,7 @@ function RequestCard({ request: r, setActive, className, onClick, onDragStart, .
 
   function StatusBadge() {
     return (
-      <span className="inline-flex items-center gap-2 rounded-md border border-foreground/15 bg-foreground/5 px-3 py-1 text-xs text-foreground/80">
+      <span className="inline-flex items-center gap-2 rounded-md border border-secondary bg-secon px-3 py-1 text-xs text-primary/80">
         <span className={cn("h-2 w-2 rounded-full", statusColor[r.status.value])} />
         <span className="capitalize">{r.status.name.replace(/_/g, " ")}</span>
       </span>
@@ -58,20 +58,20 @@ function RequestCard({ request: r, setActive, className, onClick, onDragStart, .
         {/* Title */}
         <div className="text-xl font-semibold tracking-tight">{title}</div>
         {/* Description */}
-        {description && <p className="text-[13px] leading-5 text-foreground/80 line-clamp-3 overflow-hidden"> {description} </p>}
+        {description && <p className="text-[13px] leading-5 text-primary/80 line-clamp-3 overflow-hidden"> {description} </p>}
       </div>
 
       {/* Status pill */}
       <div><StatusBadge /></div>
 
       {/* Footer with icons */}
-      <div className="flex items-center gap-6 text-sm text-foreground/80 border-t border-foreground/10 pt-2">
+      <div className="flex items-center gap-6 text-sm text-primary/80 border-t border-secondary pt-2">
         <div className="flex items-center gap-2">
-          <CalendarIcon className="h-4 w-4 text-foreground/60" />
+          <CalendarIcon className="h-4 w-4 text-quaternary" />
           <span className="text-[13px]">{footerDate}</span>
         </div>
         <div className="flex items-center gap-2">
-          <CubeIcon className="h-4 w-4 text-foreground/60" />
+          <CubeIcon className="h-4 w-4 text-quaternary" />
           <span className="text-[13px]">{totalQty}</span>
         </div>
       </div>

@@ -20,7 +20,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         type="button"
         aria-label="Toggle navigation menu"
         aria-expanded={isMobileMenuOpen}
-        className="hidden w-8 h-6 relative z-20 max-md:flex cursor-pointer items-center justify-center bg-transparent border-0 p-0 text-foreground"
+        className="hidden w-8 h-6 relative z-20 max-md:flex cursor-pointer items-center justify-center bg-transparent border-0 p-0 text-primary"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         data-status={isMobileMenuOpen ? "open" : "closed"}
       >

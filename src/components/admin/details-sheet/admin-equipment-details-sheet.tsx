@@ -27,7 +27,7 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
       <Sheet.Content>
         <Sheet.Header>
           <Text style="title-h5">{equipment.name}</Text>
-          <Text style="paragraph-sm" className="text-muted-foreground">
+          <Text style="paragraph-sm" className="text-tertiary">
             Equipment Details & Availability
           </Text>
         </Sheet.Header>
@@ -38,15 +38,15 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
             <Text style="title-h6">Basic Information</Text>
             <div className="space-y-2">
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Equipment Name</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Equipment Name</Text>
                 <Text style="paragraph-md">{equipment.name}</Text>
               </div>
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Equipment ID</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Equipment ID</Text>
                 <Text style="paragraph-sm" className="font-mono">{equipment.id}</Text>
               </div>
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Total Quantity</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Total Quantity</Text>
                 <Text style="paragraph-md">{equipment.quantity}</Text>
               </div>
             </div>
@@ -60,7 +60,7 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
             <div className="space-y-4">
               <div>
                 <Text style="paragraph-md" className="mb-2">Available for requests</Text>
-                <Text style="paragraph-sm" className="text-muted-foreground mb-3">
+                <Text style="paragraph-sm" className="text-tertiary mb-3">
                   Set how many units of this equipment are currently available for assignment to requests. 
                   Maximum available: {equipment.quantity}
                 </Text>
@@ -69,7 +69,7 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
                     value={equipment.available} 
                     onChange={handleUpdateAvailable} 
                   />
-                  <Text style="paragraph-sm" className="text-muted-foreground">
+                  <Text style="paragraph-sm" className="text-tertiary">
                     / {equipment.quantity} total
                   </Text>
                 </div>

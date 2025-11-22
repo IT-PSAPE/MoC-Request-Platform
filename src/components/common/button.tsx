@@ -14,9 +14,9 @@ export default function Button({
 }: Props) {
   const base = "inline-flex items-center justify-center gap-1 font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none";
   const variants = {
-    primary: "bg-brand-solid text-background hover:bg-brand-solid-hover",
-    secondary: "bg-transparent border border-gray-200 text-foreground hover:bg-foreground/5",
-    ghost: "bg-transparent text-foreground hover:bg-foreground/10",
+    primary: "bg-brand-solid text-white hover:bg-brand-solid-hover",
+    secondary: "bg-transparent border border-gray-200 text-primary bg-secondary",
+    ghost: "bg-transparent text-primary hover:bg-quaternary",
     destructive: "bg-error-solid text-white hover:bg-error-solid-hover",
   } as const;
   const sizes = {
@@ -38,9 +38,9 @@ export function IconButton({
 }: Props) {
   const base = "inline-flex items-center justify-center";
   const variants = {
-    primary: "bg-brand-solid text-background hover:bg-brand-solid-hover",
-    secondary: "bg-transparent border border-gray-200 text-foreground hover:bg-foreground/5",
-    ghost: "bg-transparent text-foreground hover:bg-foreground/10",
+    primary: "bg-brand-solid text-white hover:bg-brand-solid-hover",
+    secondary: "bg-transparent border border-gray-200 text-primary bg-secondary",
+    ghost: "bg-transparent text-primary hover:bg-quaternary",
     destructive: "bg-error-solid text-white hover:bg-error-solid-hover",
   } as const;
   const sizes = {

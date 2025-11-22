@@ -144,3 +144,9 @@
 .scrollbar-hide::-webkit-scrollbar {
 	display: none;  /* Chrome, Safari and Opera */
 }
+
+@custom-variant standalone {
+	@media (display-mode: standalone) {
+		@slot;
+	}
+}

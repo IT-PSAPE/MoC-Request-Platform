@@ -48,7 +48,7 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
       onClick={!isPublicView ? handleClick : undefined}
     >
       {/* Left side - Title and description */}
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-[448px]">
         <Text style="label-sm" className="text-primary line-clamp-1">{title}</Text>
         {description && (<Text style="paragraph-xs" className="text-sm text-quaternary line-clamp-2 mt-0.5">{description}</Text>)}
       </div>

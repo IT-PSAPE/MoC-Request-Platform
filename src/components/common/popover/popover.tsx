@@ -71,7 +71,7 @@ function PopoverContent({
       <div
         ref={contentRef}
         className={cn(
-          "absolute z-50 bg-primary border border-foreground/10 rounded-lg shadow-lg min-w-[280px]",
+          "absolute z-50 bg-primary border border-secondary rounded-lg shadow-lg min-w-[280px]",
           positionClasses[position],
           className
         )}
@@ -85,7 +85,7 @@ function PopoverContent({
 
 function PopoverHeader({ children, className }: PopoverHeaderProps) {
   return (
-    <div className={cn("px-4 py-3 border-b border-foreground/10", className)}>
+    <div className={cn("px-4 py-3 border-b border-secondary", className)}>
       {children}
     </div>
   );
@@ -101,7 +101,7 @@ function PopoverBody({ children, className }: PopoverBodyProps) {
 
 function PopoverFooter({ children, className }: PopoverFooterProps) {
   return (
-    <div className={cn("p-2 border-t border-foreground/10 flex gap-2 justify-end", className)}>
+    <div className={cn("p-2 border-t border-secondary flex gap-2 justify-end", className)}>
       {children}
     </div>
   );
@@ -121,7 +121,7 @@ function PopoverBarrier({ className }: PopoverBarrierProps) {
 function PopoverGroup({ fieldName, children }: PopoverGroupProps) {
   return (
     <div className="space-y-2">
-      <Text style="label-xs" className="text-foreground/70">{fieldName}</Text>
+      <Text style="label-xs" className="text-tertiary">{fieldName}</Text>
       <div className="space-y-2">{children}</div>
     </div>
   )

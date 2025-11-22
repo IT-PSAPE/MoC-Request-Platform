@@ -30,7 +30,7 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
       <Sheet.Content>
         <Sheet.Header>
           <Text style="title-h5">{song.name}</Text>
-          <Text style="paragraph-sm" className="text-muted-foreground">
+          <Text style="paragraph-sm" className="text-tertiary">
             Song Details & Settings
           </Text>
         </Sheet.Header>
@@ -41,11 +41,11 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
             <Text style="title-h6">Basic Information</Text>
             <div className="space-y-2">
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Song Name</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Song Name</Text>
                 <Text style="paragraph-md">{song.name}</Text>
               </div>
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Song ID</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Song ID</Text>
                 <Text style="paragraph-sm" className="font-mono">{song.id}</Text>
               </div>
             </div>
@@ -66,7 +66,7 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
                     {song.instrumental ? "Available" : "Unavailable"}
                   </Badge>
                 </div>
-                <Text style="paragraph-sm" className="text-muted-foreground">
+                <Text style="paragraph-sm" className="text-tertiary">
                   {song.instrumental ? "Instrumental version is available for requests" : "Instrumental version is not available"}
                 </Text>
               </div>
@@ -85,7 +85,7 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
                     {song.lyrics ? "Available" : "Unavailable"}
                   </Badge>
                 </div>
-                <Text style="paragraph-sm" className="text-muted-foreground">
+                <Text style="paragraph-sm" className="text-tertiary">
                   {song.lyrics ? "Lyrics version is available for requests" : "Lyrics version is not available"}
                 </Text>
               </div>

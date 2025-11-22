@@ -94,7 +94,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         <button
                             type="button"
                             aria-label="Close navigation menu"
-                            className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-foreground/10 transition-colors text-foreground"
+                            className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-quaternary transition-colors text-primary"
                             onClick={onClose}
                         >
                             <Icon name="line:close" />

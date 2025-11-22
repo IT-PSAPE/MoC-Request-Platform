@@ -25,7 +25,7 @@ export default function AdminVenueDetailsSheet({ venue, isOpen, onClose }: Admin
       <Sheet.Content>
         <Sheet.Header>
           <Text style="title-h5">{venue.name}</Text>
-          <Text style="paragraph-sm" className="text-muted-foreground">
+          <Text style="paragraph-sm" className="text-tertiary">
             Venue Details & Settings
           </Text>
         </Sheet.Header>
@@ -36,11 +36,11 @@ export default function AdminVenueDetailsSheet({ venue, isOpen, onClose }: Admin
             <Text style="title-h6">Basic Information</Text>
             <div className="space-y-2">
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Name</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Name</Text>
                 <Text style="paragraph-md">{venue.name}</Text>
               </div>
               <div>
-                <Text style="paragraph-sm" className="text-muted-foreground">Venue ID</Text>
+                <Text style="paragraph-sm" className="text-tertiary">Venue ID</Text>
                 <Text style="paragraph-sm" className="font-mono">{venue.id}</Text>
               </div>
             </div>
@@ -54,7 +54,7 @@ export default function AdminVenueDetailsSheet({ venue, isOpen, onClose }: Admin
             <div className="flex items-center justify-between">
               <div>
                 <Text style="paragraph-md">Available for requests</Text>
-                <Text style="paragraph-sm" className="text-muted-foreground">
+                <Text style="paragraph-sm" className="text-tertiary">
                   {venue.available ? "This venue can be used for new requests" : "This venue is currently unavailable"}
                 </Text>
               </div>

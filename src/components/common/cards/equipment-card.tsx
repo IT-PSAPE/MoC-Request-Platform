@@ -26,12 +26,12 @@ export function EquipmentCard({ equipment, className, onClick }: EquipmentCardPr
                 <div className="flex flex-col w-full">
                     <div className="flex flex-1 items-center justify-between gap-4 ">
                         <h3 className="font-semibold text-sm">{equipment.name}</h3>
-                        <span className="text-xs text-muted-foreground"> Qty: {equipment.quantity} </span>
+                        <span className="text-xs text-tertiary"> Qty: {equipment.quantity} </span>
                     </div>
-                    <p className="text-xs text-muted-foreground">ID: {equipment.id}</p>
+                    <p className="text-xs text-tertiary">ID: {equipment.id}</p>
                 </div>
                 <div className="mt-4 flex gap-1 items-center">
-                    <span className="text-xs text-muted-foreground" >Available:</span>
+                    <span className="text-xs text-tertiary" >Available:</span>
                     <NumberInput value={equipment.available} onChange={updateQuantity} />
                 </div>
             </div>
