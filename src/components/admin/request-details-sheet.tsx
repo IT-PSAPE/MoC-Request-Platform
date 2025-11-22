@@ -45,8 +45,7 @@ export default function RequestDetailsSheet({
 
   if (!request) return null;
 
-  const handleStatusChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newStatusId = event.target.value;
+  const handleStatusChange = async (newStatusId: string) => {
     if (!onUpdateStatus || !request) return;
 
     setIsUpdatingStatus(true);
@@ -161,7 +160,7 @@ export default function RequestDetailsSheet({
                       {onUpdateStatus && statuses.length > 0 ? (
                         <Select
                           value={selectedStatus}
-                          onChange={handleStatusChange}
+                          onValueChange={handleStatusChange}
                           disabled={isUpdatingStatus}
                           className="py-1"
                         >
