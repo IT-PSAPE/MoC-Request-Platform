@@ -76,6 +76,33 @@ async function addComment(supabase: SupabaseClient, requestId: string, comment: 
     return { error };
 }
 
+async function updateRequestPriority(supabase: SupabaseClient, requestId: string, priorityId: string): Promise<{ error: PostgrestError | null }> {
+    const { error } = await supabase
+        .from("request")
+        .update({ priority: priorityId })
+        .eq("id", requestId);
+
+    return { error };
+}
+
+async function updateRequestType(supabase: SupabaseClient, requestId: string, typeId: string): Promise<{ error: PostgrestError | null }> {
+    const { error } = await supabase
+        .from("request")
+        .update({ type: typeId })
+        .eq("id", requestId);
+
+    return { error };
+}
+
+async function updateRequestDueDate(supabase: SupabaseClient, requestId: string, dueDate: string): Promise<{ error: PostgrestError | null }> {
+    const { error } = await supabase
+        .from("request")
+        .update({ due: dueDate })
+        .eq("id", requestId);
+
+    return { error };
+}
+
 async function deleteRequest(supabase: SupabaseClient, requestId: string): Promise<{ error: PostgrestError | null }> {
     const { error } = await supabase
         .from("request")
@@ -85,4 +112,4 @@ async function deleteRequest(supabase: SupabaseClient, requestId: string): Promi
     return { error };
 }
 
-export { list, updateRequestStatus, addComment, deleteRequest };
+export { list, updateRequestStatus, updateRequestPriority, updateRequestType, updateRequestDueDate, addComment, deleteRequest };

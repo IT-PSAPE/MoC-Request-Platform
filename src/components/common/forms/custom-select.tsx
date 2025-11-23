@@ -13,6 +13,7 @@ import React, {
 } from "react";
 import { cn } from "@/lib/cn";
 import Icon from "../icon";
+import { SelectOptionItem } from "../select-option";
 
 type SelectContextType = {
   open: boolean;
@@ -313,28 +314,17 @@ function SelectOption({ value, children, disabled, className }: SelectOptionProp
   }, [optionsRef]);
 
   return (
-    <div
-      ref={optionRef}
-      onClick={() => !disabled && setValue(value)}
-      onMouseEnter={() => !disabled && setHighlightedIndex(index)}
-      className={cn(
-        "px-2.5 py-1.5 cursor-pointer paragraph-sm rounded-md",
-        "transition-colors duration-100",
-        isHighlighted && !isSelected && "bg-secondary",
-        // isSelected && "bg-brand-solid/10 text-brand-solid",
-        disabled && "opacity-50 cursor-not-allowed",
-        // !disabled && !isSelected && "hover:bg-secondary",
-        !disabled && "hover:bg-secondary",
-        className
-      )}
-      role="option"
-      aria-selected={isSelected}
-      aria-disabled={disabled}
-    >
-      <div className="flex items-center justify-between gap-2">
-        <span className="flex-1 break-words">{children}</span>
-        {isSelected && <Icon name="line:check" size={16} className="text-brand-solid shrink-0" />}
-      </div>
+    <div ref={optionRef}>
+      <SelectOptionItem
+        isSelected={isSelected}
+        isHighlighted={isHighlighted}
+        disabled={disabled}
+        onClick={() => setValue(value)}
+        onMouseEnter={() => setHighlightedIndex(index)}
+        className={className}
+      >
+        {children}
+      </SelectOptionItem>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Sheet } from "@/components/common/sheet/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";
@@ -8,9 +8,8 @@ import EmptyState from "@/components/common/empty-state";
 import Button, { IconButton } from "@/components/common/button";
 import Icon from "@/components/common/icon";
 import { TextArea } from "@/app/(public)/form/components/input";
-import Badge from "../common/badge";
-import Select, { Option } from "@/components/common/forms/select";
 import { useDefaultContext } from "@/contexts/defaults-context";
+import InlineEditor from "@/components/common/inline-editor";
 
 interface RequestDetailsSheetProps {
   request: FetchRequest | null;
@@ -19,6 +18,9 @@ interface RequestDetailsSheetProps {
   onAddComment?: (requestId: string, comment: string) => Promise<void>;
   onDeleteRequest?: (requestId: string) => Promise<void>;
   onUpdateStatus?: (requestId: string, statusId: string) => Promise<void>;
+  onUpdatePriority?: (requestId: string, priorityId: string) => Promise<void>;
+  onUpdateType?: (requestId: string, typeId: string) => Promise<void>;
+  onUpdateDueDate?: (requestId: string, dueDate: string) => Promise<void>;
 }
 
 export default function RequestDetailsSheet({
@@ -28,37 +30,41 @@ export default function RequestDetailsSheet({
   onAddComment,
   onDeleteRequest,
   onUpdateStatus,
+  onUpdatePriority,
+  onUpdateType,
+  onUpdateDueDate,
 }: RequestDetailsSheetProps) {
   const [newComment, setNewComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const { statuses } = useDefaultContext();
-  const [selectedStatus, setSelectedStatus] = useState(request?.status?.id || "");
-  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
-
-  useEffect(() => {
-    if (request) {
-      setSelectedStatus(request.status?.id || "");
-    }
-  }, [request]);
+  const { statuses, priorities, types } = useDefaultContext();
 
   if (!request) return null;
 
-  const handleStatusChange = async (newStatusId: string) => {
-    if (!onUpdateStatus || !request) return;
-
-    setIsUpdatingStatus(true);
-    setSelectedStatus(newStatusId);
-    try {
-      await onUpdateStatus(request.id, newStatusId);
-    } catch (error) {
-      console.error("Failed to update status:", error);
-      setSelectedStatus(request.status.id); // Revert on error
-    } finally {
-      setIsUpdatingStatus(false);
-    }
+  const requestColorMap: Record<string, BadgeColor> = {
+    "Video Filming & Production": "teal",
+    "Video Editing": "yellow",
+    "Design Flyer": "pink",
+    "Video Filming": "green",
+    "Equipment": "orange",
+    "Event": "blue",
+    "Design Special": "purple",
   };
+
+  const priorityColorMap: Record<string, BadgeColor> = {
+    "Low": "blue",
+    "Medium": "yellow",
+    "High": "orange",
+    "Urgent": "red",
+  };
+
+  const statusColorMap: Record<string, BadgeColor> = {
+    "Not Started": "gray",
+    "In Progress": "orange",
+    "Completed": "green",
+  };
+
 
   const handleAddComment = async () => {
     if (!newComment.trim() || !onAddComment) return;
@@ -79,7 +85,7 @@ export default function RequestDetailsSheet({
     try {
       return new Date(dateString).toLocaleDateString('en-ZA', {
         year: 'numeric',
-        month: 'long',
+        month: 'short',
         day: 'numeric',
         hour: 'numeric',
         minute: 'numeric',
@@ -128,15 +134,12 @@ export default function RequestDetailsSheet({
           display: none;
         }
       `}</style>
-      <Sheet.Root
-        open={isOpen}
-        onOpenChange={(open) => {
-          if (!open) onClose();
-        }}
-      >
+      <Sheet.Root open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }} >
         <Sheet.Content>
           <div className="flex flex-col h-full">
-            <Sheet.Header><span></span></Sheet.Header>
+            <Sheet.Header className="justify-end">
+              <IconButton onClick={handleOpenConfirm} disabled={!onDeleteRequest} size="sm" variant="ghost"><Icon name="line:trash" size={16} /></IconButton>
+            </Sheet.Header>
 
             {/* Scrollable content with invisible scrollbar */}
             <div
@@ -150,41 +153,86 @@ export default function RequestDetailsSheet({
                 {/* Overview Section */}
                 <section className="space-y-5">
                   <Text style="title-h6">{request.what || "Untitled Request"}</Text>
-                  <div className="space-y-4">
-                    <div className="w-full gap-sm grid grid-cols-2">
-                      <Text style="label-sm" className="text-secondary">Created time</Text>
-                      <Text style="paragraph-sm">{formatDate(request.created_at)}</Text>
+                  <div className="space-y-4 *:w-full *:gap-sm *:grid *:grid-cols-2 *:items-center">
+                    <div>
+                      <span className="flex items-center gap-1.5">
+                        <Icon name="line:status" size={16} />
+                        <Text style="label-sm" className="text-secondary">Status</Text>
+                      </span>
+                      <InlineEditor
+                        value={request.status.id}
+                        displayValue={request.status.name}
+                        onSave={(newStatusId) => onUpdateStatus?.(request.id, newStatusId)}
+                        type="select"
+                        options={statuses.map(status => ({ id: status.id, name: status.name }))}
+                        displayComponent="badge"
+                        badgeColor={statusColorMap[request.status.name] || "gray"}
+                        disabled={!onUpdateStatus || statuses.length === 0}
+                        className="w-fit"
+                        position="bottom-right"
+                      />
                     </div>
-                    <div className="w-full gap-sm grid grid-cols-2 items-center">
-                      <Text style="label-sm" className="text-secondary">Status</Text>
-                      {onUpdateStatus && statuses.length > 0 ? (
-                        <Select
-                          value={selectedStatus}
-                          onValueChange={handleStatusChange}
-                          disabled={isUpdatingStatus}
-                          className="py-1"
-                        >
-                          {statuses.map((status) => (
-                            <Option key={status.id} value={status.id}>
-                              {status.name}
-                            </Option>
-                          ))}
-                        </Select>
-                      ) : (
-                        <Badge className="w-fit">{request.status.name}</Badge>
-                      )}
+                    <div>
+                      <span className="flex items-center gap-1.5">
+                        <Icon name="line:dropdown" size={16} />
+                        <Text style="label-sm" className="text-secondary">Priority</Text>
+                      </span>
+                      <InlineEditor
+                        value={request.priority.id}
+                        displayValue={formatPriority(request.priority)}
+                        onSave={(newPriorityId) => onUpdatePriority?.(request.id, newPriorityId)}
+                        type="select"
+                        options={priorities.map(priority => ({ id: priority.id, name: priority.name }))}
+                        displayComponent="badge"
+                        badgeColor={priorityColorMap[request.priority.name] || "gray"}
+                        disabled={!onUpdatePriority || priorities.length === 0}
+                        className="w-fit"
+                        position="bottom-right"
+                      />
                     </div>
-                    <div className="w-full gap-sm grid grid-cols-2">
-                      <Text style="label-sm" className="text-secondary">Priority</Text>
-                      <Badge className="w-fit">{formatPriority(request.priority)}</Badge>
+                    <div>
+                      <span className="flex items-center gap-1.5">
+                        <Icon name="line:tag" size={16} />
+                        <Text style="label-sm" className="text-secondary">Type</Text>
+                      </span>
+                      <InlineEditor
+                        value={request.type.id}
+                        displayValue={formatRequestType(request.type)}
+                        onSave={(newTypeId) => onUpdateType?.(request.id, newTypeId)}
+                        type="select"
+                        options={types.map(type => ({ id: type.id, name: type.name }))}
+                        displayComponent="badge"
+                        badgeColor={requestColorMap[request.type.name] || "gray"}
+                        disabled={!onUpdateType || types.length === 0}
+                        className="w-fit"
+                        position="bottom-right"
+                      />
                     </div>
-                    <div className="w-full gap-sm grid grid-cols-2">
-                      <Text style="label-sm" className="text-secondary">Type</Text>
-                      <Badge className="w-fit">{formatRequestType(request.type)}</Badge>
+                    <div>
+                      <span className="flex items-center gap-1.5">
+                        <Icon name="line:calendar" size={16} />
+                        <Text style="label-sm" className="text-tertiary">Due Date</Text>
+                      </span>
+                      <InlineEditor
+                        value={request.due || ''}
+                        displayValue={formatDate(request.due)}
+                        onSave={(newDueDate) => onUpdateDueDate?.(request.id, newDueDate)}
+                        type="date"
+                        placeholder="Set due date"
+                        disabled={!onUpdateDueDate}
+                        position="bottom-right"
+                      />
                     </div>
-                    <div className="w-full gap-sm grid grid-cols-2">
-                      <Text style="label-sm" className="text-tertiary mb-1">Due Date</Text>
-                      <Text style="paragraph-sm">{formatDate(request.due)}</Text>
+                    <div>
+                      <span className="flex items-center gap-1.5">
+                        <Icon name="line:clock_rewind" size={16} />
+                        <Text style="label-sm" className="text-secondary">Created time</Text>
+                      </span>
+                      <div className="px-1 py-0.5 min-h-[24px] flex items-center">
+                        <Text style="paragraph-sm" className="text-tertiary">
+                          {formatDate(request.created_at)}
+                        </Text>
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -367,7 +415,7 @@ export default function RequestDetailsSheet({
                 </section>
               </div>
             </div>
-            <Sheet.Footer>
+            {/* <Sheet.Footer>
               <Button
                 variant="destructive"
                 className="w-full"
@@ -376,14 +424,14 @@ export default function RequestDetailsSheet({
               >
                 Delete Request
               </Button>
-            </Sheet.Footer>
+            </Sheet.Footer> */}
           </div>
         </Sheet.Content>
       </Sheet.Root>
 
       {isConfirmOpen && (
         <div
-          className="fixed inset-0 z-50 bg-linear-to-b from-black/20 to-black/50 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-[10000] bg-linear-to-b from-black/20 to-black/50 backdrop-blur-xs flex items-center justify-center p-4"
           onClick={(event) => {
             if (event.target === event.currentTarget) {
               handleCloseConfirm();

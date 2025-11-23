@@ -1,6 +1,7 @@
 import { cn } from "@/lib/cn";
 import Badge from "../badge";
 import Text from "@/components/common/text";
+import Icon from "../icon";
 
 interface RequestListItemProps {
   request: FetchRequest;
@@ -13,7 +14,7 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
   const title = request.what || "Request";
   const description = request.why || request.how || "";
   const requestType = request.type ? request.type.name.replace(/_/g, " ") : "Request";
-  const date = request.created_at ? new Date(request.created_at).toLocaleDateString() : "";
+  const date = request.due ? new Date(request.due).toLocaleDateString() : "";
 
   const requestColorMap: Record<string, BadgeColor> = {
     "Video Filming & Production": "teal",
@@ -34,7 +35,7 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
 
   const handleClick = () => {
     if (onRequestClick) { onRequestClick(request); }
-  };  
+  };
 
   return (
     <div
@@ -54,10 +55,16 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
       </div>
 
       {/* Right side - Type badge - Always show request type */}
-      <div className="flex flex-wrap gap-2">
-        <Badge color={requestColorMap[request.type?.name] || "gray"}>{requestType}</Badge>
-        <Badge color={priorityColorMap[request.priority.name] || "gray"}>{request.priority.name}</Badge>
-        <Badge color="gray">{date}</Badge>
+      <div className="flex flex-wrap gap-2 *:flex *:gap-1">
+        <Badge color={requestColorMap[request.type?.name] || "gray"}>
+          <Icon name="line:tag" size={14} />{requestType}
+        </Badge>
+        <Badge color={priorityColorMap[request.priority.name] || "gray"}>
+          <Icon name="line:dropdown" size={14} />{request.priority.name}
+        </Badge>
+        <Badge color="gray">
+          <Icon name="line:calendar" size={14} />{date}
+        </Badge>
       </div>
     </div>
   );
