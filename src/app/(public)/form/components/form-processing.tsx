@@ -9,7 +9,7 @@ export default function FormProcessing() {
             <Loader className="mb-6" />
             <div className="text-center space-y-3 max-w-md">
                 <Text style="label-md" className="font-medium text-primary">
-                    We're submitting your request...
+                    We are submitting your request...
                 </Text>
                 <Text style="paragraph-sm" className="text-tertiary max-w-sm">
                     Please wait while we process your submission. This may take a few moments.
