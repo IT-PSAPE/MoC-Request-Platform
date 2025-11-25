@@ -32,31 +32,40 @@ self.addEventListener('install', (event) => {
 
 // Fetch event
 self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
+  const { request } = event;
+  const url = new URL(request.url);
+  
+  // TEMPORARILY DISABLED: Skip caching for API requests to ensure fresh data
+  if (url.pathname.includes('/rest/v1/') || url.hostname.includes('supabase')) {
+    event.respondWith(fetch(request));
+    return;
+  }
+  
+  if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
+      fetch(request)
         .then((response) => {
           return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, response.clone());
+            cache.put(request, response.clone());
             return response;
           });
         })
         .catch(() => {
-          return caches.match(event.request).then((response) => {
+          return caches.match(request).then((response) => {
             return response || caches.match('/offline');
           });
         })
     );
   } else {
     event.respondWith(
-      caches.match(event.request)
+      caches.match(request)
         .then((response) => {
           if (response) {
             return response;
           }
-          return fetch(event.request).then((response) => {
+          return fetch(request).then((response) => {
             return caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, response.clone());
+              cache.put(request, response.clone());
               return response;
             });
           });

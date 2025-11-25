@@ -14,8 +14,9 @@ export function QueryProvider({ children }: QueryProviderProps) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 1000 * 60 * 5, // 5 minutes
-            gcTime: 1000 * 60 * 30, // 30 minutes (previously cacheTime)
+            // TEMPORARILY DISABLED: Set to 0 to disable caching
+            staleTime: 0, // 1000 * 60 * 5, // 5 minutes
+            gcTime: 0, // 1000 * 60 * 30, // 30 minutes (previously cacheTime)
             retry: (failureCount, error) => {
               // Don't retry on 4xx errors except 429
               if (error && typeof error === 'object' && 'status' in error) {
@@ -26,7 +27,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
               }
               return failureCount < 3;
             },
-            refetchOnWindowFocus: true,
+            refetchOnWindowFocus: false, // TEMPORARILY DISABLED: Always fetch fresh data
             refetchOnReconnect: true,
           },
           mutations: {
