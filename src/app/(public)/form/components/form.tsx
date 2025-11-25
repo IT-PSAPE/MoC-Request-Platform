@@ -37,6 +37,7 @@ export default function Form() {
                 setStep(3);
                 break;
             case 3:
+                setSubmissionError(null);
                 submit();
                 break;
         }
@@ -64,11 +65,6 @@ export default function Form() {
             case 3:
                 return false;
         }
-    }
-
-    function handleRetrySubmission() {
-        setSubmissionError(null); // Clear the error
-        submit(); // Retry submission
     }
 
     // Determine what to show based on current state
