@@ -60,7 +60,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
             {/* Desktop Sidebar */}
             <div className="w-65 flex-none flex flex-col max-md:hidden" >
                 <div className="p-2 pb-0 flex-none">
-                    <div className="h-13 bg bg-primary border border-secondary rounded-lg" >
+                    <div className="h-13 flex items-center px-4 py-2 bg bg-primary border border-secondary rounded-lg" >
                         <Logo />
                     </div>
                 </div>

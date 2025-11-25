@@ -3,7 +3,7 @@
 import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list, updateRequestStatus, addComment, deleteRequest as deleteRequestService } from "@/services/admin-service";
+import { list, updateRequestStatus, updateRequestPriority, updateRequestType, updateRequestDueDate, addComment, deleteRequest as deleteRequestService } from "@/services/admin-service";
 import { useAuthContext } from "./auth-context";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
@@ -19,6 +19,9 @@ type AdminContextType = {
     updateVenue: (venueId: string, available: boolean) => void;
     updateSong: (venueId: string, type: 'instrumental' | 'lyrics', available: boolean) => void;
     updateRequestStatusOptimistic: (requestId: string, newStatusId: string) => Promise<void>;
+    updateRequestPriorityOptimistic: (requestId: string, newPriorityId: string) => Promise<void>;
+    updateRequestTypeOptimistic: (requestId: string, newTypeId: string) => Promise<void>;
+    updateRequestDueDateOptimistic: (requestId: string, newDueDate: string) => Promise<void>;
     addCommentToRequest: (requestId: string, comment: string) => Promise<void>;
     deleteRequestById: (requestId: string) => Promise<void>;
     setTab: (tab: TabItem) => void;
@@ -193,6 +196,82 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         );
     }
 
+    const updateRequestPriorityOptimistic = async (requestId: string, newPriorityId: string) => {
+        // Find the priority object for the new priority ID
+        const newPriority = (await supabase.from("priority").select("*").eq("id", newPriorityId).single()).data;
+        
+        if (!newPriority) {
+            console.error("Priority not found");
+            return;
+        }
+
+        // Optimistically update the local state
+        setRequests((prevRequests) =>
+            prevRequests.map((request) =>
+                request.id === requestId ? { ...request, priority: newPriority as Priority } : request
+            )
+        );
+
+        // Update the database
+        const { error } = await updateRequestPriority(supabase, requestId, newPriorityId);
+
+        if (error) {
+            console.error("Failed to update request priority", error);
+            // Revert the optimistic update by re-fetching the data
+            const updatedRequests = await list(supabase);
+            setRequests(updatedRequests);
+            throw error;
+        }
+    }
+
+    const updateRequestTypeOptimistic = async (requestId: string, newTypeId: string) => {
+        // Find the type object for the new type ID
+        const newType = (await supabase.from("request_type").select("*").eq("id", newTypeId).single()).data;
+        
+        if (!newType) {
+            console.error("Request type not found");
+            return;
+        }
+
+        // Optimistically update the local state
+        setRequests((prevRequests) =>
+            prevRequests.map((request) =>
+                request.id === requestId ? { ...request, type: newType as RequestType } : request
+            )
+        );
+
+        // Update the database
+        const { error } = await updateRequestType(supabase, requestId, newTypeId);
+
+        if (error) {
+            console.error("Failed to update request type", error);
+            // Revert the optimistic update by re-fetching the data
+            const updatedRequests = await list(supabase);
+            setRequests(updatedRequests);
+            throw error;
+        }
+    }
+
+    const updateRequestDueDateOptimistic = async (requestId: string, newDueDate: string) => {
+        // Optimistically update the local state
+        setRequests((prevRequests) =>
+            prevRequests.map((request) =>
+                request.id === requestId ? { ...request, due: newDueDate } : request
+            )
+        );
+
+        // Update the database
+        const { error } = await updateRequestDueDate(supabase, requestId, newDueDate);
+
+        if (error) {
+            console.error("Failed to update request due date", error);
+            // Revert the optimistic update by re-fetching the data
+            const updatedRequests = await list(supabase);
+            setRequests(updatedRequests);
+            throw error;
+        }
+    }
+
     const deleteRequestById = async (requestId: string) => {
         const { error } = await deleteRequestService(supabase, requestId);
 
@@ -214,6 +293,9 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         updateVenue,
         updateSong,
         updateRequestStatusOptimistic,
+        updateRequestPriorityOptimistic,
+        updateRequestTypeOptimistic,
+        updateRequestDueDateOptimistic,
         addCommentToRequest,
         deleteRequestById,
         setTab,
