@@ -15,12 +15,14 @@ type FormContextType = {
     items: RequestItem[]
     isProcessing: boolean
     submitted: string | null
+    submissionError: string | null
     noticeAlert: string | null
     setStep: Dispatch<SetStateAction<FormSteps>>
     setRequest: Dispatch<SetStateAction<FormRequest>>
     onSubmit: FormEventHandler<HTMLFormElement>
     setIsProcessing: Dispatch<SetStateAction<boolean>>
     setSubmitted: Dispatch<SetStateAction<string | null>>
+    setSubmissionError: Dispatch<SetStateAction<string | null>>
     reset: () => void
     submit: () => void
     checkNoticePeriod: (types: { id: string; notice?: number; warning?: string }[]) => void
@@ -59,6 +61,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
     const [items, setItems] = useState<RequestItem[]>([]);
 
     const [submitted, setSubmitted] = useState<string | null>(null);
+    const [submissionError, setSubmissionError] = useState<string | null>(null);
 
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
     const [noticeAlert, setNoticeAlert] = useState<string | null>(null);
@@ -125,16 +128,30 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
     function reset() {
         setRequest(emptyRequest);
         setSubmitted(null);
+        setSubmissionError(null);
         setStep(1);
         setNoticeAlert(null);
     }
 
     async function submit() {
         setIsProcessing(true);
+        setSubmissionError(null); // Clear any previous errors
 
-        setSubmitted(await FormService.create(request, statuses, supabase));
-
-        setIsProcessing(false);
+        try {
+            // Use sandbox or real service based on mode
+            const service = FormService;
+            const requestId = await service.create(request, statuses, supabase);
+            setSubmitted(requestId);
+        } catch (error) {
+            console.error('Form submission failed:', error);
+            setSubmissionError(
+                error instanceof Error 
+                    ? error.message 
+                    : 'An unexpected error occurred while submitting your request. Please try again.'
+            );
+        } finally {
+            setIsProcessing(false);
+        }
     }
 
     const context = {
@@ -145,8 +162,10 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
         items,
         isProcessing,
         submitted,
+        submissionError,
         noticeAlert,
         setSubmitted,
+        setSubmissionError,
         onSubmit,
         setStep,
         setRequest,
