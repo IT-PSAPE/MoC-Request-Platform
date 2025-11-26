@@ -45,7 +45,12 @@ export default function SecondForm() {
     return (
         <>
             <FormField label="Priority" description="Higher priority may be processed sooner.">
-                <Select onValueChange={handlePriorityChange} value={request.priority} placeholder="Select priority...">
+                <Select 
+                    onValueChange={handlePriorityChange} 
+                    value={request.priority} 
+                    displayValue={priorities.find(p => p.id === request.priority)?.name}
+                    placeholder="Select priority..."
+                >
                     {
                         priorities.map((priority) => (
                             <Option key={priority.id} value={priority.id}>{priority.name}</Option>
@@ -55,7 +60,12 @@ export default function SecondForm() {
             </FormField>
             <Divider />
             <FormField label="Type of Request" description="Select what you are requesting.">
-                <Select onValueChange={handleTypeChange} value={request.type} placeholder="Select type...">
+                <Select 
+                    onValueChange={handleTypeChange} 
+                    value={request.type} 
+                    displayValue={types.find(t => t.id === request.type)?.name}
+                    placeholder="Select type..."
+                >
                     {
                         types.map((type) => (
                             <Option key={type.id} value={type.id}>{type.name}</Option>
@@ -67,7 +77,7 @@ export default function SecondForm() {
             <FormField label="Due Date" description="We will warn on tight deadlines.">
                 <TextInput type="datetime-local" value={request.due} onChange={handleDueChange} />
             </FormField>
-            {noticeAlert && <InlineAlert message={noticeAlert} />}
+            {noticeAlert && <InlineAlert type="warning" message={noticeAlert} />}
             <Divider />
             <FormField label="Select Venue" description="(optional)" mode="column">
                 {

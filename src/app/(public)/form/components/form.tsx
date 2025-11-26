@@ -10,10 +10,23 @@ import StepIndicator from "./step-indicator";
 
 import Text from "@/components/common/text";
 import SuccessScreen from "./success-card";
+import FormProcessing from "./form-processing";
+import InlineAlert from "@/components/common/inline-alert";
 
 
 export default function Form() {
-    const { request, onSubmit, step, setStep, reset, submit, submitted } = useFormContext();
+    const {
+        request,
+        onSubmit,
+        step,
+        setStep,
+        reset,
+        submit,
+        submitted,
+        isProcessing,
+        submissionError,
+        setSubmissionError
+    } = useFormContext();
 
     function handlePrimaryAction() {
         switch (step) {
@@ -24,6 +37,7 @@ export default function Form() {
                 setStep(3);
                 break;
             case 3:
+                setSubmissionError(null);
                 submit();
                 break;
         }
@@ -53,12 +67,36 @@ export default function Form() {
         }
     }
 
+    // Determine what to show based on current state
     const currentForm = {
         1: <FirstForm />,
         2: <SecondForm />,
         3: <FormThree />,
     }[step];
 
+    // Show success screen if submitted
+    if (submitted) {
+        return (
+            <div className="w-full max-w-[1152px] mx-auto py-6 px-4 space-y-8">
+                <FormHeader />
+                <Divider />
+                <SuccessScreen />
+            </div>
+        );
+    }
+
+    // Show processing screen if submitting
+    if (isProcessing) {
+        return (
+            <div className="w-full max-w-[1152px] mx-auto py-6 px-4 space-y-8">
+                <FormHeader />
+                <Divider />
+                <FormProcessing />
+            </div>
+        );
+    }
+
+    // Show normal form with potential error alert
     return (
         <div className="w-full max-w-[1152px] mx-auto py-6 px-4 space-y-8">
             {/* Header */}
@@ -73,16 +111,28 @@ export default function Form() {
 
             <div className="flex justify-end">
                 <div className="w-full flex gap-4 max-w-113.5">
-                    <Button className="w-full" variant="secondary" onClick={handleSecondaryAction} >
+                    <Button
+                        className="w-full"
+                        variant="secondary"
+                        onClick={handleSecondaryAction}
+                        disabled={isProcessing}
+                    >
                         {step === 1 ? 'Reset' : 'Back'}
                     </Button>
-                    <Button className="w-full" onClick={handlePrimaryAction} disabled={handleButtonDisability()} >
+                    <Button
+                        className="w-full"
+                        onClick={handlePrimaryAction}
+                        disabled={handleButtonDisability() || isProcessing}
+                    >
                         {step === 3 ? 'Submit' : 'Continue'}
                     </Button>
                 </div>
             </div>
 
-            {submitted && <SuccessScreen />}
+            {/* Error Alert */}
+            {submissionError && (
+                <InlineAlert type="error" message={submissionError} description={'An error occurred while submitting your request. Please try again.'}/>
+            )}
         </div>
     )
 }

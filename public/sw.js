@@ -1,4 +1,4 @@
-const CACHE_NAME = 'moc-request-platform-v1';
+const CACHE_NAME = 'moc-request-platform-v2';
 const urlsToCache = [
   '/',
   '/admin',
@@ -32,39 +32,46 @@ self.addEventListener('install', (event) => {
 
 // Fetch event
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        if (response) {
-          return response;
-        }
-        
-        return fetch(event.request)
-          .then((response) => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-
+  const { request } = event;
+  const url = new URL(request.url);
+  
+  // TEMPORARILY DISABLED: Skip caching for API requests to ensure fresh data
+  if (url.pathname.includes('/rest/v1/') || url.hostname.includes('supabase')) {
+    event.respondWith(fetch(request));
+    return;
+  }
+  
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          return caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, response.clone());
             return response;
-          })
-          .catch(() => {
-            // If both cache and network fail, show offline page
-            if (event.request.destination === 'document') {
-              return caches.match('/offline');
-            }
           });
-      })
-  );
+        })
+        .catch(() => {
+          return caches.match(request).then((response) => {
+            return response || caches.match('/offline');
+          });
+        })
+    );
+  } else {
+    event.respondWith(
+      caches.match(request)
+        .then((response) => {
+          if (response) {
+            return response;
+          }
+          return fetch(request).then((response) => {
+            return caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, response.clone());
+              return response;
+            });
+          });
+        })
+    );
+  }
 });
 
 // Activate event

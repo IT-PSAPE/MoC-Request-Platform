@@ -26,7 +26,9 @@ export function BoardContextProvider({ children }: { children: React.ReactNode }
                     list(supabase),
                 ]);
 
-                setRequests((requestsResults ?? []) as FetchRequest[]);
+                if (isMounted) {
+                    setRequests((requestsResults ?? []) as FetchRequest[]);
+                }
 
             } catch (error) {
                 if (!isMounted) return;
@@ -36,8 +38,16 @@ export function BoardContextProvider({ children }: { children: React.ReactNode }
 
         void loadDefaults();
 
+        // TEMPORARILY ADDED: Refetch data when window gains focus to ensure fresh data
+        const handleFocus = () => {
+            void loadDefaults();
+        };
+        
+        window.addEventListener('focus', handleFocus);
+
         return () => {
             isMounted = false;
+            window.removeEventListener('focus', handleFocus);
         };
     }, [supabase]);
 

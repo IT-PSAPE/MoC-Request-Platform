@@ -87,8 +87,16 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
 
         void loadDefaults();
 
+        // TEMPORARILY ADDED: Refetch data when window gains focus to ensure fresh data
+        const handleFocus = () => {
+            void loadDefaults();
+        };
+        
+        window.addEventListener('focus', handleFocus);
+
         return () => {
             isMounted = false;
+            window.removeEventListener('focus', handleFocus);
         };
     }, [supabase]);
 

@@ -63,7 +63,7 @@ export default function FirstForm() {
             </FormField>
             <Divider />
             <FormField label="Where" description="Location or channel.">
-                <TextInput placeholder="Who is making the request?" onChange={handleWhereChange} value={request.where} />
+                <TextInput placeholder="Where will this be used?" onChange={handleWhereChange} value={request.where} />
             </FormField>
             <Divider />
             <FormField label="Why" description="Goals, context, or problem being solved.">

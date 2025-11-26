@@ -338,6 +338,17 @@ function RequestListFilters() {
             onValueChange={(value) => setSortField(value as SortField)}
             className="w-full sm:w-[180px]"
             placeholder="Sort by"
+            displayValue={(() => {
+              const sortLabels = {
+                createdAt: "Created Date",
+                dueDate: "Due Date", 
+                title: "Title",
+                type: "Type",
+                status: "Status",
+                items: "Items Count"
+              };
+              return sortLabels[sortField as keyof typeof sortLabels];
+            })()}
           >
             <Option value="createdAt">Created Date</Option>
             <Option value="dueDate">Due Date</Option>
