@@ -8,7 +8,7 @@ import Header from "@/components/common/header";
 
 import { useAdminContext } from "@/contexts/admin-context";
 import { SongCard } from "@/components/common/cards/song-card";
-import { GridContainer } from "@/components/common/grid-container";
+import { GridContainer } from "@/components/layout/grid-container";
 import AdminSongDetailsSheet from "@/features/admin/songs/admin-songs-details-sheet";
 
 export default function SongContent() {

@@ -8,7 +8,7 @@ import EmptyState from "@/components/common/empty-state";
 import Header from "@/components/common/header";
 
 import { useAdminContext } from "@/contexts/admin-context";
-import { GridContainer } from "@/components/common/grid-container";
+import { GridContainer } from "@/components/layout/grid-container";
 import AdminVenueDetailsSheet from "@/features/admin/venues/admin-venue-details-sheet";
 
 export default function VenueContent() {

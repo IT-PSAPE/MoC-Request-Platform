@@ -8,7 +8,7 @@ import Header from "@/components/common/header";
 
 import { useAdminContext } from "@/contexts/admin-context";
 import { RequestItemCard } from "@/components/common/cards/request-item-card";
-import { GridContainer } from "@/components/common/grid-container";
+import { GridContainer } from "@/components/layout/grid-container";
 import AdminRequestItemDetailsSheet from "@/features/admin/items/admin-request-item-details-sheet";
 
 export default function RequestItemContent() {

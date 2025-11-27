@@ -4,3 +4,22 @@
 @import "../styles/colors-utility.css";
 @import "../styles/spac-primitive.css";
 @import "../styles/tokens.css";
+
+:root {
+	background-color: var(--background-color-secondary);
+}
+
+html,
+body {
+	background-color: var(--background-color-secondary);
+}
+
+body {
+	min-height: 100vh;
+}
+
+@supports (min-height: 100dvh) {
+	body {
+		min-height: 100dvh;
+	}
+}
