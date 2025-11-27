@@ -13,9 +13,9 @@ export default function NavigationBar() {
   const pathname = usePathname();
 
   const links: { href: string; label: string; icon: IconName }[] = [
-    { href: "/", label: "Home", icon: "line:home_line" },
-    { href: "/form", label: "Form", icon: "line:pen_line" },
-    { href: "/board", label: "Requests Board", icon: "line:clipboard" },
+    { href: "/", label: "Home", icon: "home_line" },
+    { href: "/form", label: "Form", icon: "pen_line" },
+    { href: "/board", label: "Requests Board", icon: "clipboard" },
   ];
 
   function Links() {

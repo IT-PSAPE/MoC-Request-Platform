@@ -52,4 +52,27 @@ function Text<T extends TextTag = "div">({ as, children, style, className, ...pr
   );
 }
 
+const TextElemnt = {
+  titleh1: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  titleh2: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  titleh3: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  titleh4: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  titleh5: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  titleh6: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  labellg: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  labelbg: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  labelmd: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  labelsm: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  labelxs: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  paragraphlg: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  paragraphbg: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  paragraphmd: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  paragraphsm: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  paragraphxs: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  subheadingbg: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  subheadingmd: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  subheadingsm: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+  subheadingxs: ({ children }: { children: ReactNode }) => <Text>{children}</Text>,
+}
+
 export default Text;

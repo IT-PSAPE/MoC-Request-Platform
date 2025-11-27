@@ -57,7 +57,7 @@ export default function RequestDeleteConfirmation({
             onClick={handleClose}
             disabled={isDeleting}
           >
-            <Icon name="line:close" />
+            <Icon.close />
           </IconButton>
         </div>
         <div className="px-5 py-6 space-y-2">

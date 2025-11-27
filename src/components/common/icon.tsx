@@ -1,4 +1,4 @@
-const Icon_Line = {
+const SVGIcon = {
     user: (props: React.SVGProps<SVGSVGElement>) => (
         <svg viewBox="0 0 24 24" {...props}>
             <path d="M12.0004 15C15.6764 15.0001 19.0079 16.554 21.4906 19.0674L21.7279 19.3145L21.7943 19.3916C22.103 19.7936 22.0625 20.3723 21.6859 20.7275C21.3093 21.0824 20.7302 21.0882 20.347 20.7568L20.2728 20.6855L19.8578 20.2656C17.7414 18.2206 14.9918 17.0001 12.0004 17C8.80935 17 5.89359 18.3887 3.72791 20.6855C3.34916 21.0873 2.71668 21.106 2.31482 20.7275C1.91305 20.3487 1.89416 19.7163 2.27283 19.3145C4.77867 16.6568 8.20568 15 12.0004 15ZM12.0004 2C15.0378 2.00019 17.5004 4.46255 17.5004 7.5C17.5004 10.5374 15.0378 12.9998 12.0004 13C8.9628 13 6.50037 10.5376 6.50037 7.5C6.50037 4.46243 8.9628 2 12.0004 2ZM12.0004 4C10.0674 4 8.50037 5.567 8.50037 7.5C8.50037 9.433 10.0674 11 12.0004 11C13.9332 10.9998 15.5004 9.43288 15.5004 7.5C15.5004 5.56712 13.9332 4.00019 12.0004 4Z" />
@@ -193,47 +193,47 @@ const Icon_Line = {
     ),
 }
 
-const Icon_Solid = {
-    info: (props: React.SVGProps<SVGSVGElement>) => (
-        <svg viewBox="0 0 24 24" {...props}>
-            <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 11C11.4477 11 11 11.4477 11 12V16C11 16.5523 11.4477 17 12 17C12.5523 17 13 16.5523 13 16V12C13 11.4477 12.5523 11 12 11ZM12 7C11.4477 7 11 7.44772 11 8C11 8.55228 11.4477 9 12 9H12.0098C12.5621 9 13.0098 8.55228 13.0098 8C13.0098 7.44772 12.5621 7 12.0098 7H12Z" />
-        </svg>
-    ),
-    check_circle: (props: React.SVGProps<SVGSVGElement>) => (
-        <svg viewBox="0 0 24 24" {...props}>
-            <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM17.207 8.29297C16.8165 7.90244 16.1835 7.90244 15.793 8.29297L10.5 13.5859L8.20703 11.293L8.13086 11.2246C7.73809 10.9043 7.15908 10.9269 6.79297 11.293C6.40244 11.6835 6.40244 12.3165 6.79297 12.707L9.79297 15.707C10.1835 16.0976 10.8165 16.0976 11.207 15.707L17.207 9.70703C17.5976 9.31651 17.5976 8.68349 17.207 8.29297Z" />
-        </svg>
-    ),
-    alert: (props: React.SVGProps<SVGSVGElement>) => (
-        <svg viewBox="0 0 24 24" {...props}>
-            <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17H12.0098C12.5621 17 13.0098 16.5523 13.0098 16C13.0098 15.4477 12.5621 15 12.0098 15H12ZM12 7C11.4477 7 11 7.44772 11 8V12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12V8C13 7.44772 12.5523 7 12 7Z" />
-        </svg>
-    ),
-}
-
-export type IconName =
-    | `line:${keyof typeof Icon_Line}`
-    | `solid:${keyof typeof Icon_Solid}`;
+type IconName = keyof typeof SVGIcon;
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+}
+
+interface IconComponentProps extends React.SVGProps<SVGSVGElement> {
     name: IconName;
     size?: number;
 }
 
-function Icon({ name, size = 24, ...props }: IconProps) {
-    const [variant, iconName] = name.split(':') as ["line" | "solid", string];
+function IconComponent({ name, size = 24, ...props }: IconComponentProps) {
+    const Component = SVGIcon[name];
+    
+    if (!Component) return null;
 
-    if (variant === 'line') {
-        const IconComponent = Icon_Line[iconName as keyof typeof Icon_Line];
-        if (!IconComponent) return null;
-        return <IconComponent fill="currentColor" height={size} width={size} {...props} />;
-    } else if (variant === 'solid') {
-        const IconComponent = Icon_Solid[iconName as keyof typeof Icon_Solid];
-        if (!IconComponent) return null;
-        return <IconComponent fill="currentColor" height={size} width={size} {...props} />;
-    }
-
-    return null;
+    return <Component fill="currentColor" height={size} width={size} {...props} />;
 }
+
+const Icon = {
+    status: ({ size = 24 }: IconProps) => <IconComponent name="status" size={size} />,
+    check: ({ size = 24 }: IconProps) => <IconComponent name="check" size={size} />,
+    plus: ({ size = 24 }: IconProps) => <IconComponent name="plus" size={size} />,
+    trash: ({ size = 24 }: IconProps) => <IconComponent name="trash" size={size} />,
+    close: ({ size = 24 }: IconProps) => <IconComponent name="close" size={size} />,
+    chevron_down: ({ size = 24 }: IconProps) => <IconComponent name="chevron_down" size={size} />,
+    chevron_up: ({ size = 24 }: IconProps) => <IconComponent name="chevron_up" size={size} />,
+    tag: ({ size = 24 }: IconProps) => <IconComponent name="tag" size={size} />,
+    dropdown: ({ size = 24 }: IconProps) => <IconComponent name="dropdown" size={size} />,
+    calendar: ({ size = 24 }: IconProps) => <IconComponent name="calendar" size={size} />,
+    column: ({ size = 24 }: IconProps) => <IconComponent name="column" size={size} />,
+    row: ({ size = 24 }: IconProps) => <IconComponent name="row" size={size} />,
+    home_line: ({ size = 24 }: IconProps) => <IconComponent name="home_line" size={size} />,
+    clock_rewind: ({ size = 24 }: IconProps) => <IconComponent name="clock_rewind" size={size} />,
+    alert: ({ size = 24 }: IconProps) => <IconComponent name="alert" size={size} />,
+    dotpoints: ({ size = 24 }: IconProps) => <IconComponent name="dotpoints" size={size} />,
+    tool: ({ size = 24 }: IconProps) => <IconComponent name="tool" size={size} />,
+    music_note: ({ size = 24 }: IconProps) => <IconComponent name="music_note" size={size} />,
+    building: ({ size = 24 }: IconProps) => <IconComponent name="building" size={size} />,
+};
+
+export type { IconName };
 
 export default Icon;

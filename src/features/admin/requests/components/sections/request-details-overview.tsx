@@ -13,6 +13,7 @@ import {
   formatRequestType,
   type RequestDetailsEditableProps
 } from "../shared/request-details-utils";
+import Badge from "@/components/common/badge";
 
 export default function RequestDetailsOverview({
   request,
@@ -29,7 +30,7 @@ export default function RequestDetailsOverview({
       <div className="space-y-4 *:w-full *:gap-sm *:grid *:grid-cols-2 *:items-center">
         <div>
           <span className="flex items-center gap-1.5">
-            <Icon name="line:status" size={16} />
+            <Icon.status size={16} />
             <Text style="label-sm" className="text-secondary">Status</Text>
           </span>
           <InlineEditor
@@ -47,7 +48,14 @@ export default function RequestDetailsOverview({
         </div>
         <div>
           <span className="flex items-center gap-1.5">
-            <Icon name="line:dropdown" size={16} />
+            <Icon.dropdown size={16} />
+            <Text style="label-sm" className="text-secondary">Type</Text>
+          </span>
+          <span><Badge>{request.type.name}</Badge></span>
+        </div>
+        <div>
+          <span className="flex items-center gap-1.5">
+            <Icon.dropdown size={16} />
             <Text style="label-sm" className="text-secondary">Priority</Text>
           </span>
           <InlineEditor
@@ -65,7 +73,7 @@ export default function RequestDetailsOverview({
         </div>
         <div>
           <span className="flex items-center gap-1.5">
-            <Icon name="line:tag" size={16} />
+            <Icon.tag size={16} />
             <Text style="label-sm" className="text-secondary">Type</Text>
           </span>
           <InlineEditor
@@ -83,7 +91,7 @@ export default function RequestDetailsOverview({
         </div>
         <div>
           <span className="flex items-center gap-1.5">
-            <Icon name="line:calendar" size={16} />
+            <Icon.calendar size={16} />
             <Text style="label-sm" className="text-tertiary">Due Date</Text>
           </span>
           <InlineEditor
@@ -98,7 +106,7 @@ export default function RequestDetailsOverview({
         </div>
         <div>
           <span className="flex items-center gap-1.5">
-            <Icon name="line:clock_rewind" size={16} />
+            <Icon.clock_rewind size={16} />
             <Text style="label-sm" className="text-secondary">Created time</Text>
           </span>
           <div className="px-1 py-0.5 min-h-[24px] flex items-center">

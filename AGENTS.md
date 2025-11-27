@@ -55,3 +55,30 @@
 - Supabase helpers & caching: `src/hooks/use-supabase-client.ts`, `src/hooks/use-cached-*.ts`, `src/lib/query-keys.ts`, `src/services/*.ts`, `src/lib/database.ts`
 - Context providers: `src/providers/root-provider.tsx`, `src/contexts/*.tsx`
 - Auth flow: `middleware.ts`, `src/components/common/auth-guard.tsx`, `src/components/common/login-form.tsx`
+
+
+Dry Run Notes 
+
+MoC:
+- Background welcome music
+- Taking event pictures:
+- Arrival downstairs/upstairs
+- Worship Song: Wahamba Nathi
+
+- Background lunch music:
+
+- Presentations
+- Taking leaders group picture after each presentation. 
+- Worship Song: (to be confirmed) 
+- Pledge Pictures 
+- Chant Pictures 
+- Closing Group Picture
+- Praise Song: (to be confirmed) while pastors gather themselves for the picture. 
+
+Required:
+- 1 Wired Mic
+- (Maybe Amen mic)
+- Performance (Skirt) 2 Mics
+- Presentations (clicker - maybe)
+- Video edited for Saturday morning
+- Walk up background music, each time a pastor is called up for presentation.

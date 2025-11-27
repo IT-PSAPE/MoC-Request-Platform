@@ -47,12 +47,12 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         )
     }
 
-    const links: { href: string; label: string; icon: IconName }[] = [
-        { href: "/admin/", label: "Dashboard", icon: "line:home_line" },
-        { href: "/admin/items/", label: "Request Items", icon: "line:dotpoints" },
-        { href: "/admin/equipment/", label: "Equipment", icon: "line:tool" },
-        { href: "/admin/songs/", label: "Songs", icon: "line:music_note" },
-        { href: "/admin/venues/", label: "Venues", icon: "line:building" },
+    const links: { href: string; label: string; icon: React.ReactNode }[] = [
+        { href: "/admin/", label: "Dashboard", icon: <Icon.home_line /> },
+        { href: "/admin/items/", label: "Request Items", icon: <Icon.dotpoints /> },
+        { href: "/admin/equipment/", label: "Equipment", icon: <Icon.tool /> },
+        { href: "/admin/songs/", label: "Songs", icon: <Icon.music_note /> },
+        { href: "/admin/venues/", label: "Venues", icon: <Icon.building /> },
     ];
 
     return (
@@ -67,13 +67,13 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 <div className="p-2 flex-1" >
                     {links.map((l) => (
                         <Link key={l.href} href={l.href}>
-                            <MenuItem current={pathname === l.href}><Icon name={l.icon} />{l.label}</MenuItem>
+                            <MenuItem current={pathname === l.href}>{l.icon}{l.label}</MenuItem>
                         </Link>
                     ))}
                 </div>
                 <div className="p-2 pt-0 flex-none" >
                     <Link href="/" >
-                        <MenuItem current ><Icon name="line:home_line" /> Home Page</MenuItem>
+                        <MenuItem current ><Icon.home_line /> Home Page</MenuItem>
                     </Link>
                 </div>
             </div>
@@ -95,14 +95,14 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                             className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-quaternary transition-colors text-primary"
                             onClick={onClose}
                         >
-                            <Icon name="line:close" />
+                            <Icon.close />
                         </button>
                     </div>
                     <div className="p-4 pt-0 flex-1">
                         {links.map((l) => (
                             <div key={l.href}>
                                 <Link href={l.href} onClick={handleLinkClick}>
-                                    <MenuItem current={pathname === l.href}><Icon name={l.icon} />{l.label}</MenuItem>
+                                    <MenuItem current={pathname === l.href}>{l.icon}{l.label}</MenuItem>
                                 </Link>
                                 {l.href === "/admin" && <Divider />}
                             </div>
@@ -110,7 +110,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                     </div>
                     <div className="p-4 pt-0 flex-none">
                         <Link href="/" onClick={onClose}>
-                            <MenuItem current ><Icon name="line:home_line" /> Home Page</MenuItem>
+                            <MenuItem current ><Icon.home_line /> Home Page</MenuItem>
                         </Link>
                     </div>
                 </div>

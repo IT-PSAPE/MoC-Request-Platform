@@ -14,6 +14,7 @@ import RequestDetailsEquipment from "./components/sections/request-details-equip
 import RequestDetailsSongs from "./components/sections/request-details-songs";
 import RequestDetailsComments from "./components/sections/request-details-comments";
 import RequestDeleteConfirmation from "./components/sections/request-delete-confirmation";
+import RequestDetailsFlow from "./components/sections/request-details-flow";
 
 interface RequestDetailsSheetProps {
   request: FetchRequest | null;
@@ -72,7 +73,7 @@ export default function RequestDetailsSheet({
                 disabled={!onDeleteRequest} 
                 variant="ghost"
               >
-                <Icon name="line:trash" size={16} />
+                <Icon.trash size={16} />
               </IconButton>
             </Sheet.Header>
 
@@ -108,6 +109,10 @@ export default function RequestDetailsSheet({
                 <Divider />
 
                 <RequestDetailsSongs request={request} />
+
+                <Divider />
+
+                <RequestDetailsFlow request={request} />
 
                 <Divider />
 

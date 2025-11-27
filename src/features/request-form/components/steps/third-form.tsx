@@ -58,7 +58,7 @@ export default function ThirdForm() {
                 }
                 <div className="flex justify-center">
                     <Button type="button" variant="secondary" onClick={handleAddStep}>
-                        <Icon name="line:plus" /> Add Step
+                        <Icon.plus /> Add Step
                     </Button>
                 </div>
             </div>

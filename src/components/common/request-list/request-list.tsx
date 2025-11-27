@@ -365,9 +365,9 @@ function RequestListFilters() {
             className="shrink-0"
           >
             {sortDirection === "asc" ? (
-              <Icon name="line:chevron_up" size={16} />
+              <Icon.chevron_up size={16} />
             ) : (
-              <Icon name="line:chevron_down" size={16} />
+              <Icon.chevron_down size={16} />
             )}
           </IconButton>
         </div>
@@ -376,10 +376,10 @@ function RequestListFilters() {
             <TabContextProvider defaultTab={listView}>
               <TabList className="max-md:w-full">
                 <TabItem value="column" onClick={() => setListView("column")}>
-                  <Icon className="mr-1" name="line:column" size={16} />Column
+                  <Icon.column className="mr-1" size={16} />Column
                 </TabItem>
                 <TabItem value="list" onClick={() => setListView("list")}>
-                  <Icon className="mr-1" name="line:row" size={16} />List
+                  <Icon.row className="mr-1"  size={16} />List
                 </TabItem>
               </TabList>
             </TabContextProvider>
