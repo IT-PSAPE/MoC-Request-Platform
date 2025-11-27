@@ -56,7 +56,7 @@ function SheetHeader({ children, className }: { children: React.ReactNode, class
             <div>
                 {children}
             </div>
-            <IconButton onClick={() => setOpen(false)} size="sm" variant="ghost"><Icon name="line:close" size={16} /></IconButton>
+            <IconButton onClick={() => setOpen(false)} variant="ghost"><Icon name="line:close" size={16} /></IconButton>
         </div>
     )
 }
