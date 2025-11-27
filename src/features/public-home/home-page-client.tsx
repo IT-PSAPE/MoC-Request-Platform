@@ -16,10 +16,10 @@ export default function HomePageClient() {
           </div>
         </div>
         <div className="py-10 w-full flex-1 flex items-center">
-          <div className="w-full mx-auto max-w-[768px] text-left space-y-20 px-4">
+          <div className="w-full mx-auto max-w-container text-left space-y-20 px-4">
             <div className="w-full flex flex-col items-center space-y-2 text-center">
               <Text style="title-h1" className="text-brand-secondary" >MOC Request Platform</Text>
-              <Text style="paragraph-md">The Ministry of Culture invites all members to submit their requests for assistance. We are here to support you and will do our best to provide the help you need.</Text>
+              <Text style="paragraph-md" className="text-tertiary max-w-[50ch]">The Ministry of Culture invites all members to submit their requests for assistance. We are here to support you and will do our best to provide the help you need.</Text>
             </div>
             <div className="mx-auto w-full grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
               <Link href="/form" className="block group h-full">
