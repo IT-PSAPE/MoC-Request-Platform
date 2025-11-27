@@ -102,7 +102,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         {links.map((l) => (
                             <div key={l.href}>
                                 <Link href={l.href} onClick={handleLinkClick}>
-                                    <MenuItem current={pathname === l.href}><Icon name="line:home_line" />{l.label}</MenuItem>
+                                    <MenuItem current={pathname === l.href}><Icon name={l.icon} />{l.label}</MenuItem>
                                 </Link>
                                 {l.href === "/admin" && <Divider />}
                             </div>
