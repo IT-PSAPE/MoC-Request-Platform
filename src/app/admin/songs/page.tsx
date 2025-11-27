@@ -44,6 +44,7 @@ export default function SongContent() {
                 <Text style="title-h4">Songs</Text>
                 <Text style="paragraph-md">Manage the catalog of approved songs and whether lyrics or instrumentals are available.</Text>
             </Header>
+            
             <GridContainer isEmpty={songs.length === 0}>
                 {songs.length === 0 ? (
                     <EmptyState message="No songs available" />

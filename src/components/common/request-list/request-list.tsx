@@ -67,7 +67,7 @@ function useRequestListContext() {
 
 function RequestListLayout() {
   return (
-    <div className="pb-4">
+    <div className="pb-4 w-full max-w-container mx-auto ">
       <RequestListFilters />
       <RequestListGroups />
     </div>

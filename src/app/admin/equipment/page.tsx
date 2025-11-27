@@ -43,6 +43,7 @@ export default function EquipmentContent() {
                 <Text style="title-h4">Equipment</Text>
                 <Text style="paragraph-md">Adjust availability for each resource before assigning it to a request.</Text>
             </Header>
+            
             <GridContainer isEmpty={equipment.length === 0}>
                 {equipment.length === 0 ? (
                     <EmptyState message="No equipment tracked yet." />

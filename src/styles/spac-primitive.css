@@ -4,5 +4,5 @@
 
 @theme {
   --spacing-margin: clamp(0.75rem, -3.3125rem + 13vw, 4rem);
-  --spacing-container: 64rem;
+  --spacing-container: 80rem;
 }

@@ -39,6 +39,7 @@ export default function RequestsContent() {
                 <Text style="title-h4">Requests</Text>
                 <Text style="paragraph-md">View and manage all requests in one place</Text>
             </Header>
+            
             <RequestList 
                 requests={requests} 
                 onRequestClick={handleRequestClick}

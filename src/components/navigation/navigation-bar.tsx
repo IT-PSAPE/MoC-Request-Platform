@@ -4,16 +4,18 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Button from "@/components/common/button";
 import { useAuthContext } from "@/contexts/auth-context";
+import Icon, { IconName } from "../common/icon";
+import { cn } from "@/lib/cn";
 
 export default function NavigationBar() {
   const { authed } = useAuthContext();
 
   const pathname = usePathname();
 
-  const links = [
-    { href: "/", label: "Home" },
-    { href: "/form/", label: "Form" },
-    { href: "/board/", label: "Requests Board" },
+  const links: { href: string; label: string; icon: IconName }[] = [
+    { href: "/", label: "Home", icon: "line:home_line" },
+    { href: "/form", label: "Form", icon: "line:pen_line" },
+    { href: "/board", label: "Requests Board", icon: "line:clipboard" },
   ];
 
   function Links() {
@@ -22,14 +24,15 @@ export default function NavigationBar() {
     };
 
     return (
-      <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-[384px] border border-gray-200 bg-gray-50 mx-auto max-md:contents">
+      <div className="flex gap-1 p-0.5 rounded-lg w-full max-w-[420px] border border-gray-200 bg-gray-50 mx-auto max-md:contents">
         {links.map((l) => (
           <Link
             key={l.href}
             href={l.href}
             onClick={handleLinkClick}
-            className={`px-4 py-1.5 rounded-md text-sm grow text-center leading-1.2 border ${pathname === l.href ? 'border-gray-200 bg-white drop-shadow-sm' : 'border-transparent text-gray-500'}`}
+            className={cn(`flex gap-1.5 items-center justify-center px-4 py-1.5 rounded-md text-sm grow text-center leading-1.2 border ${pathname === l.href ? 'border-gray-200 bg-white drop-shadow-sm' : 'border-transparent text-gray-500'}`)}
           >
+            <Icon name={l.icon} />
             {l.label}
           </Link>
         ))}
@@ -62,7 +65,7 @@ export default function NavigationBar() {
             href="/admin"
             onClick={handleActionClick}
           >
-            <Button variant='secondary' size='sm' className="max-md:w-full">Dashboard</Button>
+            <Button variant='secondary' className="max-md:w-full">Dashboard</Button>
           </Link>
         )
         : (
@@ -70,7 +73,7 @@ export default function NavigationBar() {
             href="/login"
             onClick={handleActionClick}
           >
-            <Button variant='secondary' size='sm' className="max-md:w-full">Login</Button>
+            <Button variant='secondary' className="max-md:w-full">Login</Button>
           </Link>
         )
     )

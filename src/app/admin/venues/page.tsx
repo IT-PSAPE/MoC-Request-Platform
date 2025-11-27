@@ -44,6 +44,7 @@ export default function VenueContent() {
                 <Text style="title-h4">Venues</Text>
                 <Text style="paragraph-md">Keep venue readiness up to date so request owners know where events can take place.</Text>
             </Header>
+            
             <GridContainer isEmpty={venues.length === 0}>
                 {venues.length === 0 ? (
                     <EmptyState message="No venues available" />
