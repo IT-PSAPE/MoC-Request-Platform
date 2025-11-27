@@ -21,10 +21,9 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "MoC Requests",
   },
-  themeColor: "#ffffff",
   openGraph: {
     type: "website",
     siteName: "MoC Request Platform",
@@ -51,10 +50,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={manrope.className} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#2563eb" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="MoC Requests" />
         <link rel="apple-touch-icon" href="/icons/icon-256x256.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
@@ -82,10 +81,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         <meta name="apple-mobile-web-app-title" content="MoC Requests" />
       </head>
-      <body
-        suppressHydrationWarning
-        className="antialiased flex min-h-[100dvh] flex-col bg-secondary overflow-hidden pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] max-md:overflow-auto"
-      >
+      <body suppressHydrationWarning className="antialiased flex flex-col h-screen bg-secondary overflow-hidden max-md:overflow-auto max-md:h-fit">
         <RootProvider>{children}</RootProvider>
       </body>
     </html>
