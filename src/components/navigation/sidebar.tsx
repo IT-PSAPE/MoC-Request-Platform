@@ -3,7 +3,7 @@
 import { cn } from "@/lib/cn";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Icon from "@/components/common/icon";
+import Icon, { IconName } from "@/components/common/icon";
 import Divider from "@/components/common/divider";
 
 type MenuItemProps = {
@@ -20,7 +20,7 @@ type SidebarProps = {
 function MenuItem({ current, children, onClick }: MenuItemProps) {
     return (
         <div className="p-0.5 text-sm" onClick={onClick} >
-            <div className={cn("px-3 py-2 border rounded-lg flex items-center gap-2 transition-shadow cursor-pointer", (current ? "bg-primary border-secondary hover:shadow-sm" : "border-transparent bg-transparent"))} >
+            <div className={cn("px-3 py-2 border rounded-lg flex items-center gap-2 transition-shadow cursor-pointer", (current ? "bg-primary border-secondary" : "border-transparent bg-transparent"))} >
                 {children}
             </div>
         </div>
@@ -47,12 +47,12 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         )
     }
 
-    const links = [
-        { href: "/admin/", label: "Dashboard" },
-        { href: "/admin/items/", label: "Request Items" },
-        { href: "/admin/equipment/", label: "Equipment" },
-        { href: "/admin/songs/", label: "Songs" },
-        { href: "/admin/venues/", label: "Venues" },
+    const links: { href: string; label: string; icon: IconName }[] = [
+        { href: "/admin/", label: "Dashboard", icon: "line:home_line" },
+        { href: "/admin/items/", label: "Request Items", icon: "line:dotpoints" },
+        { href: "/admin/equipment/", label: "Equipment", icon: "line:tool" },
+        { href: "/admin/songs/", label: "Songs", icon: "line:music_note" },
+        { href: "/admin/venues/", label: "Venues", icon: "line:building" },
     ];
 
     return (
@@ -67,9 +67,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 <div className="p-2 flex-1" >
                     {links.map((l) => (
                         <Link key={l.href} href={l.href}>
-                            <MenuItem current={pathname === l.href}>
-                                {l.label}
-                            </MenuItem>
+                            <MenuItem current={pathname === l.href}><Icon name={l.icon} />{l.label}</MenuItem>
                         </Link>
                     ))}
                 </div>
@@ -104,9 +102,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         {links.map((l) => (
                             <div key={l.href}>
                                 <Link href={l.href} onClick={handleLinkClick}>
-                                    <MenuItem current={pathname === l.href}>
-                                        {l.label}
-                                    </MenuItem>
+                                    <MenuItem current={pathname === l.href}><Icon name={l.icon} />{l.label}</MenuItem>
                                 </Link>
                                 {l.href === "/admin" && <Divider />}
                             </div>

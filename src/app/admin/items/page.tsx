@@ -38,16 +38,15 @@ export default function RequestItemContent() {
         }
     }, [selectedItem, isSheetOpen]);
 
-    const isEmpty = items.length === 0;
-
     return (
         <>
             <Header>
                 <Text style="title-h4">Request Items</Text>
                 <Text style="paragraph-md">Curate the predefined items teams can attach to their submissions.</Text>
             </Header>
-            <GridContainer>
-                {isEmpty ? (
+            
+            <GridContainer isEmpty={items.length === 0}>
+                {items.length === 0 ? (
                     <EmptyState message="No request items available yet." />
                 ) : items.map((item) => (
                     <RequestItemCard 

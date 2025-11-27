@@ -10,7 +10,7 @@ type Props = {
 
 export default function Card({ title, children, className, footer }: Props) {
   return (
-    <div className={cn("rounded-lg border border-gray-200 bg-white shadow-sm", className)}>
+    <div className={cn("rounded-lg border border-gray-200 bg-primary", className)}>
       {title && (
         <div className="border-b border-secondary px-2 py-2 text-sm font-medium">
           {title}

@@ -17,7 +17,7 @@ export function VenueCard({className, venue, onClick }: VenueCardProps) {
   };
 
   return (
-    <div className={cn("border border-secondary rounded-lg shadow-md", className)}>
+    <div className={cn("border border-secondary rounded-lg bg-primary", className)}>
       <div className="flex items-center justify-between p-4 ">
         <div className="flex-1">
           <h3 className="font-semibold text-sm">{venue.name}</h3>

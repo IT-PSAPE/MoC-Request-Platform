@@ -21,7 +21,7 @@ export function EquipmentCard({ equipment, className, onClick }: EquipmentCardPr
     }
     
     return (
-        <div className={cn("flex flex-col border border-secondary rounded-lg shadow-md", className)}>
+        <div className={cn("flex flex-col border border-secondary rounded-lg bg-primary", className)}>
             <div className=" p-4 " >
                 <div className="flex flex-col w-full">
                     <div className="flex flex-1 items-center justify-between gap-4 ">

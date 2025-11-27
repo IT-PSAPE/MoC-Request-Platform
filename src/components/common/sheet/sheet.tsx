@@ -53,10 +53,10 @@ function SheetHeader({ children, className }: { children: React.ReactNode, class
 
     return (
         <div className={cn('px-3 py-2 border-b border-secondary flex gap-2', className)}>
-            <div>
+            <div className="flex-1">
                 {children}
             </div>
-            <IconButton onClick={() => setOpen(false)} size="sm" variant="ghost"><Icon name="line:close" size={16} /></IconButton>
+            <IconButton onClick={() => setOpen(false)} variant="ghost"><Icon name="line:close" size={16} /></IconButton>
         </div>
     )
 }

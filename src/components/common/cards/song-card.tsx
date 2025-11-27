@@ -20,7 +20,7 @@ export function SongCard({ song, onClick }: SongCardProps) {
     };
 
     return (
-        <div className={cn("border border-secondary rounded-lg shadow-md")}>
+        <div className={cn("border border-secondary rounded-lg bg-primary")}>
             <div className="flex flex-col p-4 ">
                 <div className="">
                     <h3 className="font-semibold text-sm">{song.name}</h3>

@@ -7,6 +7,7 @@ import ThirdForm from "./components/steps/third-form";
 import Divider from "@/components/common/divider";
 import { useFormContext } from "@/contexts/form-context";
 import StepIndicator from "./components/step-indicator";
+import { useEffect } from "react";
 
 import Text from "@/components/common/text";
 import SuccessScreen from "./components/success-card";
@@ -27,6 +28,10 @@ export default function RequestForm() {
         submissionError,
         setSubmissionError
     } = useFormContext();
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [step]);
 
     function handlePrimaryAction() {
         switch (step) {
