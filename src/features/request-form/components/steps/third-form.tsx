@@ -7,7 +7,7 @@ import Icon from "@/components/common/icon";
 import FlowField from "../flow-field";
 import { useFormContext } from "@/contexts/form-context";
 
-export default function FormThree() {
+export default function ThirdForm() {
     const { request, setRequest } = useFormContext();
 
     function handleStepDelete(index: number) {

@@ -89,13 +89,9 @@ function checkPWAReadiness() {
     console.log('❌ No manifest link found');
   }
 
-  // Check for install prompt capability
-  let deferredPrompt;
-  
   window.addEventListener('beforeinstallprompt', (e) => {
     console.log('✅ beforeinstallprompt event fired - PWA is installable!');
     results.installPrompt = true;
-    deferredPrompt = e;
     e.preventDefault();
   });
 

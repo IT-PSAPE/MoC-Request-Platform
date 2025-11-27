@@ -9,7 +9,7 @@ import Header from "@/components/common/header";
 
 import { useAdminContext } from "@/contexts/admin-context";
 import { GridContainer } from "@/components/common/grid-container";
-import AdminVenueDetailsSheet from "@/components/admin/details-sheet/admin-venue-details-sheet";
+import AdminVenueDetailsSheet from "@/features/admin/venues/admin-venue-details-sheet";
 
 export default function VenueContent() {
     const { venues } = useAdminContext();

@@ -1,20 +1,20 @@
 'use client';
 
 import Button from "@/components/common/button";
-import FirstForm from "./content/first-form";
-import SecondForm from "./content/second-form";
-import FormThree from "./content/third-form";
+import FirstForm from "./components/steps/first-form";
+import SecondForm from "./components/steps/second-form";
+import ThirdForm from "./components/steps/third-form";
 import Divider from "@/components/common/divider";
 import { useFormContext } from "@/contexts/form-context";
-import StepIndicator from "./step-indicator";
+import StepIndicator from "./components/step-indicator";
 
 import Text from "@/components/common/text";
-import SuccessScreen from "./success-card";
-import FormProcessing from "./form-processing";
+import SuccessScreen from "./components/success-card";
+import FormProcessing from "./components/form-processing";
 import InlineAlert from "@/components/common/inline-alert";
 
 
-export default function Form() {
+export default function RequestForm() {
     const {
         request,
         onSubmit,
@@ -71,7 +71,7 @@ export default function Form() {
     const currentForm = {
         1: <FirstForm />,
         2: <SecondForm />,
-        3: <FormThree />,
+        3: <ThirdForm />,
     }[step];
 
     // Show success screen if submitted

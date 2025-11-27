@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BoardPageClient from "./board-page-client";
+import BoardPageClient from "@/features/public-board/board-page-client";
 
 export const metadata: Metadata = {
   title: "Request Board | MOC Request Platform",

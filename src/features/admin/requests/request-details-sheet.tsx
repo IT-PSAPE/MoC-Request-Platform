@@ -7,7 +7,7 @@ import Divider from "@/components/common/divider";
 import EmptyState from "@/components/common/empty-state";
 import Button, { IconButton } from "@/components/common/button";
 import Icon from "@/components/common/icon";
-import { TextArea } from "@/app/(public)/form/components/input";
+import { TextArea } from "@/features/request-form/components/input";
 import { useDefaultContext } from "@/contexts/defaults-context";
 import InlineEditor from "@/components/common/inline-editor";
 

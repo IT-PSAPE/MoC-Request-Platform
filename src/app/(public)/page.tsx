@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import HomePageClient from "./home-page-client";
+import HomePageClient from "@/features/public-home/home-page-client";
 
 export const metadata: Metadata = {
   title: "MOC Request Platform",
