@@ -14,6 +14,7 @@ import RequestDetailsEquipment from "./components/sections/request-details-equip
 import RequestDetailsSongs from "./components/sections/request-details-songs";
 import RequestDetailsComments from "./components/sections/request-details-comments";
 import RequestDeleteConfirmation from "./components/sections/request-delete-confirmation";
+import RequestCommentModal from "./components/sections/request-comment-modal";
 
 interface RequestDetailsSheetProps {
   request: FetchRequest | null;
@@ -39,6 +40,7 @@ export default function RequestDetailsSheet({
   onUpdateDueDate,
 }: RequestDetailsSheetProps) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   if (!request) return null;
 
@@ -56,6 +58,15 @@ export default function RequestDetailsSheet({
     onClose();
   };
 
+  const handleOpenCommentModal = () => {
+    if (!onAddComment) return;
+    setIsCommentModalOpen(true);
+  };
+
+  const handleCloseCommentModal = () => {
+    setIsCommentModalOpen(false);
+  };
+
   return (
     <>
       <style jsx>{`
@@ -67,13 +78,22 @@ export default function RequestDetailsSheet({
         <Sheet.Content>
           <div className="flex flex-col h-full">
             <Sheet.Header className="justify-end">
-              <IconButton 
-                onClick={handleOpenConfirm} 
-                disabled={!onDeleteRequest} 
-                variant="ghost"
-              >
-                <Icon name="line:trash" size={16} />
-              </IconButton>
+              <div className="flex gap-2">
+                <IconButton 
+                  onClick={handleOpenCommentModal} 
+                  disabled={!onAddComment} 
+                  variant="ghost"
+                >
+                  <Icon name="line:pen_line" />
+                </IconButton>
+                <IconButton 
+                  onClick={handleOpenConfirm} 
+                  disabled={!onDeleteRequest} 
+                  variant="ghost"
+                >
+                  <Icon name="line:trash" size={20} />
+                </IconButton>
+              </div>
             </Sheet.Header>
 
             {/* Scrollable content with invisible scrollbar */}
@@ -113,7 +133,6 @@ export default function RequestDetailsSheet({
 
                 <RequestDetailsComments 
                   request={request}
-                  onAddComment={onAddComment}
                 />
               </div>
             </div>
@@ -129,6 +148,13 @@ export default function RequestDetailsSheet({
           await onDeleteRequest(requestId);
           handleDeleteComplete();
         } : undefined}
+      />
+
+      <RequestCommentModal
+        request={request}
+        isOpen={isCommentModalOpen}
+        onClose={handleCloseCommentModal}
+        onAddComment={onAddComment}
       />
     </>
   );
