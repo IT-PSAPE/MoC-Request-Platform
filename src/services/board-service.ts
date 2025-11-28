@@ -20,7 +20,8 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
         note(*),
         song:request_song(*, song(*)),
         venue:request_venue(*, venue(*)),
-        item:request_item(*, item(*))
+        item:request_item(*, item(*)),
+        assignee:assignee(*, member(*))
       `);
 
     if (data.error) {
@@ -48,6 +49,7 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
         item: request.item,
         song: request.song,
         venue: request.venue,
+        assignee: request.assignee as Assignee[],
     }));
 
     return requests;
