@@ -7,7 +7,7 @@ import { usePopoverContext } from "./popover-provider";
 import { PopoverProvider } from "./popover-provider";
 
 function PopoverParent({ children }: PopoverProps) {
-  return <div className="relative inline-block">{children}</div>;
+  return <div className="relative inline-block w-full">{children}</div>;
 }
 
 function PopoverTrigger({ children, className }: PopoverTriggerProps) {

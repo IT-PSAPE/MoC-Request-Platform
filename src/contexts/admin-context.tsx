@@ -3,7 +3,7 @@
 import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list, updateRequestStatus, updateRequestPriority, updateRequestType, updateRequestDueDate, addComment, deleteRequest as deleteRequestService } from "@/services/admin-service";
+import { list, updateRequestStatus, updateRequestPriority, updateRequestType, updateRequestDueDate, addComment, deleteRequest as deleteRequestService, listMembers, assignMember, unassignMember } from "@/services/admin-service";
 import { useAuthContext } from "./auth-context";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
@@ -14,6 +14,7 @@ type AdminContextType = {
     equipment: Equipment[];
     songs: Song[];
     venues: Venue[];
+    members: Member[];
     tab: TabItem;
     updateEquipment: (id: string, available: number) => void;
     updateVenue: (venueId: string, available: boolean) => void;
@@ -24,6 +25,8 @@ type AdminContextType = {
     updateRequestDueDateOptimistic: (requestId: string, newDueDate: string) => Promise<void>;
     addCommentToRequest: (requestId: string, comment: string) => Promise<void>;
     deleteRequestById: (requestId: string) => Promise<void>;
+    assignMemberToRequest: (requestId: string, memberId: string) => Promise<void>;
+    unassignMemberFromRequest: (requestId: string, memberId: string) => Promise<void>;
     setTab: (tab: TabItem) => void;
 };
 
@@ -34,6 +37,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
     const [items, setItems] = useState<RequestItem[]>([]);
     const [songs, setSongs] = useState<Song[]>([]);
     const [venues, setVenues] = useState<Venue[]>([]);
+    const [members, setMembers] = useState<Member[]>([]);
     const [requests, setRequests] = useState<FetchRequest[]>([]);
     const [tab, setTab] = useState<TabItem>('dashboard');
     const { user } = useAuthContext();
@@ -43,11 +47,12 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
 
         const loadDefaults = async () => {
             try {
-                const [equipmentResult, songsResult, venuesResult, itemsResult, requestsResults] = await Promise.all([
+                const [equipmentResult, songsResult, venuesResult, itemsResult, membersResult, requestsResults] = await Promise.all([
                     EquipmentTable.select(supabase),
                     SongTable.select(supabase),
                     VenueTable.select(supabase),
                     RequestItemTable.select(supabase),
+                    listMembers(supabase),
                     list(supabase),
                 ]);
 
@@ -77,6 +82,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
                     setVenues((venuesResult.data ?? []) as Venue[]);
                 }
 
+                setMembers(membersResult ?? []);
                 setRequests((requestsResults ?? []) as FetchRequest[]);
 
             } catch (error) {
@@ -291,12 +297,72 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         setRequests((prevRequests) => prevRequests.filter((request) => request.id !== requestId));
     }
 
+    const assignMemberToRequest = async (requestId: string, memberId: string) => {
+        // Optimistically update the UI
+        const member = members.find(m => m.id === memberId);
+        if (!member) {
+            throw new Error("Member not found");
+        }
+
+        const newAssignee: Assignee = {
+            request_id: requestId,
+            member_id: memberId,
+            assigned_at: new Date().toISOString(),
+            member: member,
+        };
+
+        setRequests((prevRequests) =>
+            prevRequests.map((request) =>
+                request.id === requestId
+                    ? { ...request, assignee: [...request.assignee, newAssignee] }
+                    : request
+            )
+        );
+
+        // Update the database
+        const { error } = await assignMember(supabase, requestId, memberId);
+
+        if (error) {
+            console.error("Failed to assign member", error);
+            // Revert the optimistic update by re-fetching the data
+            const updatedRequests = await list(supabase);
+            setRequests(updatedRequests);
+            throw error;
+        }
+    }
+
+    const unassignMemberFromRequest = async (requestId: string, memberId: string) => {
+        // Optimistically update the UI
+        setRequests((prevRequests) =>
+            prevRequests.map((request) =>
+                request.id === requestId
+                    ? {
+                        ...request,
+                        assignee: request.assignee.filter((assignee) => assignee.member_id !== memberId),
+                    }
+                    : request
+            )
+        );
+
+        // Update the database
+        const { error } = await unassignMember(supabase, requestId, memberId);
+
+        if (error) {
+            console.error("Failed to unassign member", error);
+            // Revert the optimistic update by re-fetching the data
+            const updatedRequests = await list(supabase);
+            setRequests(updatedRequests);
+            throw error;
+        }
+    }
+
     const context = {
         requests,
         items,
         equipment,
         songs,
         venues,
+        members,
         tab,
         updateVenue,
         updateSong,
@@ -306,6 +372,8 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         updateRequestDueDateOptimistic,
         addCommentToRequest,
         deleteRequestById,
+        assignMemberToRequest,
+        unassignMemberFromRequest,
         setTab,
         updateEquipment,
     };

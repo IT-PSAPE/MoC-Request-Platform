@@ -89,6 +89,18 @@ type RequestedVenue = {
     venue: Venue;
 };
 
+type Member = {
+    id: string;
+    name: string;
+};
+
+type Assignee = {
+    request_id: string;
+    member_id: string;
+    assigned_at: string;
+    member: Member;
+};
+
 // Request
 
 type BaseRequest = {
@@ -154,4 +166,5 @@ type FetchRequest = {
     item: RequestedItem[];
     song: RequestedSong[];
     venue: RequestedVenue[];
+    assignee: Assignee[];
 };

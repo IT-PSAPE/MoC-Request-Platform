@@ -27,6 +27,8 @@ interface RequestDetailsSheetProps {
   onUpdatePriority?: (requestId: string, priorityId: string) => Promise<void>;
   onUpdateType?: (requestId: string, typeId: string) => Promise<void>;
   onUpdateDueDate?: (requestId: string, dueDate: string) => Promise<void>;
+  onAssignMember?: (requestId: string, memberId: string) => Promise<void>;
+  onUnassignMember?: (requestId: string, memberId: string) => Promise<void>;
 }
 
 export default function RequestDetailsSheet({
@@ -39,6 +41,8 @@ export default function RequestDetailsSheet({
   onUpdatePriority,
   onUpdateType,
   onUpdateDueDate,
+  onAssignMember,
+  onUnassignMember,
 }: RequestDetailsSheetProps) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
@@ -112,6 +116,8 @@ export default function RequestDetailsSheet({
                   onUpdatePriority={onUpdatePriority}
                   onUpdateType={onUpdateType}
                   onUpdateDueDate={onUpdateDueDate}
+                  onAssignMember={onAssignMember}
+                  onUnassignMember={onUnassignMember}
                 />
 
                 <Divider />
