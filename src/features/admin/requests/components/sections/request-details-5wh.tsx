@@ -8,34 +8,34 @@ export default function RequestDetails5WH({ request }: RequestDetailsBaseProps) 
     <section>
       <Text style="label-md" className="mb-3">5Ws and 1H</Text>
       <div className="space-y-3">
-        <div className="*:inline-block">
-          <Text style="label-sm" className="text-disable">Who: </Text>
-          <Text style="paragraph-sm">{request.who || "Not specified"}</Text>
+        <div>
+          <Text as="span" style="label-sm" >Who: </Text>
+          <Text as="span" style="paragraph-sm" className="text-tertiary">{request.who || "Not specified"}</Text>
         </div>
-        <div className="*:inline-block">
-          <Text style="label-sm" className="text-disable">What: </Text>
-          <Text style="paragraph-sm">{request.what || "Not specified"}</Text>
+        <div>
+          <Text as="span" style="label-sm" >What: </Text>
+          <Text as="span" style="paragraph-sm" className="text-tertiary">{request.what || "Not specified"}</Text>
         </div>
-        <div className="*:inline-block">
-          <Text style="label-sm" className="text-disable">When: </Text>
-          <Text style="paragraph-sm">{request.when || "Not specified"}</Text>
+        <div>
+          <Text as="span" style="label-sm" >When: </Text>
+          <Text as="span" style="paragraph-sm" className="text-tertiary">{request.when || "Not specified"}</Text>
         </div>
-        <div className="*:inline-block">
-          <Text style="label-sm" className="text-disable">Where: </Text>
-          <Text style="paragraph-sm">{request.where || "Not specified"}</Text>
+        <div>
+          <Text as="span" style="label-sm" >Where: </Text>
+          <Text as="span" style="paragraph-sm" className="text-tertiary">{request.where || "Not specified"}</Text>
         </div>
-        <div className="*:inline-block">
-          <Text style="label-sm" className="text-disable">Why: </Text>
-          <Text style="paragraph-sm">{request.why || "Not specified"}</Text>
+        <div>
+          <Text as="span" style="label-sm" >Why: </Text>
+          <Text as="span" style="paragraph-sm" className="text-tertiary">{request.why || "Not specified"}</Text>
         </div>
-        <div className="*:inline-block">
-          <Text style="label-sm" className="text-disable">How: </Text>
-          <Text style="paragraph-sm">{request.how || "Not specified"}</Text>
+        <div>
+          <Text as="span" style="label-sm" >How: </Text>
+          <Text as="span" style="paragraph-sm" className="text-tertiary">{request.how || "Not specified"}</Text>
         </div>
         {request.info && (
-          <div className="*:inline-block">
-            <Text style="label-sm" className="text-disable">Additional Information: </Text>
-            <Text style="paragraph-sm">{request.info}</Text>
+          <div>
+            <Text as="span" style="label-sm" >Additional Information: </Text>
+            <Text as="span" style="paragraph-sm" className="text-tertiary">{request.info}</Text>
           </div>
         )}
       </div>

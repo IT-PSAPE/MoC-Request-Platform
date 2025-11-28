@@ -48,7 +48,7 @@ function SheetContent({ children }: { children: React.ReactNode }) {
     )
 }
 
-function SheetHeader({ children, className }: { children: React.ReactNode, className?: string }) {
+function SheetHeader({ children, className }: { children?: React.ReactNode, className?: string }) {
     const { setOpen } = useSheetContext();
 
     return (

@@ -15,12 +15,7 @@ export default function AdminRequestItemDetailsSheet({ item, isOpen, onClose }: 
   return (
     <Sheet.Provider open={isOpen} onOpenChange={onClose}>
       <Sheet.Content>
-        <Sheet.Header>
-          <Text style="title-h5">{item.name}</Text>
-          <Text style="paragraph-sm" className="text-tertiary">
-            Request Item Details
-          </Text>
-        </Sheet.Header>
+        <Sheet.Header />
         
         <div className="flex-1 space-y-6 py-6 px-4">
           {/* Basic Info Section */}
