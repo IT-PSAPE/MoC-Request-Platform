@@ -4,8 +4,8 @@ import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
 import { formatDate, type RequestDetailsBaseProps } from "../shared/request-details-utils";
 
-export default function RequestDetailsComments({ 
-  request 
+export default function RequestDetailsComments({
+  request
 }: RequestDetailsBaseProps) {
 
   return (
@@ -14,15 +14,11 @@ export default function RequestDetailsComments({
 
       {/* Existing Comments */}
       {request.note && request.note.length > 0 ? (
-        <div className="space-y-3 mb-4">
+        <div className="space-y-1 mb-4">
           {request.note.map((note, index) => (
-            <div key={note.id || index}>
+            <div key={note.id || index} className="p-2 bg-secondary rounded-md">
               <Text style="paragraph-sm">{note.note}</Text>
-              {note.created && (
-                <Text style="paragraph-xs" className="text-primary/50 mt-2">
-                  {formatDate(note.created)}
-                </Text>
-              )}
+              <Text style="paragraph-xs" className="text-tertiary">{formatDate(note.created)}</Text>
             </div>
           ))}
         </div>

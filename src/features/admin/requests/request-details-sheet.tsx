@@ -12,6 +12,7 @@ import RequestDetails5WH from "./components/sections/request-details-5wh";
 import RequestDetailsVenues from "./components/sections/request-details-venues";
 import RequestDetailsEquipment from "./components/sections/request-details-equipment";
 import RequestDetailsSongs from "./components/sections/request-details-songs";
+import RequestDetailsFlow from "./components/sections/request-details-flow";
 import RequestDetailsComments from "./components/sections/request-details-comments";
 import RequestDeleteConfirmation from "./components/sections/request-delete-confirmation";
 import RequestCommentModal from "./components/sections/request-comment-modal";
@@ -128,6 +129,10 @@ export default function RequestDetailsSheet({
                 <Divider />
 
                 <RequestDetailsSongs request={request} />
+
+                <Divider />
+
+                <RequestDetailsFlow request={request} />
 
                 <Divider />
 
