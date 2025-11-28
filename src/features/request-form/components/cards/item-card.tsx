@@ -28,7 +28,7 @@ export default function RequestItemCard({ item }: { item: RequestItem }) {
         <div className="flex items-center gap-2" >
           <Checkbox checked={checked} />
           <Text style="label-md">{item.name}</Text>
-          <Text style="paragraph-sm">Left: {item.name}</Text>
+          {/* <Text style="paragraph-sm">Left: {item.name}</Text> */}
         </div>
         <div className="py-3">
           <Divider />

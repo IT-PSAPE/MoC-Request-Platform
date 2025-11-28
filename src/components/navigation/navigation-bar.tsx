@@ -32,7 +32,7 @@ export default function NavigationBar() {
             onClick={handleLinkClick}
             className={cn(`flex gap-1.5 items-center justify-center px-4 py-1.5 rounded-md text-sm grow text-center leading-1.2 border ${pathname === l.href ? 'border-gray-200 bg-white drop-shadow-sm' : 'border-transparent text-gray-500'}`)}
           >
-            <Icon name={l.icon} />
+            <Icon name={l.icon} size={20} />
             {l.label}
           </Link>
         ))}

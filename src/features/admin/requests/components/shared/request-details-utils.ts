@@ -55,6 +55,8 @@ export interface RequestDetailsEditableProps extends RequestDetailsBaseProps {
   onUpdatePriority?: (requestId: string, priorityId: string) => Promise<void>;
   onUpdateType?: (requestId: string, typeId: string) => Promise<void>;
   onUpdateDueDate?: (requestId: string, dueDate: string) => Promise<void>;
+  onAssignMember?: (requestId: string, memberId: string) => Promise<void>;
+  onUnassignMember?: (requestId: string, memberId: string) => Promise<void>;
 }
 
 export interface RequestDetailsCommentsProps extends RequestDetailsBaseProps {

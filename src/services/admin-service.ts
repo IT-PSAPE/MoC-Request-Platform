@@ -21,7 +21,8 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
         equipment:request_equipment(*, equipment(*)),
         song:request_song(*, song(*)),
         venue:request_venue(*, venue(*)),
-        item:request_item(*, item(*))
+        item:request_item(*, item(*)),
+        assignee:assignee(*, member(*))
       `);
 
     if (data.error) {
@@ -50,6 +51,7 @@ async function list(supabase: SupabaseClient): Promise<FetchRequest[]> {
         song: request.song,
         venue: request.venue,
         item: request.item,
+        assignee: request.assignee as Assignee[],
     }));
 
     return requests;
@@ -112,4 +114,39 @@ async function deleteRequest(supabase: SupabaseClient, requestId: string): Promi
     return { error };
 }
 
-export { list, updateRequestStatus, updateRequestPriority, updateRequestType, updateRequestDueDate, addComment, deleteRequest };
+async function listMembers(supabase: SupabaseClient): Promise<Member[]> {
+    const { data, error } = await supabase
+        .from("member")
+        .select("*")
+        .order("name");
+
+    if (error) {
+        console.error("Failed to load members", error);
+        return [];
+    }
+
+    return data as Member[];
+}
+
+async function assignMember(supabase: SupabaseClient, requestId: string, memberId: string): Promise<{ error: PostgrestError | null }> {
+    const { error } = await supabase
+        .from("assignee")
+        .insert({
+            request_id: requestId,
+            member_id: memberId,
+        });
+
+    return { error };
+}
+
+async function unassignMember(supabase: SupabaseClient, requestId: string, memberId: string): Promise<{ error: PostgrestError | null }> {
+    const { error } = await supabase
+        .from("assignee")
+        .delete()
+        .eq("request_id", requestId)
+        .eq("member_id", memberId);
+
+    return { error };
+}
+
+export { list, updateRequestStatus, updateRequestPriority, updateRequestType, updateRequestDueDate, addComment, deleteRequest, listMembers, assignMember, unassignMember };

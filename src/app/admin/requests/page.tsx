@@ -8,7 +8,7 @@ import { useAdminContext } from "@/contexts/admin-context";
 import RequestDetailsSheet from "@/features/admin/requests/request-details-sheet";
 
 export default function RequestsContent() {
-    const { requests, addCommentToRequest, deleteRequestById, updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic } = useAdminContext();
+    const { requests, addCommentToRequest, deleteRequestById, updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic, assignMemberToRequest, unassignMemberFromRequest } = useAdminContext();
     const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const selectedRequest = useMemo(() => {
@@ -57,6 +57,8 @@ export default function RequestsContent() {
                 onUpdatePriority={updateRequestPriorityOptimistic}
                 onUpdateType={updateRequestTypeOptimistic}
                 onUpdateDueDate={updateRequestDueDateOptimistic}
+                onAssignMember={assignMemberToRequest}
+                onUnassignMember={unassignMemberFromRequest}
             />
         </>
     );

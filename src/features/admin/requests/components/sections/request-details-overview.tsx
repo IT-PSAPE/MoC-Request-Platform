@@ -13,6 +13,7 @@ import {
   formatRequestType,
   type RequestDetailsEditableProps
 } from "../shared/request-details-utils";
+import RequestAssignees from "./request-assignees";
 
 export default function RequestDetailsOverview({
   request,
@@ -20,6 +21,8 @@ export default function RequestDetailsOverview({
   onUpdatePriority,
   onUpdateType,
   onUpdateDueDate,
+  onAssignMember,
+  onUnassignMember,
 }: RequestDetailsEditableProps) {
   const { statuses, priorities, types } = useDefaultContext();
 
@@ -107,7 +110,34 @@ export default function RequestDetailsOverview({
             </Text>
           </div>
         </div>
+        <div>
+          <span className="flex items-center gap-1.5">
+            <Icon name="line:user" size={16} />
+            <Text style="label-sm" className="text-secondary">Assigned Members</Text>
+          </span>
+          <div className="px-1 py-0.5 min-h-[24px] flex items-center">
+            <RequestAssignees
+              request={request}
+              onAssignMember={onAssignMember}
+              onUnassignMember={onUnassignMember}
+            />
+          </div>
+        </div>
       </div>
+
+      {/* Assignees Section */}
+      {/* <div className="space-y-2">
+        <span className="flex items-center gap-1.5">
+          <Icon name="line:user" size={16} />
+          <Text style="label-sm" className="text-secondary">Assigned Members</Text>
+        </span>
+        <RequestAssignees
+          request={request}
+          onAssignMember={onAssignMember}
+          onUnassignMember={onUnassignMember}
+        />
+      </div> */}
     </section>
   );
 }
+

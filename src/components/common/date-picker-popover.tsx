@@ -51,9 +51,9 @@ function DatePickerPopoverContent({
     }
   }, [value]);
 
-  const handleSave = async (newValue: string | null) => {
-    // Convert back to ISO string if we have a date, or null for clear
-    const dateValue = newValue ? new Date(newValue).toISOString() : null;
+  const handleSave = async () => {
+    // Convert back to ISO string if we have a date
+    const dateValue = editValue ? new Date(editValue).toISOString() : '';
     
     if (dateValue === value) {
       closePopover();
@@ -62,7 +62,7 @@ function DatePickerPopoverContent({
 
     setIsLoading(true);
     try {
-      await onSave(dateValue || '');
+      await onSave(dateValue);
       closePopover(); // Close popover after successful save
     } catch (error) {
       console.error('Failed to save:', error);
@@ -81,15 +81,28 @@ function DatePickerPopoverContent({
     }
   };
 
-  const handleClear = async () => {
-    setEditValue('');
-    await handleSave(null);
+  const handleCancel = () => {
+    // Revert to original value
+    if (!value) {
+      setEditValue('');
+    } else {
+      try {
+        setEditValue(new Date(value).toISOString().slice(0, 16));
+      } catch {
+        setEditValue('');
+      }
+    }
+    closePopover();
   };
 
-  const handleNow = async () => {
-    const now = new Date().toISOString().slice(0, 16);
-    setEditValue(now);
-    await handleSave(now);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !isLoading) {
+      e.preventDefault();
+      handleSave();
+    } else if (e.key === 'Escape' && !isLoading) {
+      e.preventDefault();
+      handleCancel();
+    }
   };
 
   return (
@@ -100,7 +113,7 @@ function DatePickerPopoverContent({
           type="datetime-local"
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
-          onBlur={() => handleSave(editValue)}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           autoFocus
           disabled={isLoading}
@@ -112,20 +125,20 @@ function DatePickerPopoverContent({
         <Button
           size="sm"
           variant="secondary"
-          onClick={handleNow}
+          onClick={handleCancel}
           disabled={isLoading}
           className="flex-1"
         >
-          Now
+          Cancel
         </Button>
         <Button
           size="sm"
-          variant="secondary"
-          onClick={handleClear}
+          variant="primary"
+          onClick={handleSave}
           disabled={isLoading}
           className="flex-1"
         >
-          Clear
+          Save
         </Button>
       </div>
     </div>

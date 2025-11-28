@@ -28,12 +28,7 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
   return (
     <Sheet.Provider open={isOpen} onOpenChange={onClose}>
       <Sheet.Content>
-        <Sheet.Header>
-          <Text style="title-h5">{song.name}</Text>
-          <Text style="paragraph-sm" className="text-tertiary">
-            Song Details & Settings
-          </Text>
-        </Sheet.Header>
+        <Sheet.Header />
         
         <div className="flex-1 space-y-6 py-6 px-4">
           {/* Basic Info Section */}
