@@ -9,15 +9,10 @@ export default function RequestDetailsVenues({ request }: RequestDetailsBaseProp
     <section>
       <Text style="label-md" className="mb-3">Available Venues</Text>
       {request.venue && request.venue.length > 0 ? (
-        <div className="space-y-2">
+        <div className="space-y-1">
           {request.venue.map((venue: RequestedVenue, index) => (
-            <div key={venue.venue?.id || index} className="p-3 bg-secondary rounded-md">
+            <div key={venue.venue?.id || index} className="p-2 bg-secondary rounded-md">
               <Text style="paragraph-sm">{venue.venue?.name || `Venue ${index + 1}`}</Text>
-              {venue.venue?.description && (
-                <Text style="paragraph-xs" className="text-tertiary mt-1">
-                  {venue.venue.description}
-                </Text>
-              )}
             </div>
           ))}
         </div>

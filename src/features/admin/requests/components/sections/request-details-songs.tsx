@@ -9,22 +9,10 @@ export default function RequestDetailsSongs({ request }: RequestDetailsBaseProps
     <section>
       <Text style="label-md" className="mb-3">Songs</Text>
       {request.song && request.song.length > 0 ? (
-        <div className="space-y-2">
+        <div className="space-y-1">
           {request.song.map((song: RequestedSong, index) => (
-            <div key={song.song?.id || index} className="p-3 bg-secondary rounded-md">
+            <div key={song.song?.id || index} className="p-2 bg-secondary rounded-md flex flex-col gap-1">
               <Text style="paragraph-sm">{song.song?.name || `Song ${index + 1}`}</Text>
-              <div className="flex gap-2 mt-2">
-                {song.song?.instrumental && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-100 text-blue-800 text-xs">
-                    Instrumental
-                  </span>
-                )}
-                {song.song?.lyrics && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-green-100 text-green-800 text-xs">
-                    Lyrics
-                  </span>
-                )}
-              </div>
             </div>
           ))}
         </div>
