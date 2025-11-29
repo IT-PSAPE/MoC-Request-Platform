@@ -3,8 +3,6 @@
 import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
 import { type RequestDetailsBaseProps } from "../shared/request-details-utils";
-import Icon from "@/components/common/icon";
-import { IconButton } from "@/components/common/button";
 
 export default function RequestDetailsEquipment({ request }: RequestDetailsBaseProps) {
   return (
