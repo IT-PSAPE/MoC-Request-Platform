@@ -35,8 +35,10 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
   
-  // TEMPORARILY DISABLED: Skip caching for API requests to ensure fresh data
-  if (url.pathname.includes('/rest/v1/') || url.hostname.includes('supabase')) {
+  // Skip caching for API requests and Supabase calls
+  if (url.pathname.includes('/rest/v1/') || 
+      url.pathname.startsWith('/api/') ||
+      url.hostname.includes('supabase')) {
     event.respondWith(fetch(request));
     return;
   }

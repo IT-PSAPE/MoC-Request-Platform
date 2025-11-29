@@ -30,18 +30,25 @@ export async function middleware(request: NextRequest) {
   // Refresh session if expired and retrieve user - required for Server Components
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Protect admin routes - redirect unauthenticated users to home page
+  // Quality of life: Redirect logged-in users from home page to admin dashboard
+  if (request.nextUrl.pathname === '/' && user) {
+    const redirectUrl = new URL('/admin', request.url)
+    return NextResponse.redirect(redirectUrl)
+  }
+
+  // Protect admin routes - redirect unauthenticated users to login with return URL
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user) {
-      // Redirect unauthenticated users to home page instead of login
-      const redirectUrl = new URL('/', request.url)
+      const redirectUrl = new URL('/login', request.url)
+      redirectUrl.searchParams.set('next', request.nextUrl.pathname)
       return NextResponse.redirect(redirectUrl)
     }
   }
 
-  // If user is logged in and trying to access login page, redirect to admin
+  // If user is logged in and trying to access login page, redirect to admin or return URL
   if (request.nextUrl.pathname === '/login' && user) {
-    const redirectUrl = new URL('/admin', request.url)
+    const returnUrl = request.nextUrl.searchParams.get('next') || '/admin'
+    const redirectUrl = new URL(returnUrl, request.url)
     return NextResponse.redirect(redirectUrl)
   }
 
@@ -58,7 +65,7 @@ export const config = {
      * - sw.js (service worker)
      * - manifest.json (PWA manifest)
      * - icons/ (PWA icons)
-     * Feel free to modify this pattern to include more paths.
+     * - api/ (API routes - handled separately)
      */
     '/((?!_next/static|_next/image|favicon.ico|sw.js|manifest.json|icons|api).*)',
   ],

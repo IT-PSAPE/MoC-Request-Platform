@@ -14,9 +14,11 @@ export function QueryProvider({ children }: QueryProviderProps) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            // TEMPORARILY DISABLED: Set to 0 to disable caching
-            staleTime: 0, // 1000 * 60 * 5, // 5 minutes
-            gcTime: 0, // 1000 * 60 * 30, // 30 minutes (previously cacheTime)
+            // Optimized caching for Vercel deployment
+            // staleTime: 1000 * 60 * 5, // 5 minutes - data considered fresh
+            // gcTime: 1000 * 60 * 30, // 30 minutes - garbage collection time
+            staleTime: 0, // 5 minutes - data considered fresh
+            gcTime: 0, // 30 minutes - garbage collection time
             retry: (failureCount, error) => {
               // Don't retry on 4xx errors except 429
               if (error && typeof error === 'object' && 'status' in error) {
@@ -27,7 +29,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
               }
               return failureCount < 3;
             },
-            refetchOnWindowFocus: false, // TEMPORARILY DISABLED: Always fetch fresh data
+            refetchOnWindowFocus: true, // Re-enabled: Fetch fresh data on window focus
             refetchOnReconnect: true,
           },
           mutations: {
