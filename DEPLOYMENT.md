@@ -38,7 +38,7 @@ vercel env add TELEGRAM_CHAT_ID
 # Enter: -1001165512639
 
 # Set your Telegram topic ID (optional, for forum groups)
-vercel env add TELEGRAM_TOPIC_REQUESTS_ID
+vercel env add TELEGRAM_TOPIC_ID
 # Enter: 21862
 ```
 
@@ -53,23 +53,17 @@ Your app will be available at: `https://your-project-name.vercel.app`
 
 ## 📱 Configure Telegram Webhook
 
-### 1. Update Chat IDs
+### 1. Verify Chat IDs
 
-Edit `/src/app/api/telegram-notification/route.ts` and replace the chat IDs:
+Ensure the Vercel environment variables are set to match your Telegram setup:
+- `TELEGRAM_CHAT_ID` → your group chat ID (negative number for groups)
+- `TELEGRAM_TOPIC_ID` → optional thread/topic ID if your group uses topics
 
-```typescript
-// Line ~77 - Replace with your actual Telegram group chat IDs
-const CHAT_IDS = [
-  '-1001234567890', // Replace with your group chat ID
-  // Add more groups as needed
-];
-```
-
-**To get your Chat ID:**
+**To get your IDs:**
 1. Add your bot to your Telegram group
-2. Send a test message in the group  
-3. Visit: `https://api.telegram.org/bot8576049932:AAHJ0DGmeU5nyD4UfeH8FNTMA2KsMy_MkM4/getUpdates`
-4. Find the `"chat":{"id":-123456789}` value in the response
+2. Send a test message in the group (or thread)
+3. Visit: `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
+4. Find the `"chat":{"id":...}` and (if present) `"message_thread_id":...` values in the response
 
 ### 2. Configure Supabase Webhook
 

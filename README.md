@@ -85,7 +85,7 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 TELEGRAM_CHAT_ID=your_telegram_group_chat_id
-TELEGRAM_TOPIC_REQUESTS_ID=your_telegram_topic_id  # Optional, for forum groups
+TELEGRAM_TOPIC_ID=your_telegram_topic_id  # Optional, for forum groups
 ```
 
 ### 4. Start Development Server
@@ -127,6 +127,8 @@ The application is optimized for Vercel deployment with full Next.js capabilitie
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY  
 TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
+TELEGRAM_TOPIC_ID
 ```
 
 ### Deploy
