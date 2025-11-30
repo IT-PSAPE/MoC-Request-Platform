@@ -2,13 +2,28 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  // If env vars are missing, avoid throwing in middleware and default to public experience.
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Supabase env vars are missing; skipping auth middleware.')
+    // Still protect admin routes by redirecting to login.
+    if (request.nextUrl.pathname.startsWith('/admin')) {
+      const redirectUrl = new URL('/login', request.url)
+      redirectUrl.searchParams.set('next', request.nextUrl.pathname)
+      return NextResponse.redirect(redirectUrl)
+    }
+    return NextResponse.next()
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
@@ -27,8 +42,15 @@ export async function middleware(request: NextRequest) {
     }
   )
 
+  let user = null
+
   // Refresh session if expired and retrieve user - required for Server Components
-  const { data: { user } } = await supabase.auth.getUser()
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data.user
+  } catch (error) {
+    console.error('Supabase auth getUser failed in middleware:', error)
+  }
 
   // Quality of life: Redirect logged-in users from home page to admin dashboard
   if (request.nextUrl.pathname === '/' && user) {
