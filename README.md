@@ -1,15 +1,15 @@
 # MOC Request Platform
 
-A comprehensive Next.js (App Router) + Tailwind CSS application for the Ministry of Culture to manage requests and assistance submissions. Features a Supabase backend, real-time notifications via Telegram, and a modern Progressive Web App (PWA) experience.
+A comprehensive Next.js (App Router) + Tailwind CSS application for the Ministry of Culture to manage requests and assistance submissions. Features a Supabase backend, real-time notifications via Telegram, and a modern Progressive Web App (PWA) experience. Deployed as a static site to GitHub Pages.
 
 ## 🚀 Live Application
 
-**Production:** [https://request.psape.co.za](https://request.psape.co.za)
+**Production:** `https://[username].github.io/[repository-name]/`
 
 ## ✨ Features
 
 - **📱 Progressive Web App (PWA)** - Install on mobile/desktop devices
-- **🔐 Authentication** - Secure Supabase Auth with server-side protection
+- **🔐 Authentication** - Secure Supabase Auth with client-side protection
 - **⚡ Real-time Updates** - Live data synchronization across all users
 - **📱 Telegram Notifications** - Instant notifications for new requests
 - **🎯 Request Management** - Complete CRUD operations with 5W+1H methodology
@@ -24,7 +24,7 @@ A comprehensive Next.js (App Router) + Tailwind CSS application for the Ministry
 - **Database:** Supabase (PostgreSQL)
 - **Authentication:** Supabase Auth
 - **State Management:** TanStack Query (React Query)
-- **Deployment:** Vercel
+- **Deployment:** GitHub Pages (Static Export)
 - **Notifications:** Telegram Bot API
 - **PWA:** Custom Service Worker
 
@@ -35,7 +35,6 @@ src/
 ├── app/                    # Next.js App Router pages
 │   ├── (public)/          # Public routes (home, form, board)
 │   ├── admin/             # Protected admin dashboard
-│   ├── api/               # API routes (Telegram notifications)
 │   └── login/             # Authentication page
 ├── components/            # Reusable UI components
 │   ├── common/           # Shared components (buttons, forms, etc.)
@@ -79,14 +78,16 @@ npm install
 ```
 
 ### 3. Environment Setup
-Create `.env.local` with your Supabase credentials:
+Create `.env.local` with your credentials:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-TELEGRAM_CHAT_ID=your_telegram_group_chat_id
-TELEGRAM_TOPIC_ID=your_telegram_topic_id  # Optional, for forum groups
+NEXT_PUBLIC_TELEGRAM_BOT_TOKEN=your_telegram_bot_token  # Optional
+NEXT_PUBLIC_TELEGRAM_CHAT_ID=your_telegram_group_chat_id  # Optional
+NEXT_PUBLIC_TELEGRAM_TOPIC_ID=your_telegram_topic_id  # Optional, for forum groups
 ```
+
+**Note:** All variables must have `NEXT_PUBLIC_` prefix for static export.
 
 ### 4. Start Development Server
 ```bash
@@ -176,13 +177,35 @@ npm start
 ```
 
 ### API Testing
-The Telegram notification API can be tested locally:
+## 🚀 Deployment
+
+### GitHub Pages Deployment
+
+1. **Build the static export**:
 ```bash
-# Test the webhook endpoint
-curl -X POST http://localhost:3000/api/telegram-notification \
-  -H "Content-Type: application/json" \
-  -d '{"type": "INSERT", "table": "request", "record": {...}}'
+npm run build
 ```
+
+2. **Deploy to GitHub Pages**:
+```bash
+git add .
+git commit -m "Deploy to GitHub Pages"
+git push origin main
+```
+
+3. **GitHub Actions** will automatically:
+   - Build the static site
+   - Deploy to GitHub Pages
+   - Site will be available at `https://[username].github.io/[repository-name]/`
+
+### Important Notes
+
+- **Static Export**: The app is deployed as a static site with client-side functionality only
+- **Environment Variables**: Must be set as GitHub repository secrets (without `NEXT_PUBLIC_` prefix)
+- **Authentication**: Handled entirely client-side through Supabase Auth
+- **Telegram Notifications**: Sent from the client-side after successful request creation
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## 🤝 Contributing
 
