@@ -13,18 +13,14 @@ export default function HomePageClient() {
       <div className="isolate relative h-full w-full">
         <div className="absolute top-0 left-0 right-0 h-full -z-10 overflow-hidden">
           <div className="relative w-full h-full">
-            <Image
-              src="/images/public-home-bg.avif"
+            <img src="/images/public-home-bg.avif"
               alt="Background image"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
+              className="absolute w-full top-0"
             />
           </div>
         </div>
         <div className="py-10 w-full flex-1 flex items-center">
-          <div className="w-full mx-auto max-w-container text-left space-y-20 px-4">
+          <div className="w-full mx-auto max-w-container-sm text-left space-y-20 px-4">
             <div className="w-full flex flex-col items-center space-y-2 text-center">
               <Text style="title-h1" className="text-brand-secondary" >MOC Request Platform</Text>
               <Text style="paragraph-md" className="text-tertiary max-w-[50ch]">The Ministry of Culture invites all members to submit their requests for assistance. We are here to support you and will do our best to provide the help you need.</Text>
