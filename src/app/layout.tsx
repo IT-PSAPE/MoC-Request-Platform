@@ -60,6 +60,20 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
         <link rel="mask-icon" href="/icons/icon-32x32.png" color="#2563eb" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-FNM0ZVKPTE" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-FNM0ZVKPTE');
+            `,
+          }}
+        />
+        
         <script
           dangerouslySetInnerHTML={{
             __html: `

@@ -12,7 +12,7 @@ import InlineAlert from '@/components/common/inline-alert';
 import Divider from '@/components/common/divider';
 import EmptyState from '@/components/common/empty-state';
 import Link from 'next/link';
-import { get } from '@/services/request-services';
+import { RequestTable } from '@/lib/database';
 
 // Color maps from request details sheet
 const requestColorMap: Record<string, BadgeColor> = {
@@ -59,7 +59,12 @@ function RequestDetailsContent() {
       setError(null);
 
       try {
-        const data = await get(supabase, requestId);
+        const { data, error } = await RequestTable.get(supabase, requestId);
+
+        if (error) {
+          setError('Failed to load request');
+          return;
+        }
 
         if (!data) {
           setError('Request not found');

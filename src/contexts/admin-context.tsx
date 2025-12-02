@@ -1,10 +1,11 @@
 'use client';
 
-import { EquipmentTable, RequestItemTable, SongTable, VenueTable } from "@/lib/database";
+import { EquipmentTable, RequestItemTable, RequestTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list, updateRequestStatus, updateRequestPriority, updateRequestType, updateRequestDueDate, addComment, deleteRequest as deleteRequestService, listMembers, assignMember, unassignMember } from "@/services/admin-service";
+import { addComment, listMembers, assignMember, unassignMember } from "@/services/admin-service";
 import { useAuthContext } from "./auth-context";
+import { useDefaultContext } from "./defaults-context";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
 
@@ -42,6 +43,8 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
     const [tab, setTab] = useState<TabItem>('dashboard');
     const { user } = useAuthContext();
 
+    const { statuses, priorities, types } = useDefaultContext();
+
     useEffect(() => {
         let isMounted = true;
 
@@ -53,7 +56,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
                     VenueTable.select(supabase),
                     RequestItemTable.select(supabase),
                     listMembers(supabase),
-                    list(supabase),
+                    RequestTable.list(supabase),
                 ]);
 
                 if (!isMounted) return;
@@ -97,7 +100,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         const handleFocus = () => {
             void loadDefaults();
         };
-        
+
         window.addEventListener('focus', handleFocus);
 
         return () => {
@@ -153,8 +156,8 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
 
     const updateRequestStatusOptimistic = async (requestId: string, newStatusId: string) => {
         // Find the status object for the new status ID
-        const newStatus = (await supabase.from("status").select("*").eq("id", newStatusId).single()).data;
-        
+        const newStatus = statuses.find(s => s.id === newStatusId);
+
         if (!newStatus) {
             console.error("Status not found");
             return;
@@ -168,12 +171,12 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         );
 
         // Update the database
-        const { error } = await updateRequestStatus(supabase, requestId, newStatusId);
+        const { error } = await RequestTable.update(supabase, requestId, { status: newStatusId });
 
         if (error) {
             console.error("Failed to update request status", error);
             // Revert the optimistic update by re-fetching the data
-            const updatedRequests = await list(supabase);
+            const updatedRequests = await RequestTable.list(supabase);
             setRequests(updatedRequests);
             throw error;
         }
@@ -183,7 +186,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         if (!user) {
             throw new Error("User must be logged in to add comments");
         }
-        
+
         // Add comment to database
         const { error } = await addComment(supabase, requestId, comment, user.id);
 
@@ -203,7 +206,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
 
         setRequests((prevRequests) =>
             prevRequests.map((request) =>
-                request.id === requestId 
+                request.id === requestId
                     ? { ...request, note: [...(request.note || []), newNote] }
                     : request
             )
@@ -212,8 +215,8 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
 
     const updateRequestPriorityOptimistic = async (requestId: string, newPriorityId: string) => {
         // Find the priority object for the new priority ID
-        const newPriority = (await supabase.from("priority").select("*").eq("id", newPriorityId).single()).data;
-        
+        const newPriority = priorities.find(p => p.id === newPriorityId);
+
         if (!newPriority) {
             console.error("Priority not found");
             return;
@@ -227,12 +230,12 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         );
 
         // Update the database
-        const { error } = await updateRequestPriority(supabase, requestId, newPriorityId);
+        const { error } = await RequestTable.update(supabase, requestId, { priority: newPriorityId });
 
         if (error) {
             console.error("Failed to update request priority", error);
             // Revert the optimistic update by re-fetching the data
-            const updatedRequests = await list(supabase);
+            const updatedRequests = await RequestTable.list(supabase);
             setRequests(updatedRequests);
             throw error;
         }
@@ -240,8 +243,8 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
 
     const updateRequestTypeOptimistic = async (requestId: string, newTypeId: string) => {
         // Find the type object for the new type ID
-        const newType = (await supabase.from("request_type").select("*").eq("id", newTypeId).single()).data;
-        
+        const newType = types.find(t => t.id === newTypeId);
+
         if (!newType) {
             console.error("Request type not found");
             return;
@@ -255,12 +258,12 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         );
 
         // Update the database
-        const { error } = await updateRequestType(supabase, requestId, newTypeId);
+        const { error } = await RequestTable.update(supabase, requestId, { type: newTypeId });
 
         if (error) {
             console.error("Failed to update request type", error);
             // Revert the optimistic update by re-fetching the data
-            const updatedRequests = await list(supabase);
+            const updatedRequests = await RequestTable.list(supabase);
             setRequests(updatedRequests);
             throw error;
         }
@@ -275,19 +278,19 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         );
 
         // Update the database
-        const { error } = await updateRequestDueDate(supabase, requestId, newDueDate);
+        const { error } = await RequestTable.update(supabase, requestId, { due: newDueDate });
 
         if (error) {
             console.error("Failed to update request due date", error);
             // Revert the optimistic update by re-fetching the data
-            const updatedRequests = await list(supabase);
+            const updatedRequests = await RequestTable.list(supabase);
             setRequests(updatedRequests);
             throw error;
         }
     }
 
     const deleteRequestById = async (requestId: string) => {
-        const { error } = await deleteRequestService(supabase, requestId);
+        const { error } = await RequestTable.delete(supabase, requestId);
 
         if (error) {
             console.error("Failed to delete request", error);
@@ -325,7 +328,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         if (error) {
             console.error("Failed to assign member", error);
             // Revert the optimistic update by re-fetching the data
-            const updatedRequests = await list(supabase);
+            const updatedRequests = await RequestTable.list(supabase);
             setRequests(updatedRequests);
             throw error;
         }
@@ -350,7 +353,7 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
         if (error) {
             console.error("Failed to unassign member", error);
             // Revert the optimistic update by re-fetching the data
-            const updatedRequests = await list(supabase);
+            const updatedRequests = await RequestTable.list(supabase);
             setRequests(updatedRequests);
             throw error;
         }

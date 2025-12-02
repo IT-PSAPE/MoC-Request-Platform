@@ -1,5 +1,6 @@
 'use client';
 
+import { PriorityTable, RequestTypeTable, StatusTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
@@ -29,9 +30,9 @@ export function DefaultContextProvider({ children, supabase }: { children: React
         const loadDefaults = async () => {
             try {
                 const [statusResult, priorityResult, typeResult] = await Promise.all([
-                    supabase.from("status").select("*").order("value", { ascending: true }),
-                    supabase.from("priority").select("*").order("value", { ascending: true }),
-                    supabase.from("request_type").select("*"),
+                    StatusTable.list(supabase),
+                    PriorityTable.list(supabase),
+                    RequestTypeTable.list(supabase),
                 ]);
 
                 if (!isMounted) return;

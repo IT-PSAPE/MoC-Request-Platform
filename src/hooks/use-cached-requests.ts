@@ -3,7 +3,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from './use-supabase-client';
 import { QueryKeys } from '@/lib/query-keys';
-import { list, updateRequestStatus, addComment, deleteRequest } from '@/services/admin-service';
+import { addComment } from '@/services/admin-service';
+import { RequestTable } from '@/lib/database';
 
 // Hook for fetching requests with automatic caching
 export function useRequests() {
@@ -13,7 +14,7 @@ export function useRequests() {
     queryKey: QueryKeys.requests(),
     queryFn: async () => {
       if (!supabase) throw new Error('Supabase client not available');
-      return list(supabase);
+      return RequestTable.list(supabase);
     },
     enabled: !!supabase,
     staleTime: 1000 * 60 * 2, // 2 minutes for requests (more dynamic data)
@@ -31,7 +32,7 @@ export function useRequest(requestId: string | null) {
       
       // For now, we'll filter from the cached requests list
       // In the future, you might want a dedicated endpoint for single request
-      const allRequests = await list(supabase);
+      const allRequests = await RequestTable.list(supabase);
       const request = allRequests.find(r => r.id === requestId);
       
       if (!request) throw new Error('Request not found');
@@ -59,7 +60,7 @@ export function useUpdateRequestStatus() {
       
       if (statusResponse.error) throw statusResponse.error;
       
-      const result = await updateRequestStatus(supabase, requestId, statusId);
+      const result = await RequestTable.update(supabase, requestId, { status: statusId });
       if (result.error) throw result.error;
       
       return { requestId, status: statusResponse.data };
@@ -204,7 +205,7 @@ export function useDeleteRequest() {
     mutationFn: async (requestId: string) => {
       if (!supabase) throw new Error('Supabase client not available');
       
-      const result = await deleteRequest(supabase, requestId);
+      const result = await RequestTable.delete(supabase, requestId);
       if (result.error) throw result.error;
       
       return requestId;

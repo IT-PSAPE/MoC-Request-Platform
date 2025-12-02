@@ -2,7 +2,7 @@
 
 import { useDefaultContext } from "@/contexts/defaults-context";
 import { createContext, useContext, useEffect, useState } from "react";
-import { list } from "@/services/board-service";
+import { RequestTable } from "@/lib/database";
 
 type BoardSteps = 1 | 2 | 3;
 
@@ -23,7 +23,7 @@ export function BoardContextProvider({ children }: { children: React.ReactNode }
         const loadDefaults = async () => {
             try {
                 const [requestsResults] = await Promise.all([
-                    list(supabase),
+                    RequestTable.list(supabase),
                 ]);
 
                 if (isMounted) {
