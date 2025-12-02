@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from "react";
-import { Sheet } from "@/components/common/sheet/sheet";
+import { Sheet } from "@/components/base/sheet/sheet";
 import Divider from "@/components/common/divider";
-import { IconButton } from "@/components/common/button";
+import { IconButton } from "@/components/common/controls/button";
 import Icon from "@/components/common/icon";
 
 // Import all section components
@@ -89,14 +89,14 @@ export default function RequestDetailsSheet({
                   disabled={!onAddComment} 
                   variant="ghost"
                 >
-                  <Icon name="line:pen_line" />
+                  <Icon name="pen_line" />
                 </IconButton>
                 <IconButton 
                   onClick={handleOpenConfirm} 
                   disabled={!onDeleteRequest} 
                   variant="ghost"
                 >
-                  <Icon name="line:trash" size={20} />
+                  <Icon name="trash" size={20} />
                 </IconButton>
               </div>
             </Sheet.Header>

@@ -13,7 +13,7 @@ import React, {
 } from "react";
 import { cn } from "@/lib/cn";
 import Icon from "../icon";
-import { SelectOptionItem } from "../select-option";
+import { SelectOptionItem } from "./select-option";
 
 type SelectContextType = {
   open: boolean;
@@ -179,7 +179,7 @@ function ScrollIndicator({ position, onClick }: ScrollIndicatorProps) {
       onClick={onClick}
     >
       <Icon
-        name="line:chevron_down"
+        name="chevron_down"
         size={16}
         className={cn(
           "mx-auto text-gray-500",
@@ -218,7 +218,7 @@ function SelectTrigger({ placeholder, disabled, displayValue }: SelectTriggerPro
       aria-haspopup="listbox"
     >
       <span className={cn("truncate text-left", showPlaceholder && "text-gray-500")}>{label}</span>
-      <Icon name="line:chevron_down" size={16} className="ml-2 text-gray-500" />
+      <Icon name="chevron_down" size={16} className="ml-2 text-gray-500" />
     </button>
   );
 }

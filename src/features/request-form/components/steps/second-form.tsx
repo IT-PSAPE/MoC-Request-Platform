@@ -8,7 +8,7 @@ import VenueCard from "../cards/venue-card";
 import SongCard from "../cards/song-card";
 import { useFormContext } from "@/contexts/form-context";
 import RequestItemCard from "../cards/item-card";
-import Select, { Option } from "@/components/common/forms/select";
+import Select, { Option } from "@/components/common/controls/select";
 import { useDefaultContext } from "@/contexts/defaults-context";
 import InlineAlert from "@/components/common/inline-alert";
 import { useEffect } from "react";

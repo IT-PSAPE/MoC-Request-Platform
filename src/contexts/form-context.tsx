@@ -1,9 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, Dispatch, SetStateAction, FormEventHandler } from "react";
+import React, { createContext, useContext, useState, useEffect, Dispatch, SetStateAction, FormEventHandler } from "react";
 // Types are global from @/lib/type.ts - no import needed
 import FormService from "@/services/form-service";
-import { useSupabaseClient } from '@/hooks/use-supabase-client';
 import { sendTelegramNotification } from '@/services/telegram-service';
 import { useDefaultContext } from "@/contexts/defaults-context";
 import { SongTable, VenueTable, RequestItemTable } from "@/lib/database";
@@ -54,7 +53,7 @@ const emptyRequest: FormRequest = {
 }
 
 export function FormContextProvider({ children }: { children: React.ReactNode }) {
-    const { supabase, statuses } = useDefaultContext();
+    const { supabase, statuses, priorities, types } = useDefaultContext();
 
     const [request, setRequest] = useState<FormRequest>(emptyRequest)
     const [step, setStep] = useState<FormSteps>(1);
@@ -147,9 +146,15 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
             setSubmitted(requestId);
             
             // Send Telegram notification (non-blocking)
+            const priorityName = priorities.find(p => p.id === request.priority)?.name || 'Unknown';
+            const typeName = types.find(t => t.id === request.type)?.name || 'Unknown';
+            
             sendTelegramNotification({
                 id: requestId,
-                what: request.what
+                what: request.what,
+                type: typeName,
+                priority: priorityName,
+                due: request.due || null
             }).catch(error => {
                 console.warn('Telegram notification failed:', error);
                 // Don't fail the form submission if notification fails

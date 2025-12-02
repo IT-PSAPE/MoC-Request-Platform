@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import Text from "./text";
-import Badge from "./badge";
-import Button from "./button";
-import Icon from "./icon";
-import { Popover } from "./popover/popover";
-import { SelectOptionItem } from "./select-option";
+import Text from "@/components/common/text";
+import Badge from "@/components/common/badge";
+import Button from "@/components/common/controls/button";
+import Icon from "@/components/common/icon";
+import { Popover } from "@/components/base/popover";
+import { SelectOptionItem } from "@/components/common/controls/select-option";
 
 type AssigneeOption = {
   id: string;
@@ -23,6 +23,8 @@ type AssigneeInlineEditorProps = {
   position?: 'bottom-left' | 'bottom-right' | 'bottom-center';
   onRemoveAssignee?: (memberId: string) => Promise<void> | void;
 };
+
+type DisplayComponentProp ={ assignees: AssigneeOption[], onRemoveAssignee?: (memberId: string) => Promise<void> | void }
 
 function AssigneeInlineEditorContent({
   assignees,
@@ -40,8 +42,8 @@ function AssigneeInlineEditorContent({
   const { closePopover } = Popover.useContext();
 
   const handleMemberToggle = (memberId: string) => {
-    setSelectedMemberIds(prev => 
-      prev.includes(memberId) 
+    setSelectedMemberIds(prev =>
+      prev.includes(memberId)
         ? prev.filter(id => id !== memberId)
         : [...prev, memberId]
     );
@@ -72,7 +74,7 @@ function AssigneeInlineEditorContent({
 
   const handleRemove = async (memberId: string) => {
     if (!onRemoveAssignee) return;
-    
+
     try {
       await onRemoveAssignee(memberId);
     } catch (error) {
@@ -88,17 +90,17 @@ function AssigneeInlineEditorContent({
           <Text style="label-sm" className="text-secondary mb-2">Currently Assigned</Text>
           <div className="flex flex-wrap gap-1">
             {assignees.map((assignee) => (
-              <Badge 
-                key={assignee.id} 
+              <Badge
+                key={assignee.id}
                 className="flex items-center gap-1 pr-1"
               >
                 <span>{assignee.name}</span>
                 {onRemoveAssignee && (
-                  <span 
-                    onClick={() => handleRemove(assignee.id)} 
+                  <span
+                    onClick={() => handleRemove(assignee.id)}
                     className="cursor-pointer hover:bg-white/20 rounded p-0.5"
                   >
-                    <Icon name="line:close" size={12} />
+                    <Icon name="close" size={12} />
                   </span>
                 )}
               </Badge>
@@ -143,25 +145,46 @@ function AssigneeInlineEditorContent({
 
       {/* Action Buttons */}
       <div className="flex gap-2 p-3 border-t border-secondary">
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={handleCancel}
-          disabled={isLoading}
-          className="flex-1"
-        >
+        <Button size="sm" variant="secondary" onClick={handleCancel} disabled={isLoading} className="flex-1" >
           Cancel
         </Button>
-        <Button
-          size="sm"
-          variant="primary"
-          onClick={handleSave}
-          disabled={selectedMemberIds.length === 0 || isLoading}
-          className="flex-1"
-        >
+        <Button size="sm" variant="primary" onClick={handleSave} disabled={selectedMemberIds.length === 0 || isLoading} className="flex-1">
           {isLoading ? "Saving..." : `Add ${selectedMemberIds.length || ''}`}
         </Button>
       </div>
+    </div>
+  );
+}
+
+function DisplayComponenet({ assignees, onRemoveAssignee }: DisplayComponentProp) {
+
+  if (assignees.length === 0) {
+    return (
+      <div className="flex items-center gap-1 p-1 min-h-[24px] w-full text-tertiary">
+        <Icon name='plus' size={16} />
+        <Text style="paragraph-sm" as="span">Add Member</Text>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-wrap gap-1">
+      {assignees.map((assignee) => (
+        <Badge key={assignee.id} className="flex items-center gap-1 pr-1" >
+          <span>{assignee.name}</span>
+          {onRemoveAssignee && (
+            <span
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemoveAssignee(assignee.id);
+              }}
+              className="cursor-pointer rounded p-0.5"
+            >
+              <Icon name="close" size={12} />
+            </span>
+          )}
+        </Badge>
+      ))}
     </div>
   );
 }
@@ -175,48 +198,12 @@ export default function AssigneeInlineEditor({
   position = 'bottom-right',
   onRemoveAssignee,
 }: AssigneeInlineEditorProps) {
-  const [isHovered, setIsHovered] = useState(false);
 
-  const renderDisplayComponent = () => {
-    if (assignees.length === 0) {
-      return (
-        <div className="flex items-center gap-1.5 px-1 py-0.5 min-h-[24px] w-full">
-          <Text style="paragraph-sm" className="text-tertiary italic">
-            No members assigned
-          </Text>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex flex-wrap gap-1">
-        {assignees.map((assignee) => (
-          <Badge 
-            key={assignee.id} 
-            className="flex items-center gap-1 pr-1"
-          >
-            <span>{assignee.name}</span>
-            {onRemoveAssignee && (
-              <span 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemoveAssignee(assignee.id);
-                }} 
-                className="cursor-pointer hover:bg-white/20 rounded p-0.5"
-              >
-                <Icon name="line:close" size={12} />
-              </span>
-            )}
-          </Badge>
-        ))}
-      </div>
-    );
-  };
 
   if (disabled) {
     return (
       <div className={className}>
-        {renderDisplayComponent()}
+        <DisplayComponenet assignees={assignees} onRemoveAssignee={onRemoveAssignee} />
       </div>
     );
   }
@@ -225,18 +212,11 @@ export default function AssigneeInlineEditor({
     <Popover.Provider>
       <Popover.Root>
         <Popover.Trigger className={className}>
-          <div
-            className={cn(
-              "cursor-pointer rounded-md transition-all duration-150",
-              isHovered && "bg-secondary/50"
-            )}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            {renderDisplayComponent()}
+          <div className={cn("cursor-pointer rounded-md transition-all duration-150 hover:bg-secondary")}>
+            <DisplayComponenet assignees={assignees} onRemoveAssignee={onRemoveAssignee} />
           </div>
         </Popover.Trigger>
-        
+
         <Popover.Content position={position}>
           <AssigneeInlineEditorContent
             assignees={assignees}

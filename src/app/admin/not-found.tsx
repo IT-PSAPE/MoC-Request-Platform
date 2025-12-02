@@ -1,13 +1,18 @@
 import Link from 'next/link';
-import Button from '@/components/common/button';
+import Button from '@/components/common/controls/button';
 import Text from '@/components/common/text';
-import ErrorLayout from '@/components/common/error-layout';
-import NotFoundIcon from '@/components/common/icons/not-found-icon';
+import ErrorLayout from '@/components/navigation/error-layout';
 
 export default function AdminNotFound() {
   return (
     <ErrorLayout
-      icon={<NotFoundIcon />}
+      icon={
+        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-secondary flex items-center justify-center">
+          <Text style="title-h1" className="text-primary">
+            404
+          </Text>
+        </div>
+      }
       title="Admin Page Not Found"
       description="The admin page you're looking for doesn't exist or you don't have permission to access it."
       actions={

@@ -1,10 +1,10 @@
-import { Popover } from "../popover/popover";
 import { useFilterContext } from "./filter-provider";
 import { useDefaultContext } from "@/contexts/defaults-context";
-import Button from "../button";
-import Input from "../forms/input";
-import Checkbox from "../checkbox";
+import Button from "../controls/button";
+import Input from "../controls/input";
 import Text from "../text";
+import { Popover } from "@/components/base/popover";
+import Checkbox from "../controls/checkbox";
 
 export function FilterPopover() {
   const { closePopover } = Popover.useContext();

@@ -10,6 +10,9 @@ const TELEGRAM_TOPIC_ID = process.env.NEXT_PUBLIC_TELEGRAM_TOPIC_ID;
 interface TelegramNotificationPayload {
   id: string;
   what: string;
+  type: string;
+  priority: string;
+  due: string | null;
 }
 
 export async function sendTelegramNotification(payload: TelegramNotificationPayload): Promise<void> {
@@ -20,11 +23,26 @@ export async function sendTelegramNotification(payload: TelegramNotificationPayl
   }
 
   try {
-    const text = `🎭 New Request #${payload.id}
+    // Format due date if available
+    const dueDateText = payload.due 
+      ? new Date(payload.due).toLocaleDateString('en-ZA', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      : 'Not specified';
 
-${payload.what}
+    const text = `🎭 <b>New Request Submitted</b>
 
-View details: ${window.location.origin}/admin`;
+📋 <b>Request: ${payload.what}</b>
+
+📝 <b>Type:</b> ${payload.type}
+⭐ <b>Priority:</b> ${payload.priority}
+📅 <b>Due Date:</b> ${dueDateText}
+
+🔗 <a href="${window.location.origin}/request?id=${payload.id}">View Full Details</a>`;
 
     const telegramPayload = {
       chat_id: Number(TELEGRAM_CHAT_ID),

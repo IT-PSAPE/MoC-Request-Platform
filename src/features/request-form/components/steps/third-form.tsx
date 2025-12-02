@@ -2,7 +2,7 @@
 
 import EmptyState from "@/components/common/empty-state";
 import FormField from "../form-field";
-import Button from "@/components/common/button";
+import Button from "@/components/common/controls/button";
 import Icon from "@/components/common/icon";
 import FlowField from "../flow-field";
 import { useFormContext } from "@/contexts/form-context";
@@ -58,7 +58,7 @@ export default function ThirdForm() {
                 }
                 <div className="flex justify-center">
                     <Button type="button" variant="secondary" onClick={handleAddStep}>
-                        <Icon name="line:plus" /> Add Step
+                        <Icon name="plus" /> Add Step
                     </Button>
                 </div>
             </div>

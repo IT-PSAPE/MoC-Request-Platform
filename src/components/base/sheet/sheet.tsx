@@ -1,8 +1,8 @@
 import { cn } from "@/lib/cn"
 import { SheetContextProvider, useSheetContext } from "./sheet-provider"
-import { IconButton } from "../button";
-import Icon from "../icon";
 import { SheetProps } from "./types";
+import { IconButton } from "@/components/common/controls/button";
+import Icon from "@/components/common/icon";
 
 export function SheetRoot({ children, open, onOpenChange }: SheetProps) {
     return (
@@ -56,7 +56,7 @@ function SheetHeader({ children, className }: { children?: React.ReactNode, clas
             <div className="flex-1">
                 {children}
             </div>
-            <IconButton onClick={() => setOpen(false)} variant="ghost"><Icon name="line:close" size={20} /></IconButton>
+            <IconButton onClick={() => setOpen(false)} variant="ghost"><Icon name="close" size={20} /></IconButton>
         </div>
     )
 }

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/auth-context';
-import Loader from './loader';
+import Loader from '../common/loader';
 
 interface AuthGuardProps {
   children: React.ReactNode;

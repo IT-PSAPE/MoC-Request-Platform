@@ -1,6 +1,6 @@
 'use client';
 
-import Button from "@/components/common/button";
+import Button from "@/components/common/controls/button";
 import FirstForm from "./components/steps/first-form";
 import SecondForm from "./components/steps/second-form";
 import ThirdForm from "./components/steps/third-form";

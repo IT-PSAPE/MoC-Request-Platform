@@ -1,9 +1,9 @@
 import { useAdminContext } from "@/contexts/admin-context";
-import { Sheet } from "@/components/common/sheet/sheet";
+import { Sheet } from "@/components/base/sheet/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";
-import Switch from "@/components/common/switch";
-import Button from "@/components/common/button";
+import Switch from "@/components/common/controls/switch";
+import Button from "@/components/common/controls/button";
 
 interface AdminVenueDetailsSheetProps {
   venue: Venue | null;

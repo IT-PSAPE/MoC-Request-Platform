@@ -1,4 +1,4 @@
-import Checkbox from "@/components/common/checkbox";
+import Checkbox from "@/components/common/controls/checkbox";
 import { Card, CardContent } from "@/components/common/cards/public-card";
 import Divider from "@/components/common/divider";
 

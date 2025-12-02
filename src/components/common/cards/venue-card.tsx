@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn";
-import Switch from "../switch";
-import Button from "../button";
+import Switch from "../controls/switch";
+import Button from "../controls/button";
 import { useAdminContext } from "@/contexts/admin-context";
 
 interface VenueCardProps {

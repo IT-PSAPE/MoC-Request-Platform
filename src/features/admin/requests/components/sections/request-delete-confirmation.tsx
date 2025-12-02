@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Text from "@/components/common/text";
-import Button, { IconButton } from "@/components/common/button";
+import Button, { IconButton } from "@/components/common/controls/button";
 import Icon from "@/components/common/icon";
 import { type RequestDetailsDeleteProps } from "../shared/request-details-utils";
 
@@ -57,7 +57,7 @@ export default function RequestDeleteConfirmation({
             onClick={handleClose}
             disabled={isDeleting}
           >
-            <Icon name="line:close" />
+            <Icon name="close" />
           </IconButton>
         </div>
         <div className="px-5 py-6 space-y-2">

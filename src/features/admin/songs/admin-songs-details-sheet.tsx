@@ -1,10 +1,10 @@
 import { useAdminContext } from "@/contexts/admin-context";
-import { Sheet} from "@/components/common/sheet";
+import { Sheet} from "@/components/base/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";
 import Badge from "@/components/common/badge";
-import Switch from "@/components/common/switch";
-import Button from "@/components/common/button";
+import Switch from "@/components/common/controls/switch";
+import Button from "@/components/common/controls/button";
 
 interface AdminSongDetailsSheetProps {
   song: Song | null;

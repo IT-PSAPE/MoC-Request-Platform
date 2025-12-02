@@ -10,28 +10,28 @@ interface InlineAlertProps {
 
 function InlineAlert({ message, description, type = 'notice' }: InlineAlertProps) {
 
-    let icon: IconName = 'line:alert';
+    let icon: IconName = 'alert';
     let color = '';
 
     switch (type) {
         case 'notice':
-            icon = 'line:alert';
+            icon = 'alert';
             color = 'bg-pink-50 border-pink-300 text-pink-900';
             break;
         case 'info':
-            icon = 'line:alert';
+            icon = 'alert';
             color = 'bg-gray-50 border-gray-300 text-gray-900';
             break;
         case 'warning':
-            icon = 'line:alert';
+            icon = 'alert';
             color = 'bg-yellow-50 border-yellow-300 text-yellow-900';
             break;
         case 'error':
-            icon = 'line:alert';
+            icon = 'alert';
             color = 'bg-red-50 border-red-300 text-red-900';
             break;
         case 'success':
-            icon = 'line:alert';
+            icon = 'alert';
             color = 'bg-green-50 border-green-300 text-green-900';
             break;
     }

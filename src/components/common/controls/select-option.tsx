@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from "@/lib/cn";
-import Icon from "./icon";
+import Icon from "../icon";
 
 type SelectOptionItemProps = {
   children: React.ReactNode;
@@ -40,7 +40,7 @@ export function SelectOptionItem({
     >
       <div className="flex items-center justify-between gap-2">
         <span className="flex-1 break-words">{children}</span>
-        {isSelected && <Icon name="line:check" size={16} className="text-brand-solid shrink-0" />}
+        {isSelected && <Icon name="check" size={16} className="text-brand-solid shrink-0" />}
       </div>
     </div>
   );

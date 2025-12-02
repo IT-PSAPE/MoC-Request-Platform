@@ -1,4 +1,4 @@
-import Text from "../text";
+import Text from "@/components/common/text";
 
 type PopoverGroupProps = {
   fieldName: string;

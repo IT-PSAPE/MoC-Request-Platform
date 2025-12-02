@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/cn";
-import { Popover } from "./popover/popover";
-import Input from "./forms/input";
-import { SelectOptionContainer, SelectOptionItem } from "./select-option";
+import Input from "@/components/common/controls/input";
+import { SelectOptionContainer, SelectOptionItem } from "@/components/common/controls/select-option";
+import { Popover } from "@/components/base/popover";
 
 type SelectOption = {
   id: string;

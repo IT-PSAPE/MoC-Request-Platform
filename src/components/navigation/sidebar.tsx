@@ -48,11 +48,11 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     }
 
     const links: { href: string; label: string; icon: IconName }[] = [
-        { href: "/admin/", label: "Dashboard", icon: "line:home_line" },
-        { href: "/admin/items/", label: "Request Items", icon: "line:dotpoints" },
-        { href: "/admin/equipment/", label: "Equipment", icon: "line:tool" },
-        { href: "/admin/songs/", label: "Songs", icon: "line:music_note" },
-        { href: "/admin/venues/", label: "Venues", icon: "line:building" },
+        { href: "/admin/", label: "Dashboard", icon: "home_line" },
+        { href: "/admin/items/", label: "Request Items", icon: "dotpoints" },
+        { href: "/admin/equipment/", label: "Equipment", icon: "tool" },
+        { href: "/admin/songs/", label: "Songs", icon: "music_note" },
+        { href: "/admin/venues/", label: "Venues", icon: "building" },
     ];
 
     return (
@@ -73,7 +73,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 </div>
                 <div className="p-2 pt-0 flex-none" >
                     <Link href="/" >
-                        <MenuItem current ><Icon name="line:home_line" /> Home Page</MenuItem>
+                        <MenuItem current ><Icon name="home_line" /> Home Page</MenuItem>
                     </Link>
                 </div>
             </div>
@@ -95,7 +95,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                             className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-quaternary transition-colors text-primary"
                             onClick={onClose}
                         >
-                            <Icon name="line:close" />
+                            <Icon name="close" />
                         </button>
                     </div>
                     <div className="p-4 pt-0 flex-1">
@@ -110,7 +110,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                     </div>
                     <div className="p-4 pt-0 flex-none">
                         <Link href="/" onClick={onClose}>
-                            <MenuItem current ><Icon name="line:home_line" /> Home Page</MenuItem>
+                            <MenuItem current ><Icon name="home_line" /> Home Page</MenuItem>
                         </Link>
                     </div>
                 </div>

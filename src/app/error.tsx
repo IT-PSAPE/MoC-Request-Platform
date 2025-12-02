@@ -2,10 +2,10 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/common/button';
+import Button from '@/components/common/controls/button';
 import Text from '@/components/common/text';
-import ErrorLayout from '@/components/common/error-layout';
-import ErrorIcon from '@/components/common/icons/error-icon';
+import ErrorLayout from '@/components/navigation/error-layout';
+import Icon from '@/components/common/icon';
 
 export default function Error({
   error,
@@ -23,7 +23,11 @@ export default function Error({
 
   return (
     <ErrorLayout
-      icon={<ErrorIcon />}
+      icon={
+        <div className="mx-auto mb-4 rounded-full bg-error/10 flex items-center justify-center">
+          <Icon name="alert_triangle" size={16} />
+        </div>
+      }
       title="Oops! Something went wrong"
       description="We encountered an unexpected error. Don't worry, you can try refreshing the page or return to the home page."
       errorId={error.digest}

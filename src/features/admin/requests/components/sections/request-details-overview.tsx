@@ -1,8 +1,8 @@
 'use client';
 
 import Text from "@/components/common/text";
-import Icon from "@/components/common/icon";
-import InlineEditor from "@/components/common/inline-editor";
+import Icon, { IconName } from "@/components/common/icon";
+import InlineEditor from "@/components/common/inline-editors/inline-editor";
 import { useDefaultContext } from "@/contexts/defaults-context";
 import {
   statusColorMap,
@@ -14,6 +14,25 @@ import {
   type RequestDetailsEditableProps
 } from "../shared/request-details-utils";
 import RequestAssignees from "./request-assignees";
+
+
+type PropertyItemProp = {
+  icon: IconName,
+  label: string,
+  children: React.ReactNode
+}
+
+function PropertyItem({ icon, label, children }: PropertyItemProp) {
+  return (
+    <div className="w-full gap-sm grid grid-cols-2 items-center *:h-8">
+      <span className="flex items-center gap-1.5">
+        <Icon name={icon} size={16} />
+        <Text style="label-sm" className="text-secondary">{label}</Text>
+      </span>
+      { children }
+    </div>
+  )
+}
 
 export default function RequestDetailsOverview({
   request,
@@ -29,12 +48,8 @@ export default function RequestDetailsOverview({
   return (
     <section className="space-y-5">
       <Text style="title-h6">{request.what || "Untitled Request"}</Text>
-      <div className="space-y-4 *:w-full *:gap-sm *:grid *:grid-cols-2 *:items-center">
-        <div>
-          <span className="flex items-center gap-1.5">
-            <Icon name="line:status" size={16} />
-            <Text style="label-sm" className="text-secondary">Status</Text>
-          </span>
+      <div className="space-y-1">
+        <PropertyItem icon="status" label="Status">
           <InlineEditor
             value={request.status.id}
             displayValue={request.status.name}
@@ -47,12 +62,8 @@ export default function RequestDetailsOverview({
             className="w-fit"
             position="bottom-right"
           />
-        </div>
-        <div>
-          <span className="flex items-center gap-1.5">
-            <Icon name="line:dropdown" size={16} />
-            <Text style="label-sm" className="text-secondary">Priority</Text>
-          </span>
+        </PropertyItem>
+        <PropertyItem icon="dropdown" label="Priority">
           <InlineEditor
             value={request.priority.id}
             displayValue={formatPriority(request.priority)}
@@ -65,12 +76,9 @@ export default function RequestDetailsOverview({
             className="w-fit"
             position="bottom-right"
           />
-        </div>
-        <div>
-          <span className="flex items-center gap-1.5">
-            <Icon name="line:tag" size={16} />
-            <Text style="label-sm" className="text-secondary">Type</Text>
-          </span>
+
+        </PropertyItem>
+        <PropertyItem icon="tag" label="Type">
           <InlineEditor
             value={request.type.id}
             displayValue={formatRequestType(request.type)}
@@ -83,12 +91,8 @@ export default function RequestDetailsOverview({
             className="w-fit"
             position="bottom-right"
           />
-        </div>
-        <div>
-          <span className="flex items-center gap-1.5">
-            <Icon name="line:calendar" size={16} />
-            <Text style="label-sm" className="text-tertiary">Due Date</Text>
-          </span>
+        </PropertyItem>
+        <PropertyItem icon="calendar" label="Due Date">
           <InlineEditor
             value={request.due || ''}
             displayValue={formatDate(request.due)}
@@ -98,45 +102,20 @@ export default function RequestDetailsOverview({
             disabled={!onUpdateDueDate}
             position="bottom-right"
           />
-        </div>
-        <div>
-          <span className="flex items-center gap-1.5">
-            <Icon name="line:clock_rewind" size={16} />
-            <Text style="label-sm" className="text-secondary">Created time</Text>
-          </span>
-          <div className="px-1 py-0.5 min-h-[24px] flex items-center">
-            <Text style="paragraph-sm" className="text-tertiary">
-              {formatDate(request.created_at)}
-            </Text>
-          </div>
-        </div>
-        <div>
-          <span className="flex items-center gap-1.5">
-            <Icon name="line:user" size={16} />
-            <Text style="label-sm" className="text-secondary">Assigned Members</Text>
-          </span>
-          <div className="px-1 py-0.5 min-h-[24px] flex items-center">
-            <RequestAssignees
-              request={request}
-              onAssignMember={onAssignMember}
-              onUnassignMember={onUnassignMember}
-            />
-          </div>
-        </div>
+        </PropertyItem>
+        <PropertyItem icon="clock_rewind" label="Created time">
+          <Text style="paragraph-sm" className="text-tertiary">
+            {formatDate(request.created_at)}
+          </Text>
+        </PropertyItem>
+        <PropertyItem icon="user" label="Assigned Members">
+          <RequestAssignees
+            request={request}
+            onAssignMember={onAssignMember}
+            onUnassignMember={onUnassignMember}
+          />
+        </PropertyItem>
       </div>
-
-      {/* Assignees Section */}
-      {/* <div className="space-y-2">
-        <span className="flex items-center gap-1.5">
-          <Icon name="line:user" size={16} />
-          <Text style="label-sm" className="text-secondary">Assigned Members</Text>
-        </span>
-        <RequestAssignees
-          request={request}
-          onAssignMember={onAssignMember}
-          onUnassignMember={onUnassignMember}
-        />
-      </div> */}
     </section>
   );
 }

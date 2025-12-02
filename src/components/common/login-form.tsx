@@ -2,8 +2,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
 import { useState } from "react";
-import Button from "./button";
-import Input from "./forms/input";
+import Button from "./controls/button";
+import Input from "./controls/input";
 import Text from "./text";
 
 export default function LoginFormContainer() {

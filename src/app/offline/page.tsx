@@ -1,9 +1,9 @@
 'use client';
 
-import Button from '@/components/common/button';
-import ErrorLayout from '@/components/common/error-layout';
-import OfflineIcon from '@/components/common/icons/offline-icon';
+import Button from '@/components/common/controls/button';
+import ErrorLayout from '@/components/navigation/error-layout';
 import { useEffect } from 'react';
+import Icon from '@/components/common/icon';
 
 export default function OfflinePage() {
   useEffect(() => {
@@ -12,7 +12,11 @@ export default function OfflinePage() {
 
   return (
     <ErrorLayout
-      icon={<OfflineIcon />}
+      icon={
+      <div className="w-24 h-24 mx-auto bg-muted rounded-full flex items-center justify-center mb-4 text-tertiary">
+        <Icon name="wifi_off"/>
+      </div>
+      }
       title="You're Offline"
       description="It looks like you've lost your internet connection. Don't worry - you can still view previously loaded content."
       actions={

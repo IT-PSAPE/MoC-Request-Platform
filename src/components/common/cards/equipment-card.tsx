@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn";
-import NumberInput from "../forms/number-input";
-import Button from "../button";
+import NumberInput from "../controls/number-input";
+import Button from "../controls/button";
 import { useAdminContext } from "@/contexts/admin-context";
 
 interface EquipmentCardProps {

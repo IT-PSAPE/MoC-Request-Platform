@@ -57,13 +57,13 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
       {/* Right side - Type badge - Always show request type */}
       <div className="flex flex-wrap gap-2 *:flex *:gap-1">
         <Badge color={requestColorMap[request.type?.name] || "gray"}>
-          <Icon name="line:tag" size={14} />{requestType}
+          <Icon name="tag" size={14} />{requestType}
         </Badge>
         <Badge color={priorityColorMap[request.priority.name] || "gray"}>
-          <Icon name="line:dropdown" size={14} />{request.priority.name}
+          <Icon name="dropdown" size={14} />{request.priority.name}
         </Badge>
         <Badge color="gray">
-          <Icon name="line:calendar" size={14} />{date}
+          <Icon name="calendar" size={14} />{date}
         </Badge>
       </div>
     </div>

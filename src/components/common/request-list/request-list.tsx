@@ -1,8 +1,8 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import type { DragEvent, MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { RequestListItem } from "@/components/common/request-list/request-list-item";
-import { IconButton } from "@/components/common/button";
-import Select, { Option } from "@/components/common/forms/select";
+import { IconButton } from "@/components/common/controls/button";
+import Select, { Option } from "@/components/common/controls/select";
 import EmptyState from "@/components/common/empty-state";
 import { useDefaultContext } from "@/contexts/defaults-context";
 import { cn } from "@/lib/cn";
@@ -365,9 +365,9 @@ function RequestListFilters() {
             className="shrink-0"
           >
             {sortDirection === "asc" ? (
-              <Icon name="line:chevron_up" size={16} />
+              <Icon name="chevron_up" size={16} />
             ) : (
-              <Icon name="line:chevron_down" size={16} />
+              <Icon name="chevron_down" size={16} />
             )}
           </IconButton>
         </div>
@@ -376,10 +376,10 @@ function RequestListFilters() {
             <TabContextProvider defaultTab={listView}>
               <TabList className="max-md:w-full">
                 <TabItem value="column" onClick={() => setListView("column")}>
-                  <Icon className="mr-1" name="line:column" size={16} />Column
+                  <Icon className="mr-1" name="column" size={16} />Column
                 </TabItem>
                 <TabItem value="list" onClick={() => setListView("list")}>
-                  <Icon className="mr-1" name="line:row" size={16} />List
+                  <Icon className="mr-1" name="row" size={16} />List
                 </TabItem>
               </TabList>
             </TabContextProvider>

@@ -1,9 +1,9 @@
 import { useAdminContext } from "@/contexts/admin-context";
-import { Sheet } from "@/components/common/sheet";
+import { Sheet } from "@/components/base/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";
-import NumberInput from "@/components/common/forms/number-input";
-import Button from "@/components/common/button";
+import NumberInput from "@/components/common/controls/number-input";
+import Button from "@/components/common/controls/button";
 
 interface AdminEquipmentDetailsSheetProps {
   equipment: Equipment | null;

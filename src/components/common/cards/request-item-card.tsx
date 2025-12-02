@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import Button from "../button";
+import Button from "../controls/button";
 import Text from "../text";
 
 interface RequestItemCardProps {
