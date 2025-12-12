@@ -13,6 +13,7 @@ import Divider from '@/components/common/divider';
 import EmptyState from '@/components/common/empty-state';
 import Link from 'next/link';
 import { RequestTable } from '@/lib/database';
+import Icon from '@/components/common/icon';
 
 // Color maps from request details sheet
 const requestColorMap: Record<string, BadgeColor> = {
@@ -140,7 +141,7 @@ function RequestDetailsContent() {
       <div className="mb-6">
         <Link href="/board">
           <Button>
-            ← Back Request Board
+            <Icon name='arrow_left' /> Back
           </Button>
         </Link>
       </div>

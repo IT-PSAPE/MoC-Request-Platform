@@ -72,6 +72,10 @@ export default function RequestDetailsSheet({
     setIsCommentModalOpen(false);
   };
 
+  const handleExpandDetails = () => {
+    window.location.href = `/request?id=${request.id}`;
+  }
+
   return (
     <>
       <style jsx>{`
@@ -84,6 +88,12 @@ export default function RequestDetailsSheet({
           <div className="flex flex-col h-full">
             <Sheet.Header className="justify-end">
               <div className="flex gap-2">
+                <IconButton 
+                  onClick={handleExpandDetails} 
+                  variant="ghost"
+                >
+                  <Icon name="expand" />
+                </IconButton>
                 <IconButton 
                   onClick={handleOpenCommentModal} 
                   disabled={!onAddComment} 

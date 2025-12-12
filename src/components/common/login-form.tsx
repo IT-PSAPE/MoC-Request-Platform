@@ -1,54 +1,46 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
-import { useState } from "react";
+import { useActionState } from "react";
 import Button from "./controls/button";
 import Input from "./controls/input";
 import Text from "./text";
 
 export default function LoginFormContainer() {
   const { login } = useAuthContext();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  async function onLogin(email: string, password: string) {
-    if (!email.trim() || !password.trim()) {
-      setError("Please enter both email and password");
-      return;
-    }
+  // React 19 Actions API with useActionState
+  const [error, loginAction, isPending] = useActionState(
+    async (previousState: string | null, formData: FormData) => {
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
 
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const ok = await login(email, password);
-      const next = searchParams.get("next") ?? "/admin";
-
-      if (ok) {
-        router.push(next);
-        router.refresh(); // Ensure server state is updated
+      if (!email?.trim() || !password?.trim()) {
+        return "Please enter both email and password";
       }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Invalid email or password. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
-  function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    onLogin(email, password);
-  }
+      try {
+        const ok = await login(email, password);
+        const next = searchParams.get("next") ?? "/admin";
+
+        if (ok) {
+          router.push(next);
+          router.refresh(); // Ensure server state is updated
+          return null; // Success
+        }
+        return "Login failed. Please try again.";
+      } catch (err) {
+        console.error("Login error:", err);
+        return "Invalid email or password. Please try again.";
+      }
+    },
+    null
+  );
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
+    <form action={loginAction} className="space-y-3">
       <Text style="paragraph-sm">Only MoC Members can login</Text>
       
       {error && (
@@ -61,22 +53,20 @@ export default function LoginFormContainer() {
       
       <Input
         type="email"
+        name="email"
         placeholder="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        disabled={isLoading}
+        disabled={isPending}
         required
       />
       <Input
         type="password"
+        name="password"
         placeholder="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        disabled={isLoading}
+        disabled={isPending}
         required
       />
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Logging in..." : "Login"}
+      <Button type="submit" disabled={isPending}>
+        {isPending ? "Logging in..." : "Login"}
       </Button>
     </form>
   );
