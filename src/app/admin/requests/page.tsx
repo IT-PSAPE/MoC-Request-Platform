@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Text from "@/components/common/text";
 import Header from "@/components/common/header";
 import { RequestList } from "@/components/common/request-list/request-list";
-import { useAdminContext } from "@/contexts/admin-context";
+import { useAdminContext } from "@/components/contexts/admin-context";
 import RequestDetailsSheet from "@/features/admin/requests/request-details-sheet";
 
 export default function RequestsContent() {

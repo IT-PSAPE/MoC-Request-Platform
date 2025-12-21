@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuthContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/components/contexts/auth-context";
 import { useActionState } from "react";
 import Button from "./controls/button";
 import Input from "./controls/input";

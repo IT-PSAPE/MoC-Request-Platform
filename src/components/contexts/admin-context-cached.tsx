@@ -2,21 +2,8 @@
 
 import { createContext, useContext } from "react";
 import { useAuthContext } from "./auth-context";
-import { 
-  useRequests, 
-  useUpdateRequestStatus, 
-  useAddComment, 
-  useDeleteRequest 
-} from "@/hooks/use-cached-requests";
-import { 
-  useEquipment, 
-  useUpdateEquipment,
-  useSongs,
-  useUpdateSong,
-  useVenues,
-  useUpdateVenue,
-  useRequestItems
-} from "@/hooks/use-cached-defaults";
+import { useRequests, useUpdateRequestStatus, useAddComment, useDeleteRequest } from "@/logic/hooks/use-cached-requests";
+import { useEquipment, useUpdateEquipment, useSongs, useUpdateSong, useVenues, useUpdateVenue, useRequestItems } from "@/logic/hooks/use-cached-defaults";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';
 
@@ -27,25 +14,25 @@ type AdminContextType = {
   equipment: Equipment[];
   songs: Song[];
   venues: Venue[];
-  
+
   // Loading states
   requestsLoading: boolean;
   itemsLoading: boolean;
   equipmentLoading: boolean;
   songsLoading: boolean;
   venuesLoading: boolean;
-  
+
   // Error states
   requestsError: Error | null;
   itemsError: Error | null;
   equipmentError: Error | null;
   songsError: Error | null;
   venuesError: Error | null;
-  
+
   // UI State
   tab: TabItem;
   setTab: (tab: TabItem) => void;
-  
+
   // Mutations (returning mutation objects for loading/error states)
   updateEquipmentMutation: ReturnType<typeof useUpdateEquipment>;
   updateVenueMutation: ReturnType<typeof useUpdateVenue>;
@@ -53,7 +40,7 @@ type AdminContextType = {
   updateRequestStatusMutation: ReturnType<typeof useUpdateRequestStatus>;
   addCommentMutation: ReturnType<typeof useAddComment>;
   deleteRequestMutation: ReturnType<typeof useDeleteRequest>;
-  
+
   // Legacy methods for backward compatibility
   updateEquipment: (id: string, available: number) => void;
   updateVenue: (venueId: string, available: boolean) => void;
@@ -63,17 +50,15 @@ type AdminContextType = {
   deleteRequestById: (requestId: string) => Promise<void>;
 };
 
-export const AdminContextCached = createContext<AdminContextType | null>(null);
-
-export function AdminContextCachedProvider({ 
-  children, 
-  tab = 'dashboard',
-  onTabChange
-}: { 
-  children: React.ReactNode; 
+type AdminContextCachedProps = {
+  children: React.ReactNode;
   tab?: TabItem;
   onTabChange?: (tab: TabItem) => void;
-}) {
+}
+
+export const AdminContextCached = createContext<AdminContextType | null>(null);
+
+export function AdminContextCachedProvider({ children, tab = 'dashboard', onTabChange}: AdminContextCachedProps) {
   const { user } = useAuthContext();
 
   // Cached queries
@@ -117,12 +102,12 @@ export function AdminContextCachedProvider({
     if (!user) {
       throw new Error("User must be logged in to add comments");
     }
-    
+
     try {
-      await addCommentMutation.mutateAsync({ 
-        requestId, 
-        comment, 
-        authorId: user.id 
+      await addCommentMutation.mutateAsync({
+        requestId,
+        comment,
+        authorId: user.id
       });
     } catch (error) {
       console.error("Failed to add comment", error);
@@ -150,25 +135,25 @@ export function AdminContextCachedProvider({
     equipment: equipmentQuery.data ?? [],
     songs: songsQuery.data ?? [],
     venues: venuesQuery.data ?? [],
-    
+
     // Loading states
     requestsLoading: requestsQuery.isLoading,
     itemsLoading: itemsQuery.isLoading,
     equipmentLoading: equipmentQuery.isLoading,
     songsLoading: songsQuery.isLoading,
     venuesLoading: venuesQuery.isLoading,
-    
+
     // Error states
     requestsError: requestsQuery.error,
     itemsError: itemsQuery.error,
     equipmentError: equipmentQuery.error,
     songsError: songsQuery.error,
     venuesError: venuesQuery.error,
-    
+
     // UI State
     tab,
     setTab,
-    
+
     // Mutations
     updateEquipmentMutation,
     updateVenueMutation,
@@ -176,7 +161,7 @@ export function AdminContextCachedProvider({
     updateRequestStatusMutation,
     addCommentMutation,
     deleteRequestMutation,
-    
+
     // Legacy methods
     updateEquipment,
     updateVenue,
@@ -195,10 +180,10 @@ export function AdminContextCachedProvider({
 
 export function useAdminContextCached() {
   const context = useContext(AdminContextCached);
-  
+
   if (!context) {
     throw new Error("useAdminContextCached must be used within a AdminContextCachedProvider");
   }
-  
+
   return context;
 }

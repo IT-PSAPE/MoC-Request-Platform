@@ -16,7 +16,15 @@ type DefaultContextType = {
     supabase: SupabaseClient;
 };
 
-export const DefaultContext = createContext<DefaultContextType | null>(null);
+const DefaultContext = createContext<DefaultContextType | null>(null);
+
+export function useDefaultContext() {
+    const context = useContext(DefaultContext);
+
+    if (!context) throw new Error("useDefaultContext must be used within a DefaultContextProvider");
+
+    return context;
+}
 
 export function DefaultContextProvider({ children, supabase }: { children: React.ReactNode, supabase: SupabaseClient}) {
     const [statuses, setStatuses] = useState<Status[]>([]);
@@ -84,12 +92,4 @@ export function DefaultContextProvider({ children, supabase }: { children: React
             {children}
         </DefaultContext.Provider>
     );
-}
-
-export function useDefaultContext() {
-    const context = useContext(DefaultContext);
-
-    if (!context) throw new Error("useDefaultContext must be used within a DefaultContextProvider");
-
-    return context;
 }

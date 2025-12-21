@@ -4,7 +4,7 @@ import { RequestListItem } from "@/components/common/request-list/request-list-i
 import { IconButton } from "@/components/common/controls/button";
 import Select, { Option } from "@/components/common/controls/select";
 import EmptyState from "@/components/common/empty-state";
-import { useDefaultContext } from "@/contexts/defaults-context";
+import { useDefaultContext } from "@/components/contexts/defaults-context";
 import { cn } from "@/lib/cn";
 import Icon from "@/components/common/icon";
 import Text from "@/components/common/text";

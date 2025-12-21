@@ -5,7 +5,7 @@ import Loader from "@/components/common/loader";
 import Header from "@/components/common/header";
 import Text from "@/components/common/text";
 import { RequestList } from "@/components/common/request-list/request-list";
-import { BoardContextProvider, useBoardContext } from "@/contexts/board-context";
+import { BoardContextProvider, useBoardContext } from "@/components/contexts/board-context";
 
 function BoardRequestsContent() {
   const { requests } = useBoardContext();

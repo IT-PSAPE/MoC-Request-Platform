@@ -1,11 +1,11 @@
 'use client';
 
-import { AuthContextProvider } from "@/contexts/auth-context";
-import { DefaultContextProvider } from "@/contexts/defaults-context";
-import { QueryProvider } from "@/providers/query-provider";
-import { CacheSyncProvider } from "@/providers/cache-sync-provider";
+import { AuthContextProvider } from "@/components/contexts/auth-context";
+import { DefaultContextProvider } from "@/components/contexts/defaults-context";
+import { QueryProvider } from "@/components/providers/query-provider";
+import { CacheSyncProvider } from "@/components/providers/cache-sync-provider";
 import Loader from "@/components/common/loader";
-import { useSupabaseClient } from "@/hooks/use-supabase-client";
+import { useSupabaseClient } from "@/logic/hooks/use-supabase-client";
 
 function RootProvider({ children }: { children: React.ReactNode }) {
     const supabase = useSupabaseClient();

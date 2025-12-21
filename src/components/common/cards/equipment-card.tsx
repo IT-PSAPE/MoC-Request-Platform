@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 import NumberInput from "../controls/number-input";
 import Button from "../controls/button";
-import { useAdminContext } from "@/contexts/admin-context";
+import { useAdminContext } from "@/components/contexts/admin-context";
 
 interface EquipmentCardProps {
     className?: string;

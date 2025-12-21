@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from './use-supabase-client';
 import { QueryKeys } from '@/lib/query-keys';
-import { addComment } from '@/services/admin-service';
+import { addComment } from '@/logic/services/admin-service';
 import { RequestTable } from '@/lib/database';
 
 // Hook for fetching requests with automatic caching

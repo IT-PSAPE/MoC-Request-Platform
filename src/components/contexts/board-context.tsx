@@ -1,16 +1,24 @@
 'use client';
 
-import { useDefaultContext } from "@/contexts/defaults-context";
+import { useDefaultContext } from "@/components/contexts/defaults-context";
 import { createContext, useContext, useEffect, useState } from "react";
 import { RequestTable } from "@/lib/database";
 
-type BoardSteps = 1 | 2 | 3;
+export type BoardSteps = 1 | 2 | 3;
 
 type BoardContextType = {
     requests: FetchRequest[]
 };
 
-export const BoardContext = createContext<BoardContextType | null>(null);
+const BoardContext = createContext<BoardContextType | null>(null);
+
+export function useBoardContext() {
+    const context = useContext(BoardContext);
+
+    if (!context) throw new Error("useBoardContext must be used within a BoardContextProvider");
+
+    return context;
+}
 
 export function BoardContextProvider({ children }: { children: React.ReactNode }) {
     const { supabase } = useDefaultContext();
@@ -61,13 +69,3 @@ export function BoardContextProvider({ children }: { children: React.ReactNode }
         </BoardContext.Provider>
     );
 }
-
-export function useBoardContext() {
-    const context = useContext(BoardContext);
-
-    if (!context) throw new Error("useBoardContext must be used within a BoardContextProvider");
-
-    return context;
-}
-
-export type { BoardSteps as BoardSteps }

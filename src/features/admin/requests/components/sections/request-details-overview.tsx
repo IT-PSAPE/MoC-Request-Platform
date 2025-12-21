@@ -3,7 +3,7 @@
 import Text from "@/components/common/text";
 import Icon, { IconName } from "@/components/common/icon";
 import InlineEditor from "@/components/common/inline-editors/inline-editor";
-import { useDefaultContext } from "@/contexts/defaults-context";
+import { useDefaultContext } from "@/components/contexts/defaults-context";
 import {
   statusColorMap,
   priorityColorMap,

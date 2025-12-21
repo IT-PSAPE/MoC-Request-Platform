@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Button from "@/components/common/controls/button";
-import { useAuthContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/components/contexts/auth-context";
 import Icon, { IconName } from "../common/icon";
 import { cn } from "@/lib/cn";
 

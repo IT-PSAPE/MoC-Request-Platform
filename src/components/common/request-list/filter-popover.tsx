@@ -1,5 +1,5 @@
 import { useFilterContext } from "./filter-provider";
-import { useDefaultContext } from "@/contexts/defaults-context";
+import { useDefaultContext } from "@/components/contexts/defaults-context";
 import Button from "../controls/button";
 import Input from "../controls/input";
 import Text from "../text";

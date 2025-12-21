@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-import { AdminContextProvider } from '@/contexts/admin-context';
-import { useDefaultContext } from '@/contexts/defaults-context';
+import { AdminContextProvider } from '@/components/contexts/admin-context';
+import { useDefaultContext } from '@/components/contexts/defaults-context';
 import Sidebar from '@/components/navigation/sidebar';
 import MainContent from '@/components/layout/main-content';
 import Breadcrumbs from '@/components/common/breadcrumbs';

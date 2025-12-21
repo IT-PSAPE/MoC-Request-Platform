@@ -6,7 +6,7 @@ import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
 import Header from "@/components/common/header";
 
-import { useAdminContext } from "@/contexts/admin-context";
+import { useAdminContext } from "@/components/contexts/admin-context";
 import { RequestItemCard } from "@/components/common/cards/request-item-card";
 import { GridContainer } from "@/components/layout/grid-container";
 import AdminRequestItemDetailsSheet from "@/features/admin/items/admin-request-item-details-sheet";
@@ -47,7 +47,7 @@ export default function RequestItemContent() {
             
             <GridContainer isEmpty={items.length === 0}>
                 {items.length === 0 ? (
-                    <EmptyState message="No request items available yet." />
+                    <EmptyState title="No information" message="No request items available yet." />
                 ) : items.map((item) => (
                     <RequestItemCard 
                         key={item.id} 

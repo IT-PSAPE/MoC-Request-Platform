@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthContext } from '@/contexts/auth-context';
+import { useAuthContext } from '@/components/contexts/auth-context';
 import Loader from '@/components/common/loader';
 
 interface SmartRedirectProps {

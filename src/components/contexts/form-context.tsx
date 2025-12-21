@@ -2,9 +2,9 @@
 
 import React, { createContext, useContext, useState, useEffect, Dispatch, SetStateAction, FormEventHandler } from "react";
 // Types are global from @/lib/type.ts - no import needed
-import FormService from "@/services/form-service";
-import { sendTelegramNotification } from '@/services/telegram-service';
-import { useDefaultContext } from "@/contexts/defaults-context";
+import FormService from "@/logic/services/form-service";
+import { sendTelegramNotification } from '@/logic/services/telegram-service';
+import { useDefaultContext } from "@/components/contexts/defaults-context";
 import { SongTable, VenueTable, RequestItemTable } from "@/lib/database";
 
 type FormSteps = 1 | 2 | 3;

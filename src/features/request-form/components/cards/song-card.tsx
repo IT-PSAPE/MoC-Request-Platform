@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/common/cards/public-card";
 import Divider from "@/components/common/divider";
 
 import Text from "@/components/common/text";
-import { useFormContext } from "@/contexts/form-context";
+import { useFormContext } from "@/components/contexts/form-context";
 
 
 export default function SongCard({ song }: { song: Song }) {

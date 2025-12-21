@@ -1,4 +1,4 @@
-import { useAdminContext } from "@/contexts/admin-context";
+import { useAdminContext } from "@/components/contexts/admin-context";
 import { Sheet } from "@/components/base/sheet";
 import Text from "@/components/common/text";
 import Divider from "@/components/common/divider";

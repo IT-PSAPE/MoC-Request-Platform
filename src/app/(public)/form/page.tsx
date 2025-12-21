@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FormContextProvider } from "@/contexts/form-context";
+import { FormContextProvider } from "@/components/contexts/form-context";
 import RequestForm from "@/features/request-form/form";
 
 export const metadata: Metadata = {

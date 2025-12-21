@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 import Switch from "../controls/switch";
 import Button from "../controls/button";
-import { useAdminContext } from "@/contexts/admin-context";
+import { useAdminContext } from "@/components/contexts/admin-context";
 
 interface SongCardProps {
     song: Song;

@@ -11,7 +11,15 @@ type AuthContextType = {
     logout: () => Promise<void>;
 };
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function useAuthContext() {
+    const context = useContext(AuthContext);
+
+    if (!context) throw new Error("useAuthContext must be used within a AuthContextProvider");
+
+    return context;
+}
 
 export function AuthContextProvider({ children, supabase }: { children: React.ReactNode, supabase: SupabaseClient }) {
     const [authed, setAuthed] = useState(false);
@@ -103,12 +111,4 @@ export function AuthContextProvider({ children, supabase }: { children: React.Re
             {children}
         </AuthContext.Provider>
     );
-}
-
-export function useAuthContext() {
-    const context = useContext(AuthContext);
-
-    if (!context) throw new Error("useAuthContext must be used within a AuthContextProvider");
-
-    return context;
 }

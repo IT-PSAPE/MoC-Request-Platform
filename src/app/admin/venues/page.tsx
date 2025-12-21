@@ -7,7 +7,7 @@ import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
 import Header from "@/components/common/header";
 
-import { useAdminContext } from "@/contexts/admin-context";
+import { useAdminContext } from "@/components/contexts/admin-context";
 import { GridContainer } from "@/components/layout/grid-container";
 import AdminVenueDetailsSheet from "@/features/admin/venues/admin-venue-details-sheet";
 

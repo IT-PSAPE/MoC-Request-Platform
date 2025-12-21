@@ -6,7 +6,7 @@ import Text from "@/components/common/text";
 import EmptyState from "@/components/common/empty-state";
 import Header from "@/components/common/header";
 
-import { useAdminContext } from "@/contexts/admin-context";
+import { useAdminContext } from "@/components/contexts/admin-context";
 import { SongCard } from "@/components/common/cards/song-card";
 import { GridContainer } from "@/components/layout/grid-container";
 import AdminSongDetailsSheet from "@/features/admin/songs/admin-songs-details-sheet";

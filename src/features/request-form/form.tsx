@@ -5,7 +5,7 @@ import FirstForm from "./components/steps/first-form";
 import SecondForm from "./components/steps/second-form";
 import ThirdForm from "./components/steps/third-form";
 import Divider from "@/components/common/divider";
-import { useFormContext } from "@/contexts/form-context";
+import { useFormContext } from "@/components/contexts/form-context";
 import StepIndicator from "./components/step-indicator";
 import { useEffect } from "react";
 

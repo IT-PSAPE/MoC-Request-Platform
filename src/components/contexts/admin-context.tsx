@@ -3,7 +3,7 @@
 import { EquipmentTable, RequestItemTable, RequestTable, SongTable, VenueTable } from "@/lib/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
-import { addComment, listMembers, assignMember, unassignMember } from "@/services/admin-service";
+import { addComment, listMembers, assignMember, unassignMember } from "@/logic/services/admin-service";
 import { useAuthContext } from "./auth-context";
 import { useDefaultContext } from "./defaults-context";
 
@@ -31,7 +31,15 @@ type AdminContextType = {
     setTab: (tab: TabItem) => void;
 };
 
-export const AdminContext = createContext<AdminContextType | null>(null);
+const AdminContext = createContext<AdminContextType | null>(null);
+
+export function useAdminContext() {
+    const context = useContext(AdminContext);
+
+    if (!context) throw new Error("useAdminContext must be used within a AdminContextProvider");
+
+    return context;
+}
 
 export function AdminContextProvider({ children, supabase }: { children: React.ReactNode, supabase: SupabaseClient }) {
     const [equipment, setEquipment] = useState<Equipment[]>([]);
@@ -386,12 +394,4 @@ export function AdminContextProvider({ children, supabase }: { children: React.R
             {children}
         </AdminContext.Provider>
     );
-}
-
-export function useAdminContext() {
-    const context = useContext(AdminContext);
-
-    if (!context) throw new Error("useAdminContext must be used within a AdminContextProvider");
-
-    return context;
 }

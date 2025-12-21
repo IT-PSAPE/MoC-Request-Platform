@@ -1,6 +1,6 @@
 'use client';
 
-import { useRealtimeSubscriptions } from '@/hooks/use-realtime-subscriptions';
+import { useRealtimeSubscriptions } from "@/logic/hooks/use-realtime-subscriptions";
 
 interface CacheSyncProviderProps {
   children: React.ReactNode;
