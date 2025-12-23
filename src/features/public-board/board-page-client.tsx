@@ -1,10 +1,10 @@
 "use client";
 
 import { Suspense } from "react";
-import Loader from "@/components/common/loader";
-import Header from "@/components/common/header";
-import Text from "@/components/common/text";
-import { RequestList } from "@/components/common/request-list/request-list";
+import Loader from "@/components/ui/common/loader";
+import Header from "@/components/ui/common/header";
+import Text from "@/components/ui/common/text";
+import { RequestList } from "@/components/ui/common/request-list/request-list";
 import { BoardContextProvider, useBoardContext } from "@/components/contexts/board-context";
 
 function BoardRequestsContent() {

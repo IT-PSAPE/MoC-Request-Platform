@@ -3,8 +3,8 @@
 import { cn } from "@/lib/cn";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Icon from "@/components/common/icon";
-import Divider from "@/components/common/divider";
+import Icon from "@/components/ui/common/icon";
+import Divider from "@/components/ui/common/divider";
 
 type MenuItemProps = {
     children?: React.ReactNode;

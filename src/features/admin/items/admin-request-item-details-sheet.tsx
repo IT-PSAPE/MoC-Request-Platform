@@ -1,7 +1,7 @@
-import { Sheet } from "@/components/base/sheet";
-import Text from "@/components/common/text";
-import Divider from "@/components/common/divider";
-import Button from "@/components/common/controls/button";
+import { Sheet } from "@/components/ui/base/sheet";
+import Text from "@/components/ui/common/text";
+import Divider from "@/components/ui/common/divider";
+import Button from "@/components/ui/common/controls/button";
 
 interface AdminRequestItemDetailsSheetProps {
   item: RequestItem | null;

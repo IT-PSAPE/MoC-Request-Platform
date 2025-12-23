@@ -3,7 +3,7 @@ import { useDefaultContext } from "@/components/contexts/defaults-context";
 import Button from "../controls/button";
 import Input from "../controls/input";
 import Text from "../text";
-import { Popover } from "@/components/base/popover";
+import { Popover } from "@/components/ui/base/popover";
 import Checkbox from "../controls/checkbox";
 
 export function FilterPopover() {

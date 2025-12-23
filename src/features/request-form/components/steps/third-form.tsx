@@ -1,9 +1,9 @@
 'use client';
 
-import EmptyState from "@/components/common/empty-state";
+import EmptyState from "@/components/ui/common/empty-state";
 import FormField from "../form-field";
-import Button from "@/components/common/controls/button";
-import Icon from "@/components/common/icon";
+import Button from "@/components/ui/common/controls/button";
+import Icon from "@/components/ui/common/icon";
 import FlowField from "../flow-field";
 import { useFormContext } from "@/components/contexts/form-context";
 

@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { VenueCard } from "@/components/common/cards/venue-card";
-import Text from "@/components/common/text";
-import EmptyState from "@/components/common/empty-state";
-import Header from "@/components/common/header";
+import { VenueCard } from "@/components/ui/common/cards/venue-card";
+import Text from "@/components/ui/common/text";
+import EmptyState from "@/components/ui/common/empty-state";
+import Header from "@/components/ui/common/header";
 
 import { useAdminContext } from "@/components/contexts/admin-context";
-import { GridContainer } from "@/components/layout/grid-container";
+import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminVenueDetailsSheet from "@/features/admin/venues/admin-venue-details-sheet";
 
 export default function VenueContent() {
@@ -47,7 +47,7 @@ export default function VenueContent() {
             
             <GridContainer isEmpty={venues.length === 0}>
                 {venues.length === 0 ? (
-                    <EmptyState message="No venues available" />
+                    <EmptyState title="No information" message="No venues available" />
                 ) : venues.map((venue) => (
                     <VenueCard 
                         key={venue.id} 

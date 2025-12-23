@@ -1,8 +1,8 @@
-import Checkbox from "@/components/common/controls/checkbox";
-import { Card, CardContent } from "@/components/common/cards/public-card";
-import Divider from "@/components/common/divider";
+import Checkbox from "@/components/ui/common/controls/checkbox";
+import { Card, CardContent } from "@/components/ui/common/cards/public-card";
+import Divider from "@/components/ui/common/divider";
 
-import Text from "@/components/common/text";
+import Text from "@/components/ui/common/text";
 import { useFormContext } from "@/components/contexts/form-context";
 
 

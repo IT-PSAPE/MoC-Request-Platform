@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import Text from "@/components/common/text";
+import Text from "@/components/ui/common/text";
 
 type Props = {
     label: string;

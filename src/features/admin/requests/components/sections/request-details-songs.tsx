@@ -1,7 +1,7 @@
 'use client';
 
-import Text from "@/components/common/text";
-import EmptyState from "@/components/common/empty-state";
+import Text from "@/components/ui/common/text";
+import EmptyState from "@/components/ui/common/empty-state";
 import { type RequestDetailsBaseProps } from "../shared/request-details-utils";
 
 export default function RequestDetailsSongs({ request }: RequestDetailsBaseProps) {

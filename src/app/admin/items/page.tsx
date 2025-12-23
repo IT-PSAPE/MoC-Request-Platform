@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import Text from "@/components/common/text";
-import EmptyState from "@/components/common/empty-state";
-import Header from "@/components/common/header";
+import Text from "@/components/ui/common/text";
+import EmptyState from "@/components/ui/common/empty-state";
+import Header from "@/components/ui/common/header";
 
 import { useAdminContext } from "@/components/contexts/admin-context";
-import { RequestItemCard } from "@/components/common/cards/request-item-card";
-import { GridContainer } from "@/components/layout/grid-container";
+import { RequestItemCard } from "@/components/ui/common/cards/request-item-card";
+import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminRequestItemDetailsSheet from "@/features/admin/items/admin-request-item-details-sheet";
 
 export default function RequestItemContent() {

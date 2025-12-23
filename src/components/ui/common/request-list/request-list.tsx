@@ -1,14 +1,14 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import type { DragEvent, MouseEvent as ReactMouseEvent, ReactNode } from "react";
-import { RequestListItem } from "@/components/common/request-list/request-list-item";
-import { IconButton } from "@/components/common/controls/button";
-import Select, { Option } from "@/components/common/controls/select";
-import EmptyState from "@/components/common/empty-state";
+import { RequestListItem } from "@/components/ui/common/request-list/request-list-item";
+import { IconButton } from "@/components/ui/common/controls/button";
+import Select, { Option } from "@/components/ui/common/controls/select";
+import EmptyState from "@/components/ui/common/empty-state";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 import { cn } from "@/lib/cn";
-import Icon from "@/components/common/icon";
-import Text from "@/components/common/text";
-import { TabContextProvider, TabItem, TabList } from "@/components/common/tabs";
+import Icon from "@/components/ui/common/icon";
+import Text from "@/components/ui/common/text";
+import { TabContextProvider, TabItem, TabList } from "@/components/ui/common/tabs";
 import { FilterProvider, useFilterContext } from "./filter-provider";
 
 type SortField = "title" | "type" | "status" | "dueDate" | "createdAt" | "items";

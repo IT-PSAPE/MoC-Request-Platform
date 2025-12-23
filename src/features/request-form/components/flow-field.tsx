@@ -1,6 +1,6 @@
-import Icon from "@/components/common/icon";
+import Icon from "@/components/ui/common/icon";
 import { TextArea } from "./input";
-import Text from "@/components/common/text";
+import Text from "@/components/ui/common/text";
 
 type FlowFieldProps = {
     index: number;

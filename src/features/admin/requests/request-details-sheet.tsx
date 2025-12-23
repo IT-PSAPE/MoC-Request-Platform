@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from "react";
-import { Sheet } from "@/components/base/sheet/sheet";
-import Divider from "@/components/common/divider";
-import { IconButton } from "@/components/common/controls/button";
-import Icon from "@/components/common/icon";
+import { Sheet } from "@/components/ui/base/sheet/sheet";
+import Divider from "@/components/ui/common/divider";
+import { IconButton } from "@/components/ui/common/controls/button";
+import Icon from "@/components/ui/common/icon";
 
 // Import all section components
 import RequestDetailsOverview from "./components/sections/request-details-overview";

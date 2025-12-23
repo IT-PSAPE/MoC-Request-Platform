@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Text from "@/components/common/text";
-import EmptyState from "@/components/common/empty-state";
-import Header from "@/components/common/header";
+import Text from "@/components/ui/common/text";
+import EmptyState from "@/components/ui/common/empty-state";
+import Header from "@/components/ui/common/header";
 
 import { useAdminContext } from "@/components/contexts/admin-context";
-import { EquipmentCard } from "@/components/common/cards/equipment-card";
-import { GridContainer } from "@/components/layout/grid-container";
+import { EquipmentCard } from "@/components/ui/common/cards/equipment-card";
+import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminEquipmentDetailsSheet from "@/features/admin/equipment/admin-equipment-details-sheet";
 
 export default function EquipmentContent() {
@@ -46,7 +46,7 @@ export default function EquipmentContent() {
             
             <GridContainer isEmpty={equipment.length === 0}>
                 {equipment.length === 0 ? (
-                    <EmptyState message="No equipment tracked yet." />
+                    <EmptyState title="No information" message="No equipment tracked yet." />
                 ) : equipment.map((item) => (
                     <EquipmentCard 
                         key={item.id} 

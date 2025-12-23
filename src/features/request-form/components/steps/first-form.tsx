@@ -1,7 +1,7 @@
 import FormField from "../form-field";
 import { useFormContext } from "@/components/contexts/form-context";
 import { TextArea, TextInput } from "../input";
-import Divider from "@/components/common/divider";
+import Divider from "@/components/ui/common/divider";
 
 export default function FirstForm() {
     const { request, setRequest } = useFormContext();

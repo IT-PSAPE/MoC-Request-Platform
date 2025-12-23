@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import Text from "@/components/common/text";
-import EmptyState from "@/components/common/empty-state";
-import Header from "@/components/common/header";
+import Text from "@/components/ui/common/text";
+import EmptyState from "@/components/ui/common/empty-state";
+import Header from "@/components/ui/common/header";
 
 import { useAdminContext } from "@/components/contexts/admin-context";
-import { SongCard } from "@/components/common/cards/song-card";
-import { GridContainer } from "@/components/layout/grid-container";
+import { SongCard } from "@/components/ui/common/cards/song-card";
+import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminSongDetailsSheet from "@/features/admin/songs/admin-songs-details-sheet";
 
 export default function SongContent() {
@@ -47,7 +47,7 @@ export default function SongContent() {
             
             <GridContainer isEmpty={songs.length === 0}>
                 {songs.length === 0 ? (
-                    <EmptyState message="No songs available" />
+                    <EmptyState title="No information" message="No songs available" />
                 ) : songs.map((song) => (
                     <SongCard 
                         key={song.id} 

@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 import Input from "../controls/input";
 import Button from "../controls/button";
 import Text from "../text";
-import { Popover } from "@/components/base/popover";
+import { Popover } from "@/components/ui/base/popover";
 
 type DatePickerPopoverProps = {
   value: string;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuthContext } from '@/components/contexts/auth-context';
-import Loader from '@/components/common/loader';
+import Loader from '@/components/ui/common/loader';
 
 interface SmartRedirectProps {
   children: React.ReactNode;

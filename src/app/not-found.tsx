@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Button from '@/components/common/controls/button';
-import Text from '@/components/common/text';
+import Button from '@/components/ui/common/controls/button';
+import Text from '@/components/ui/common/text';
 import ErrorLayout from '@/components/navigation/error-layout';
 
 export default function NotFound() {

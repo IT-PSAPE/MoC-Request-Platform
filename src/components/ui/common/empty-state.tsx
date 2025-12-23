@@ -1,4 +1,4 @@
-import Text from "@/components/common/text"
+import Text from "@/components/ui/common/text"
 
 type EmptyStateProps = {
   title: string;

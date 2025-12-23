@@ -2,15 +2,15 @@
 
 import FormField from "../form-field";
 import { TextInput } from "../input";
-import Divider from "@/components/common/divider";
-import EmptyState from "@/components/common/empty-state";
+import Divider from "@/components/ui/common/divider";
+import EmptyState from "@/components/ui/common/empty-state";
 import VenueCard from "../cards/venue-card";
 import SongCard from "../cards/song-card";
 import { useFormContext } from "@/components/contexts/form-context";
 import RequestItemCard from "../cards/item-card";
-import Select, { Option } from "@/components/common/controls/select";
+import Select, { Option } from "@/components/ui/common/controls/select";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
-import InlineAlert from "@/components/common/inline-alert";
+import InlineAlert from "@/components/ui/common/inline-alert";
 import { useEffect } from "react";
 
 export default function SecondForm() {
@@ -82,7 +82,7 @@ export default function SecondForm() {
             <FormField label="Select Venue" description="(optional)" mode="column">
                 {
                     venues.length === 0 ? (
-                        <EmptyState message="No venues available." />
+                        <EmptyState title="No information" message="No venues available." />
                     ) : (
                         <div className="grid grid-cols-3 gap-2 flex-col max-md:flex">
                             {venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)}
@@ -94,7 +94,7 @@ export default function SecondForm() {
             <FormField label="Select equipment" description="(optional)" mode="column">
                 {
                     items.length === 0 ? (
-                        <EmptyState message="No Request Item available." />
+                        <EmptyState title="No information" message="No Request Item available." />
                     ) : (
                         <div className="grid grid-cols-3 gap-2 flex-col max-md:flex">
                             {items.map((item) => <RequestItemCard key={item.id} item={item} />)}
@@ -106,7 +106,7 @@ export default function SecondForm() {
             <FormField label="Select songs" description="(optional)" mode="column">
                 {
                     songs.length === 0 ? (
-                        <EmptyState message="No song available." />
+                        <EmptyState title="No information" message="No song available." />
                     ) : (
                         <div className="grid grid-cols-3 gap-2 flex-col max-md:flex">
                             {songs.map((song) => <SongCard key={song.id} song={song} />)}

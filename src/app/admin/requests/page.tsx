@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Text from "@/components/common/text";
-import Header from "@/components/common/header";
-import { RequestList } from "@/components/common/request-list/request-list";
+import Text from "@/components/ui/common/text";
+import Header from "@/components/ui/common/header";
+import { RequestList } from "@/components/ui/common/request-list/request-list";
 import { useAdminContext } from "@/components/contexts/admin-context";
 import RequestDetailsSheet from "@/features/admin/requests/request-details-sheet";
 

@@ -1,4 +1,4 @@
-import MainContent from "@/components/layout/main-content";
+import MainContent from "@/components/ui/layout/main-content";
 import NavigationBar from "@/components/navigation/navigation-bar";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {

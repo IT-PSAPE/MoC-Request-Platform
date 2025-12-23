@@ -1,6 +1,6 @@
 'use client';
 
-import AssigneeInlineEditor from "@/components/common/inline-editors/assignee-inline-editor";
+import AssigneeInlineEditor from "@/components/ui/common/inline-editors/assignee-inline-editor";
 import { useAdminContext } from "@/components/contexts/admin-context";
 import { type RequestDetailsEditableProps } from "../shared/request-details-utils";
 

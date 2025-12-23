@@ -3,16 +3,16 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import AuthGuard from '@/components/navigation/auth-guard';
-import Text from '@/components/common/text';
-import Button from '@/components/common/controls/button';
-import Badge from '@/components/common/badge';
-import Loader from '@/components/common/loader';
-import InlineAlert from '@/components/common/inline-alert';
-import Divider from '@/components/common/divider';
-import EmptyState from '@/components/common/empty-state';
+import Text from '@/components/ui/common/text';
+import Button from '@/components/ui/common/controls/button';
+import Badge from '@/components/ui/common/badge';
+import Loader from '@/components/ui/common/loader';
+import InlineAlert from '@/components/ui/common/inline-alert';
+import Divider from '@/components/ui/common/divider';
+import EmptyState from '@/components/ui/common/empty-state';
 import Link from 'next/link';
 import { RequestTable } from '@/lib/database';
-import Icon from '@/components/common/icon';
+import Icon from '@/components/ui/common/icon';
 import { useSupabaseClient } from '@/logic/hooks/use-supabase-client';
 
 // Color maps from request details sheet

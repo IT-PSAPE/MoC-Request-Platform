@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn";
 import Badge from "../badge";
-import Text from "@/components/common/text";
+import Text from "@/components/ui/common/text";
 import Icon from "../icon";
 
 interface RequestListItemProps {

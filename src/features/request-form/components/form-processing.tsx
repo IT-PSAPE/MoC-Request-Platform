@@ -1,7 +1,7 @@
 'use client';
 
-import Loader from "@/components/common/loader";
-import Text from "@/components/common/text";
+import Loader from "@/components/ui/common/loader";
+import Text from "@/components/ui/common/text";
 
 export default function FormProcessing() {
     return (

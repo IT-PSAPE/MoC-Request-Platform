@@ -1,6 +1,6 @@
 'use client';
 
-import Text from "@/components/common/text";
+import Text from "@/components/ui/common/text";
 import { type RequestDetailsBaseProps } from "../shared/request-details-utils";
 
 export default function RequestDetails5WH({ request }: RequestDetailsBaseProps) {

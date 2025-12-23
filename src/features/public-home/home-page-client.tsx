@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Card from "@/components/common/cards/card";
-import Button from "@/components/common/controls/button";
-import Text from "@/components/common/text";
+import Card from "@/components/ui/common/cards/card";
+import Button from "@/components/ui/common/controls/button";
+import Text from "@/components/ui/common/text";
 import SmartRedirect from "@/components/navigation/smart-redirect";
 
 export default function HomePageClient() {

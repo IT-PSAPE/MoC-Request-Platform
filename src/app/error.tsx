@@ -2,10 +2,10 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/common/controls/button';
-import Text from '@/components/common/text';
+import Button from '@/components/ui/common/controls/button';
+import Text from '@/components/ui/common/text';
 import ErrorLayout from '@/components/navigation/error-layout';
-import Icon from '@/components/common/icon';
+import Icon from '@/components/ui/common/icon';
 
 type ErrorProp = {
   error: Error & { digest?: string };

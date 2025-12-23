@@ -2,10 +2,10 @@
 
 import React from "react";
 import { cn } from "@/lib/cn";
-import Text from "@/components/common/text";
-import Badge from "@/components/common/badge";
+import Text from "@/components/ui/common/text";
+import Badge from "@/components/ui/common/badge";
 import { InlineEditPopover } from "./inline-edit-popover";
-import { DatePickerPopover } from "@/components/common/inline-editors/date-picker-popover";
+import { DatePickerPopover } from "@/components/ui/common/inline-editors/date-picker-popover";
 
 type InlineEditorProps = {
   value: string;

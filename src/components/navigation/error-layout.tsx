@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import Text from '@/components/common/text';
-import Header from '@/components/common/header';
+import Text from '@/components/ui/common/text';
+import Header from '@/components/ui/common/header';
 
 interface ErrorLayoutProps {
   icon: ReactNode;

@@ -1,8 +1,8 @@
 import { cn } from "@/lib/cn"
 import { SheetContextProvider, useSheetContext } from "./sheet-provider"
 import { SheetProps } from "./types";
-import { IconButton } from "@/components/common/controls/button";
-import Icon from "@/components/common/icon";
+import { IconButton } from "@/components/ui/common/controls/button";
+import Icon from "@/components/ui/common/icon";
 
 export function SheetRoot({ children, open, onOpenChange }: SheetProps) {
     return (

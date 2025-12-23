@@ -4,7 +4,7 @@ import { AuthContextProvider } from "@/components/contexts/auth-context";
 import { DefaultContextProvider } from "@/components/contexts/defaults-context";
 import { QueryProvider } from "@/components/contexts/query-provider";
 import { CacheSyncProvider } from "@/components/contexts/cache-sync-provider";
-import Loader from "@/components/common/loader";
+import Loader from "@/components/ui/common/loader";
 import { useSupabaseClient } from "@/logic/hooks/use-supabase-client";
 
 function RootProvider({ children }: { children: React.ReactNode }) {

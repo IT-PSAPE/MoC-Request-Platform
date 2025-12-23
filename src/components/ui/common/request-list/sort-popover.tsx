@@ -2,7 +2,7 @@ import { useFilterContext } from "./filter-provider";
 import Button from "../controls/button";
 import Radio from "../controls/radio";
 import Text from "../text";
-import { Popover } from "@/components/base/popover";
+import { Popover } from "@/components/ui/base/popover";
 
 export function SortPopover() {
   const { closePopover } = Popover.useContext();

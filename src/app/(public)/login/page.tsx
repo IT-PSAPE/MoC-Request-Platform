@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Card from "@/components/common/cards/card";
-import LoginFormContainer from "@/components/common/login-form";
-import Loader from "@/components/common/loader";
+import Card from "@/components/ui/common/cards/card";
+import LoginFormContainer from "@/components/ui/common/login-form";
+import Loader from "@/components/ui/common/loader";
 
 export const metadata: Metadata = {
   title: "Admin Login | MOC Request Platform",

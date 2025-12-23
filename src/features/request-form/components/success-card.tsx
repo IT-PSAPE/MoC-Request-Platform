@@ -1,4 +1,4 @@
-import Button from "@/components/common/controls/button";
+import Button from "@/components/ui/common/controls/button";
 import Link from "next/link";
 import { useFormContext } from "@/components/contexts/form-context";
 

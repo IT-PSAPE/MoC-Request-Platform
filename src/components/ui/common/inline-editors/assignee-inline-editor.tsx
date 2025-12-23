@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import Text from "@/components/common/text";
-import Badge from "@/components/common/badge";
-import Button from "@/components/common/controls/button";
-import Icon from "@/components/common/icon";
-import { Popover } from "@/components/base/popover";
-import { SelectOptionItem } from "@/components/common/controls/select-option";
+import Text from "@/components/ui/common/text";
+import Badge from "@/components/ui/common/badge";
+import Button from "@/components/ui/common/controls/button";
+import Icon from "@/components/ui/common/icon";
+import { Popover } from "@/components/ui/base/popover";
+import { SelectOptionItem } from "@/components/ui/common/controls/select-option";
 
 type AssigneeOption = {
   id: string;

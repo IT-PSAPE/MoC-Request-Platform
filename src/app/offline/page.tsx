@@ -1,9 +1,9 @@
 'use client';
 
-import Button from '@/components/common/controls/button';
+import Button from '@/components/ui/common/controls/button';
 import ErrorLayout from '@/components/navigation/error-layout';
 import { useEffect } from 'react';
-import Icon from '@/components/common/icon';
+import Icon from '@/components/ui/common/icon';
 
 export default function OfflinePage() {
   useEffect(() => {

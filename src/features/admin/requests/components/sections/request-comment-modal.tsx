@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from "react";
-import Text from "@/components/common/text";
-import Button, { IconButton } from "@/components/common/controls/button";
-import Icon from "@/components/common/icon";
+import Text from "@/components/ui/common/text";
+import Button, { IconButton } from "@/components/ui/common/controls/button";
+import Icon from "@/components/ui/common/icon";
 import { TextArea } from "@/features/request-form/components/input";
 import { type RequestDetailsBaseProps } from "../shared/request-details-utils";
 

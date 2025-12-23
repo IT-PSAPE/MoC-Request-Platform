@@ -1,8 +1,8 @@
 'use client';
 
-import Text from "@/components/common/text";
-import Icon from "@/components/common/icon";
-import InlineEditor from "@/components/common/inline-editors/inline-editor";
+import Text from "@/components/ui/common/text";
+import Icon from "@/components/ui/common/icon";
+import InlineEditor from "@/components/ui/common/inline-editors/inline-editor";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 import {
   statusColorMap,
