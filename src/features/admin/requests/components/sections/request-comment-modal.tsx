@@ -73,7 +73,7 @@ export default function RequestCommentModal({
             onClick={handleClose}
             disabled={isSaving}
           >
-            <Icon name="close" />
+            <Icon.close />
           </IconButton>
         </div>
         

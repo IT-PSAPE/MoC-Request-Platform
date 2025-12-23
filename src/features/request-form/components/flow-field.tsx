@@ -16,7 +16,7 @@ export default function FlowField({ index, handleStepDelete, handleChange, value
             <div className="flex items-center gap-1">
                 <TextArea placeholder="Describe the step..." className="h-40" onChange={handleChange} value={value} />
                 <div className="p-2 text-quaternary hover:text-error hover:bg-error-primary rounded-md cursor-pointer" onClick={() => handleStepDelete()}>
-                    <Icon name="trash" />
+                    <Icon.trash />
                 </div>
             </div>
         </div>

@@ -178,8 +178,7 @@ function ScrollIndicator({ position, onClick }: ScrollIndicatorProps) {
       )}
       onClick={onClick}
     >
-      <Icon
-        name="chevron_down"
+      <Icon.chevron_down
         size={16}
         className={cn(
           "mx-auto text-gray-500",
@@ -218,7 +217,7 @@ function SelectTrigger({ placeholder, disabled, displayValue }: SelectTriggerPro
       aria-haspopup="listbox"
     >
       <span className={cn("truncate text-left", showPlaceholder && "text-gray-500")}>{label}</span>
-      <Icon name="chevron_down" size={16} className="ml-2 text-gray-500" />
+      <Icon.chevron_down size={16} className="ml-2 text-gray-500" />
     </button>
   );
 }

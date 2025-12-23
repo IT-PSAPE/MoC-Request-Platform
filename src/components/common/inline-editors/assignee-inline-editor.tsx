@@ -100,7 +100,7 @@ function AssigneeInlineEditorContent({
                     onClick={() => handleRemove(assignee.id)}
                     className="cursor-pointer hover:bg-white/20 rounded p-0.5"
                   >
-                    <Icon name="close" size={12} />
+                    <Icon.close size={12} />
                   </span>
                 )}
               </Badge>
@@ -161,7 +161,7 @@ function DisplayComponenet({ assignees, onRemoveAssignee }: DisplayComponentProp
   if (assignees.length === 0) {
     return (
       <div className="flex items-center gap-1 p-1 min-h-[24px] w-full text-tertiary">
-        <Icon name='plus' size={16} />
+        <Icon.plus size={16} />
         <Text style="paragraph-sm" as="span">Add Member</Text>
       </div>
     );
@@ -180,7 +180,7 @@ function DisplayComponenet({ assignees, onRemoveAssignee }: DisplayComponentProp
               }}
               className="cursor-pointer rounded p-0.5"
             >
-              <Icon name="close" size={12} />
+              <Icon.close size={12} />
             </span>
           )}
         </Badge>

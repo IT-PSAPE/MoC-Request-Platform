@@ -14,7 +14,7 @@ export default function OfflinePage() {
     <ErrorLayout
       icon={
       <div className="w-24 h-24 mx-auto bg-muted rounded-full flex items-center justify-center mb-4 text-tertiary">
-        <Icon name="wifi_off"/>
+        <Icon.wifi_off/>
       </div>
       }
       title="You're Offline"

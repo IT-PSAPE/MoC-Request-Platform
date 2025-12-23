@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Button from "@/components/common/controls/button";
 import { useAuthContext } from "@/components/contexts/auth-context";
-import Icon, { IconName } from "../common/icon";
+import Icon from "../common/icon";
 import { cn } from "@/lib/cn";
 
 export default function NavigationBar() {
@@ -12,10 +12,10 @@ export default function NavigationBar() {
 
   const pathname = usePathname();
 
-  const links: { href: string; label: string; icon: IconName }[] = [
-    { href: "/", label: "Home", icon: "home_line" },
-    { href: "/form", label: "Form", icon: "pen_line" },
-    { href: "/board", label: "Requests Board", icon: "clipboard" },
+  const links: { href: string; label: string; icon: React.ReactNode }[] = [
+    { href: "/", label: "Home", icon: <Icon.home_line size={20} /> },
+    { href: "/form", label: "Form", icon: <Icon.pen_line size={20} /> },
+    { href: "/board", label: "Requests Board", icon: <Icon.clipboard size={20} /> },
   ];
 
   function Links() {
@@ -32,7 +32,7 @@ export default function NavigationBar() {
             onClick={handleLinkClick}
             className={cn(`flex gap-1.5 items-center justify-center px-4 py-1.5 rounded-md text-sm grow text-center leading-1.2 border ${pathname === l.href ? 'border-gray-200 bg-white drop-shadow-sm' : 'border-transparent text-gray-500'}`)}
           >
-            <Icon name={l.icon} size={20} />
+            {l.icon}
             {l.label}
           </Link>
         ))}
@@ -102,18 +102,18 @@ export default function NavigationBar() {
   }
 
   return (
-      <nav className="sticky top-0 z-10 max-md:bg-secondary max-md:border-b max-md:border-secondary">
-        <div className="mx-auto max-w-[1280px] px-4 py-3 flex items-center gap-4">
-          <div className="w-full max-w-[120px] relative z-1 max-md:max-w-full"> <Logo /> </div>
-          <MenuBar />
-          <div
-            className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary max-md:flex transition-all duration-200 ease-in-out max-md:p-4 max-md:pt-16 max-md:w-full max-md:data-[status=closed]:left-[100%]"
-            data-status={isMenuOpen ? 'open' : 'closed'}
-          >
-            <div className="w-full max-md:w-full max-md:flex max-md:flex-col max-md:gap-4"><Links /></div>
-            <div className="w-full max-w-[120px] text-sm max-md:max-w-full"><Actions /></div>
-          </div>
+    <nav className="sticky top-0 z-10 max-md:bg-secondary max-md:border-b max-md:border-secondary">
+      <div className="mx-auto max-w-[1280px] px-4 py-3 flex items-center gap-4">
+        <div className="w-full max-w-[120px] relative z-1 max-md:max-w-full"> <Logo /> </div>
+        <MenuBar />
+        <div
+          className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary max-md:flex transition-all duration-200 ease-in-out max-md:p-4 max-md:pt-16 max-md:w-full max-md:data-[status=closed]:left-[100%]"
+          data-status={isMenuOpen ? 'open' : 'closed'}
+        >
+          <div className="w-full max-md:w-full max-md:flex max-md:flex-col max-md:gap-4"><Links /></div>
+          <div className="w-full max-w-[120px] text-sm max-md:max-w-full"><Actions /></div>
         </div>
-      </nav>
+      </div>
+    </nav>
   );
 }

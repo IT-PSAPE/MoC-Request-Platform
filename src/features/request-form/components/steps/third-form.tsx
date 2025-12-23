@@ -43,7 +43,7 @@ export default function ThirdForm() {
             <div className="space-y-4">
                 {
                     request.flow.length < 1 ?
-                        <EmptyState />
+                        <EmptyState title={"No information"} />
                         : request.flow.map((s, i) => {
                             return (
                                 <FlowField
@@ -58,7 +58,7 @@ export default function ThirdForm() {
                 }
                 <div className="flex justify-center">
                     <Button type="button" variant="secondary" onClick={handleAddStep}>
-                        <Icon name="plus" /> Add Step
+                        <Icon.plus /> Add Step
                     </Button>
                 </div>
             </div>

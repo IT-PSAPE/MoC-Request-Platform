@@ -2,7 +2,6 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useSupabaseClient } from '@/hooks/use-supabase-client';
 import AuthGuard from '@/components/navigation/auth-guard';
 import Text from '@/components/common/text';
 import Button from '@/components/common/controls/button';
@@ -14,6 +13,7 @@ import EmptyState from '@/components/common/empty-state';
 import Link from 'next/link';
 import { RequestTable } from '@/lib/database';
 import Icon from '@/components/common/icon';
+import { useSupabaseClient } from '@/logic/hooks/use-supabase-client';
 
 // Color maps from request details sheet
 const requestColorMap: Record<string, BadgeColor> = {
@@ -141,7 +141,7 @@ function RequestDetailsContent() {
       <div className="mb-6">
         <Link href="/board">
           <Button>
-            <Icon name='arrow_left' /> Back
+            <Icon.arrow_left /> Back
           </Button>
         </Link>
       </div>

@@ -92,21 +92,21 @@ export default function RequestDetailsSheet({
                   onClick={handleExpandDetails} 
                   variant="ghost"
                 >
-                  <Icon name="expand" />
+                  <Icon.expand />
                 </IconButton>
                 <IconButton 
                   onClick={handleOpenCommentModal} 
                   disabled={!onAddComment} 
                   variant="ghost"
                 >
-                  <Icon name="pen_line" />
+                  <Icon.pen_line />
                 </IconButton>
                 <IconButton 
                   onClick={handleOpenConfirm} 
                   disabled={!onDeleteRequest} 
                   variant="ghost"
                 >
-                  <Icon name="trash" size={20} />
+                  <Icon.trash size={20} />
                 </IconButton>
               </div>
             </Sheet.Header>

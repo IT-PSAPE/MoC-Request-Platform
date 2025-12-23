@@ -7,13 +7,12 @@ import Text from '@/components/common/text';
 import ErrorLayout from '@/components/navigation/error-layout';
 import Icon from '@/components/common/icon';
 
-export default function Error({
-  error,
-  reset,
-}: {
+type ErrorProp = {
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}
+
+export default function ErrorPage({ error, reset }: ErrorProp) {
   const router = useRouter();
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function Error({
     <ErrorLayout
       icon={
         <div className="mx-auto mb-4 rounded-full bg-error/10 flex items-center justify-center">
-          <Icon name="alert_triangle" size={16} />
+          <Icon.alert_triangle size={16} />
         </div>
       }
       title="Oops! Something went wrong"

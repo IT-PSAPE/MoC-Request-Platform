@@ -23,7 +23,7 @@ export default function PublicError({
     <ErrorLayout
       icon={
         <div className="mx-auto mb-4 rounded-full bg-error/10 flex items-center justify-center">
-          <Icon name="alert_triangle" size={16} />
+          <Icon.alert_triangle size={16} />
         </div>
       }
       title="Something went wrong"

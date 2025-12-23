@@ -1,7 +1,7 @@
 'use client';
 
 import Text from "@/components/common/text";
-import Icon, { IconName } from "@/components/common/icon";
+import Icon from "@/components/common/icon";
 import InlineEditor from "@/components/common/inline-editors/inline-editor";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 import {
@@ -17,7 +17,7 @@ import RequestAssignees from "./request-assignees";
 
 
 type PropertyItemProp = {
-  icon: IconName,
+  icon: React.ReactNode,
   label: string,
   children: React.ReactNode
 }
@@ -26,7 +26,7 @@ function PropertyItem({ icon, label, children }: PropertyItemProp) {
   return (
     <div className="w-full gap-sm grid grid-cols-2 items-center *:h-8">
       <span className="flex items-center gap-1.5">
-        <Icon name={icon} size={16} />
+        {icon}
         <Text style="label-sm" className="text-secondary">{label}</Text>
       </span>
       { children }
