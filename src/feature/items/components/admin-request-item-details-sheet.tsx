@@ -1,6 +1,6 @@
 import { Sheet } from "@/components/ui/base/sheet";
 import { Divider, Text } from "@/components/ui/common";
-import Button from "@/components/ui/common/button";
+import { Button } from "@/components/ui/common/button";
 
 interface AdminRequestItemDetailsSheetProps {
   item: RequestItem | null;

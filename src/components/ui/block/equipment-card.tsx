@@ -1,6 +1,5 @@
 import { cn } from "@/shared/cn";
-import NumberInput from "./number-input";
-import Button from "./button";
+import { Button, NumberInput } from "@/components/ui";
 import { useAdminContext } from "@/components/contexts/admin-context";
 
 interface EquipmentCardProps {
@@ -19,7 +18,7 @@ export function EquipmentCard({ equipment, className, onClick }: EquipmentCardPr
 
         updateEquipment(equipment.id, clamped);
     }
-    
+
     return (
         <div className={cn("flex flex-col border border-secondary rounded-lg bg-primary", className)}>
             <div className=" p-4 " >
@@ -36,9 +35,9 @@ export function EquipmentCard({ equipment, className, onClick }: EquipmentCardPr
                 </div>
             </div>
             <div className="p-3 border-t border-secondary">
-                <Button 
-                    type="button" 
-                    variant="secondary" 
+                <Button
+                    type="button"
+                    variant="secondary"
                     className="w-full"
                     onClick={() => onClick?.(equipment)}
                 >

@@ -4,7 +4,6 @@ import { VenueTable } from "@/shared/database";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 
-
 type VenuesContextType = {
     venues: Venue[];
     updateVenue: (venueId: string, available: boolean) => void;

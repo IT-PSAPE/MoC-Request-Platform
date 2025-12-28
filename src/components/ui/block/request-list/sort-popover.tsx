@@ -1,7 +1,5 @@
 import { useFilterContext } from "./filter-provider";
-import Button from "../controls/button";
-import Radio from "../controls/radio";
-import Text from "../text";
+import { Button, Radio, Text } from "@/components/ui";
 import { Popover } from "@/components/ui/base/popover";
 
 export function SortPopover() {

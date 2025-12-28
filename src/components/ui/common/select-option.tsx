@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from "@/shared/cn";
-import Icon from "./icon";
+import { Icon } from "./icon";
 
 type SelectOptionItemProps = {
   children: React.ReactNode;
@@ -58,7 +58,7 @@ export function SelectOptionContainer({
   className,
 }: SelectOptionContainerProps) {
   return (
-    <div 
+    <div
       className={cn("p-1 overflow-y-auto", className)}
       style={{ maxHeight: `${maxHeight}px` }}
     >

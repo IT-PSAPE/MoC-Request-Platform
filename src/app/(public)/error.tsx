@@ -2,9 +2,8 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/ui/common/button';
+import { Button, Icon } from '@/components/ui';
 import ErrorLayout from '@/components/navigation/error-layout';
-import { Icon } from '@/components/ui/common';
 
 export default function PublicError({
   error,

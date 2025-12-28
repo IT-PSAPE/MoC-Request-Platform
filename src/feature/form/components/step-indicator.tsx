@@ -1,7 +1,7 @@
 import { cn } from "@/shared/cn";
 import { useFormContext } from "@/feature/form/components/form-context";
 
-export default function StepIndicator() {
+export function StepIndicator() {
     const { step } = useFormContext();
 
     const steps = [1, 2, 3]

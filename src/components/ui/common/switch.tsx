@@ -9,7 +9,7 @@ export type SwitchProps = {
   "aria-label"?: string;
 };
 
-export default function Switch({ checked, onCheckedChange, id, disabled, ...rest }: SwitchProps) {
+export function Switch({ checked, onCheckedChange, id, disabled, ...rest }: SwitchProps) {
   return (
     <button
       type="button"

@@ -5,7 +5,7 @@ import { useFormContext } from "./form-context";
 import FormField from "./form-field";
 import FlowField from "./flow-field";
 
-export default function ThirdForm() {
+export function ThirdForm() {
     const { request, setRequest } = useFormContext();
 
     function handleStepDelete(index: number) {

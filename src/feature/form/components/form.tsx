@@ -1,18 +1,15 @@
 'use client';
 
-import Button from "@/components/ui/common/button";
-import FirstForm from "./components/steps/first-form";
-import SecondForm from "./components/steps/second-form";
-import ThirdForm from "./components/steps/third-form";
-import { Divider } from "@/components/ui/common/divider";
-import { useFormContext } from "@/feature/form/components/form-context";
-import StepIndicator from "./components/step-indicator";
 import { useEffect } from "react";
+import { Button, Divider, InlineAlert, Text } from "@/components/ui";
+import { FirstForm } from "./first-form";
+import { SecondForm } from "./second-form";
+import { ThirdForm } from "./third-form";
+import { useFormContext } from "./form-context";
+import { StepIndicator } from "./step-indicator";
 
-import { Text } from "@/components/ui/common/text";
-import SuccessScreen from "./components/success-card";
-import FormProcessing from "./components/form-processing";
-import { InlineAlert } from "@/components/ui/common/inline-alert";
+import { SuccessScreen } from "./success-card";
+import { FormProcessing } from "./form-processing";
 
 
 export default function RequestForm() {

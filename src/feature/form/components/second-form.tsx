@@ -8,12 +8,12 @@ import VenueCard from "./venue-card";
 import SongCard from "./song-card";
 import { useFormContext } from "@/feature/form/components/form-context";
 import RequestItemCard from "./item-card";
-import Select, { Option } from "@/components/ui/common/native-select";
+import { Select, SelectOption } from "@/components/ui";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 import { InlineAlert } from "@/components/ui/common/inline-alert";
 import { useEffect } from "react";
 
-export default function SecondForm() {
+export function SecondForm() {
     const { songs, venues, items, request, setRequest, noticeAlert, checkNoticePeriod } = useFormContext();
     const { priorities, types } = useDefaultContext();
 
@@ -53,7 +53,7 @@ export default function SecondForm() {
                 >
                     {
                         priorities.map((priority) => (
-                            <Option key={priority.id} value={priority.id}>{priority.name}</Option>
+                            <SelectOption key={priority.id} value={priority.id}>{priority.name}</SelectOption>
                         ))
                     }
                 </Select>
@@ -68,7 +68,7 @@ export default function SecondForm() {
                 >
                     {
                         types.map((type) => (
-                            <Option key={type.id} value={type.id}>{type.name}</Option>
+                            <SelectOption key={type.id} value={type.id}>{type.name}</SelectOption>
                         ))
                     }
                 </Select>

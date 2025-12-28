@@ -1,6 +1,6 @@
 import { cn } from "@/shared/cn";
-import Button from "./button";
-import Text from "./text";
+import { Button } from "../common/button";
+import { Text } from "../common/text";
 
 interface RequestItemCardProps {
     className?: string;
@@ -21,9 +21,9 @@ export function RequestItemCard({ item, className, onClick }: RequestItemCardPro
                 </div>
             </div>
             <div className="p-3 border-t border-secondary">
-                <Button 
-                    type="button" 
-                    variant="secondary" 
+                <Button
+                    type="button"
+                    variant="secondary"
                     className="w-full"
                     onClick={() => onClick?.(item)}
                 >

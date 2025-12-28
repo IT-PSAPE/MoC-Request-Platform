@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import Button, { IconButton } from "@/components/ui/common/button";
-import { TextArea } from "@/feature/form/components/input";
+import { Button, IconButton, Icon, Text, TextArea } from "@/components/ui";
 import { type RequestDetailsBaseProps } from "../request.utils";
-import { Icon, Text } from "@/components/ui/common";
 
 interface RequestCommentModalProps extends RequestDetailsBaseProps {
   isOpen: boolean;

@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import Button, { IconButton } from "@/components/ui/common/button";
+import { Button, IconButton, Icon, Text } from "@/components/ui";
 import { type RequestDetailsDeleteProps } from "../request.utils";
-import { Icon, Text } from "@/components/ui/common";
 
 export default function RequestDeleteConfirmation({
   request,

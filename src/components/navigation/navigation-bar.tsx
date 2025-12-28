@@ -2,9 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import Button from "@/components/ui/common/button";
+import { Button, Icon } from "@/components/ui";
 import { useAuthContext } from "@/feature/auth/components/auth-context";
-import { Icon } from "../ui/common/icon";
 import { cn } from "@/shared/cn";
 
 export default function NavigationBar() {

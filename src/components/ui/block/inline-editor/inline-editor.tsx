@@ -4,7 +4,7 @@ import { cn } from "@/shared/cn";
 import { Text } from "@/components/ui/common/text";
 import { Badge } from "@/components/ui/common/badge";
 import { InlineEditPopover } from "./inline-edit-popover";
-import { DatePickerPopover } from "@/components/ui/common/date-picker-popover";
+import { DatePickerPopover } from "@/components/ui/block/date-picker-popover";
 
 type InlineEditorProps = {
   value: string;

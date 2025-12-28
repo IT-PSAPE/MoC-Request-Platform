@@ -1,8 +1,8 @@
-import Button from "@/components/ui/common/button";
 import Link from "next/link";
+import { Button } from "@/components/ui/common/button";
 import { useFormContext } from "@/feature/form/components/form-context";
 
-function SuccessScreen() {
+export function SuccessScreen() {
 
     const { submitted, reset } = useFormContext();
 
@@ -24,5 +24,3 @@ function SuccessScreen() {
         </div>
     );
 }
-
-export default SuccessScreen;

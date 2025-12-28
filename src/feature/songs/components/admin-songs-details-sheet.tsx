@@ -1,8 +1,6 @@
 import { useAdminContext } from "@/components/contexts/admin-context";
-import { Sheet} from "@/components/ui/base/sheet";
-import {Badge, Divider, Text} from "@/components/ui/common";
-import Switch from "@/components/ui/common/switch";
-import Button from "@/components/ui/common/button";
+import { Sheet } from "@/components/ui/base/sheet";
+import { Badge, Button, Switch, Divider, Text } from "@/components/ui/common";
 
 interface AdminSongDetailsSheetProps {
   song: Song | null;
@@ -27,7 +25,7 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
     <Sheet.Provider open={isOpen} onOpenChange={onClose}>
       <Sheet.Content>
         <Sheet.Header />
-        
+
         <div className="flex-1 space-y-6 py-6 px-4">
           {/* Basic Info Section */}
           <div className="space-y-4">
@@ -49,7 +47,7 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
           {/* Availability Section */}
           <div className="space-y-4">
             <Text style="title-h6">Availability</Text>
-            
+
             {/* Instrumental Toggle */}
             <div className="flex items-center justify-between">
               <div>

@@ -5,7 +5,7 @@ type RadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
   label?: string;
 };
 
-export default function Radio({ label, className, ...props }: RadioProps) {
+export function Radio({ label, className, ...props }: RadioProps) {
   return (
     <div className="flex items-center gap-2">
       <div className="relative h-5 w-5 rounded-full bg-quaternary p-0.5 has-checked:bg-brand-solid">

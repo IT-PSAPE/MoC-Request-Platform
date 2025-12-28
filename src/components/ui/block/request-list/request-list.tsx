@@ -2,8 +2,7 @@ import { createContext, useContext, useMemo, useState } from "react";
 import type { DragEvent, MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { RequestListItem } from "@/components/ui/block/request-list/request-list-item";
 import { IconButton } from "@/components/ui/common/button";
-import Select, { Option } from "@/components/ui/common/native-select";
-import EmptyState from "@/components/ui/common/empty-state";
+import { EmptyState, Select, SelectOption } from "@/components/ui";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 import { cn } from "@/shared/cn";
 import { Icon, Text } from "@/components/ui/common";
@@ -325,11 +324,11 @@ function RequestListFilters() {
             placeholder="All Types"
             displayValue={typeFilterLabel}
           >
-            <Option value="all">All Types</Option>
+            <SelectOption value="all">All Types</SelectOption>
             {types.map((type) => (
-              <Option key={type.id} value={String(type.id)}>
+              <SelectOption key={type.id} value={String(type.id)}>
                 {type.name.replace(/_/g, " ")}
-              </Option>
+              </SelectOption>
             ))}
           </Select>
 
@@ -350,12 +349,12 @@ function RequestListFilters() {
               return sortLabels[sortField as keyof typeof sortLabels];
             })()}
           >
-            <Option value="createdAt">Created Date</Option>
-            <Option value="dueDate">Due Date</Option>
-            <Option value="title">Title</Option>
-            <Option value="type">Type</Option>
-            <Option value="status">Status</Option>
-            <Option value="items">Items Count</Option>
+            <SelectOption value="createdAt">Created Date</SelectOption>
+            <SelectOption value="dueDate">Due Date</SelectOption>
+            <SelectOption value="title">Title</SelectOption>
+            <SelectOption value="type">Type</SelectOption>
+            <SelectOption value="status">Status</SelectOption>
+            <SelectOption value="items">Items Count</SelectOption>
           </Select>
 
           <IconButton

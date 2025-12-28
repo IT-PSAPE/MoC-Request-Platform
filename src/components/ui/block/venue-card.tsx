@@ -1,6 +1,6 @@
 import { cn } from "@/shared/cn";
-import Switch from "./switch";
-import Button from "./button";
+import Switch from "../common/switch";
+import { Button } from "../common/button";
 import { useAdminContext } from "@/components/contexts/admin-context";
 
 interface VenueCardProps {
@@ -9,7 +9,7 @@ interface VenueCardProps {
   onClick?: (venue: Venue) => void;
 }
 
-export function VenueCard({className, venue, onClick }: VenueCardProps) {
+export function VenueCard({ className, venue, onClick }: VenueCardProps) {
   const { updateVenue } = useAdminContext();
 
   const onToggleActive = (isActive: boolean) => {
@@ -34,9 +34,9 @@ export function VenueCard({className, venue, onClick }: VenueCardProps) {
         </div>
       </div>
       <div className="p-3 border-t border-secondary">
-        <Button 
-          type="button" 
-          variant="secondary" 
+        <Button
+          type="button"
+          variant="secondary"
           className="w-full"
           onClick={() => onClick?.(venue)}
         >

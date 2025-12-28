@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/ui/common/empty-state";
 import { Header } from "@/components/ui/layout/header";
 
 import { useAdminContext } from "@/components/contexts/admin-context";
-import { RequestItemCard } from "@/components/ui/common/request-item-card";
+import { RequestItemCard } from "@/components/ui/block/request-item-card";
 import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminRequestItemDetailsSheet from "@/feature/items/components/admin-request-item-details-sheet";
 

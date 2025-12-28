@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/shared/cn";
-import Input from "@/components/ui/common/input";
+import { Input } from "@/components/ui";
 import { SelectOptionContainer, SelectOptionItem } from "@/components/ui/common/select-option";
 import { Popover } from "@/components/ui/base/popover";
 
@@ -151,7 +151,7 @@ export function InlineEditPopover({
             {children}
           </div>
         </Popover.Trigger>
-        
+
         <Popover.Content position={position} maxWidth="240px">
           <InlineEditPopoverContent
             value={value}

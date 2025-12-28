@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/ui/common/empty-state";
 import { Header } from "@/components/ui/layout/header";
 
 import { useAdminContext } from "@/components/contexts/admin-context";
-import { EquipmentCard } from "@/components/ui/common/equipment-card";
+import { EquipmentCard } from "@/components/ui/block/equipment-card";
 import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminEquipmentDetailsSheet from "@/feature/equipment/components/admin-equipment-details-sheet";
 

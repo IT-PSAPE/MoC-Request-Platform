@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { MouseEvent } from "react";
-import Text from "@/components/ui/common/text";
+import { Text } from "@/components/ui/common/text";
 import { cn } from "@/shared/cn";
 import { PopoverBarrierProps, PopoverBodyProps, PopoverContentProps, PopoverFooterProps, PopoverGroupProps, PopoverHeaderProps, PopoverProps, PopoverTriggerProps } from "./types";
 import { usePopoverContext } from "./popover-provider";
@@ -29,11 +29,11 @@ function PopoverTrigger({ children, className }: PopoverTriggerProps) {
   );
 }
 
-function PopoverContent({ 
-  children, 
-  className, 
+function PopoverContent({
+  children,
+  className,
   position = "bottom-left",
-  maxWidth = "320px" 
+  maxWidth = "320px"
 }: PopoverContentProps) {
   const { isOpen, closePopover, anchorRef } = usePopoverContext();
   const contentRef = useRef<HTMLDivElement>(null);
@@ -61,7 +61,7 @@ function PopoverContent({
 
   const positionClasses = {
     "bottom-left": "top-full left-0 mt-2",
-    "bottom-right": "top-full right-0 mt-2", 
+    "bottom-right": "top-full right-0 mt-2",
     "bottom-center": "top-full left-1/2 transform -translate-x-1/2 mt-2",
   };
 
@@ -127,7 +127,7 @@ function PopoverGroup({ fieldName, children }: PopoverGroupProps) {
   )
 }
 
-const Popover ={
+const Popover = {
   Provider: PopoverProvider,
   useContext: usePopoverContext,
   Root: PopoverParent,

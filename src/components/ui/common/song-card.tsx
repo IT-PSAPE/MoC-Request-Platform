@@ -1,6 +1,6 @@
 import { cn } from "@/shared/cn";
 import Switch from "./switch";
-import Button from "./button";
+import { Button } from "./button";
 import { useAdminContext } from "@/components/contexts/admin-context";
 
 interface SongCardProps {
@@ -48,9 +48,9 @@ export function SongCard({ song, onClick }: SongCardProps) {
                 </div>
             </div>
             <div className="p-3 border-t border-secondary">
-                <Button 
-                    type="button" 
-                    variant="secondary" 
+                <Button
+                    type="button"
+                    variant="secondary"
                     className="w-full"
                     onClick={() => onClick?.(song)}
                 >

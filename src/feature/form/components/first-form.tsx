@@ -3,7 +3,7 @@ import { useFormContext } from "@/feature/form/components/form-context";
 import { TextArea, TextInput } from "./input";
 import { Divider } from "@/components/ui/common/divider";
 
-export default function FirstForm() {
+export function FirstForm() {
     const { request, setRequest } = useFormContext();
 
     function handleWhoChange(event: React.ChangeEvent<HTMLInputElement>) {

@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/shared/cn";
-import Input from "./input";
-import { Button } from "./button";
-import { Text } from "./text";
+import {Button,  Input, Text } from "@/components/ui";
 import { Popover } from "@/components/ui/base/popover";
 
 type DatePickerPopoverProps = {

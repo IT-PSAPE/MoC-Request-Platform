@@ -1,5 +1,5 @@
 import { cn } from "@/shared/cn";
-import {Badge, Icon, Text} from "@/components/ui/common";
+import { Badge, Icon, Text } from "@/components/ui/common";
 
 interface RequestListItemProps {
   request: FetchRequest;
