@@ -1,7 +1,6 @@
-import { cn } from "@/lib/cn";
-import Icon from "./icon";
-import Text from "./text";
-import React from "react";
+import { cn } from "@/shared/cn";
+import { Icon } from "./icon";
+import { Text } from "./text";
 
 interface InlineAlertProps {
     message: string;
@@ -9,7 +8,7 @@ interface InlineAlertProps {
     type?: 'notice' | 'warning' | 'error' | 'success' | 'info';
 }
 
-function InlineAlert({ message, description, type = 'notice' }: InlineAlertProps) {
+export function InlineAlert({ message, description, type = 'notice' }: InlineAlertProps) {
 
     let icon: React.ReactNode = <Icon.alert />;
     let color = '';
@@ -47,5 +46,3 @@ function InlineAlert({ message, description, type = 'notice' }: InlineAlertProps
         </div>
     </div>;
 }
-
-export default InlineAlert;

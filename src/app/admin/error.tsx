@@ -2,9 +2,8 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/ui/common/controls/button';
 import ErrorLayout from '@/components/navigation/error-layout';
-import Icon from '@/components/ui/common/icon';
+import { Button, Icon } from '@/components/ui';
 
 export default function AdminError({
   error,

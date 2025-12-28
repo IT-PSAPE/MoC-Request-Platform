@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useSupabaseClient } from './use-supabase-client';
-import { QueryKeys } from '@/lib/query-keys';
+import { QueryKeys } from '@/shared/query-keys';
 
 // Hook to set up real-time subscriptions for cache invalidation
 export function useRealtimeSubscriptions() {

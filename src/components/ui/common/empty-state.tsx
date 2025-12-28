@@ -1,4 +1,4 @@
-import Text from "@/components/ui/common/text"
+import { Text } from "@/components/ui/common/text"
 
 type EmptyStateProps = {
   title: string;
@@ -7,7 +7,7 @@ type EmptyStateProps = {
   icon?: React.ReactNode
 };
 
-export default function EmptyState({ title = "No information", message = "This section has no content to show.", className, icon }: EmptyStateProps) {
+export function EmptyState({ title = "No information", message = "This section has no content to show.", className, icon }: EmptyStateProps) {
   return (
     <div className={`w-full rounded-md bg-primary border border-secondary px-4 py-3 ${className}`}>
       {icon && <div className="mb-2">{icon}</div>}

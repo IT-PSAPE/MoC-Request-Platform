@@ -1,6 +1,6 @@
 'use client';
 
-import { PriorityTable, RequestTypeTable, StatusTable } from "@/lib/database";
+import { PriorityTable, RequestTypeTable, StatusTable } from "@/shared/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 

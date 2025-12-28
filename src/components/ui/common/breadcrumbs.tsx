@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/shared/cn";
 
 type BreadcrumbItemProps = {
     children: React.ReactNode;
@@ -11,7 +11,7 @@ function BreadcrumbItem({ children }: BreadcrumbItemProps) {
     );
 }
 
-export default function Breadcrumbs() {
+export function Breadcrumbs() {
     return (
         <div className="h-13 flex items-center px-6 py-4 border-b border-secondary sticky top-0 bg-primary" >
             <BreadcrumbItem>Admin</BreadcrumbItem>

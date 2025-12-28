@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/shared/cn";
 
 type TextStyle =
   | "title-h1"
@@ -42,7 +42,7 @@ type TextProps<T extends TextTag = "div"> = {
   className?: string;
 } & Omit<ComponentPropsWithoutRef<T>, "className" | "children" | "style">;
 
-function Text<T extends TextTag = "div">({ as, children, style, className, ...props }: TextProps<T>) {
+export function Text<T extends TextTag = "div">({ as, children, style, className, ...props }: TextProps<T>) {
   const Component = (as ?? "div") as ElementType;
 
   return (
@@ -51,5 +51,3 @@ function Text<T extends TextTag = "div">({ as, children, style, className, ...pr
     </Component>
   );
 }
-
-export default Text;

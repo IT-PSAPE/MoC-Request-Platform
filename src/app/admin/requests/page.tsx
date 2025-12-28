@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Text from "@/components/ui/common/text";
-import Header from "@/components/ui/common/header";
-import { RequestList } from "@/components/ui/common/request-list/request-list";
+import { Text } from "@/components/ui/common/text";
+import { Header } from "@/components/ui/layout/header";
 import { useAdminContext } from "@/components/contexts/admin-context";
-import RequestDetailsSheet from "@/features/admin/requests/request-details-sheet";
+import RequestDetailsSheet from "@/feature/requests/components/details-sheet/request-details-sheet";
+import { RequestList } from "@/components/ui/block/request-list";
 
 export default function RequestsContent() {
-    const { requests, addCommentToRequest, deleteRequestById, updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic, assignMemberToRequest, unassignMemberFromRequest } = useAdminContext();
+    const { requests } = useAdminContext();
+
     const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const selectedRequest = useMemo(() => {
@@ -39,26 +40,17 @@ export default function RequestsContent() {
                 <Text style="title-h4">Requests</Text>
                 <Text style="paragraph-md">View and manage all requests in one place</Text>
             </Header>
-            
-            <RequestList 
-                requests={requests} 
+
+            <RequestList
+                requests={requests}
                 onRequestClick={handleRequestClick}
                 isPublic={false}
-                onRequestStatusChange={updateRequestStatusOptimistic}
             />
-            
+
             <RequestDetailsSheet
                 request={selectedRequest}
                 isOpen={isSheetOpen}
                 onClose={handleCloseSheet}
-                onAddComment={addCommentToRequest}
-                onDeleteRequest={deleteRequestById}
-                onUpdateStatus={updateRequestStatusOptimistic}
-                onUpdatePriority={updateRequestPriorityOptimistic}
-                onUpdateType={updateRequestTypeOptimistic}
-                onUpdateDueDate={updateRequestDueDateOptimistic}
-                onAssignMember={assignMemberToRequest}
-                onUnassignMember={unassignMemberFromRequest}
             />
         </>
     );

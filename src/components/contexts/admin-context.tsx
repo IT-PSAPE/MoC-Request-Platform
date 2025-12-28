@@ -1,10 +1,10 @@
 'use client';
 
-import { EquipmentTable, RequestItemTable, RequestTable, SongTable, VenueTable } from "@/lib/database";
+import { EquipmentTable, RequestItemTable, RequestTable, SongTable, VenueTable } from "@/shared/database";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { addComment, listMembers, assignMember, unassignMember } from "@/logic/services/admin-service";
-import { useAuthContext } from "./auth-context";
+import { useAuthContext } from "../../feature/auth/components/auth-context";
 import { useDefaultContext } from "./defaults-context";
 
 type TabItem = 'venues' | 'songs' | 'equipment' | 'dashboard' | 'request-items';

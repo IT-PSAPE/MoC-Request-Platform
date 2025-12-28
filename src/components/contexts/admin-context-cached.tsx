@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext } from "react";
-import { useAuthContext } from "./auth-context";
+import { useAuthContext } from "../../feature/auth/components/auth-context";
 import { useRequests, useUpdateRequestStatus, useAddComment, useDeleteRequest } from "@/logic/hooks/use-cached-requests";
 import { useEquipment, useUpdateEquipment, useSongs, useUpdateSong, useVenues, useUpdateVenue, useRequestItems } from "@/logic/hooks/use-cached-defaults";
 

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/shared/cn";
 
 type Props = {
   children: ReactNode;
@@ -8,7 +8,7 @@ type Props = {
   className?: string;
 };
 
-export default function Badge({ children, color = "gray", indicator, className }: Props) {
+export function Badge({ children, color = "gray", indicator, className }: Props) {
   const colorMap = {
     gray: "bg-utility-gray-100 text-utility-gray-600",
     green: "bg-utility-green-100 text-utility-green-600",

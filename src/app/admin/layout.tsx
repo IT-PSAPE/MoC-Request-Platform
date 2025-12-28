@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import AuthGuard from '@/components/navigation/auth-guard';
+import { AuthGuard } from '@/feature/auth';
 import AdminLayoutClient from '@/components/ui/layout/admin-layout-client';
 
 export const metadata: Metadata = {

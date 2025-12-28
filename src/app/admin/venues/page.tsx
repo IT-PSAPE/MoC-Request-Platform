@@ -2,20 +2,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { VenueCard } from "@/components/ui/common/cards/venue-card";
-import Text from "@/components/ui/common/text";
-import EmptyState from "@/components/ui/common/empty-state";
-import Header from "@/components/ui/common/header";
+import { EmptyState, Text, VenueCard } from "@/components/ui";
+import { Header } from "@/components/ui/layout/header";
 
 import { useAdminContext } from "@/components/contexts/admin-context";
 import { GridContainer } from "@/components/ui/layout/grid-container";
-import AdminVenueDetailsSheet from "@/features/admin/venues/admin-venue-details-sheet";
+import AdminVenueDetailsSheet from "@/feature/venues/components/admin-venue-details-sheet";
 
 export default function VenueContent() {
     const { venues } = useAdminContext();
     const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-    
+
     const selectedVenue = useMemo(() => {
         if (!selectedVenueId) return null;
         return venues.find((venue) => venue.id === selectedVenueId) ?? null;
@@ -44,13 +42,13 @@ export default function VenueContent() {
                 <Text style="title-h4">Venues</Text>
                 <Text style="paragraph-md">Keep venue readiness up to date so request owners know where events can take place.</Text>
             </Header>
-            
+
             <GridContainer isEmpty={venues.length === 0}>
                 {venues.length === 0 ? (
                     <EmptyState title="No information" message="No venues available" />
                 ) : venues.map((venue) => (
-                    <VenueCard 
-                        key={venue.id} 
+                    <VenueCard
+                        key={venue.id}
                         venue={venue}
                         onClick={handleVenueClick}
                     />

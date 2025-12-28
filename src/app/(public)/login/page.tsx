@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Card from "@/components/ui/common/cards/card";
-import LoginFormContainer from "@/components/ui/common/login-form";
-import Loader from "@/components/ui/common/loader";
+import { PublicCard, Loader } from "@/components/ui";
+import { LoginFormContainer } from "@/feature/auth";
 
 export const metadata: Metadata = {
   title: "Admin Login | MOC Request Platform",
@@ -12,11 +11,11 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div className="mx-auto max-w-[384px] py-16">
-      <Card title="Admin Login">
+      <PublicCard title="Admin Login">
         <Suspense fallback={<Loader />}>
           <LoginFormContainer />
         </Suspense>
-      </Card>
+      </PublicCard>
     </div>
   );
 }

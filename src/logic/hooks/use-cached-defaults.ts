@@ -2,8 +2,8 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from './use-supabase-client';
-import { QueryKeys } from '@/lib/query-keys';
-import { EquipmentTable, SongTable, VenueTable, RequestItemTable } from '@/lib/database';
+import { QueryKeys } from '@/shared/query-keys';
+import { EquipmentTable, SongTable, VenueTable, RequestItemTable } from '@/shared/database';
 
 // Hook for fetching equipment with automatic caching
 export function useEquipment() {

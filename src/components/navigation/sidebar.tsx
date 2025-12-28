@@ -1,10 +1,9 @@
 'use client';
 
-import { cn } from "@/lib/cn";
+import { cn } from "@/shared/cn";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Icon from "@/components/ui/common/icon";
-import Divider from "@/components/ui/common/divider";
+import { Divider, Icon } from "@/components/ui/common";
 
 type MenuItemProps = {
     children?: React.ReactNode;

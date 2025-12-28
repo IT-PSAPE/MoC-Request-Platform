@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from './use-supabase-client';
-import { QueryKeys } from '@/lib/query-keys';
+import { QueryKeys } from '@/shared/query-keys';
 
 // Hook for getting a signed URL for a file with caching
 export function useSignedUrl(bucketName: string, filePath: string, expiresIn = 3600) {

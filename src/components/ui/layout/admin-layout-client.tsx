@@ -5,7 +5,7 @@ import { AdminContextProvider } from '@/components/contexts/admin-context';
 import { useDefaultContext } from '@/components/contexts/defaults-context';
 import Sidebar from '@/components/navigation/sidebar';
 import MainContent from '@/components/ui/layout/main-content';
-import Breadcrumbs from '@/components/ui/common/breadcrumbs';
+import { Breadcrumbs } from '@/components/ui/common/breadcrumbs';
 
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const { supabase } = useDefaultContext();

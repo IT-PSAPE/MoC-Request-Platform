@@ -1,19 +1,12 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import AuthGuard from '@/components/navigation/auth-guard';
-import Text from '@/components/ui/common/text';
-import Button from '@/components/ui/common/controls/button';
-import Badge from '@/components/ui/common/badge';
-import Loader from '@/components/ui/common/loader';
-import InlineAlert from '@/components/ui/common/inline-alert';
-import Divider from '@/components/ui/common/divider';
-import EmptyState from '@/components/ui/common/empty-state';
 import Link from 'next/link';
-import { RequestTable } from '@/lib/database';
-import Icon from '@/components/ui/common/icon';
+import { useSearchParams } from 'next/navigation';
+import { Button, EmptyState, Text, Badge, Loader, InlineAlert, Divider, Icon } from '@/components/ui';
+import { RequestTable } from '@/shared/database';
 import { useSupabaseClient } from '@/logic/hooks/use-supabase-client';
+import { AuthGuard } from '@/feature/auth';
 
 // Color maps from request details sheet
 const requestColorMap: Record<string, BadgeColor> = {

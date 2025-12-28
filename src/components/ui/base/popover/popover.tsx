@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { MouseEvent } from "react";
 import Text from "@/components/ui/common/text";
-import { cn } from "@/lib/cn";
+import { cn } from "@/shared/cn";
 import { PopoverBarrierProps, PopoverBodyProps, PopoverContentProps, PopoverFooterProps, PopoverGroupProps, PopoverHeaderProps, PopoverProps, PopoverTriggerProps } from "./types";
 import { usePopoverContext } from "./popover-provider";
 import { PopoverProvider } from "./popover-provider";

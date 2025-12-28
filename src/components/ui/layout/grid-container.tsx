@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/shared/cn";
 
 export function GridContainer({ children, isEmpty }: { children: React.ReactNode, isEmpty?: boolean }) {
     return (
