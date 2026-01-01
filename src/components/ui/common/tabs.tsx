@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from "@/shared/cn";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 

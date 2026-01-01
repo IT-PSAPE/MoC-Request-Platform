@@ -1,5 +1,5 @@
 import { cn } from "@/shared/cn";
-import { Text } from "@/components/ui/common/text";
+import { Text } from "@/components/ui";
 
 type Props = {
     label: string;

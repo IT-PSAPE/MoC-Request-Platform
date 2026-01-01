@@ -67,6 +67,7 @@ export const RequestTable = {
             due,
             flow,
             created_at,
+            archived,
             priority(*),
             status(*),
             type(*),
@@ -104,6 +105,7 @@ export const RequestTable = {
             venue: request.venue,
             item: request.item,
             assignee: request.assignee as Assignee[],
+            archived: request.archived as boolean,
         }));
 
         return requests;
@@ -121,6 +123,7 @@ export const RequestTable = {
             due,
             flow,
             created_at,
+            archived,
             priority(*),
             status(*),
             type(*),
@@ -145,6 +148,7 @@ export const RequestTable = {
         due,
         flow,
         created_at,
+        archived,
         priority(*),
         status(*),
         type(*),
@@ -184,6 +188,7 @@ export const RequestTable = {
             venue: responce.data.venue,
             item: responce.data.item,
             assignee: responce.data.assignee as Assignee[],
+            archived: responce.data.archived as boolean,
         };
 
         return { data, error: null };

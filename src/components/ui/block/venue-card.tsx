@@ -1,5 +1,5 @@
 import { cn } from "@/shared/cn";
-import Switch from "../common/switch";
+import { Switch } from "../common/switch";
 import { Button } from "../common/button";
 import { useAdminContext } from "@/components/contexts/admin-context";
 

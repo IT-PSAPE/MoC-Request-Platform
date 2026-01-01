@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 import { EquipmentTable } from "@/shared/database";

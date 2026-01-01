@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useMemo, useState } from "react";
 import type { DragEvent, MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { RequestListItem } from "@/components/ui/block/request-list/request-list-item";

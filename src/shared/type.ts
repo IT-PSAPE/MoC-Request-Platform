@@ -116,6 +116,7 @@ type BaseRequest = {
     priority: string;
     status: string;
     type: string;
+    archived: boolean;
 }
 
 type FormRequest = {
@@ -167,4 +168,5 @@ type FetchRequest = {
     song: RequestedSong[];
     venue: RequestedVenue[];
     assignee: Assignee[];
+    archived: boolean;
 };

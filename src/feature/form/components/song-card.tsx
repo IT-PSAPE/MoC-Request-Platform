@@ -1,4 +1,4 @@
-import Checkbox from "@/components/ui/common/checkbox";
+import { Checkbox } from "@/components/ui/common/checkbox";
 import { PublicCard, PublicCardContent } from "@/components/ui/common/public-card";
 import { Divider } from "@/components/ui/common/divider";
 

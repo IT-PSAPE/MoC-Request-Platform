@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import Link from "next/link";
 import { Button, Card, Text } from "@/components/ui";
 import SmartRedirect from "@/components/navigation/smart-redirect";

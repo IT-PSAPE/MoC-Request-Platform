@@ -1,16 +1,12 @@
 'use client';
 
 import FormField from "./form-field";
-import { TextInput } from "./input";
-import { Divider } from "@/components/ui/common/divider";
-import { EmptyState } from "@/components/ui/common/empty-state";
 import VenueCard from "./venue-card";
 import SongCard from "./song-card";
 import { useFormContext } from "@/feature/form/components/form-context";
 import RequestItemCard from "./item-card";
-import { Select, SelectOption } from "@/components/ui";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
-import { InlineAlert } from "@/components/ui/common/inline-alert";
+import { Divider, EmptyState, InlineAlert, TextInput, Select, SelectOption } from "@/components/ui";
 import { useEffect } from "react";
 
 export function SecondForm() {

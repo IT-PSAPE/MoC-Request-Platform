@@ -35,10 +35,11 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
   
-  // Skip caching for API requests and Supabase calls
+  // Skip caching for API requests, Supabase calls, and chrome-extension requests
   if (url.pathname.includes('/rest/v1/') || 
       url.pathname.startsWith('/api/') ||
-      url.hostname.includes('supabase')) {
+      url.hostname.includes('supabase') ||
+      url.protocol === 'chrome-extension:') {
     event.respondWith(fetch(request));
     return;
   }
@@ -48,7 +49,10 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((response) => {
           return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, response.clone());
+            const url = new URL(request.url);
+            if (request.method === 'GET' && response && response.ok && url.protocol !== 'chrome-extension:') {
+              cache.put(request, response.clone());
+            }
             return response;
           });
         })
@@ -67,7 +71,10 @@ self.addEventListener('fetch', (event) => {
           }
           return fetch(request).then((response) => {
             return caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, response.clone());
+              const url = new URL(request.url);
+              if (request.method === 'GET' && response && response.ok && url.protocol !== 'chrome-extension:') {
+                cache.put(request, response.clone());
+              }
               return response;
             });
           });

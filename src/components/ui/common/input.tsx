@@ -3,18 +3,8 @@ import { cn } from "@/shared/cn";
 
 type Props = InputHTMLAttributes<HTMLInputElement>;
 
-export const Input = forwardRef<HTMLInputElement, Props>(function Input(
-    { className, ...props },
-    ref
-) {
+export function TextInput({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
     return (
-        <input
-            ref={ref}
-            className={cn(
-                "w-full rounded-md border border-primary bg-transparent px-3 py-2 text-sm placeholder:text-quaternary",
-                className
-            )}
-            {...props}
-        />
-    );
-});
+        <input className={cn("w-full p-2.5 bg-primary border border-primary rounded-lg shadow-sm paragraph-sm", className)}  {...props} />
+    )
+}
