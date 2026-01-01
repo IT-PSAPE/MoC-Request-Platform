@@ -29,8 +29,8 @@ export default function RequestDetailsSheet({
   isOpen,
   onClose,
 }: RequestDetailsSheetProps) {
-  const { addCommentToRequest, deleteRequestById, updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic, assignMemberToRequest, unassignMemberFromRequest } = useRequestContext();
-  
+  const { addCommentToRequest, deleteRequestById, updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic, assignMemberToRequest, unassignMemberFromRequest, updateRequest } = useRequestContext();
+
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
@@ -63,32 +63,28 @@ export default function RequestDetailsSheet({
     window.location.href = `/request?id=${request.id}`;
   }
 
+  const handleArchiveRequest = async () => {
+    await updateRequest(request.id, { archived: !request.archived });
+  };
+
   return (
     <>
-  
+
       <Sheet.Root open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }} >
         <Sheet.Content>
           <div className="flex flex-col h-full">
             <Sheet.Header className="justify-end">
               <div className="flex gap-2">
-                <IconButton 
-                  onClick={handleExpandDetails} 
-                  variant="ghost"
-                >
+                <IconButton variant="ghost" onClick={handleExpandDetails}>
                   <Icon.expand size={20} />
                 </IconButton>
-                <IconButton 
-                  onClick={handleOpenCommentModal} 
-                  disabled={!addCommentToRequest} 
-                  variant="ghost"
-                >
+                <IconButton variant="ghost" onClick={handleOpenCommentModal} disabled={!addCommentToRequest}>
                   <Icon.pen_line size={20} />
                 </IconButton>
-                <IconButton 
-                  onClick={handleOpenConfirm} 
-                  disabled={!deleteRequestById} 
-                  variant="ghost"
-                >
+                <IconButton variant="ghost" onClick={handleArchiveRequest}>
+                  {request.archived ? <Icon.eye size={20} /> : <Icon.eye_off size={20} />}
+                </IconButton>
+                <IconButton variant="ghost" onClick={handleOpenConfirm} disabled={!deleteRequestById}>
                   <Icon.trash size={20} />
                 </IconButton>
               </div>
@@ -96,41 +92,41 @@ export default function RequestDetailsSheet({
 
             {/* Scrollable content with invisible scrollbar */}
             <ScrollContainer className="flex-1 px-4 py-2 space-y-6">
-                <RequestDetailsOverview
-                  request={request}
-                  onUpdateStatus={updateRequestStatusOptimistic}
-                  onUpdatePriority={updateRequestPriorityOptimistic}
-                  onUpdateType={updateRequestTypeOptimistic}
-                  onUpdateDueDate={updateRequestDueDateOptimistic}
-                  onAssignMember={assignMemberToRequest}
-                  onUnassignMember={unassignMemberFromRequest}
-                />
+              <RequestDetailsOverview
+                request={request}
+                onUpdateStatus={updateRequestStatusOptimistic}
+                onUpdatePriority={updateRequestPriorityOptimistic}
+                onUpdateType={updateRequestTypeOptimistic}
+                onUpdateDueDate={updateRequestDueDateOptimistic}
+                onAssignMember={assignMemberToRequest}
+                onUnassignMember={unassignMemberFromRequest}
+              />
 
-                <Divider />
+              <Divider />
 
-                <RequestDetails5WH request={request} />
+              <RequestDetails5WH request={request} />
 
-                <Divider />
+              <Divider />
 
-                <RequestDetailsVenues request={request} />
+              <RequestDetailsVenues request={request} />
 
-                <Divider />
+              <Divider />
 
-                <RequestDetailsEquipment request={request} />
+              <RequestDetailsEquipment request={request} />
 
-                <Divider />
+              <Divider />
 
-                <RequestDetailsSongs request={request} />
+              <RequestDetailsSongs request={request} />
 
-                <Divider />
+              <Divider />
 
-                <RequestDetailsFlow request={request} />
+              <RequestDetailsFlow request={request} />
 
-                <Divider />
+              <Divider />
 
-                <RequestDetailsComments 
-                  request={request}
-                />
+              <RequestDetailsComments
+                request={request}
+              />
             </ScrollContainer>
           </div>
         </Sheet.Content>

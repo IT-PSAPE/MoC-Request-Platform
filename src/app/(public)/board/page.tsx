@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Loader } from "@/components/ui/common";
-import { PublicRequestContextProvider } from "@/feature/requests/components/public-request-context";
 import { BoardRequestsContent } from "./content";
+import { RequestContextProvider } from "@/feature/requests/components/request-context";
 
 export const metadata: Metadata = {
   title: "Request Board | MOC Request Platform",
@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 
 export default function RequestsPage() {
   return (
-    <PublicRequestContextProvider>
+    <RequestContextProvider>
       <Suspense fallback={<Loader label="Loading requests" />}>
         <BoardRequestsContent />
       </Suspense>
-    </PublicRequestContextProvider>
+    </RequestContextProvider>
   );
 }

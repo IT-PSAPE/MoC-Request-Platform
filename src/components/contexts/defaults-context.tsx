@@ -38,9 +38,9 @@ export function DefaultContextProvider({ children, supabase }: { children: React
         const loadDefaults = async () => {
             try {
                 const [statusResult, priorityResult, typeResult] = await Promise.all([
-                    StatusTable.list(supabase),
-                    PriorityTable.list(supabase),
-                    RequestTypeTable.list(supabase),
+                    StatusTable.select(supabase),
+                    PriorityTable.select(supabase),
+                    RequestTypeTable.select(supabase),
                 ]);
 
                 if (!isMounted) return;

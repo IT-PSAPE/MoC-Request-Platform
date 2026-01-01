@@ -29,6 +29,7 @@ export type PopoverContentProps = {
   className?: string;
   position?: PopoverPosition;
   maxWidth?: string;
+  maxHeight?: string;
 }
 
 export type PopoverHeaderProps = {

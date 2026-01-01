@@ -5,6 +5,7 @@ import { cn } from "@/shared/cn";
 import { PopoverBarrierProps, PopoverBodyProps, PopoverContentProps, PopoverFooterProps, PopoverGroupProps, PopoverHeaderProps, PopoverProps, PopoverTriggerProps } from "./types";
 import { usePopoverContext } from "./popover-provider";
 import { PopoverProvider } from "./popover-provider";
+import { ScrollContainer } from "../../layout/scroll-container";
 
 function PopoverParent({ children }: PopoverProps) {
   return <div className="relative inline-block w-full">{children}</div>;
@@ -33,7 +34,8 @@ function PopoverContent({
   children,
   className,
   position = "bottom-left",
-  maxWidth = "320px"
+  maxWidth = "320px",
+  maxHeight = "300px"
 }: PopoverContentProps) {
   const { isOpen, closePopover, anchorRef } = usePopoverContext();
   const contentRef = useRef<HTMLDivElement>(null);
@@ -70,12 +72,8 @@ function PopoverContent({
       <PopoverBarrier />
       <div
         ref={contentRef}
-        className={cn(
-          "absolute z-50 bg-primary border border-secondary rounded-lg shadow-lg min-w-[280px]",
-          positionClasses[position],
-          className
-        )}
-        style={{ maxWidth }}
+        className={cn("absolute z-50 bg-primary border border-secondary rounded-lg shadow-lg min-w-[280px]", positionClasses[position], className)}
+        style={{ maxWidth, maxHeight }}
       >
         {children}
       </div>

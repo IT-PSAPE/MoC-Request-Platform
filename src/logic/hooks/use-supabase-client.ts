@@ -5,11 +5,6 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 export function useSupabaseClient(): SupabaseClient | null {
     return useMemo(() => {
-        // Only create client on the browser side to avoid SSR issues with Math.random()
-        if (typeof window === 'undefined') {
-            return null;
-        }
-
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -18,6 +13,12 @@ export function useSupabaseClient(): SupabaseClient | null {
             return null;
         }
 
-        return createClient(supabaseUrl, supabaseAnonKey);
+        return createClient(supabaseUrl, supabaseAnonKey, {
+            auth: {
+                persistSession: typeof window !== 'undefined',
+                autoRefreshToken: typeof window !== 'undefined',
+                detectSessionInUrl: typeof window !== 'undefined'
+            }
+        });
     }, []);
 }

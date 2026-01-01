@@ -10,6 +10,7 @@ type FilterState = {
   };
   requestTypes: string[];
   priorities: string[];
+  showArchived: boolean;
 };
 
 type SortState = {
@@ -42,6 +43,7 @@ const defaultFilterState: FilterState = {
   dateRange: { from: "", to: "" },
   requestTypes: [],
   priorities: [],
+  showArchived: false,
 };
 
 const defaultSortState: SortState = {
@@ -97,7 +99,8 @@ export function FilterProvider({ children }: FilterProviderProps) {
     filters.dateRange.from !== "" ||
     filters.dateRange.to !== "" ||
     filters.requestTypes.length > 0 ||
-    filters.priorities.length > 0;
+    filters.priorities.length > 0 ||
+    filters.showArchived !== false;
 
   const value: FilterContextValue = {
     filters,

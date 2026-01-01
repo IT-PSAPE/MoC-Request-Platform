@@ -80,7 +80,7 @@ export function SecondForm() {
                     venues.length === 0 ? (
                         <EmptyState title="No information" message="No venues available." />
                     ) : (
-                        <div className="grid grid-cols-3 gap-2 flex-col max-md:flex">
+                        <div className="grid grid-cols-3 gap-2 flex-col mobile:flex">
                             {venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)}
                         </div>
                     )
@@ -92,7 +92,7 @@ export function SecondForm() {
                     items.length === 0 ? (
                         <EmptyState title="No information" message="No Request Item available." />
                     ) : (
-                        <div className="grid grid-cols-3 gap-2 flex-col max-md:flex">
+                        <div className="grid grid-cols-3 gap-2 flex-col mobile:flex">
                             {items.map((item) => <RequestItemCard key={item.id} item={item} />)}
                         </div>
                     )
@@ -104,7 +104,7 @@ export function SecondForm() {
                     songs.length === 0 ? (
                         <EmptyState title="No information" message="No song available." />
                     ) : (
-                        <div className="grid grid-cols-3 gap-2 flex-col max-md:flex">
+                        <div className="grid grid-cols-3 gap-2 flex-col mobile:flex">
                             {songs.map((song) => <SongCard key={song.id} song={song} />)}
                         </div>
                     )

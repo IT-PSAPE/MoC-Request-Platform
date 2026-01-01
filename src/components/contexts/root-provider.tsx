@@ -9,8 +9,6 @@ import { useSupabaseClient } from "@/logic/hooks/use-supabase-client";
 function RootProvider({ children }: { children: React.ReactNode }) {
     const supabase = useSupabaseClient();
 
-    console.log("RootProvider Supabase Client:", supabase ? true : false);
-
     if (!supabase) {
         return <Loader label="Initializing" className="flex-1" />;
     }

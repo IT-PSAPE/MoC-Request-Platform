@@ -65,8 +65,6 @@ export function AuthContextProvider({ children, supabase }: { children: React.Re
         } = supabase.auth.onAuthStateChange(async (event, session) => {
             if (!isMounted) return;
             
-            console.log('Auth state change:', event, session?.user?.email);
-            
             const sessionUser = session?.user ?? null;
             setUser(sessionUser);
             setAuthed(Boolean(sessionUser));

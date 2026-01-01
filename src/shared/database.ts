@@ -1,6 +1,6 @@
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 
-type CellData =
+export type CellData =
     | string        // text, varchar, uuid, date, timestamp (as ISO string), json (as stringified JSON)
     | number        // integer, bigint, numeric, float
     | boolean       // true/false
@@ -20,8 +20,7 @@ export const EquipmentTable = {
         return supabase.from("equipment").select("*").order("name");
     },
     update: async (supabase: SupabaseClient, equipmentId: string, update: { [key: string]: CellData }) => {
-        return supabase.from("equipment").update(update)
-            .eq("id", equipmentId);
+        return supabase.from("equipment").update(update).eq("id", equipmentId);
     }
 }
 
@@ -30,8 +29,7 @@ export const SongTable = {
         return supabase.from("song").select("*").order("name");
     },
     update: async (supabase: SupabaseClient, songId: string, update: { [key: string]: CellData }) => {
-        return supabase.from("song").update(update)
-            .eq("id", songId);
+        return supabase.from("song").update(update).eq("id", songId);
     }
 }
 
@@ -111,29 +109,7 @@ export const RequestTable = {
         return requests;
     },
     select: async (supabase: SupabaseClient) => {
-        return supabase.from("request").select(
-            ` id,
-            who,
-            what,
-            when,
-            where,
-            why,
-            how,
-            info,
-            due,
-            flow,
-            created_at,
-            archived,
-            priority(*),
-            status(*),
-            type(*),
-            attachment(*),
-            note(*),
-            song:request_song(*, song(*)),
-            venue:request_venue(*, venue(*)),
-            item:request_item(*, item(*)),
-            assignee:assignee(*, member(*))
-          `);
+        return supabase.from("request").select(`id, who, what, when, where, why, how, info, due, flow, created_at, archived, priority(*), status(*), type(*), attachment(*), note(*), song:request_song(*, song(*)), venue:request_venue(*, venue(*)), item:request_item(*, item(*)), assignee:assignee(*, member(*))`);
     },
     get: async (supabase: SupabaseClient, requestId: string): Promise<{ data: FetchRequest | null, error: PostgrestError | null }> => {
         const responce = await supabase.from("request").select(
@@ -194,38 +170,31 @@ export const RequestTable = {
         return { data, error: null };
     },
     delete: async (supabase: SupabaseClient, requestId: string): Promise<{ error: PostgrestError | null }> => {
-        const { error } = await supabase
-            .from("request")
-            .delete()
-            .eq("id", requestId);
+        const { error } = await supabase.from("request").delete().eq("id", requestId);
 
         return { error };
     },
     update: async (supabase: SupabaseClient, requestId: string, payload: { [key: string]: CellData }): Promise<{ error: PostgrestError | null }> => {
-        const { error } = await supabase
-            .from("request")
-            .update(payload)
-            .eq("id", requestId);
+        const { error } = await supabase.from("request").update(payload).eq("id", requestId);
 
         return { error };
     }
 }
 
 export const StatusTable = {
-    list: async (supabase: SupabaseClient): Promise<{ data: Status[] | null, error: PostgrestError | null }> => {
+    select: async (supabase: SupabaseClient): Promise<{ data: Status[] | null, error: PostgrestError | null }> => {
         return supabase.from("status").select("*").order("value", { ascending: true });
     }
 };
 
-
 export const PriorityTable = {
-    list: async (supabase: SupabaseClient): Promise<{ data: Priority[] | null, error: PostgrestError | null }> => {
+    select: async (supabase: SupabaseClient): Promise<{ data: Priority[] | null, error: PostgrestError | null }> => {
         return supabase.from("priority").select("*").order("value", { ascending: true });
     }
 };
 
 export const RequestTypeTable = {
-    list: async (supabase: SupabaseClient): Promise<{ data: RequestType[] | null, error: PostgrestError | null }> => {
+    select: async (supabase: SupabaseClient): Promise<{ data: RequestType[] | null, error: PostgrestError | null }> => {
         return supabase.from("request_type").select("*");
     }
 };

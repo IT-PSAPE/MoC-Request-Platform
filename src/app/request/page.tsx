@@ -16,35 +16,8 @@ import RequestDetailsComments from '@/feature/requests/components/request-detail
 import RequestDetailsOverview from '@/feature/requests/components/request-details-overview';
 import { useRequestContext } from '@/feature/requests/components/request-context';
 
-// Color maps from request details sheet
-const requestColorMap: Record<string, BadgeColor> = {
-  "Video Filming & Production": "teal",
-  "Video Editing": "yellow",
-  "Design Flyer": "pink",
-  "Video Filming": "green",
-  "Equipment": "orange",
-  "Event": "blue",
-  "Design Special": "purple",
-};
-
-const priorityColorMap: Record<string, BadgeColor> = {
-  "Low": "blue",
-  "Medium": "yellow",
-  "High": "orange",
-  "Urgent": "red",
-};
-
-const statusColorMap: Record<string, BadgeColor> = {
-  "Not Started": "gray",
-  "In Progress": "orange",
-  "Completed": "green",
-};
-
-function RequestDetailsContent() {
+function RequestDetailsContent({ requestId }: { requestId: string | null }) {
   const { updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic, assignMemberToRequest, unassignMemberFromRequest } = useRequestContext();
-
-  const searchParams = useSearchParams();
-  const requestId = searchParams.get('id')?.replace('/', '');
   const supabase = useSupabaseClient();
 
   const [request, setRequest] = useState<FetchRequest | null>(null);
@@ -185,6 +158,13 @@ function RequestDetailsContent() {
   );
 }
 
+function RequestDetailsWithParams() {
+  const searchParams = useSearchParams();
+  const requestId = searchParams.get('id')?.replace('/', '') || null;
+  
+  return <RequestDetailsContent requestId={requestId} />;
+}
+
 function RequestDetailsWithAuth() {
   return (
     <Suspense fallback={
@@ -197,7 +177,7 @@ function RequestDetailsWithAuth() {
         </div>
       </div>
     }>
-      <RequestDetailsContent />
+      <RequestDetailsWithParams />
     </Suspense>
   );
 }

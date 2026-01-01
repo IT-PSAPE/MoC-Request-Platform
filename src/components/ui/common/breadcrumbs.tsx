@@ -11,17 +11,26 @@ type BreadcrumbItemProps = {
 };
 
 function BreadcrumbItem({ children, current, href }: BreadcrumbItemProps) {
-    const Component = href && !current ? Link : "div";
+    const isLink = href && !current;
+    
+    if (isLink) {
+        return (
+            <Link 
+                href={href}
+                className={cn(
+                    "min-w-5 text-sm flex justify-center",
+                    "hover:text-secondary transition-colors cursor-pointer"
+                )}
+            >
+                {children}
+            </Link>
+        );
+    }
+    
     return (
-        <Component 
-            href={href}
-            className={cn(
-                "min-w-5 text-sm flex justify-center",
-                href && !current && "hover:text-secondary transition-colors cursor-pointer"
-            )}
-        >
+        <div className="min-w-5 text-sm flex justify-center">
             {children}
-        </Component>
+        </div>
     );
 }
 
