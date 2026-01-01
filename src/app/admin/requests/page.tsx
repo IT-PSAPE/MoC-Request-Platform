@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Text } from "@/components/ui/common/text";
 import { Header } from "@/components/ui/layout/header";
-import { useAdminContext } from "@/components/contexts/admin-context";
 import RequestDetailsSheet from "@/feature/requests/components/details-sheet/request-details-sheet";
 import { RequestList } from "@/components/ui/block/request-list";
+import { useRequestContext } from "@/feature/requests/components/request-context";
 
 export default function RequestsContent() {
-    const { requests } = useAdminContext();
+    const { requests } = useRequestContext();
 
     const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);

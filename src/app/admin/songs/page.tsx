@@ -5,13 +5,13 @@ import { useEffect, useMemo, useState } from "react";
 import { EmptyState, Text } from "@/components/ui";
 import { Header } from "@/components/ui/layout/header";
 
-import { useAdminContext } from "@/components/contexts/admin-context";
-import { SongCard } from "@/components/ui/common/song-card";
+import { SongCard } from "@/feature/songs/components/song-card";
 import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminSongDetailsSheet from "@/feature/songs/components/admin-songs-details-sheet";
+import { useSongsContext } from "@/feature/songs/components/songs-context";
 
 export default function SongContent() {
-    const { songs } = useAdminContext();
+    const { songs } = useSongsContext();
     const [selectedSongId, setSelectedSongId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 

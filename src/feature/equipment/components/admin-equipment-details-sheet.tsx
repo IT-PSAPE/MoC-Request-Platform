@@ -1,7 +1,7 @@
-import { useAdminContext } from "@/components/contexts/admin-context";
 import { Sheet } from "@/components/ui/base/sheet";
 import { Divider, Text } from "@/components/ui/common";
 import { Button, NumberInput } from "@/components/ui";
+import { useEquipmentContext } from "./equipment-context";
 
 interface AdminEquipmentDetailsSheetProps {
   equipment: Equipment | null;
@@ -10,7 +10,7 @@ interface AdminEquipmentDetailsSheetProps {
 }
 
 export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose }: AdminEquipmentDetailsSheetProps) {
-  const { updateEquipment } = useAdminContext();
+  const { updateEquipment } = useEquipmentContext();
 
   if (!equipment) return null;
 

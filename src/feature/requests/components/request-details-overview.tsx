@@ -1,6 +1,6 @@
 'use client';
 
-import { Text } from "@/components/ui/common";
+import { Icon, Text } from "@/components/ui/common";
 import InlineEditor from "@/components/ui/block/inline-editor/inline-editor";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 import {
@@ -48,7 +48,7 @@ export default function RequestDetailsOverview({
     <section className="space-y-5">
       <Text style="title-h6">{request.what || "Untitled Request"}</Text>
       <div className="space-y-1">
-        <PropertyItem icon="status" label="Status">
+        <PropertyItem icon={<Icon.status size={16} />} label="Status">
           <InlineEditor
             value={request.status.id}
             displayValue={request.status.name}
@@ -62,7 +62,7 @@ export default function RequestDetailsOverview({
             position="bottom-right"
           />
         </PropertyItem>
-        <PropertyItem icon="dropdown" label="Priority">
+        <PropertyItem icon={<Icon.dropdown size={16} />} label="Priority">
           <InlineEditor
             value={request.priority.id}
             displayValue={formatPriority(request.priority)}
@@ -77,7 +77,7 @@ export default function RequestDetailsOverview({
           />
 
         </PropertyItem>
-        <PropertyItem icon="tag" label="Type">
+        <PropertyItem icon={<Icon.tag size={16} />} label="Type">
           <InlineEditor
             value={request.type.id}
             displayValue={formatRequestType(request.type)}
@@ -91,7 +91,7 @@ export default function RequestDetailsOverview({
             position="bottom-right"
           />
         </PropertyItem>
-        <PropertyItem icon="calendar" label="Due Date">
+        <PropertyItem icon={<Icon.calendar size={16} />} label="Due Date">
           <InlineEditor
             value={request.due || ''}
             displayValue={formatDate(request.due)}
@@ -102,12 +102,12 @@ export default function RequestDetailsOverview({
             position="bottom-right"
           />
         </PropertyItem>
-        <PropertyItem icon="clock_rewind" label="Created time">
+        <PropertyItem icon={<Icon.clock_rewind size={16} />} label="Created time">
           <Text style="paragraph-sm" className="text-tertiary">
             {formatDate(request.created_at)}
           </Text>
         </PropertyItem>
-        <PropertyItem icon="user" label="Assigned Members">
+        <PropertyItem icon={<Icon.user size={16} />} label="Assigned Members">
           <RequestAssignees
             request={request}
             onAssignMember={onAssignMember}

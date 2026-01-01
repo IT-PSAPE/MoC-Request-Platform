@@ -5,13 +5,13 @@ import { Text } from "@/components/ui/common/text";
 import { EmptyState } from "@/components/ui/common/empty-state";
 import { Header } from "@/components/ui/layout/header";
 
-import { useAdminContext } from "@/components/contexts/admin-context";
-import { EquipmentCard } from "@/components/ui/block/equipment-card";
+import { EquipmentCard } from "@/feature/equipment/components/equipment-card";
 import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminEquipmentDetailsSheet from "@/feature/equipment/components/admin-equipment-details-sheet";
+import { useEquipmentContext } from "@/feature/equipment/components/equipment-context";
 
 export default function EquipmentContent() {
-    const { equipment } = useAdminContext();
+    const { equipment } = useEquipmentContext();
     const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 

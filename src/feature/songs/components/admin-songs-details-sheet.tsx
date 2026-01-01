@@ -1,6 +1,6 @@
-import { useAdminContext } from "@/components/contexts/admin-context";
 import { Sheet } from "@/components/ui/base/sheet";
 import { Badge, Button, Switch, Divider, Text } from "@/components/ui/common";
+import { useSongsContext } from "./songs-context";
 
 interface AdminSongDetailsSheetProps {
   song: Song | null;
@@ -9,7 +9,7 @@ interface AdminSongDetailsSheetProps {
 }
 
 export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSongDetailsSheetProps) {
-  const { updateSong } = useAdminContext();
+  const { updateSong } = useSongsContext();
 
   if (!song) return null;
 

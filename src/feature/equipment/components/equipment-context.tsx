@@ -11,15 +11,15 @@ type EquipmentContextType = {
 
 const EquipmentContext = createContext<EquipmentContextType | null>(null);
 
-export function useAdminContext() {
+export function useEquipmentContext() {
     const context = useContext(EquipmentContext);
 
-    if (!context) throw new Error("useAdminContext must be used within a AdminContextProvider");
+    if (!context) throw new Error("useEquipmentContext must be used within a EquipmentContextProvider");
 
     return context;
 }
 
-export function AdminContextProvider({ children }: { children: React.ReactNode}) {
+export function EquipmentContextProvider({ children }: { children: React.ReactNode}) {
     const { supabase } = useDefaultContext();
 
     const [equipment, setEquipment] = useState<Equipment[]>([]);

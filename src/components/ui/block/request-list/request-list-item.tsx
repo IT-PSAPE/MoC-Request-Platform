@@ -38,7 +38,7 @@ export function RequestListItem({ request, onRequestClick, className, isPublicVi
   return (
     <div
       className={cn(
-        "group flex items-center justify-between p-3 rounded-md flex-wrap gap-2 bg-primary hover:shadow-sm transition-shadow cursor-pointer",
+        "group flex items-center justify-between p-3 rounded-md flex-wrap gap-2 bg-primary cursor-pointer",
         className,
         isPublicView
           ? ""

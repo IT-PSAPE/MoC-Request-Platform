@@ -7,3 +7,5 @@
   --spacing-container: 80rem;
   --spacing-container-sm: 45rem;
 }
+
+@custom-variant mobile (@media (max-width: 480px));

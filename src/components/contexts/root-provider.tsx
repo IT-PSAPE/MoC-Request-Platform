@@ -3,12 +3,14 @@
 import { AuthContextProvider } from "@/feature/auth/components/auth-context";
 import { DefaultContextProvider } from "@/components/contexts/defaults-context";
 import { QueryProvider } from "@/components/contexts/query-provider";
-import { CacheSyncProvider } from "@/components/contexts/cache-sync-provider";
+// Cache sync provider removed — cached settings deprecated
 import { Loader } from "@/components/ui/common/loader";
 import { useSupabaseClient } from "@/logic/hooks/use-supabase-client";
 
 function RootProvider({ children }: { children: React.ReactNode }) {
     const supabase = useSupabaseClient();
+
+    console.log("RootProvider Supabase Client:", supabase ? true : false);
 
     if (!supabase) {
         return <Loader label="Initializing" className="flex-1" />;
@@ -17,11 +19,9 @@ function RootProvider({ children }: { children: React.ReactNode }) {
     return (
         <QueryProvider>
             <AuthContextProvider supabase={supabase}>
-                <CacheSyncProvider>
-                    <DefaultContextProvider supabase={supabase}>
-                        {children}
-                    </DefaultContextProvider>
-                </CacheSyncProvider>
+                <DefaultContextProvider supabase={supabase}>
+                    {children}
+                </DefaultContextProvider>
             </AuthContextProvider>
         </QueryProvider>
     );

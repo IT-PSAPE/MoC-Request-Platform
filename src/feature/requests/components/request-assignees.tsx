@@ -1,15 +1,15 @@
 'use client';
 
 import AssigneeInlineEditor from "@/components/ui/block/inline-editor/assignee-inline-editor";
-import { useAdminContext } from "@/components/contexts/admin-context";
 import { type RequestDetailsEditableProps } from "../request.utils";
+import { useRequestContext } from "./request-context";
 
 export default function RequestAssignees({
   request,
   onAssignMember,
   onUnassignMember,
 }: RequestDetailsEditableProps) {
-  const { members } = useAdminContext();
+  const { members } = useRequestContext();
 
   // Convert assignees to the format expected by the inline editor
   const assignees = request.assignee.map(a => ({

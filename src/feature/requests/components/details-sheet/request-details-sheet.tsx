@@ -15,8 +15,8 @@ import RequestDetailsFlow from "../request-details-flow";
 import RequestDetailsComments from "../request-details-comments";
 import RequestDeleteConfirmation from "../request-delete-confirmation";
 import RequestCommentModal from "../request-comment-modal";
-import { useAdminContext } from "@/components/contexts/admin-context";
 import { ScrollContainer } from "@/components/ui/layout/scroll-container";
+import { useRequestContext } from "../request-context";
 
 interface RequestDetailsSheetProps {
   request: FetchRequest | null;
@@ -29,7 +29,7 @@ export default function RequestDetailsSheet({
   isOpen,
   onClose,
 }: RequestDetailsSheetProps) {
-  const { addCommentToRequest, deleteRequestById, updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic, assignMemberToRequest, unassignMemberFromRequest } = useAdminContext();
+  const { addCommentToRequest, deleteRequestById, updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic, assignMemberToRequest, unassignMemberFromRequest } = useRequestContext();
   
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
@@ -75,14 +75,14 @@ export default function RequestDetailsSheet({
                   onClick={handleExpandDetails} 
                   variant="ghost"
                 >
-                  <Icon.expand />
+                  <Icon.expand size={20} />
                 </IconButton>
                 <IconButton 
                   onClick={handleOpenCommentModal} 
                   disabled={!addCommentToRequest} 
                   variant="ghost"
                 >
-                  <Icon.pen_line />
+                  <Icon.pen_line size={20} />
                 </IconButton>
                 <IconButton 
                   onClick={handleOpenConfirm} 

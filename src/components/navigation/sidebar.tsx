@@ -47,11 +47,11 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     }
 
     const links: { href: string; label: string; icon: React.ReactNode }[] = [
-        { href: "/admin/", label: "Dashboard", icon: <Icon.home_line /> },
-        { href: "/admin/items/", label: "Request Items", icon: <Icon.dotpoints /> },
-        { href: "/admin/equipment/", label: "Equipment", icon: <Icon.tool /> },
-        { href: "/admin/songs/", label: "Songs", icon: <Icon.music_note /> },
-        { href: "/admin/venues/", label: "Venues", icon: <Icon.building /> },
+        { href: "/admin/", label: "Dashboard", icon: <Icon.home_line size={24} /> },
+        { href: "/admin/items/", label: "Request Items", icon: <Icon.dotpoints size={24} /> },
+        { href: "/admin/equipment/", label: "Equipment", icon: <Icon.tool size={24} /> },
+        { href: "/admin/songs/", label: "Songs", icon: <Icon.music_note size={24} /> },
+        { href: "/admin/venues/", label: "Venues", icon: <Icon.building size={24} /> },
     ];
 
     return (
@@ -72,7 +72,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 </div>
                 <div className="p-2 pt-0 flex-none" >
                     <Link href="/" >
-                        <MenuItem current ><Icon.home_line /> Home Page</MenuItem>
+                        <MenuItem current ><Icon.home_line size={24} /> Home Page</MenuItem>
                     </Link>
                 </div>
             </div>
@@ -109,7 +109,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                     </div>
                     <div className="p-4 pt-0 flex-none">
                         <Link href="/" onClick={onClose}>
-                            <MenuItem current ><Icon.home_line /> Home Page</MenuItem>
+                            <MenuItem current ><Icon.home_line size={24} /> Home Page</MenuItem>
                         </Link>
                     </div>
                 </div>

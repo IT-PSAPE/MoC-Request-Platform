@@ -1,7 +1,7 @@
 import { cn } from "@/shared/cn";
-import { Switch } from "./switch";
-import { Button } from "./button";
-import { useAdminContext } from "@/components/contexts/admin-context";
+import { Switch } from "../../../components/ui/common/switch";
+import { Button } from "../../../components/ui/common/button";
+import { useSongsContext } from "@/feature/songs/components/songs-context";
 
 interface SongCardProps {
     song: Song;
@@ -9,7 +9,7 @@ interface SongCardProps {
 }
 
 export function SongCard({ song, onClick }: SongCardProps) {
-    const { updateSong } = useAdminContext();
+    const { updateSong } = useSongsContext();
 
     const onToggleLyrics = (isActive: boolean) => {
         updateSong(song.id, 'lyrics', isActive);

@@ -1,104 +1,99 @@
-/* Focus */
-*:focus-visible {
-    @apply outline-offset-2 outline-pink-400 outline-solid outline-2
-}
-
 /* ──────────────────────────────────────────────────────────── */
 /* TYPOGRAPHY  */
 /* ──────────────────────────────────────────────────────────── */
 /* ─── Titles ────────────────────────────────────────────────── */
 .title-h1 {
-    @apply text-6xl font-semibold
+	@apply text-6xl font-semibold
 }
 
 .title-h2 {
-    @apply text-5xl font-semibold
+	@apply text-5xl font-semibold
 }
 
 .title-h3 {
-    @apply text-4xl font-semibold
+	@apply text-4xl font-semibold
 }
 
 .title-h4 {
-    @apply text-3xl font-semibold
+	@apply text-3xl font-semibold
 }
 
 .title-h5 {
-    @apply text-2xl font-semibold
+	@apply text-2xl font-semibold
 }
 
 .title-h6 {
-    @apply text-xl font-semibold
+	@apply text-xl font-semibold
 }
 
 /* Labels */
 .label-lg {
-    @apply text-2xl font-semibold
+	@apply text-2xl font-semibold
 }
 
 .label-bg {
-    @apply text-lg font-semibold
+	@apply text-lg font-semibold
 }
 
 .label-md {
-    @apply text-base font-semibold
+	@apply text-base font-semibold
 }
 
 .label-sm {
-    @apply text-sm font-semibold
+	@apply text-sm font-semibold
 }
 
 .label-xs {
-    @apply text-xs font-semibold
+	@apply text-xs font-semibold
 }
 
 /* ─── Paragraph ──────────────────────────────────────────────── */
 .paragraph-lg {
-    @apply text-2xl font-normal
+	@apply text-2xl font-normal
 }
 
 .paragraph-bg {
-    @apply text-lg font-normal
+	@apply text-lg font-normal
 }
 
 .paragraph-md {
-    @apply text-base font-normal
+	@apply text-base font-normal
 }
 
 .paragraph-sm {
-    @apply text-sm font-normal
+	@apply text-sm font-normal
 }
 
 .paragraph-xs {
-    @apply text-xs font-normal
+	@apply text-xs font-normal
 }
 
 /* ─── Subheading ──────────────────────────────────────────────── */
 .subheading-bg {
-    @apply text-base font-medium
+	@apply text-base font-medium
 }
 
 .subheading-md {
-    @apply text-sm font-medium
+	@apply text-sm font-medium
 }
 
 .subheading-sm {
-    @apply text-xs font-medium
+	@apply text-xs font-medium
 }
 
 .subheading-xs {
-    @apply text-xs font-medium
+	@apply text-xs font-medium
 }
 
 /* ============================================================= */
 /* ANIMATIONS
 /* ============================================================= */
-
 @keyframes animate-in {
 	from {
 		opacity: 0;
 		transform: scale(0.95);
 	}
+
 	to {
 		opacity: 1;
 		transform: scale(1);
@@ -109,6 +104,7 @@
 	from {
 		opacity: 0;
 	}
+
 	to {
 		opacity: 1;
 	}
@@ -118,6 +114,7 @@
 	from {
 		transform: scale(0.95);
 	}
+
 	to {
 		transform: scale(1);
 	}
@@ -137,16 +134,28 @@
 
 /* Scrollbar hide utility */
 .scrollbar-hide {
-	-ms-overflow-style: none;  /* IE and Edge */
-	scrollbar-width: none;  /* Firefox */
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-	display: none;  /* Chrome, Safari and Opera */
+	display: none;
+	/* Chrome, Safari and Opera */
 }
 
 @custom-variant standalone {
 	@media (display-mode: standalone) {
 		@slot;
 	}
+}
+
+/* Focus */
+input:focus-visible, textarea:focus-visible {
+	@apply outline-foreground-brand-secondary outline-solid outline-1
+}
+
+input:focus, textarea:focus {
+	@apply focus:ring-3 focus:ring-foreground-brand-secondary/15 focus:border-foreground-brand-secondary
 }

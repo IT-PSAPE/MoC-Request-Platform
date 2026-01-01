@@ -5,6 +5,6 @@ type Props = InputHTMLAttributes<HTMLInputElement>;
 
 export function TextInput({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
     return (
-        <input className={cn("w-full p-2.5 bg-primary border border-primary rounded-lg shadow-sm paragraph-sm", className)}  {...props} />
+        <input className={cn("w-full p-2.5 bg-primary border border-primary rounded-lg shadow-sm paragraph-sm focus:ring-3 focus:ring-foreground-brand-primary/15 focus:border-foreground-brand-primary", className)}  {...props} />
     )
 }

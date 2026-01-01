@@ -2,13 +2,11 @@
 
 import { useState } from 'react';
 import { AdminContextProvider } from '@/components/contexts/admin-context';
-import { useDefaultContext } from '@/components/contexts/defaults-context';
 import Sidebar from '@/components/navigation/sidebar';
 import MainContent from '@/components/ui/layout/main-content';
 import { Breadcrumbs } from '@/components/ui/common/breadcrumbs';
 
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
-  const { supabase } = useDefaultContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   function MenuBar() {
@@ -38,7 +36,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   }
 
   return (
-    <AdminContextProvider supabase={supabase}>
+    <AdminContextProvider>
       {/* Mobile menu button */}
       <div className="hidden max-md:flex max-md:sticky max-md:top-0 max-md:z-10 max-md:bg-primary max-md:border-b max-md:border-secondary max-md:px-4 max-md:py-3">
         <MenuBar />

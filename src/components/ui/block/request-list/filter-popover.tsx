@@ -1,6 +1,6 @@
 import { useFilterContext } from "./filter-provider";
 import { useDefaultContext } from "@/components/contexts/defaults-context";
-import { Button, Checkbox, Input, Text } from "@/components/ui";
+import { Button, Checkbox, TextInput, Text } from "@/components/ui";
 import { Popover } from "@/components/ui/base/popover";
 
 export function FilterPopover() {
@@ -55,7 +55,7 @@ export function FilterPopover() {
         <Popover.Group fieldName="Due date range">
           <div>
             <Text style="paragraph-xs" className="text-primary/50 mb-1">From:</Text>
-            <Input
+            <TextInput
               type="date"
               value={pendingFilters.dateRange.from}
               onChange={(e) => handleDateChange("from", e.target.value)}
@@ -64,7 +64,7 @@ export function FilterPopover() {
           </div>
           <div>
             <Text style="paragraph-xs" className="text-primary/50 mb-1">To:</Text>
-            <Input
+            <TextInput
               type="date"
               value={pendingFilters.dateRange.to}
               onChange={(e) => handleDateChange("to", e.target.value)}

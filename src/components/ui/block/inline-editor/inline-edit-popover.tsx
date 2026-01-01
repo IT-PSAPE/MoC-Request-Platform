@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/shared/cn";
-import { Input } from "@/components/ui";
+import { TextInput } from "@/components/ui";
 import { SelectOptionContainer, SelectOptionItem } from "@/components/ui/common/select-option";
 import { Popover } from "@/components/ui/base/popover";
 
@@ -98,7 +98,7 @@ function InlineEditPopoverContent({
     if (type === 'text') {
       return (
         <div className="p-3">
-          <Input
+          <TextInput
             type="text"
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}

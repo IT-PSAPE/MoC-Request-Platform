@@ -5,12 +5,12 @@ import { useEffect, useMemo, useState } from "react";
 import { EmptyState, Text, VenueCard } from "@/components/ui";
 import { Header } from "@/components/ui/layout/header";
 
-import { useAdminContext } from "@/components/contexts/admin-context";
 import { GridContainer } from "@/components/ui/layout/grid-container";
 import AdminVenueDetailsSheet from "@/feature/venues/components/admin-venue-details-sheet";
+import { useVenuesContext } from "@/feature/venues/components/venue-context";
 
 export default function VenueContent() {
-    const { venues } = useAdminContext();
+    const { venues } = useVenuesContext();
     const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 

@@ -1,6 +1,6 @@
 import { cn } from "@/shared/cn";
 import { Button, NumberInput } from "@/components/ui";
-import { useAdminContext } from "@/components/contexts/admin-context";
+import { useEquipmentContext } from "@/feature/equipment/components/equipment-context";
 
 interface EquipmentCardProps {
     className?: string;
@@ -9,7 +9,7 @@ interface EquipmentCardProps {
 }
 
 export function EquipmentCard({ equipment, className, onClick }: EquipmentCardProps) {
-    const { updateEquipment } = useAdminContext();
+    const { updateEquipment } = useEquipmentContext();
 
     function updateQuantity(quantity: number) {
         const clamped = Math.max(0, Math.min(isFinite(equipment.quantity) ? equipment.quantity : 9999, quantity));

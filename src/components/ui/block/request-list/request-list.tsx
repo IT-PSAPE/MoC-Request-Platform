@@ -10,7 +10,7 @@ import { cn } from "@/shared/cn";
 import { Icon, Text } from "@/components/ui/common";
 import { TabContextProvider, TabItem, TabList } from "@/components/ui/common/tabs";
 import { FilterProvider, useFilterContext } from "./filter-provider";
-import { useAdminContext } from "@/components/contexts/admin-context";
+import { useRequestContext } from "@/feature/requests/components/request-context";
 
 type SortField = "title" | "type" | "status" | "dueDate" | "createdAt" | "items";
 type SortDirection = "asc" | "desc";
@@ -74,13 +74,17 @@ function RequestListLayout() {
   );
 }
 
-function RequestListProvider({
-  children,
-  requests,
-  onRequestClick,
-  isPublic = true,
-}: RequestListProviderProps) {
-  const { updateRequestStatusOptimistic } = useAdminContext();
+function RequestListProvider({ children, requests, onRequestClick, isPublic = true }: RequestListProviderProps) {
+  // Safely get admin context - it may not be available in public context
+  let requestContext = null;
+
+  try {
+    requestContext = useRequestContext();
+  } catch (error) {
+    // AdminContext not available, which is fine for public usage
+  }
+
+  const { updateRequestStatusOptimistic } = requestContext || {};
 
   const { types, statuses } = useDefaultContext();
   const { filters, sort } = useFilterContext();
@@ -255,7 +259,11 @@ function RequestListProvider({
     event.preventDefault();
 
     if (draggedRequestId) {
-      await updateRequestStatusOptimistic(draggedRequestId, statusId);
+      try {
+        await updateRequestStatusOptimistic(draggedRequestId, statusId);
+      } catch (error) {
+        console.error("Failed to update request status:", error);
+      }
     }
 
     handleDragEnd();
@@ -509,9 +517,10 @@ function RequestListGroupBody({ group }: { group: RequestGroup }) {
         ))
       ) : (
         <EmptyState
+          icon={<Icon.trash size={24} className="text-quaternary mx-auto" />}
           title="No requests"
           message={`No requests in ${group.status.name.replace(/_/g, " ").toLowerCase()} status`}
-          className="my-2"
+          className="my-2 text-center"
         />
       )}
       {isDragging && dragOverStatusId === group.status.id && (

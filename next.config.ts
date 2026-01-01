@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* Next.js 16 configuration */
   
   // Enable Next.js 16 Cache Components for better performance
-  cacheComponents: true,
+  // cacheComponents: true,
   
   // Enable React Compiler for automatic optimizations (moved from experimental in Next.js 16)
   reactCompiler: true,

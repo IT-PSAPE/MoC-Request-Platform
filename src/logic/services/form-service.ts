@@ -15,6 +15,7 @@ const FormService = {
             status: statuses.find(s => s.value === 0)?.id || '',
             type: request.type,
             flow: request.flow,
+            archived: false,
         };
 
         const { data, error } = await supabase.from('request').insert(requestData).select('id');

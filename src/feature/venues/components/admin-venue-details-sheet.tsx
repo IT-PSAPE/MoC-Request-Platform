@@ -1,6 +1,6 @@
-import { useAdminContext } from "@/components/contexts/admin-context";
 import { Sheet } from "@/components/ui/base/sheet/sheet";
 import { Button, Divider, Text, Switch } from "@/components/ui/common";
+import { useVenuesContext } from "./venue-context";
 
 interface AdminVenueDetailsSheetProps {
   venue: Venue | null;
@@ -9,7 +9,7 @@ interface AdminVenueDetailsSheetProps {
 }
 
 export default function AdminVenueDetailsSheet({ venue, isOpen, onClose }: AdminVenueDetailsSheetProps) {
-  const { updateVenue } = useAdminContext();
+  const { updateVenue } = useVenuesContext();
 
   if (!venue) return null;
 

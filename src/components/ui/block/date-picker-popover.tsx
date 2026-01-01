@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/shared/cn";
-import {Button,  Input, Text } from "@/components/ui";
+import { Button, TextInput, Text } from "@/components/ui";
 import { Popover } from "@/components/ui/base/popover";
 
 type DatePickerPopoverProps = {
@@ -107,7 +107,7 @@ function DatePickerPopoverContent({
     <div className="p-3 space-y-3">
       <div>
         <Text style="label-sm" className="text-secondary mb-2">Select Date & Time</Text>
-        <Input
+        <TextInput
           type="datetime-local"
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
