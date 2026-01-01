@@ -134,8 +134,8 @@ export function SortPopover() {
   return (
     <Popover.Provider>
       <Popover.Root>
-        <Popover.Trigger>
-          <Button variant="secondary" className="space-x-1">
+        <Popover.Trigger className="mobile:w-full">
+          <Button variant="secondary" className="space-x-1 mobile:w-full">
             <Icon.filter size={16} />
             <span>Sort</span>
           </Button>
