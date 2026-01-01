@@ -19,12 +19,14 @@ export default function LoginPage() {
           </Suspense>
         </div>
       </div>
-      
+
       {/* Right side - Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative z-10 flex items-center justify-center h-full">
-          <div className="text-center text-white p-8">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden isolate">
+        <div className="absolute inset-1 -z-10 rounded-lg overflow-hidden">
+          <img src="/images/sky.avif" alt="Background image" />
+        </div>
+        <div className="relative z-10 flex items-center justify-center h-full w-full">
+          <div className="text-center text-white p-8 mx-auto">
             <h2 className="text-4xl font-bold mb-4">Welcome to MOC</h2>
             <p className="text-lg opacity-90">Ministry of Culture Request Platform</p>
           </div>

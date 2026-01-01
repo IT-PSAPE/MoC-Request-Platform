@@ -10,19 +10,17 @@ import { useAuthContext } from './auth-context';
 interface AuthGuardProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
+  redirect?: string;
 }
 
-export function AuthGuard({
-  children,
-  fallback
-}: AuthGuardProps) {
+export function AuthGuard({ children, fallback, redirect }: AuthGuardProps) {
   const { authed, initialized } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
     if (initialized && !authed) {
       // Redirect unauthenticated users to home page
-      router.push('/');
+      router.push(redirect ?? '/');
     }
   }, [initialized, authed, router]);
 

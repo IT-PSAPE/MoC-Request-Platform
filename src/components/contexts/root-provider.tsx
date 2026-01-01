@@ -3,7 +3,6 @@
 import { AuthContextProvider } from "@/feature/auth/components/auth-context";
 import { DefaultContextProvider } from "@/components/contexts/defaults-context";
 import { QueryProvider } from "@/components/contexts/query-provider";
-// Cache sync provider removed — cached settings deprecated
 import { Loader } from "@/components/ui/common/loader";
 import { useSupabaseClient } from "@/logic/hooks/use-supabase-client";
 

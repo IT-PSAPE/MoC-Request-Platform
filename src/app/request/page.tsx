@@ -7,6 +7,14 @@ import { Button, EmptyState, Text, Badge, Loader, InlineAlert, Divider, Icon } f
 import { RequestTable } from '@/shared/database';
 import { useSupabaseClient } from '@/logic/hooks/use-supabase-client';
 import { AuthGuard } from '@/feature/auth';
+import RequestDetails5WH from '@/feature/requests/components/request-details-5wh';
+import RequestDetailsVenues from '@/feature/requests/components/request-details-venues';
+import RequestDetailsEquipment from '@/feature/requests/components/request-details-equipment';
+import RequestDetailsSongs from '@/feature/requests/components/request-details-songs';
+import RequestDetailsFlow from '@/feature/requests/components/request-details-flow';
+import RequestDetailsComments from '@/feature/requests/components/request-details-comments';
+import RequestDetailsOverview from '@/feature/requests/components/request-details-overview';
+import { useRequestContext } from '@/feature/requests/components/request-context';
 
 // Color maps from request details sheet
 const requestColorMap: Record<string, BadgeColor> = {
@@ -33,6 +41,8 @@ const statusColorMap: Record<string, BadgeColor> = {
 };
 
 function RequestDetailsContent() {
+  const { updateRequestStatusOptimistic, updateRequestPriorityOptimistic, updateRequestTypeOptimistic, updateRequestDueDateOptimistic, assignMemberToRequest, unassignMemberFromRequest } = useRequestContext();
+
   const searchParams = useSearchParams();
   const requestId = searchParams.get('id')?.replace('/', '');
   const supabase = useSupabaseClient();
@@ -130,198 +140,46 @@ function RequestDetailsContent() {
 
   return (
     <div className="w-full max-w-container-sm mx-auto p-6 px-margin py-8">
-      {/* Header */}
-      <div className="mb-6">
-        <Link href="/board">
-          <Button>
-            <Icon.arrow_left /> Back
-          </Button>
-        </Link>
-      </div>
 
       {/* Content with same structure as request details sheet */}
       <div className="space-y-6">
         {/* Overview Section - matches RequestDetailsOverview */}
-        <section className="space-y-5">
-          <Text style="title-h6">{request.what || "Untitled Request"}</Text>
-          <div className="space-y-4 *:w-full *:gap-sm *:grid *:grid-cols-2 *:items-center">
-            <div>
-              <span className="flex items-center gap-1.5">
-                <Text style="label-sm" className="text-secondary">Status</Text>
-              </span>
-              <span>
-
-                <Badge color={statusColorMap[request.status.name] || "gray"}>
-                  {request.status.name}
-                </Badge>
-              </span>
-            </div>
-            <div>
-              <span className="flex items-center gap-1.5">
-                <Text style="label-sm" className="text-secondary">Priority</Text>
-              </span>
-              <span>
-                <Badge color={priorityColorMap[request.priority.name] || "gray"}>
-                  {request.priority.name}
-                </Badge>
-              </span>
-            </div>
-            <div>
-              <span className="flex items-center gap-1.5">
-                <Text style="label-sm" className="text-secondary">Type</Text>
-              </span>
-              <span>
-                <Badge color={requestColorMap[request.type.name] || "gray"}>
-                  {request.type.name}
-                </Badge>
-              </span>
-            </div>
-            <div>
-              <span className="flex items-center gap-1.5">
-                <Text style="label-sm" className="text-secondary">Due Date</Text>
-              </span>
-              <Text style="paragraph-sm">{formatDate(request.due)}</Text>
-            </div>
-            {request.assignee && request.assignee.length > 0 && (
-              <div className="col-span-2">
-                <span className="flex items-center gap-1.5">
-                  <Text style="label-sm" className="text-secondary">Assigned Team Members</Text>
-                </span>
-                <div className="flex flex-wrap gap-1">
-                  {request.assignee.map((assigneeItem) => (
-                    <Badge key={assigneeItem.member_id} color="blue">
-                      {assigneeItem.member.name}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
+        <RequestDetailsOverview
+          request={request}
+          onUpdateStatus={updateRequestStatusOptimistic}
+          onUpdatePriority={updateRequestPriorityOptimistic}
+          onUpdateType={updateRequestTypeOptimistic}
+          onUpdateDueDate={updateRequestDueDateOptimistic}
+          onAssignMember={assignMemberToRequest}
+          onUnassignMember={unassignMemberFromRequest}
+        />
 
         <Divider />
 
-        {/* 5Ws and 1H Section - matches RequestDetails5WH */}
-        <section>
-          <Text style="label-md" className="mb-3">5Ws and 1H</Text>
-          <div className="space-y-3">
-            <div>
-              <Text as="span" style="label-sm">Who: </Text>
-              <Text as="span" style="paragraph-sm" className="text-tertiary">{request.who || "Not specified"}</Text>
-            </div>
-            <div>
-              <Text as="span" style="label-sm">What: </Text>
-              <Text as="span" style="paragraph-sm" className="text-tertiary">{request.what || "Not specified"}</Text>
-            </div>
-            <div>
-              <Text as="span" style="label-sm">When: </Text>
-              <Text as="span" style="paragraph-sm" className="text-tertiary">{request.when || "Not specified"}</Text>
-            </div>
-            <div>
-              <Text as="span" style="label-sm">Where: </Text>
-              <Text as="span" style="paragraph-sm" className="text-tertiary">{request.where || "Not specified"}</Text>
-            </div>
-            <div>
-              <Text as="span" style="label-sm">Why: </Text>
-              <Text as="span" style="paragraph-sm" className="text-tertiary">{request.why || "Not specified"}</Text>
-            </div>
-            <div>
-              <Text as="span" style="label-sm">How: </Text>
-              <Text as="span" style="paragraph-sm" className="text-tertiary">{request.how || "Not specified"}</Text>
-            </div>
-            {request.info && (
-              <div>
-                <Text as="span" style="label-sm">Additional Information: </Text>
-                <Text as="span" style="paragraph-sm" className="text-tertiary">{request.info}</Text>
-              </div>
-            )}
-          </div>
-        </section>
+        <RequestDetails5WH request={request} />
 
         <Divider />
 
-        {/* Venues Section - matches RequestDetailsVenues */}
-        <section>
-          <Text style="label-md" className="mb-3">Available Venues</Text>
-          {request.venue && request.venue.length > 0 ? (
-            <div className="space-y-1">
-              {request.venue.map((venue: RequestedVenue, index) => (
-                <div key={venue.venue?.id || index} className="p-2 bg-secondary rounded-md">
-                  <Text style="paragraph-sm">{venue.venue?.name || `Venue ${index + 1}`}</Text>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              title="No venues available"
-              message="No venues have been selected for this request."
-            />
-          )}
-        </section>
+        <RequestDetailsVenues request={request} />
 
         <Divider />
 
-        {/* Equipment Section - matches RequestDetailsEquipment */}
-        <section>
-          <Text style="label-md" className="mb-3">Selected Equipment</Text>
-          {request.item && request.item.length > 0 ? (
-            <div className="space-y-1">
-              {request.item.map((equipment: RequestedItem, index) => (
-                <div key={equipment.item?.id || index} className="p-2 bg-secondary rounded-md">
-                  <Text style="paragraph-sm">{equipment.item?.name || `Item ${index + 1}`}</Text>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              title="No equipment selected"
-              message="No equipment has been selected for this request."
-            />
-          )}
-        </section>
+        <RequestDetailsEquipment request={request} />
 
         <Divider />
 
-        {/* Songs Section - matches RequestDetailsSongs */}
-        <section>
-          <Text style="label-md" className="mb-3">Selected Songs</Text>
-          {request.song && request.song.length > 0 ? (
-            <div className="space-y-1">
-              {request.song.map((song: RequestedSong, index) => (
-                <div key={song.song?.id || index} className="p-2 bg-secondary rounded-md">
-                  <Text style="paragraph-sm">{song.song?.name || `Song ${index + 1}`}</Text>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              title="No songs selected"
-              message="No songs have been selected for this request."
-            />
-          )}
-        </section>
+        <RequestDetailsSongs request={request} />
 
         <Divider />
 
-        {/* Comments Section - matches RequestDetailsComments */}
-        <section>
-          <Text style="label-md" className="mb-3">Comments</Text>
-          {request.note && request.note.length > 0 ? (
-            <div className="space-y-1 mb-4">
-              {request.note.map((note, index) => (
-                <div key={note.id || index} className="p-2 bg-secondary rounded-md">
-                  <Text style="paragraph-sm">{note.note}</Text>
-                  <Text style="paragraph-xs" className="text-tertiary">{formatDate(note.created)}</Text>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              title="No comments yet"
-              message="No comments have been added to this request."
-            />
-          )}
-        </section>
+        <RequestDetailsFlow request={request} />
+
+        <Divider />
+
+        <RequestDetailsComments
+          request={request}
+        />
+
       </div>
     </div>
   );
@@ -346,7 +204,7 @@ function RequestDetailsWithAuth() {
 
 export default function RequestDetailsPage() {
   return (
-    <AuthGuard>
+    <AuthGuard redirect='/board'>
       <RequestDetailsWithAuth />
     </AuthGuard>
   );
