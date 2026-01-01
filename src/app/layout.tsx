@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
-import RootProvider from "@/providers/root-provider";
+import RootProvider from "@/components/contexts/root-provider";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -32,13 +32,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "MoC Request Platform", 
+    title: "MoC Request Platform",
     description: "Submit, track, and process requests for the Ministry of Culture",
   },
   manifest: "/manifest.json",
 };
 
-export const viewport:Viewport = {
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={manrope.className} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
-        <meta name="theme-color" content="#2563eb" />
+        <meta name="theme-color" content="#ffffff" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -59,8 +59,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
-        <link rel="mask-icon" href="/icons/icon-32x32.png" color="#2563eb" />
-        
+        <link rel="mask-icon" href="/icons/icon-32x32.png" color="#ffffff" />
+
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-FNM0ZVKPTE" />
         <script
@@ -73,7 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             `,
           }}
         />
-        
+
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -95,7 +95,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         <meta name="apple-mobile-web-app-title" content="MoC Requests" />
       </head>
-      <body suppressHydrationWarning className="antialiased flex flex-col h-screen bg-secondary overflow-hidden max-md:overflow-auto max-md:h-fit">
+      <body suppressHydrationWarning className="antialiased flex flex-col h-screen bg-secondary mobile:bg-primary overflow-hidden mobile:overflow-auto mobile:h-fit">
         <RootProvider>{children}</RootProvider>
       </body>
     </html>

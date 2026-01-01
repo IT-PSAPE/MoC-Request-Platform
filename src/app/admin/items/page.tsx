@@ -2,20 +2,20 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import Text from "@/components/common/text";
-import EmptyState from "@/components/common/empty-state";
-import Header from "@/components/common/header";
+import { Text } from "@/components/ui/common/text";
+import { EmptyState } from "@/components/ui/common/empty-state";
+import { Header } from "@/components/ui/layout/header";
 
-import { useAdminContext } from "@/contexts/admin-context";
-import { RequestItemCard } from "@/components/common/cards/request-item-card";
-import { GridContainer } from "@/components/layout/grid-container";
-import AdminRequestItemDetailsSheet from "@/features/admin/items/admin-request-item-details-sheet";
+import { RequestItemCard } from "@/components/ui/block/request-item-card";
+import { GridContainer } from "@/components/ui/layout/grid-container";
+import AdminRequestItemDetailsSheet from "@/feature/items/components/admin-request-item-details-sheet";
+import { useItemsContext } from "@/feature/items/components/items-context";
 
 export default function RequestItemContent() {
-    const { items } = useAdminContext();
+    const { items } = useItemsContext();
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-    
+
     const selectedItem = useMemo(() => {
         if (!selectedItemId) return null;
         return items.find((item) => item.id === selectedItemId) ?? null;
@@ -44,13 +44,13 @@ export default function RequestItemContent() {
                 <Text style="title-h4">Request Items</Text>
                 <Text style="paragraph-md">Curate the predefined items teams can attach to their submissions.</Text>
             </Header>
-            
+
             <GridContainer isEmpty={items.length === 0}>
                 {items.length === 0 ? (
-                    <EmptyState message="No request items available yet." />
+                    <EmptyState title="No information" message="No request items available yet." />
                 ) : items.map((item) => (
-                    <RequestItemCard 
-                        key={item.id} 
+                    <RequestItemCard
+                        key={item.id}
                         item={item}
                         onClick={handleItemClick}
                     />

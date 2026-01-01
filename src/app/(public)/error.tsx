@@ -2,9 +2,8 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/common/controls/button';
+import { Button, Icon } from '@/components/ui';
 import ErrorLayout from '@/components/navigation/error-layout';
-import Icon from '@/components/common/icon';
 
 export default function PublicError({
   error,
@@ -23,7 +22,7 @@ export default function PublicError({
     <ErrorLayout
       icon={
         <div className="mx-auto mb-4 rounded-full bg-error/10 flex items-center justify-center">
-          <Icon name="alert_triangle" size={16} />
+          <Icon.alert_triangle size={16} />
         </div>
       }
       title="Something went wrong"

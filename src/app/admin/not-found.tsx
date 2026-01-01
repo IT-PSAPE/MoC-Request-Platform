@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import Button from '@/components/common/controls/button';
-import Text from '@/components/common/text';
+import { Button, Text } from '@/components/ui';
 import ErrorLayout from '@/components/navigation/error-layout';
 
 export default function AdminNotFound() {

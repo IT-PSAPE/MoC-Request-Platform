@@ -1,10 +1,7 @@
 'use client';
 
-import Image from "next/image";
 import Link from "next/link";
-import Card from "@/components/common/cards/card";
-import Button from "@/components/common/controls/button";
-import Text from "@/components/common/text";
+import { Button, Card, Text } from "@/components/ui";
 import SmartRedirect from "@/components/navigation/smart-redirect";
 
 export default function HomePageClient() {

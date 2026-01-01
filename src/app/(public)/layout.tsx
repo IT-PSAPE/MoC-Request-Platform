@@ -1,4 +1,4 @@
-import MainContent from "@/components/layout/main-content";
+import MainContent from "@/components/ui/layout/main-content";
 import NavigationBar from "@/components/navigation/navigation-bar";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
@@ -6,7 +6,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <>
             <NavigationBar />
             {/* <main className="w-full overflow-clip h-full min-h-0"> */}
-            <main className="w-full overflow-y-auto h-full min-h-0 max-md:overflow-auto max-md:h-fit">
+            <main className="w-full overflow-y-auto h-full min-h-0 mobile:overflow-auto mobile:h-fit">
                 <MainContent>
                     {children}
                 </MainContent>

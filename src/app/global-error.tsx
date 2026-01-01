@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import Button from '@/components/common/controls/button';
+import { Button } from '@/components/ui';
 
 export default function GlobalError({
   error,
@@ -36,7 +36,7 @@ export default function GlobalError({
                   />
                 </svg>
               </div>
-              
+
               <div className="space-y-2">
                 <h1 className="text-2xl font-semibold">Critical Error</h1>
                 <p className="text-secondary">

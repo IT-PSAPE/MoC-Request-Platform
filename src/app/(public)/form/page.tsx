@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { FormContextProvider } from "@/contexts/form-context";
-import RequestForm from "@/features/request-form/form";
+import { FormContextProvider } from "@/feature/form/components/form-context";
+import RequestForm from "@/feature/form/components/form";
 
 export const metadata: Metadata = {
   title: "Submit a Request | MOC Request Platform",

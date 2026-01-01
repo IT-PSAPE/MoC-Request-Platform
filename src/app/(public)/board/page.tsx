@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import BoardPageClient from "@/features/public-board/board-page-client";
+import { Suspense } from "react";
+import { Loader } from "@/components/ui/common";
+import { BoardRequestsContent } from "./content";
+import { RequestContextProvider } from "@/feature/requests/components/request-context";
 
 export const metadata: Metadata = {
   title: "Request Board | MOC Request Platform",
@@ -7,5 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default function RequestsPage() {
-  return <BoardPageClient />;
+  return (
+    <RequestContextProvider>
+      <Suspense fallback={<Loader label="Loading requests" />}>
+        <BoardRequestsContent />
+      </Suspense>
+    </RequestContextProvider>
+  );
 }

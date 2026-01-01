@@ -2,20 +2,19 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import Text from "@/components/common/text";
-import EmptyState from "@/components/common/empty-state";
-import Header from "@/components/common/header";
+import { EmptyState, Text } from "@/components/ui";
+import { Header } from "@/components/ui/layout/header";
 
-import { useAdminContext } from "@/contexts/admin-context";
-import { SongCard } from "@/components/common/cards/song-card";
-import { GridContainer } from "@/components/layout/grid-container";
-import AdminSongDetailsSheet from "@/features/admin/songs/admin-songs-details-sheet";
+import { SongCard } from "@/feature/songs/components/song-card";
+import { GridContainer } from "@/components/ui/layout/grid-container";
+import AdminSongDetailsSheet from "@/feature/songs/components/admin-songs-details-sheet";
+import { useSongsContext } from "@/feature/songs/components/songs-context";
 
 export default function SongContent() {
-    const { songs } = useAdminContext();
+    const { songs } = useSongsContext();
     const [selectedSongId, setSelectedSongId] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-    
+
     const selectedSong = useMemo(() => {
         if (!selectedSongId) return null;
         return songs.find((song) => song.id === selectedSongId) ?? null;
@@ -44,13 +43,13 @@ export default function SongContent() {
                 <Text style="title-h4">Songs</Text>
                 <Text style="paragraph-md">Manage the catalog of approved songs and whether lyrics or instrumentals are available.</Text>
             </Header>
-            
+
             <GridContainer isEmpty={songs.length === 0}>
                 {songs.length === 0 ? (
-                    <EmptyState message="No songs available" />
+                    <EmptyState title="No information" message="No songs available" />
                 ) : songs.map((song) => (
-                    <SongCard 
-                        key={song.id} 
+                    <SongCard
+                        key={song.id}
                         song={song}
                         onClick={handleSongClick}
                     />

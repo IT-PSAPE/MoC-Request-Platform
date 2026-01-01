@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import Text from '@/components/common/text';
-import Header from '@/components/common/header';
+import { Text } from '@/components/ui/common/text';
+import { Header } from '@/components/ui/layout/header';
 
 interface ErrorLayoutProps {
   icon: ReactNode;
@@ -24,7 +24,7 @@ export default function ErrorLayout({
       <div className="max-w-md w-full space-y-6 text-center">
         <div className="space-y-2">
           {icon}
-          
+
           <Header>
             <Text style="title-h4">{title}</Text>
             <Text style="paragraph-md" className="text-secondary">
