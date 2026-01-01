@@ -242,7 +242,7 @@ function Controls({ children }: { children: ReactNode }) {
   return (
     <div className="px-(--margin) mb-6 space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <div className="w-full flex items-center gap-2">
+        <div className="w-full flex mobile:flex-col items-center mobile:items-stretch gap-2">
           {children}
         </div>
       </div>
@@ -271,7 +271,7 @@ function ViewTab() {
 
 function Filters() {
   return (
-    <div className="ml-auto flex items-center gap-2">
+    <div className="ml-auto mobile:ml-0 flex items-center mobile:justify-stretch gap-2">
       <SortPopover />
       <FilterPopover />
     </div>
