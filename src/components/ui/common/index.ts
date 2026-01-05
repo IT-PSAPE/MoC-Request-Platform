@@ -24,3 +24,5 @@ export * from "./tabs"
 export * from "./text";
 export * from "./textarea";
 export * from "../../../feature/venues/venue-card";
+export * from "./file-uploader";
+export * from "./file-icons";

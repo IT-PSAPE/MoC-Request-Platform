@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, Dispatch, SetStateAction, FormEventHandler } from "react";
 // Types are global from @/lib/type.ts - no import needed
 import FormService from "@/logic/services/form-service";
-import { sendTelegramNotification } from '@/logic/services/telegram-service';
+import { sendTelegramNotificationWithAttachments } from '@/logic/services/telegram-service';
 import { useDefaultContext } from "@/components/contexts/defaults-context";
 import { SongTable, VenueTable, RequestItemTable } from "@/shared/database";
 
@@ -11,6 +11,7 @@ type FormSteps = 1 | 2 | 3;
 
 type FormContextType = {
     request: FormRequest
+    files: File[]
     step: FormSteps,
     songs: Song[]
     venues: Venue[]
@@ -21,6 +22,7 @@ type FormContextType = {
     noticeAlert: string | null
     setStep: Dispatch<SetStateAction<FormSteps>>
     setRequest: Dispatch<SetStateAction<FormRequest>>
+    setFiles: Dispatch<SetStateAction<File[]>>
     onSubmit: FormEventHandler<HTMLFormElement>
     setIsProcessing: Dispatch<SetStateAction<boolean>>
     setSubmitted: Dispatch<SetStateAction<string | null>>
@@ -56,6 +58,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
     const { supabase, statuses, priorities, types } = useDefaultContext();
 
     const [request, setRequest] = useState<FormRequest>(emptyRequest)
+    const [files, setFiles] = useState<File[]>([]);
     const [step, setStep] = useState<FormSteps>(1);
 
     const [songs, setSongs] = useState<Song[]>([]);
@@ -129,6 +132,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
 
     function reset() {
         setRequest(emptyRequest);
+        setFiles([]);
         setSubmitted(null);
         setSubmissionError(null);
         setStep(1);
@@ -145,18 +149,19 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
             const requestId = await service.create(request, statuses, supabase);
             setSubmitted(requestId);
             
-            // Send Telegram notification (non-blocking)
+            // Send Telegram notification with attachments (non-blocking)
             const priorityName = priorities.find(p => p.id === request.priority)?.name || 'Unknown';
             const typeName = types.find(t => t.id === request.type)?.name || 'Unknown';
             
-            sendTelegramNotification({
+            sendTelegramNotificationWithAttachments({
                 id: requestId,
                 what: request.what,
                 type: typeName,
                 priority: priorityName,
-                due: request.due || null
-            }).catch(error => {
-                console.warn('Telegram notification failed:', error);
+                due: request.due || null,
+                files: files
+            }).catch((error: unknown) => {
+                console.warn('Telegram notification with attachments failed:', error);
                 // Don't fail the form submission if notification fails
             });
         } catch (error) {
@@ -173,6 +178,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
 
     const context = {
         request,
+        files,
         step,
         songs,
         venues,
@@ -186,6 +192,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
         onSubmit,
         setStep,
         setRequest,
+        setFiles,
         reset,
         submit,
         setIsProcessing,
