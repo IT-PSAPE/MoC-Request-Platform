@@ -6,17 +6,17 @@ import { IconButton } from "@/components/ui/common/button";
 import { Divider, Icon } from "@/components/ui/common";
 
 // Import all section components
-import RequestDetailsOverview from "../request-details-overview";
-import RequestDetails5WH from "../request-details-5wh";
-import RequestDetailsVenues from "../request-details-venues";
-import RequestDetailsEquipment from "../request-details-equipment";
-import RequestDetailsSongs from "../request-details-songs";
-import RequestDetailsFlow from "../request-details-flow";
-import RequestDetailsComments from "../request-details-comments";
-import RequestDeleteConfirmation from "../request-delete-confirmation";
-import RequestCommentModal from "../request-comment-modal";
+import RequestDetailsOverview from "./request-details-overview";
+import RequestDetails5WH from "./request-details-5wh";
+import RequestDetailsVenues from "./request-details-venues";
+import RequestDetailsEquipment from "./request-details-equipment";
+import RequestDetailsSongs from "./request-details-songs";
+import RequestDetailsFlow from "./request-details-flow";
+import RequestDetailsComments from "./request-details-comments";
+import RequestDeleteConfirmation from "./request-delete-confirmation";
+import RequestCommentModal from "./request-comment-modal";
 import { ScrollContainer } from "@/components/ui/layout/scroll-container";
-import { useRequestContext } from "../request-context";
+import { useRequestContext } from "./request-context";
 
 interface RequestDetailsSheetProps {
   request: FetchRequest | null;
