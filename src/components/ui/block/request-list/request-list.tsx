@@ -115,7 +115,7 @@ function ListGroupBody({ group }: { group: RequestGroup }) {
           icon={<Icon.folder_search size={24} className="text-quaternary mx-auto" />}
           title="No requests"
           message={`No requests in ${group.status.name.replace(/_/g, " ").toLowerCase()} status`}
-          className="my-2 text-center"
+          className="text-center"
         />
       )}
       {isDragging && dragOverStatusId === group.status.id && (

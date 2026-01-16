@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Text } from "@/components/ui/common/text";
 import { Header } from "@/components/ui/layout/header";
-import RequestDetailsSheet from "@/feature/requests/components/details-sheet/request-details-sheet";
+import RequestDetailsSheet from "@/feature/requests/components/request-details-sheet";
 import { useRequestContext } from "@/feature/requests/components/request-context";
 import { AdminRequestList } from "@/feature/requests/components/admin-request-list";
 
