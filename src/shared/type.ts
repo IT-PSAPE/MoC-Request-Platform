@@ -27,6 +27,7 @@ type RequestItem = {
     name: string;
     description: string;
     available: boolean;
+    archived: boolean;
 };
 
 type Equipment = {
@@ -35,6 +36,7 @@ type Equipment = {
     quantity: number;
     available: number;
     description: string;
+    archived: boolean;
 };
 
 type Song = {
@@ -42,6 +44,7 @@ type Song = {
     name: string;
     instrumental: boolean;
     lyrics: boolean;
+    archived: boolean;
 };
 
 type Venue = {
@@ -49,6 +52,7 @@ type Venue = {
     name: string;
     available: boolean;
     description: string;
+    archived: boolean;
 };
 
 type Attachment = {
@@ -70,6 +74,22 @@ type Note = {
 };
 
 // JOIN TABLES
+
+type ItemEquipment = {
+    id: string;
+    item_id: string;
+    equipment_id: string;
+    quantity: number;
+    created_at: string;
+};
+
+type ItemEquipmentWithEquipment = ItemEquipment & {
+    equipment: Equipment;
+};
+
+type RequestItemWithEquipment = RequestItem & {
+    equipment: ItemEquipmentWithEquipment[];
+};
 
 type RequestedItem = {
     request_id: string;
@@ -170,3 +190,48 @@ type FetchRequest = {
     assignee: Assignee[];
     archived: boolean;
 };
+
+// INPUT TYPES FOR CRUD OPERATIONS
+
+type CreateRequestItemInput = {
+    name: string;
+    description: string;
+    available?: boolean;
+    equipment?: { equipment_id: string; quantity: number }[];
+};
+
+type UpdateRequestItemInput = Partial<{
+    name: string;
+    description: string;
+    available: boolean;
+    archived: boolean;
+}>;
+
+type CreateEquipmentInput = {
+    name: string;
+    description: string;
+    quantity: number;
+    available?: number;
+};
+
+type UpdateEquipmentInput = Partial<{
+    name: string;
+    description: string;
+    quantity: number;
+    available: number;
+    archived: boolean;
+}>;
+
+type UpdateSongInput = Partial<{
+    name: string;
+    instrumental: boolean;
+    lyrics: boolean;
+    archived: boolean;
+}>;
+
+type UpdateVenueInput = Partial<{
+    name: string;
+    description: string;
+    available: boolean;
+    archived: boolean;
+}>;

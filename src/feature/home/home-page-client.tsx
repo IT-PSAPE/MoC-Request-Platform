@@ -12,7 +12,7 @@ export default function HomePageClient() {
         <div className="absolute top-0 left-0 right-0 w-full h-full -z-10 overflow-hidden">
           <Image src="/images/public-home-bg.avif" alt="Background image" fill priority sizes="100vw" className="object-cover" />
         </div>
-        <div className="py-10 w-full flex-1 flex items-center w-full mx-auto max-w-container text-left space-y-20 px-4">
+        <div className="py-10 w-full flex-1 flex items-center mx-auto max-w-container text-left space-y-20 px-4">
           <div className="w-full flex flex-col items-center space-y-2 text-center">
             <Text style="title-h1" className="text-brand-secondary" >MOC Request Platform</Text>
             <Text style="paragraph-md" className="text-tertiary max-w-[50ch]">The Ministry of Culture invites all members to submit their requests for assistance. We are here to support you and will do our best to provide the help you need.</Text>

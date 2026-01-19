@@ -72,7 +72,7 @@ export function Breadcrumbs() {
     }
     
     return (
-        <div className="h-13 flex items-center px-6 py-4 border-b border-secondary sticky top-0 bg-primary mobile:hidden">
+        <div className="flex items-center">
             {breadcrumbs.map((breadcrumb, index) => (
                 <div key={breadcrumb.href} className="flex items-center">
                     <BreadcrumbItem 

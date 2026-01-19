@@ -95,7 +95,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         <meta name="apple-mobile-web-app-title" content="MoC Requests" />
       </head>
-      <body suppressHydrationWarning className="antialiased flex flex-col h-screen bg-secondary mobile:bg-primary overflow-hidden mobile:overflow-auto">
+      <body suppressHydrationWarning className="antialiased flex flex-col h-screen bg-primary overflow-hidden mobile:overflow-auto">
         <RootProvider>{children}</RootProvider>
       </body>
     </html>

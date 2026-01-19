@@ -34,6 +34,7 @@ export const formatDate = (dateString: string | null) => {
       day: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
+      timeZone: 'UTC',
     });
   } catch {
     return "Invalid date";

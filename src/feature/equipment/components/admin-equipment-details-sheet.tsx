@@ -1,5 +1,5 @@
 import { Sheet } from "@/components/ui/base/sheet";
-import { Divider, Text } from "@/components/ui/common";
+import { Divider, Text, TextArea } from "@/components/ui/common";
 import { Button, NumberInput } from "@/components/ui";
 import { useEquipmentContext } from "./equipment-context";
 
@@ -24,24 +24,14 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
     <Sheet.Provider open={isOpen} onOpenChange={onClose}>
       <Sheet.Content>
         <Sheet.Header />
-        <div className="flex-1 space-y-6 py-6 px-4">
+        <div className="flex-1 px-4 py-2 space-y-6">
           {/* Basic Info Section */}
-          <div className="space-y-4">
-            <Text style="title-h6">Basic Information</Text>
-            <div className="space-y-2">
-              <div>
-                <Text style="paragraph-sm" className="text-tertiary">Equipment Name</Text>
-                <Text style="paragraph-md">{equipment.name}</Text>
-              </div>
-              <div>
-                <Text style="paragraph-sm" className="text-tertiary">Equipment ID</Text>
-                <Text style="paragraph-sm" className="font-mono">{equipment.id}</Text>
-              </div>
-              <div>
-                <Text style="paragraph-sm" className="text-tertiary">Total Quantity</Text>
-                <Text style="paragraph-md">{equipment.quantity}</Text>
-              </div>
-            </div>
+          <Text style="title-h6">{equipment.name}</Text>
+
+          <Divider />
+
+          <div>
+            <TextArea value={equipment.description} />
           </div>
 
           <Divider />
