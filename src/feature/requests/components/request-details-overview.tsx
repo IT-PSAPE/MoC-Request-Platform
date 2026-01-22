@@ -23,12 +23,14 @@ type PropertyItemProp = {
 
 function PropertyItem({ icon, label, children }: PropertyItemProp) {
   return (
-    <div className="w-full gap-sm grid grid-cols-2 items-center *:h-8">
-      <span className="flex items-center gap-1.5">
+    <div className="w-full gap-sm grid grid-cols-2">
+      <span className="flex items-center gap-1.5 h-8">
         {icon}
         <Text style="label-sm" className="text-secondary">{label}</Text>
       </span>
-      { children }
+      <span className="flex items-center gap-1.5 min-h-8">
+        {children}
+      </span>
     </div>
   )
 }

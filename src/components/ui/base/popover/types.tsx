@@ -17,6 +17,7 @@ export type PopoverProviderProps = {
 
 export type PopoverProps = {
   children: ReactNode;
+  className?: string; 
 }
 
 export type PopoverTriggerProps = {

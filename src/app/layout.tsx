@@ -74,25 +74,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           }}
         />
 
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  const swPath = '/sw.js';
-                  
-                  navigator.serviceWorker.register(swPath)
-                    .then(function(registration) {
-                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                      console.log('Using SW path:', swPath);
-                    }, function(err) {
-                      console.log('ServiceWorker registration failed: ', err);
-                    });
-                });
-              }
-            `,
-          }}
-        />
         <meta name="apple-mobile-web-app-title" content="MoC Requests" />
       </head>
       <body suppressHydrationWarning className="antialiased flex flex-col h-screen bg-secondary mobile:bg-primary overflow-hidden mobile:overflow-auto">

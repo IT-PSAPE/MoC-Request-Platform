@@ -7,8 +7,8 @@ import { usePopoverContext } from "./popover-provider";
 import { PopoverProvider } from "./popover-provider";
 import { ScrollContainer } from "../../layout/scroll-container";
 
-function PopoverParent({ children }: PopoverProps) {
-  return <div className="relative inline-block w-full">{children}</div>;
+function PopoverParent({ children, className }: PopoverProps) {
+  return <div className={cn("relative inline-block w-full", className)}>{children}</div>;
 }
 
 function PopoverTrigger({ children, className }: PopoverTriggerProps) {
