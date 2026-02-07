@@ -49,7 +49,7 @@ async function sendTelegramNotification(payload: TelegramNotificationPayload): P
 
 📋 <b>Request: ${payload.what}</b>
 
-⭐ <b>Who:</b> ${payload.who}
+👤 <b>Who:</b> ${payload.who}
 📝 <b>Type:</b> ${payload.type}
 ⭐ <b>Priority:</b> ${payload.priority}
 📅 <b>Due Date:</b> ${dueDateText}
