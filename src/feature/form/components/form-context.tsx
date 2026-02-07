@@ -158,6 +158,7 @@ export function FormContextProvider({ children }: { children: React.ReactNode })
                 what: request.what,
                 type: typeName,
                 priority: priorityName,
+                who: request.who,
                 due: request.due || null,
                 files: files
             }).catch((error: unknown) => {

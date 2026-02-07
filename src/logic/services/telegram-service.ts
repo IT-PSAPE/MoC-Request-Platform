@@ -13,6 +13,7 @@ interface TelegramNotificationPayload {
   type: string;
   priority: string;
   due: string | null;
+  who: string;
 }
 
 interface TelegramCombinedPayload {
@@ -21,6 +22,7 @@ interface TelegramCombinedPayload {
   type: string;
   priority: string;
   due: string | null;
+  who: string;
   files: File[];
 }
 
@@ -47,6 +49,7 @@ async function sendTelegramNotification(payload: TelegramNotificationPayload): P
 
 📋 <b>Request: ${payload.what}</b>
 
+⭐ <b>Who:</b> ${payload.who}
 📝 <b>Type:</b> ${payload.type}
 ⭐ <b>Priority:</b> ${payload.priority}
 📅 <b>Due Date:</b> ${dueDateText}
@@ -167,7 +170,8 @@ export async function sendTelegramNotificationWithAttachments(payload: TelegramC
       what: payload.what,
       type: payload.type,
       priority: payload.priority,
-      due: payload.due
+      due: payload.due,
+      who: payload.who
     });
 
     // Step 2: Send media group if files exist
