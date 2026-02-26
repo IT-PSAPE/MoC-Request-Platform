@@ -12,7 +12,7 @@ export default function AdminRequestItemDetailsSheet({ item, isOpen, onClose }: 
   if (!item) return null;
 
   return (
-    <Sheet.Provider open={isOpen} onOpenChange={onClose}>
+    <Sheet.Root open={isOpen} onOpenChange={onClose}>
       <Sheet.Content>
         <Sheet.Header />
 
@@ -60,6 +60,6 @@ export default function AdminRequestItemDetailsSheet({ item, isOpen, onClose }: 
           </Button>
         </Sheet.Footer>
       </Sheet.Content>
-    </Sheet.Provider>
+    </Sheet.Root>
   );
 }

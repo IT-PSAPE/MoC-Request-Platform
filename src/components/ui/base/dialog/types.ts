@@ -1,31 +1,36 @@
-export type SheetProps = {
+export type DialogProps = {
   children: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   defaultOpen?: boolean;
 };
 
-export type SheetContentProps = {
+export type DialogContentProps = {
   children: React.ReactNode;
   className?: string;
 };
 
-export type SheetHeaderProps = {
+export type DialogHeaderProps = {
   children?: React.ReactNode;
   className?: string;
 };
 
-export type SheetFooterProps = {
+export type DialogBodyProps = {
   children: React.ReactNode;
   className?: string;
 };
 
-export type SheetTriggerProps = {
+export type DialogFooterProps = {
   children: React.ReactNode;
   className?: string;
 };
 
-export type SheetCloseProps = {
+export type DialogCloseProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+export type DialogTriggerProps = {
   children: React.ReactNode;
   className?: string;
 };

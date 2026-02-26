@@ -39,7 +39,7 @@ function AssigneeInlineEditorContent({
 }) {
   const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { closePopover } = Popover.useContext();
+  const { close } = Popover.useContext();
 
   const handleMemberToggle = (memberId: string) => {
     setSelectedMemberIds(prev =>
@@ -51,7 +51,7 @@ function AssigneeInlineEditorContent({
 
   const handleSave = async () => {
     if (selectedMemberIds.length === 0) {
-      closePopover();
+      close();
       return;
     }
 
@@ -59,7 +59,7 @@ function AssigneeInlineEditorContent({
     try {
       await onSave(selectedMemberIds);
       setSelectedMemberIds([]); // Clear selection after save
-      closePopover();
+      close();
     } catch (error) {
       console.error('Failed to save assignees:', error);
     } finally {
@@ -69,7 +69,7 @@ function AssigneeInlineEditorContent({
 
   const handleCancel = () => {
     setSelectedMemberIds([]);
-    closePopover();
+    close();
   };
 
   const handleRemove = async (memberId: string) => {
@@ -209,23 +209,21 @@ export default function AssigneeInlineEditor({
   }
 
   return (
-    <Popover.Provider>
-      <Popover.Root>
-        <Popover.Trigger className={className}>
-          <div className={cn("cursor-pointer rounded-md transition-all duration-150 hover:bg-secondary")}>
-            <DisplayComponenet assignees={assignees} onRemoveAssignee={onRemoveAssignee} />
-          </div>
-        </Popover.Trigger>
+    <Popover.Root>
+      <Popover.Trigger className={className}>
+        <div className={cn("cursor-pointer rounded-md transition-all duration-150 hover:bg-secondary")}>
+          <DisplayComponenet assignees={assignees} onRemoveAssignee={onRemoveAssignee} />
+        </div>
+      </Popover.Trigger>
 
-        <Popover.Content position={position}>
-          <AssigneeInlineEditorContent
-            assignees={assignees}
-            availableMembers={availableMembers}
-            onSave={onSave}
-            onRemoveAssignee={onRemoveAssignee}
-          />
-        </Popover.Content>
-      </Popover.Root>
-    </Popover.Provider>
+      <Popover.Content position={position}>
+        <AssigneeInlineEditorContent
+          assignees={assignees}
+          availableMembers={availableMembers}
+          onSave={onSave}
+          onRemoveAssignee={onRemoveAssignee}
+        />
+      </Popover.Content>
+    </Popover.Root>
   );
 }

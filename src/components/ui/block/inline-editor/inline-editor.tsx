@@ -51,7 +51,7 @@ export default function InlineEditor({
 
     return (
       <div className="flex items-center gap-1.5 px-1 py-0.5 min-h-[24px]">
-        {icon && <span className="flex-shrink-0">{icon}</span>}
+        {icon && <span className="shrink-0">{icon}</span>}
         <Text style="paragraph-sm" className={cn(
           disabled ? "text-tertiary" : "text-primary",
           !value && !displayValue && "text-tertiary italic"

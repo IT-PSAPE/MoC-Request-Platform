@@ -1,82 +1,111 @@
-import { cn } from "@/shared/cn"
-import { SheetContextProvider, useSheetContext } from "./sheet-provider"
-import { SheetProps } from "./types";
+'use client';
+
+import { useRef } from "react";
+import { cn } from "@/shared/cn";
 import { IconButton } from "@/components/ui/common/button";
 import { Icon } from "@/components/ui/common/icon";
+import { OverlayProvider, useOverlayContext, OverlayBackdrop, OverlayPortal, useOverlayBehavior, Z_INDEX } from "../overlay";
+import type { SheetProps, SheetContentProps, SheetHeaderProps, SheetFooterProps, SheetTriggerProps, SheetCloseProps } from "./types";
 
-export function SheetRoot({ children, open, onOpenChange }: SheetProps) {
-    return (
-        <SheetContextProvider open={open} onOpenChange={onOpenChange}>{children}</SheetContextProvider>
-    )
+function SheetRoot({ children, open, onOpenChange, defaultOpen }: SheetProps) {
+  return (
+    <OverlayProvider open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
+      {children}
+    </OverlayProvider>
+  );
 }
 
-function SheetTrigger({ children, className }: { children: React.ReactNode, className?: string }) {
-    const { setOpen } = useSheetContext();
+function SheetTrigger({ children, className }: SheetTriggerProps) {
+  const { setOpen } = useOverlayContext();
 
-    return (
-        <div onClick={() => setOpen(true)} className={cn("cursor-pointer", className)} >{children}</div>
-    )
+  return (
+    <div onClick={() => setOpen(true)} className={cn("cursor-pointer", className)}>
+      {children}
+    </div>
+  );
 }
 
-function SheetClose({ children, className }: { children: React.ReactNode, className?: string }) {
-    const { setOpen } = useSheetContext();
+function SheetClose({ children, className }: SheetCloseProps) {
+  const { close } = useOverlayContext();
 
-    return (
-        <div onClick={() => setOpen(false)} className={cn("cursor-pointer", className)} >{children}</div>
-    )
+  return (
+    <div onClick={close} className={cn("cursor-pointer", className)}>
+      {children}
+    </div>
+  );
 }
 
-function SheetContent({ children }: { children: React.ReactNode }) {
-    const { open, setOpen } = useSheetContext();
+function SheetContent({ children, className }: SheetContentProps) {
+  const { open, close, contentId } = useOverlayContext();
+  const contentRef = useRef<HTMLDivElement>(null);
 
-    if (!open) return null;
+  useOverlayBehavior({
+    open,
+    onClose: close,
+    closeOnEscape: true,
+    closeOnOutsideClick: true,
+    lockBodyScroll: true,
+    contentRef,
+  });
 
-    function handleBarrieClick(event: React.MouseEvent<HTMLDivElement>) {
-        event.stopPropagation();
+  if (!open) return null;
 
-        if (event.target === event.currentTarget) {
-            setOpen(false);
-        }
-    }
-
-    return (
-        <div className="fixed z-9999 inset-0 bg-linear-to-b from-black/20 to-black/40 backdrop-blur-xs p-2" onClick={handleBarrieClick}>
-            <div className="w-full max-w-[384px] h-full flex flex-col ml-auto bg-primary rounded-xl">
-                {children}
-            </div>
+  return (
+    <OverlayPortal>
+      <OverlayBackdrop variant="blur" onClick={close} style={{ zIndex: Z_INDEX.SHEET_BACKDROP }} />
+      <div
+        className="fixed inset-0 p-2 mobile:p-0"
+        style={{ zIndex: Z_INDEX.SHEET_CONTENT }}
+      >
+        <div
+          ref={contentRef}
+          id={contentId}
+          role="dialog"
+          aria-modal="true"
+          className={cn(
+            "w-full max-w-[384px] h-full flex flex-col ml-auto bg-primary rounded-xl",
+            "animate-[overlay-slide-in-right_0.25s_ease-out]",
+            "mobile:max-w-full mobile:h-auto mobile:max-h-[85vh] mobile:ml-0",
+            "mobile:fixed mobile:bottom-0 mobile:left-0 mobile:right-0",
+            "mobile:rounded-b-none mobile:rounded-t-xl",
+            "mobile:animate-[overlay-slide-in-bottom_0.25s_ease-out]",
+            className
+          )}
+        >
+          {children}
         </div>
-    )
+      </div>
+    </OverlayPortal>
+  );
 }
 
-function SheetHeader({ children, className }: { children?: React.ReactNode, className?: string }) {
-    const { setOpen } = useSheetContext();
+function SheetHeader({ children, className }: SheetHeaderProps) {
+  const { close } = useOverlayContext();
 
-    return (
-        <div className={cn('px-3 py-2 border-b border-secondary flex gap-2', className)}>
-            <div className="flex-1">
-                {children}
-            </div>
-            <IconButton onClick={() => setOpen(false)} variant="ghost"><Icon.close size={20} /></IconButton>
-        </div>
-    )
+  return (
+    <div className={cn("px-3 py-2 border-b border-secondary flex gap-2", className)}>
+      <div className="flex-1">
+        {children}
+      </div>
+      <IconButton onClick={close} variant="ghost"><Icon.close size={20} /></IconButton>
+    </div>
+  );
 }
 
-function SheetFooter({ children, className }: { children: React.ReactNode, className?: string }) {
-    return (
-        <div className={cn('px-4 py-5 border-t border-secondary', className)}>{children}</div>
-    )
+function SheetFooter({ children, className }: SheetFooterProps) {
+  return (
+    <div className={cn("px-4 py-5 border-t border-secondary", className)}>{children}</div>
+  );
 }
-
 
 const Sheet = {
-    Provider: SheetContextProvider,
-    useContent: useSheetContext,
-    Root: SheetRoot,
-    Trigger: SheetTrigger,
-    Close: SheetClose,
-    Content: SheetContent,
-    Header: SheetHeader,
-    Footer: SheetFooter,
+  Root: SheetRoot,
+  Trigger: SheetTrigger,
+  Close: SheetClose,
+  Content: SheetContent,
+  Header: SheetHeader,
+  Footer: SheetFooter,
+  useContext: useOverlayContext,
 };
 
-export { Sheet }
+export { Sheet };

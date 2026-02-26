@@ -21,7 +21,7 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
   };
 
   return (
-    <Sheet.Provider open={isOpen} onOpenChange={onClose}>
+    <Sheet.Root open={isOpen} onOpenChange={onClose}>
       <Sheet.Content>
         <Sheet.Header />
         <div className="flex-1 space-y-6 py-6 px-4">
@@ -94,6 +94,6 @@ export default function AdminEquipmentDetailsSheet({ equipment, isOpen, onClose 
           </Button>
         </Sheet.Footer>
       </Sheet.Content>
-    </Sheet.Provider>
+    </Sheet.Root>
   );
 }

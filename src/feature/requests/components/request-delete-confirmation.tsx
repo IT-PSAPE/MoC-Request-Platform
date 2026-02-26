@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import { Button, IconButton, Icon, Text } from "@/components/ui";
+import { Button, Text } from "@/components/ui";
+import { Dialog } from "@/components/ui/base/dialog";
 import { type RequestDetailsDeleteProps } from "../request.utils";
 
 export default function RequestDeleteConfirmation({
@@ -33,36 +34,19 @@ export default function RequestDeleteConfirmation({
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-[10000] bg-linear-to-b from-black/20 to-black/50 backdrop-blur-xs flex items-center justify-center p-4"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          handleClose();
-        }
-      }}
-    >
-      <div className="w-full max-w-[448px] bg-primary rounded-xl border border-secondary shadow-lg">
-        <div className="flex items-start justify-between px-5 py-4 border-b border-secondary">
-          <div>
-            <Text style="title-h6">Delete Request</Text>
-            <Text style="paragraph-sm" className="text-tertiary mt-1">
-              This action cannot be undone. All associated data with this request will be removed.
-            </Text>
-          </div>
-          <IconButton
-            size="sm"
-            variant="ghost"
-            onClick={handleClose}
-            disabled={isDeleting}
-          >
-            <Icon.close />
-          </IconButton>
-        </div>
-        <div className="px-5 py-6 space-y-2">
+    <Dialog.Root open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
+      <Dialog.Content>
+        <Dialog.Header>
+          <Text style="title-h6">Delete Request</Text>
+          <Text style="paragraph-sm" className="text-tertiary mt-1">
+            This action cannot be undone. All associated data with this request will be removed.
+          </Text>
+        </Dialog.Header>
+        <Dialog.Body className="space-y-2">
           <Text style="label-sm" className="text-tertiary">Request</Text>
           <Text style="title-h6">{request.what || "Untitled Request"}</Text>
-        </div>
-        <div className="flex items-center justify-end gap-3 px-5 py-4 border-t border-secondary">
+        </Dialog.Body>
+        <Dialog.Footer>
           <Button
             variant="secondary"
             size="sm"
@@ -79,8 +63,8 @@ export default function RequestDeleteConfirmation({
           >
             {isDeleting ? "Deleting..." : "Delete"}
           </Button>
-        </div>
-      </div>
-    </div>
+        </Dialog.Footer>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }

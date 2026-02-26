@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import { Button, IconButton, Icon, Text, TextArea } from "@/components/ui";
+import { Button, Text, TextArea } from "@/components/ui";
+import { Dialog } from "@/components/ui/base/dialog";
 import { type RequestDetailsBaseProps } from "../request.utils";
 
 interface RequestCommentModalProps extends RequestDetailsBaseProps {
@@ -21,11 +22,11 @@ export default function RequestCommentModal({
 
   const handleSaveComment = async () => {
     if (!comment.trim() || !onAddComment || isSaving) return;
-    
+
     setIsSaving(true);
     try {
       await onAddComment(request.id, comment.trim());
-      setComment(""); // Clear the comment after successful save
+      setComment("");
       onClose();
     } catch (error) {
       console.error("Failed to add comment:", error);
@@ -36,45 +37,27 @@ export default function RequestCommentModal({
 
   const handleClose = () => {
     if (isSaving) return;
-    setComment(""); // Clear comment when closing without saving
+    setComment("");
     onClose();
   };
 
   const handleCancel = () => {
-    setComment(""); // Clear comment when cancelling
+    setComment("");
     onClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-[10000] bg-linear-to-b from-black/20 to-black/50 backdrop-blur-xs flex items-center justify-center p-4"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          handleClose();
-        }
-      }}
-    >
-      <div className="w-full max-w-[448px] bg-primary rounded-xl border border-secondary shadow-lg">
-        <div className="flex items-start justify-between px-5 py-4 border-b border-secondary">
-          <div>
-            <Text style="title-h6">Add Comment</Text>
-            <Text style="paragraph-sm" className="text-tertiary mt-1">
-              Add a comment to this request.
-            </Text>
-          </div>
-          <IconButton
-            size="sm"
-            variant="ghost"
-            onClick={handleClose}
-            disabled={isSaving}
-          >
-            <Icon.close />
-          </IconButton>
-        </div>
-        
-        <div className="px-5 py-6">
+    <Dialog.Root open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
+      <Dialog.Content>
+        <Dialog.Header>
+          <Text style="title-h6">Add Comment</Text>
+          <Text style="paragraph-sm" className="text-tertiary mt-1">
+            Add a comment to this request.
+          </Text>
+        </Dialog.Header>
+        <Dialog.Body>
           <Text style="label-sm" className="text-tertiary mb-2">Comment</Text>
           <TextArea
             value={comment}
@@ -85,9 +68,8 @@ export default function RequestCommentModal({
             disabled={isSaving}
             autoFocus
           />
-        </div>
-        
-        <div className="flex items-center justify-end gap-3 px-5 py-4 border-t border-secondary">
+        </Dialog.Body>
+        <Dialog.Footer>
           <Button
             variant="secondary"
             size="sm"
@@ -104,8 +86,8 @@ export default function RequestCommentModal({
           >
             {isSaving ? "Saving..." : "Save"}
           </Button>
-        </div>
-      </div>
-    </div>
+        </Dialog.Footer>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }

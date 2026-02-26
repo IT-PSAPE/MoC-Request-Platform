@@ -4,7 +4,7 @@ import { Popover } from "@/components/ui/base/popover";
 import { ScrollContainer } from "../../layout/scroll-container";
 
 export function SortContent() {
-  const { closePopover } = Popover.useContext();
+  const { close } = Popover.useContext();
   const { pendingSort, updatePendingSort, applySort, resetSort } = useFilterContext();
 
   const handleFieldChange = (field: "name" | "dueDate" | "createDate" | "type") => {
@@ -17,7 +17,7 @@ export function SortContent() {
 
   const handleApply = () => {
     applySort();
-    closePopover();
+    close();
   };
 
   const handleReset = () => {
@@ -132,19 +132,17 @@ export function SortContent() {
 
 export function SortPopover() {
   return (
-    <Popover.Provider>
-      <Popover.Root>
-        <Popover.Trigger className="mobile:w-full">
-          <Button variant="secondary" className="space-x-1 mobile:w-full">
-            <Icon.filter size={16} />
-            <span>Sort</span>
-          </Button>
-        </Popover.Trigger>
+    <Popover.Root>
+      <Popover.Trigger className="mobile:w-full">
+        <Button variant="secondary" className="space-x-1 mobile:w-full">
+          <Icon.filter size={16} />
+          <span>Sort</span>
+        </Button>
+      </Popover.Trigger>
 
-        <Popover.Content position={'bottom-right'} maxWidth="280px" maxHeight="480px" className="flex flex-col h-200">
-          <SortContent />
-        </Popover.Content>
-      </Popover.Root>
-    </Popover.Provider>
+      <Popover.Content position={'bottom-right'} maxWidth="280px" maxHeight="480px" className="flex flex-col h-200">
+        <SortContent />
+      </Popover.Content>
+    </Popover.Root>
   )
 }

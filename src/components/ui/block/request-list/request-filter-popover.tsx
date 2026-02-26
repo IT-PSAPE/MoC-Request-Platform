@@ -6,7 +6,7 @@ import { useFilterContext } from "./request-filter-provider";
 
 function FilterContent() {
 
-  const { closePopover } = Popover.useContext();
+  const { close } = Popover.useContext();
   const { pendingFilters, updatePendingFilter, applyFilters, resetFilters } = useFilterContext();
   const { types, priorities } = useDefaultContext();
 
@@ -43,7 +43,7 @@ function FilterContent() {
 
   const handleApply = () => {
     applyFilters();
-    closePopover();
+    close();
   };
 
   const handleReset = () => {
@@ -140,19 +140,17 @@ function FilterContent() {
 
 export function FilterPopover() {
   return (
-    <Popover.Provider>
-      <Popover.Root>
-        <Popover.Trigger className="mobile:w-full">
-          <Button variant="secondary" className="space-x-1 mobile:w-full">
-            <Icon.filter size={16} />
-            <span>Filter</span>
-          </Button>
-        </Popover.Trigger>
+    <Popover.Root>
+      <Popover.Trigger className="mobile:w-full">
+        <Button variant="secondary" className="space-x-1 mobile:w-full">
+          <Icon.filter size={16} />
+          <span>Filter</span>
+        </Button>
+      </Popover.Trigger>
 
-        <Popover.Content position={'bottom-right'} maxWidth="280px" maxHeight="480px" className="flex flex-col h-200">
-          <FilterContent />
-        </Popover.Content>
-      </Popover.Root>
-    </Popover.Provider>
+      <Popover.Content position={'bottom-right'} maxWidth="280px" maxHeight="480px" className="flex flex-col h-200">
+        <FilterContent />
+      </Popover.Content>
+    </Popover.Root>
   )
 }

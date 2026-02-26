@@ -84,7 +84,7 @@ export default function NavigationBar() {
           </div>
         </div>
         <div
-          className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary mobile:flex transition-all duration-200 ease-in-out mobile:p-4 mobile:pt-16 mobile:w-full mobile:data-[status=closed]:left-[100%]"
+          className="contents fixed inset-0 flex-col justify-between gap-4 bg-primary mobile:flex transition-all duration-200 ease-in-out mobile:p-4 mobile:pt-16 mobile:w-full mobile:data-[status=closed]:left-full"
           data-status={isMenuOpen ? 'open' : 'closed'}
         >
           <div className="w-full mobile:w-full mobile:flex mobile:flex-col mobile:gap-4"><Links /></div>

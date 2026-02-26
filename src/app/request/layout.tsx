@@ -71,7 +71,7 @@ function NavigationTop() {
     };
 
     return (
-        <div className="px-margin py-4 sticky top-0 bg-gradient-to-b from-primary to-primary/0 z-10">
+        <div className="px-margin py-4 sticky top-0 bg-linear-to-b from-primary to-primary/0 z-10">
             <div className="flex justify-between items-center">
                 <div className="bg-primary border border-gray-200 rounded-full">
                     <IconButton variant="ghost" onClick={handleBack}>

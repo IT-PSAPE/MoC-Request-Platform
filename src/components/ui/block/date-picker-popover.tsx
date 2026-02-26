@@ -35,7 +35,7 @@ function DatePickerPopoverContent({
     }
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { closePopover } = Popover.useContext();
+  const { close } = Popover.useContext();
 
   useEffect(() => {
     if (!value) {
@@ -54,14 +54,14 @@ function DatePickerPopoverContent({
     const dateValue = editValue ? new Date(editValue).toISOString() : '';
 
     if (dateValue === value) {
-      closePopover();
+      close();
       return;
     }
 
     setIsLoading(true);
     try {
       await onSave(dateValue);
-      closePopover(); // Close popover after successful save
+      close(); // Close popover after successful save
     } catch (error) {
       console.error('Failed to save:', error);
       // Revert on error
@@ -90,7 +90,7 @@ function DatePickerPopoverContent({
         setEditValue('');
       }
     }
-    closePopover();
+    close();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -159,29 +159,27 @@ export function DatePickerPopover({
   }
 
   return (
-    <Popover.Provider>
-      <Popover.Root>
-        <Popover.Trigger className={className}>
-          <div
-            className={cn(
-              "cursor-pointer rounded-md transition-all duration-150",
-              isHovered && "bg-secondary/50"
-            )}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            {children}
-          </div>
-        </Popover.Trigger>
+    <Popover.Root>
+      <Popover.Trigger className={className}>
+        <div
+          className={cn(
+            "cursor-pointer rounded-md transition-all duration-150",
+            isHovered && "bg-secondary/50"
+          )}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {children}
+        </div>
+      </Popover.Trigger>
 
-        <Popover.Content position={position} maxWidth="280px">
-          <DatePickerPopoverContent
-            value={value}
-            onSave={onSave}
-            placeholder={placeholder}
-          />
-        </Popover.Content>
-      </Popover.Root>
-    </Popover.Provider>
+      <Popover.Content position={position} maxWidth="280px">
+        <DatePickerPopoverContent
+          value={value}
+          onSave={onSave}
+          placeholder={placeholder}
+        />
+      </Popover.Content>
+    </Popover.Root>
   );
 }

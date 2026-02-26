@@ -1,22 +1,26 @@
-import { useEffect, useRef } from "react";
+'use client';
+
+import { useRef } from "react";
 import type { MouseEvent } from "react";
 import { Text } from "@/components/ui/common/text";
 import { cn } from "@/shared/cn";
-import { PopoverBarrierProps, PopoverBodyProps, PopoverContentProps, PopoverFooterProps, PopoverGroupProps, PopoverHeaderProps, PopoverProps, PopoverTriggerProps } from "./types";
-import { usePopoverContext } from "./popover-provider";
-import { PopoverProvider } from "./popover-provider";
-import { ScrollContainer } from "../../layout/scroll-container";
+import { OverlayProvider, useOverlayContext, OverlayBackdrop, OverlayPortal, useOverlayBehavior, Z_INDEX } from "../overlay";
+import type { PopoverProps, PopoverTriggerProps, PopoverContentProps, PopoverHeaderProps, PopoverBodyProps, PopoverFooterProps, PopoverGroupProps } from "./types";
 
-function PopoverParent({ children, className }: PopoverProps) {
-  return <div className={cn("relative inline-block w-full", className)}>{children}</div>;
+function PopoverRoot({ children, className, open, onOpenChange, defaultOpen }: PopoverProps) {
+  return (
+    <OverlayProvider open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
+      <div className={cn("relative inline-block w-full", className)}>{children}</div>
+    </OverlayProvider>
+  );
 }
 
 function PopoverTrigger({ children, className }: PopoverTriggerProps) {
-  const { togglePopover, anchorRef } = usePopoverContext();
+  const { toggle, anchorRef } = useOverlayContext();
 
   const handleClick = (event: MouseEvent) => {
     event.stopPropagation();
-    togglePopover();
+    toggle();
   };
 
   return (
@@ -35,48 +39,78 @@ function PopoverContent({
   className,
   position = "bottom-left",
   maxWidth = "320px",
-  maxHeight = "300px"
+  maxHeight = "300px",
 }: PopoverContentProps) {
-  const { isOpen, closePopover, anchorRef } = usePopoverContext();
-  const contentRef = useRef<HTMLDivElement>(null);
+  const { open, close, anchorRef, contentId } = useOverlayContext();
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const mobileRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
+  useOverlayBehavior({
+    open,
+    onClose: close,
+    closeOnEscape: true,
+    closeOnOutsideClick: true,
+    lockBodyScroll: false,
+    contentRef: desktopRef,
+    anchorRef,
+  });
 
-    const handleClickOutside = (event: Event) => {
-      const target = event.target as Node;
-      if (
-        contentRef.current &&
-        !contentRef.current.contains(target) &&
-        anchorRef.current &&
-        !anchorRef.current.contains(target)
-      ) {
-        closePopover();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, closePopover, anchorRef]);
-
-  if (!isOpen) return null;
+  if (!open) return null;
 
   const positionClasses = {
     "bottom-left": "top-full left-0 mt-2",
     "bottom-right": "top-full right-0 mt-2",
-    "bottom-center": "top-full left-1/2 transform -translate-x-1/2 mt-2",
+    "bottom-center": "top-full left-1/2 -translate-x-1/2 mt-2",
   };
 
   return (
     <>
-      <PopoverBarrier />
+      {/* Desktop: invisible barrier + absolute dropdown */}
+      <OverlayBackdrop
+        variant="transparent"
+        onClick={close}
+        className="mobile:hidden"
+        style={{ zIndex: Z_INDEX.POPOVER_BARRIER }}
+      />
       <div
-        ref={contentRef}
-        className={cn("absolute z-50 bg-primary border border-secondary rounded-lg shadow-lg min-w-[280px]", positionClasses[position], className)}
-        style={{ maxWidth, maxHeight }}
+        ref={desktopRef}
+        id={contentId}
+        className={cn(
+          "absolute bg-primary border border-secondary rounded-lg shadow-lg min-w-[280px]",
+          "animate-[overlay-pop-in_0.15s_ease-out]",
+          "mobile:hidden",
+          positionClasses[position],
+          className,
+        )}
+        style={{ zIndex: Z_INDEX.POPOVER_CONTENT, maxWidth, maxHeight }}
       >
         {children}
       </div>
+
+      {/* Mobile: bottom-sheet drawer via portal */}
+      <OverlayPortal>
+        <div className="hidden mobile:block">
+          <OverlayBackdrop
+            variant="blur"
+            onClick={close}
+            style={{ zIndex: Z_INDEX.SHEET_BACKDROP }}
+          />
+          <div
+            className="fixed bottom-0 left-0 right-0 animate-[overlay-slide-in-bottom_0.25s_ease-out]"
+            style={{ zIndex: Z_INDEX.SHEET_CONTENT }}
+          >
+            <div
+              ref={mobileRef}
+              className={cn(
+                "bg-primary rounded-t-xl border-t border-secondary shadow-lg max-h-[70vh] overflow-y-auto",
+                className,
+              )}
+            >
+              {children}
+            </div>
+          </div>
+        </div>
+      </OverlayPortal>
     </>
   );
 }
@@ -105,37 +139,24 @@ function PopoverFooter({ children, className }: PopoverFooterProps) {
   );
 }
 
-function PopoverBarrier({ className }: PopoverBarrierProps) {
-  const { closePopover } = usePopoverContext();
-
-  return (
-    <div
-      className={cn("fixed inset-0 z-40", className)}
-      onClick={closePopover}
-    />
-  );
-}
-
 function PopoverGroup({ fieldName, children }: PopoverGroupProps) {
   return (
     <div className="space-y-2">
       <Text style="label-xs" className="text-tertiary">{fieldName}</Text>
       <div className="space-y-2">{children}</div>
     </div>
-  )
+  );
 }
 
 const Popover = {
-  Provider: PopoverProvider,
-  useContext: usePopoverContext,
-  Root: PopoverParent,
+  Root: PopoverRoot,
   Trigger: PopoverTrigger,
   Content: PopoverContent,
   Header: PopoverHeader,
   Body: PopoverBody,
   Footer: PopoverFooter,
-  Barrier: PopoverBarrier,
   Group: PopoverGroup,
+  useContext: useOverlayContext,
 };
 
 export { Popover };

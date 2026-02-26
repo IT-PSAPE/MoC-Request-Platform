@@ -22,7 +22,7 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
   };
 
   return (
-    <Sheet.Provider open={isOpen} onOpenChange={onClose}>
+    <Sheet.Root open={isOpen} onOpenChange={onClose}>
       <Sheet.Content>
         <Sheet.Header />
 
@@ -94,6 +94,6 @@ export default function AdminSongDetailsSheet({ song, isOpen, onClose }: AdminSo
           </Button>
         </Sheet.Footer>
       </Sheet.Content>
-    </Sheet.Provider>
+    </Sheet.Root>
   );
 }

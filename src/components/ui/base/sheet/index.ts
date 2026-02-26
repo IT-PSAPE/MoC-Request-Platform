@@ -1,7 +1,10 @@
 export { Sheet } from './sheet';
 
 export type {
-    SheetContextType,
-    SheetContextProviderProps,
-    SheetProps,
+  SheetProps,
+  SheetContentProps,
+  SheetHeaderProps,
+  SheetFooterProps,
+  SheetTriggerProps,
+  SheetCloseProps,
 } from "./types";
