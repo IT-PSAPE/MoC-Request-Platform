@@ -12,6 +12,9 @@ import { useFilterContext } from "./request-filter-provider";
 import { FilterPopover } from "./request-filter-popover";
 import { SortPopover } from "./request-sort-popover";
 import { RequestListProvider, useRequestListContext } from "./request-list-context";
+import { Calendar } from "@/components/ui/base/calendar";
+import type { CalendarEvent, CalendarDayInfo } from "@/components/ui/base/calendar";
+import { requestColorMap } from "./request-list-item";
 
 type SortField = "title" | "type" | "status" | "dueDate" | "createdAt" | "items";
 type SortDirection = "asc" | "desc";
@@ -254,7 +257,7 @@ function ViewTab() {
   const { listView, setListView } = useDefaultContext();
 
   return (
-    <div className="flex-1 max-w-[200px] mobile:max-w-full">
+    <div className="flex-1 max-w-[300px] mobile:max-w-full">
       <TabContextProvider defaultTab={listView}>
         <TabList className="mobile:w-full">
           <TabItem value="column" onClick={() => setListView("column")}>
@@ -262,6 +265,9 @@ function ViewTab() {
           </TabItem>
           <TabItem value="list" onClick={() => setListView("list")}>
             <Icon.row className="mr-1" size={16} />List
+          </TabItem>
+          <TabItem value="calendar" onClick={() => setListView("calendar")}>
+            <Icon.calendar className="mr-1" size={16} />Calendar
           </TabItem>
         </TabList>
       </TabContextProvider>
@@ -278,11 +284,57 @@ function Filters() {
   )
 }
 
+function CalendarView() {
+  const { filteredRequests, onRequestClick } = useRequestListContext();
+  const [selectedDay, setSelectedDay] = useState<CalendarDayInfo | null>(null);
+  const [isDaySheetOpen, setIsDaySheetOpen] = useState(false);
+
+  const calendarEvents: CalendarEvent[] = filteredRequests
+    .filter((r) => r.due)
+    .map((r) => ({
+      id: r.id,
+      date: r.due!,
+      label: r.what || "Request",
+      color: requestColorMap[r.type?.name] || "gray",
+      data: r,
+    }));
+
+  const handleEventClick = (event: CalendarEvent) => {
+    if (onRequestClick && event.data) {
+      onRequestClick(event.data as FetchRequest);
+    }
+  };
+
+  const handleDayClick = (day: CalendarDayInfo) => {
+    setSelectedDay(day);
+    setIsDaySheetOpen(true);
+  };
+
+  return (
+    <div className="px-(--margin)">
+      <Calendar.Root events={calendarEvents} onEventClick={handleEventClick} onDayClick={handleDayClick} maxVisibleEvents={3}>
+        <Calendar.Header />
+        <Calendar.Grid />
+      </Calendar.Root>
+      <Calendar.DayEventsSheet
+        day={selectedDay}
+        open={isDaySheetOpen}
+        onOpenChange={setIsDaySheetOpen}
+        onEventClick={handleEventClick}
+      />
+    </div>
+  );
+}
+
 function List() {
   const { groupedRequests, typeFilter } = useRequestListContext();
   const { hasActiveFilters } = useFilterContext();
 
   const { listView } = useDefaultContext();
+
+  if (listView === "calendar") {
+    return <CalendarView />;
+  }
 
   return (
     <div className={cn("px-(--margin)", listView === "column" ? "flex gap-4 items-start overflow-y-auto *:min-w-[280px]" : "space-y-4")}>

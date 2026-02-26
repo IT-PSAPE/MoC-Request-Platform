@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-type ListView = "column" | "list";
+type ListView = "column" | "list" | "calendar";
 
 type IndicatorColor = "gray" | "blue" | "yellow" | "green" | "red";
 

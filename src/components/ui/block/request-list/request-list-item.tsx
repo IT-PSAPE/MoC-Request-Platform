@@ -8,28 +8,28 @@ interface RequestListItemProps {
   isPublicView?: boolean;
 }
 
+export const requestColorMap: Record<string, BadgeColor> = {
+  "Video Filming & Production": "teal",
+  "Video Editing": "yellow",
+  "Design Flyer": "pink",
+  "Video Filming": "green",
+  "Equipment": "orange",
+  "Event": "blue",
+  "Design Special": "purple",
+};
+
+export const priorityColorMap: Record<string, BadgeColor> = {
+  "Low": "blue",
+  "Medium": "yellow",
+  "High": "orange",
+  "Urgent": "red",
+};
+
 export function RequestListItem({ request, onRequestClick, className, isPublicView = false }: RequestListItemProps) {
   const title = request.what || "Request";
   const description = request.why || request.how || "";
   const requestType = request.type ? request.type.name.replace(/_/g, " ") : "Request";
   const date = request.due ? new Date(request.due).toLocaleDateString() : "";
-
-  const requestColorMap: Record<string, BadgeColor> = {
-    "Video Filming & Production": "teal",
-    "Video Editing": "yellow",
-    "Design Flyer": "pink",
-    "Video Filming": "green",
-    "Equipment": "orange",
-    "Event": "blue",
-    "Design Special": "purple",
-  };
-
-  const priorityColorMap: Record<string, BadgeColor> = {
-    "Low": "blue",
-    "Medium": "yellow",
-    "High": "orange",
-    "Urgent": "red",
-  };
 
   const handleClick = () => {
     if (onRequestClick) { onRequestClick(request); }
