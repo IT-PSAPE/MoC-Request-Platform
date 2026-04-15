@@ -38,13 +38,13 @@ function SheetClose({ children, className }: SheetCloseProps) {
 function SheetContent({ children, className }: SheetContentProps) {
   const { open, close, contentId } = useOverlayContext();
   const contentRef = useRef<HTMLDivElement>(null);
-  const { stackStyles } = useOverlayStack(open);
+  const { depth, stackStyles } = useOverlayStack(open);
 
   useOverlayBehavior({
     open,
     onClose: close,
-    closeOnEscape: true,
-    closeOnOutsideClick: true,
+    closeOnEscape: depth === 0,
+    closeOnOutsideClick: depth === 0,
     lockBodyScroll: true,
     contentRef,
   });

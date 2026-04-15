@@ -4,7 +4,12 @@ import { useEffect, useId, useSyncExternalStore } from 'react';
 import type { CSSProperties } from 'react';
 
 // ── Module-level overlay stack registry ─────────────────────
-let stack: string[] = [];
+type StackEntry = {
+  id: string;
+  modal: boolean;
+};
+
+let stack: StackEntry[] = [];
 let snapshot = 0;
 const subscribers = new Set<() => void>();
 
@@ -21,15 +26,15 @@ function subscribe(callback: () => void) {
 function getSnapshot() { return snapshot; }
 function getServerSnapshot() { return 0; }
 
-function push(id: string) {
-  if (!stack.includes(id)) {
-    stack.push(id);
+function push(entry: StackEntry) {
+  if (!stack.some(e => e.id === entry.id)) {
+    stack.push(entry);
     notify();
   }
 }
 
 function remove(id: string) {
-  const idx = stack.indexOf(id);
+  const idx = stack.findIndex(e => e.id === id);
   if (idx !== -1) {
     stack.splice(idx, 1);
     notify();
@@ -43,35 +48,46 @@ const SPRING_CURVE = 'cubic-bezier(0.32, 0.72, 0, 1)';
 const DURATION = '0.35s';
 
 /**
- * Registers an overlay in a global stack and returns inline styles
- * for the Apple-style stacked sheet effect.
+ * Registers an overlay in a global stack and returns depth info
+ * plus inline styles for Apple-style stacked sheet behavior.
  *
- * When a child overlay opens, every parent overlay receives a
- * scale-down + translateY transform so its top edge peeks out as
- * a visible "lip". The transition uses an Apple-like spring curve.
+ * @param open  — Whether this overlay is currently open.
+ * @param modal — `true` for Dialog/Sheet (causes parent visual push-back).
+ *                `false` for Popover (registers for coordination only,
+ *                so parent overlays disable outside-click / escape while
+ *                this overlay is open, but no visual push-back).
  *
- * Apply the returned `stackStyles` to the overlay's positioning
- * wrapper (the `fixed inset-0` div), NOT the content card — this
- * keeps entry animations on the card unaffected.
+ * The returned `depth` counts ALL overlays above this one (modal + non-modal).
+ * Use `depth === 0` to gate `closeOnOutsideClick` / `closeOnEscape` so that
+ * only the topmost overlay responds to dismissal gestures.
+ *
+ * The returned `stackStyles` only factor in modal overlays above, so a
+ * Popover opening inside a Sheet won't cause the Sheet to scale down.
  */
-export function useOverlayStack(open: boolean) {
+export function useOverlayStack(open: boolean, modal = true) {
   const id = useId();
   useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   useEffect(() => {
     if (!open) return;
-    push(id);
+    push({ id, modal });
     return () => remove(id);
-  }, [id, open]);
+  }, [id, open, modal]);
 
-  const idx = stack.indexOf(id);
-  const depth = (open && idx !== -1) ? (stack.length - 1 - idx) : 0;
+  const idx = stack.findIndex(e => e.id === id);
+  const overlaysAbove = (open && idx !== -1) ? stack.slice(idx + 1) : [];
+
+  // Any overlay above — for behavioral decisions (outside-click, escape)
+  const depth = overlaysAbove.length;
+
+  // Only modal overlays above — for visual push-back
+  const modalDepth = overlaysAbove.filter(e => e.modal).length;
 
   const stackStyles: CSSProperties = {
     transformOrigin: 'top center',
     transition: `transform ${DURATION} ${SPRING_CURVE}`,
-    ...(depth > 0 && {
-      transform: `scale(${1 - depth * SCALE_STEP}) translateY(${depth * TRANSLATE_Y_PX}px)`,
+    ...(modalDepth > 0 && {
+      transform: `scale(${1 - modalDepth * SCALE_STEP}) translateY(${modalDepth * TRANSLATE_Y_PX}px)`,
     }),
   };
 

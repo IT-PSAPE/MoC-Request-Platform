@@ -4,7 +4,7 @@ import { useRef } from "react";
 import type { MouseEvent } from "react";
 import { Text } from "@/components/ui/common/text";
 import { cn } from "@/shared/cn";
-import { OverlayProvider, useOverlayContext, OverlayBackdrop, OverlayPortal, useOverlayBehavior, Z_INDEX } from "../overlay";
+import { OverlayProvider, useOverlayContext, OverlayBackdrop, OverlayPortal, useOverlayBehavior, useOverlayStack, Z_INDEX } from "../overlay";
 import type { PopoverProps, PopoverTriggerProps, PopoverContentProps, PopoverHeaderProps, PopoverBodyProps, PopoverFooterProps, PopoverGroupProps } from "./types";
 
 function PopoverRoot({ children, className, open, onOpenChange, defaultOpen }: PopoverProps) {
@@ -44,6 +44,10 @@ function PopoverContent({
   const { open, close, anchorRef, contentId } = useOverlayContext();
   const desktopRef = useRef<HTMLDivElement>(null);
   const mobileRef = useRef<HTMLDivElement>(null);
+
+  // Register as non-modal: parents disable outside-click while this is open,
+  // but no visual push-back (scale/translate) on parent overlays.
+  useOverlayStack(open, false);
 
   useOverlayBehavior({
     open,
