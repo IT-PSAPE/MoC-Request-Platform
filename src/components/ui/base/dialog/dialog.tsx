@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { cn } from "@/shared/cn";
 import { IconButton } from "@/components/ui/common/button";
 import { Icon } from "@/components/ui/common/icon";
-import { OverlayProvider, useOverlayContext, OverlayBackdrop, OverlayPortal, useOverlayBehavior, Z_INDEX } from "../overlay";
+import { OverlayProvider, useOverlayContext, OverlayBackdrop, OverlayPortal, useOverlayBehavior, useOverlayStack, Z_INDEX } from "../overlay";
 import type { DialogProps, DialogContentProps, DialogHeaderProps, DialogBodyProps, DialogFooterProps, DialogCloseProps, DialogTriggerProps } from "./types";
 
 function DialogRoot({ children, open, onOpenChange, defaultOpen }: DialogProps) {
@@ -28,6 +28,7 @@ function DialogTrigger({ children, className }: DialogTriggerProps) {
 function DialogContent({ children, className }: DialogContentProps) {
   const { open, close, contentId } = useOverlayContext();
   const contentRef = useRef<HTMLDivElement>(null);
+  const { stackStyles } = useOverlayStack(open);
 
   useOverlayBehavior({
     open,
@@ -45,7 +46,7 @@ function DialogContent({ children, className }: DialogContentProps) {
       <OverlayBackdrop variant="blur" onClick={close} style={{ zIndex: Z_INDEX.DIALOG_BACKDROP }} />
       <div
         className="fixed inset-0 flex items-center justify-center p-4 mobile:items-end mobile:p-0"
-        style={{ zIndex: Z_INDEX.DIALOG_CONTENT }}
+        style={{ zIndex: Z_INDEX.DIALOG_CONTENT, ...stackStyles }}
       >
         <div
           ref={contentRef}

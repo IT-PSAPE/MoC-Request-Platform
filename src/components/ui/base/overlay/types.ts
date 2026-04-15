@@ -36,5 +36,6 @@ export type UseOverlayBehaviorOptions = {
   closeOnOutsideClick?: boolean;
   lockBodyScroll?: boolean;
   contentRef: RefObject<HTMLElement | null>;
+  additionalContentRefs?: RefObject<HTMLElement | null>[];
   anchorRef?: RefObject<HTMLElement | null>;
 };

@@ -12,6 +12,7 @@ export function useOverlayBehavior({
   closeOnOutsideClick = true,
   lockBodyScroll = true,
   contentRef,
+  additionalContentRefs,
   anchorRef,
 }: UseOverlayBehaviorOptions) {
 
@@ -38,6 +39,7 @@ export function useOverlayBehavior({
       const target = event.target as Node;
 
       if (contentRef.current && contentRef.current.contains(target)) return;
+      if (additionalContentRefs?.some(ref => ref.current?.contains(target))) return;
       if (anchorRef?.current && anchorRef.current.contains(target)) return;
 
       onClose();

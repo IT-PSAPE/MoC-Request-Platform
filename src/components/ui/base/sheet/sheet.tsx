@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { cn } from "@/shared/cn";
 import { IconButton } from "@/components/ui/common/button";
 import { Icon } from "@/components/ui/common/icon";
-import { OverlayProvider, useOverlayContext, OverlayBackdrop, OverlayPortal, useOverlayBehavior, Z_INDEX } from "../overlay";
+import { OverlayProvider, useOverlayContext, OverlayBackdrop, OverlayPortal, useOverlayBehavior, useOverlayStack, Z_INDEX } from "../overlay";
 import type { SheetProps, SheetContentProps, SheetHeaderProps, SheetFooterProps, SheetTriggerProps, SheetCloseProps } from "./types";
 
 function SheetRoot({ children, open, onOpenChange, defaultOpen }: SheetProps) {
@@ -38,6 +38,7 @@ function SheetClose({ children, className }: SheetCloseProps) {
 function SheetContent({ children, className }: SheetContentProps) {
   const { open, close, contentId } = useOverlayContext();
   const contentRef = useRef<HTMLDivElement>(null);
+  const { stackStyles } = useOverlayStack(open);
 
   useOverlayBehavior({
     open,
@@ -55,7 +56,7 @@ function SheetContent({ children, className }: SheetContentProps) {
       <OverlayBackdrop variant="blur" onClick={close} style={{ zIndex: Z_INDEX.SHEET_BACKDROP }} />
       <div
         className="fixed inset-0 p-2 mobile:p-0"
-        style={{ zIndex: Z_INDEX.SHEET_CONTENT }}
+        style={{ zIndex: Z_INDEX.SHEET_CONTENT, ...stackStyles }}
       >
         <div
           ref={contentRef}

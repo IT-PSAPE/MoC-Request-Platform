@@ -28,8 +28,8 @@ export function SelectOptionItem({
       onMouseEnter={() => !disabled && onMouseEnter?.()}
       className={cn(
         "px-2.5 py-1.5 cursor-pointer paragraph-sm rounded-md",
-        "transition-colors duration-100",
-        isHighlighted && !isSelected && "bg-secondary",
+        "transition-colors duration-100 border border-transparent",
+        isHighlighted && !isSelected && "!bg-pink-100 !border-utility-brand-400",
         disabled && "opacity-50 cursor-not-allowed",
         !disabled && "hover:bg-secondary",
         className
@@ -40,7 +40,7 @@ export function SelectOptionItem({
     >
       <div className="flex items-center justify-between gap-2">
         <span className="flex-1 break-words">{children}</span>
-        {isSelected && <Icon.check size={16} className="text-brand-solid shrink-0" />}
+        {isSelected && <Icon.check size={16} className="text-brand-secondary shrink-0" />}
       </div>
     </div>
   );
@@ -59,7 +59,7 @@ export function SelectOptionContainer({
 }: SelectOptionContainerProps) {
   return (
     <div
-      className={cn("p-1 overflow-y-auto", className)}
+      className={cn("p-1 overflow-y-auto space-y-1", className)}
       style={{ maxHeight: `${maxHeight}px` }}
     >
       {children}

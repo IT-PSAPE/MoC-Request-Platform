@@ -2,6 +2,7 @@ export { OverlayProvider, useOverlayContext } from "./overlay-context";
 export { OverlayBackdrop } from "./overlay-backdrop";
 export { OverlayPortal } from "./overlay-portal";
 export { useOverlayBehavior } from "./use-overlay-behavior";
+export { useOverlayStack } from "./overlay-stack";
 export { Z_INDEX } from "./z-index";
 
 export type {

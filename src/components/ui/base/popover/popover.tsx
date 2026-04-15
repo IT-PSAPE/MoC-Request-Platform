@@ -52,6 +52,7 @@ function PopoverContent({
     closeOnOutsideClick: true,
     lockBodyScroll: false,
     contentRef: desktopRef,
+    additionalContentRefs: [mobileRef],
     anchorRef,
   });
 
@@ -93,11 +94,11 @@ function PopoverContent({
           <OverlayBackdrop
             variant="blur"
             onClick={close}
-            style={{ zIndex: Z_INDEX.SHEET_BACKDROP }}
+            style={{ zIndex: Z_INDEX.MOBILE_POPOVER_BACKDROP }}
           />
           <div
             className="fixed bottom-0 left-0 right-0 animate-[overlay-slide-in-bottom_0.25s_ease-out]"
-            style={{ zIndex: Z_INDEX.SHEET_CONTENT }}
+            style={{ zIndex: Z_INDEX.MOBILE_POPOVER_CONTENT }}
           >
             <div
               ref={mobileRef}
